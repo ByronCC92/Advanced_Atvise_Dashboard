@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT
+NodeClass: Object
+BrowseName: 1:AGENT
+DisplayName: en|AGENT
+Description: en|AGENT
+EventNotifier: 0
+Reference: forward HasTypeDefinition ns=1;s=ObjectTypes.ATVISE.Server.Local

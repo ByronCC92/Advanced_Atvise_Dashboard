@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Counter.Line_Counter_2
+NodeClass: Variable
+BrowseName: 1:Line_Counter_2
+DisplayName: en|Line_Counter_2
+Description: en|Line_Counter_2
+DataType: UInt64
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.datavalues

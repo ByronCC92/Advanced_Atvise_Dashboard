@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Temperature
+NodeClass: Object
+BrowseName: 1:Temperature
+DisplayName: en|Temperature
+Description: en|Temperature
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

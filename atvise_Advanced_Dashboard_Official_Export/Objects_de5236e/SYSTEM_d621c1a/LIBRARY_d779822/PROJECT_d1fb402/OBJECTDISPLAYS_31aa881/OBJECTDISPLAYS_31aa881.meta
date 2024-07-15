@@ -1,0 +1,7 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS
+NodeClass: Object
+BrowseName: 1:OBJECTDISPLAYS
+DisplayName: en|OBJECTDISPLAYS
+Description: en|OBJECTDISPLAYS
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

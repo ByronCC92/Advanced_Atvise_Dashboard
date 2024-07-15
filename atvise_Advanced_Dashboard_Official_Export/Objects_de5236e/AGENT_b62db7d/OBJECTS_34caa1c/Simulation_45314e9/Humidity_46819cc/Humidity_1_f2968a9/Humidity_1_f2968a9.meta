@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Humidity.Humidity_1
+NodeClass: Variable
+BrowseName: 1:Humidity_1
+DisplayName: en|Humidity_1
+Description: en|Humidity_1
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.datavalues

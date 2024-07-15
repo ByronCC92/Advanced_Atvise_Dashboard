@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.HISTORY.datavalues.AggregateConfiguration
+NodeClass: Object
+BrowseName: AggregateConfiguration
+DisplayName: en|AggregateConfiguration
+Description: en|AggregateConfiguration
+EventNotifier: 0
+Reference: forward HasTypeDefinition i=11187

@@ -1,0 +1,7 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT
+NodeClass: Object
+BrowseName: 1:PROJECT
+DisplayName: en|PROJECT
+Description: en|PROJECT
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

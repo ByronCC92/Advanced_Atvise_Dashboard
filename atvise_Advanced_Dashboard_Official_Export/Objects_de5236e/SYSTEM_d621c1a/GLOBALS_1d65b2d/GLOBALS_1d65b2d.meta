@@ -1,0 +1,7 @@
+NodeId: ns=1;s=SYSTEM.GLOBALS
+NodeClass: Object
+BrowseName: 1:GLOBALS
+DisplayName: en|GLOBALS
+Description: en|GLOBALS
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

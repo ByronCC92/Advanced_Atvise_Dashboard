@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.HISTORY.datavalues.disable
+NodeClass: Variable
+BrowseName: 1:disable
+DisplayName: en|disable
+Description: en|disable
+DataType: Boolean
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Value xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd">
+	<uax:ListOfString>
+		<uax:String>&quot;0&quot;:{&quot;Color&quot;:&quot;#309cff&quot;,&quot;Label&quot;:&quot;Label_1&quot;,&quot;Node&quot;:&quot;AGENT.OBJECTS.Simulacion.Energy.Power&quot;}</uax:String>
+		<uax:String>&quot;1&quot;:{&quot;Color&quot;:&quot;#aa0000&quot;,&quot;Label&quot;:&quot;Label_2&quot;,&quot;Node&quot;:&quot;AGENT.OBJECTS.Simulacion.Energy.Power_2&quot;}</uax:String>
+	</uax:ListOfString>
+</Value>

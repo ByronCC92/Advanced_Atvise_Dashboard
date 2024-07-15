@@ -1,0 +1,7 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.RESOURCES
+NodeClass: Object
+BrowseName: 1:RESOURCES
+DisplayName: en|RESOURCES
+Description: en|RESOURCES
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.GLOBALS.Global_Color_1
+NodeClass: Variable
+BrowseName: 1:Global_Color_1
+DisplayName: en|Global_Color_1
+Description: en|Global_Color_1
+DataType: String
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.GlobalVariable

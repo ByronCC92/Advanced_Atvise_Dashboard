@@ -1,0 +1,1478 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg height="304.80000000000001" version="1.2" width="607.60000000000002" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs/>
+ <metadata>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Dashboard ID" group="GeneralConfig" name="DashboardID" valuetype="string"/>
+  <atv:parameter behavior="optional" config="Line;Spline;Area;Column;Bar;Pie;Pyramid;Solidgauge;Histogram;Gauge" defaultvalue="" desc="Chart Type" group="GeneralConfig" name="ChartType" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="Values;Alarms;Aggregates" defaultvalue="Values" desc="Data Type" group="GeneralConfig" name="DataType" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="EnumList;Text" defaultvalue="Text" desc="Series Source" group="GeneralConfig" name="SeriesSource" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="2" desc="InitialRange" group="GeneralConfig" name="InitialRange" valuetype="number"/>
+  <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="" desc="Initial Range Unit" group="GeneralConfig" name="InitialRangeUnit" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="Data Reduction Enabled" group="DataOptimization" name="DataReductionEnabled" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="1000" desc="Data Reduction Max Size" group="DataOptimization" name="DataReductionMaxSize" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="DataLimitEnabled" group="LimitAnalysis" name="DataLimitEnabled" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Data Max Limit" group="LimitAnalysis" name="DataMaxLimit" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Data Min Limit" group="LimitAnalysis" name="DataMinLimit" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="Data Processing Enabled" group="DataProcessing" name="DataProcessingEnabled" valuetype="bool"/>
+  <atv:parameter behavior="optional" config="Simple-None;SinglePoint-LastValue;SinglePoint-FirstValue;SinglePoint-Max;SinglePoint-Min;Interval-Addition;Interval-CountChanges;Interval-CountTimeOff;Interval-CountTimeOn;Interval-Difference;Interval-Histogram;Interval-Integration;FullRange-Addition;FullRange-Difference;FullRange-OEEAvailability;FullRange-OEEProductivity" defaultvalue="" desc="Data Processing Type" group="DataProcessing" name="DataProcessingType" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="AllData-DateTime;Interval-CustomText;Interval-CustomInterval;Interval-Dynamic;Interval-Histogram;Single-Simple" defaultvalue="" desc="Category Type" group="Category Selection" name="CategoryType" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Category Round Up" group="Category Selection" name="CategoryRound" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Custom Category" group="Category Selection" name="CategoryCustomText" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="1" desc="Custom Interval Length" group="Category Selection" name="CategoryCustomIntervalLength" valuetype="number"/>
+  <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="h" desc="Custom Interval Unit" group="Category Selection" name="CategoryCustomIntervalUnit" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="Category Time Offset" group="Category Selection" name="CategoryTimeOffset" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Global Enum List" group="EnumList" name="EnumList" valuetype="global"/>
+  <atv:parameter behavior="optional" desc="Input1" group="Series 1" name="Series1Node" valuetype="address"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Label1" group="Series 1" name="Series1Label" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color1" group="Series 1" name="Series1Color" valuetype="color"/>
+  <atv:parameter behavior="optional" desc="Input2" group="Series 2" name="Series2Node" valuetype="address"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Label2" group="Series 2" name="Series2Label" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color2" group="Series 2" name="Series2Color" valuetype="color"/>
+  <atv:parameter behavior="optional" desc="Input3" group="Series 3" name="Series3Node" valuetype="address"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Label3" group="Series 3" name="Series3Label" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color3" group="Series 3" name="Series3Color" valuetype="color"/>
+  <atv:parameter behavior="optional" desc="Input4" group="Series 4" name="Series4Node" valuetype="address"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Label4" group="Series 4" name="Series4Label" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color4" group="Series 4" name="Series4Color" valuetype="color"/>
+  <atv:parameter behavior="optional" desc="Input5" group="Series 5" name="Series5Node" valuetype="address"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Label5" group="Series 5" name="Series5Label" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color5" group="Series 5" name="Series5Color" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Title" group="Appereance" name="Title" valuetype="string"/>
+  <atv:parameter behavior="optional" config="center;left;rigth" defaultvalue="center" desc="TitleAlign" group="Appereance" name="TitleAlign" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Subtitle" group="Appereance" name="Subtitle" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="YName" group="Appereance" name="YName" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="XName" group="Appereance" name="XName" valuetype="string"/>
+  <atv:parameter behavior="optional" config="Color-Pallete;Color-Custom" defaultvalue="Color-Pallete" desc="Color Series Type" group="Appereance" name="ColorSeriesType" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Series Palette Color" group="Appereance" name="ColorSeriesPalette" substitute="$Color$" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="Background Transparent Enabled" group="Appereance" name="ColorBackgroundTranspartentEnable" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Background Color" group="Appereance" name="ColorB" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Grid Color" group="Appereance" name="ColorG" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Limit Color" group="Appereance" name="ColorL" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color Title" group="Appereance" name="ColorTitle" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color Subtitle" group="Appereance" name="ColorSubTitle" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color Legend" group="Appereance" name="ColorLegend" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="#000000" desc="Color xAxis" group="Appereance" name="ColorxAxis" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#000000" desc="Color yAxis" group="Appereance" name="ColoryAxis" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="SYSTEM.GLOBALS.atvFontColor" desc="Color dataLabels" group="Appereance" name="ColordataLabels" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="14" desc="TitleFontSize" group="Appereance" name="FontSizeTitle" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="12" desc="xAxis FontSize" group="Appereance" name="FontSizexAxis" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="12" desc="yAxis FontSize" group="Appereance" name="FontSizeyAxis" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="12" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="12" desc="Data Labels FontSize" group="Appereance" name="FontSizedataLabels" valuetype="number"/>
+  <atv:parameter behavior="optional" config="Time;Value" defaultvalue="Value" desc="Label Type" group="Column Only" name="ColumnLabelType" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="left;center;right" defaultvalue="center" desc="Label Position" group="Column Only" name="ColumnLabelPosition" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="Stack Enabled" group="Column Only" name="ColumnStackEnabled" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="100" desc="Max Value" group="Solid Gauge Only" name="SolidGaugeMaxValue" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Unit" group="Solid Gauge Only" name="SolidGaugeUnit" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="80" desc="OuterRadius" group="Solid Gauge Only" name="SolidGaugeOuterRadius" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="55" desc="InnerRadius" group="Solid Gauge Only" name="SolidGaugeInnerRadius" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Unit" group="Gauge Only" name="GaugeUnit" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="Gauge Min" group="Gauge Only" name="GaugeMin" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="100" desc="Gauge Max" group="Gauge Only" name="GaugeMax" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Pane Color" group="Gauge Only" name="GaugePaneColor" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="Gauge Band 1 Min" group="Gauge Only" name="GaugeBand1Min" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="50" desc="Gauge Band 1 Max" group="Gauge Only" name="GaugeBand1Max" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="#00aa00" desc="Gauge Band 1 Color" group="Gauge Only" name="GaugeBand1Color" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="50" desc="Gauge Band 2 Min" group="Gauge Only" name="GaugeBand2Min" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="75" desc="Gauge Band 2 Max" group="Gauge Only" name="GaugeBand2Max" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="#ecec00" desc="Gauge Band 2 Color" group="Gauge Only" name="GaugeBand2Color" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="75" desc="Gauge Band 3 Min" group="Gauge Only" name="GaugeBand3Min" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="100" desc="Gauge Band 3 Max" group="Gauge Only" name="GaugeBand3Max" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Gauge Band 3 Color" group="Gauge Only" name="GaugeBand3Color" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Outer Radius" group="Gauge Only" name="GaugeOuterRadius" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Inner Radius" group="Gauge Only" name="GaugeInnerRadius" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Production Speed (U/h)" group="OEE Only" name="OEEProductionSpeed" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="Complete Range Analisis" group="OEE Only" name="OEECompleteRangeAnalisis" valuetype="bool"/>
+  <atv:gridconfig enabled="true" gridstyle="lines" height="20" width="20"/>
+  <atv:snapconfig enabled="true" height="10" width="10"/>
+ </metadata>
+ <rect atv:refpx="303.798" atv:refpy="140.5" fill="none" height="279" id="Border" stroke="#000000" stroke-width="2" width="605.597" x="1" y="1"/>
+ <text atv:refpx="222.595" atv:refpy="160.4" fill="none" font-family="Arial" font-size="36" id="Label" text-anchor="middle" x="303.8" y="164.9">Advanced Chart</text>
+ <foreignObject height="280" id="Chart_Container" width="605.597" x="0" y="0">
+  <div style="width:100%;height:100%" xmlns="http://www.w3.org/1999/xhtml"/>
+ </foreignObject>
+ <script atv:desc="" atv:name="" type="text/ecmascript" xlink:href="../../highcharts/highcharts.js"/>
+ <script atv:desc="" atv:name="" type="text/ecmascript" xlink:href="../../highcharts/highcharts-more.js"/>
+ <script atv:desc="" atv:name="" type="text/ecmascript" xlink:href="../../highcharts/modules/exporting.js"/>
+ <script atv:desc="" atv:name="" type="text/ecmascript" xlink:href="../../highcharts/modules/funnel.js"/>
+ <script atv:desc="" atv:name="" type="text/ecmascript" xlink:href="../../highcharts/modules/solid-gauge.js"/>
+ <script atv:desc="" atv:name="" type="text/ecmascript" xlink:href="../../highcharts/modules/histogram-bellcurve.js"/>
+ <script atv:desc="" atv:name="" type="text/ecmascript"><![CDATA[//------Initialize Variables-----------//
+
+//------Parameters   
+var Initializing=true;
+var chartContainter;
+
+//Chart Config Construction 
+const elementRawConfig = { 
+
+	// General Configuration
+	GeneralConfig: {
+		DashboardID: webMI.query["DashboardID"],
+		ChartType: webMI.query["ChartType"],
+		DataType: webMI.query["DataType"],
+		SeriesSource: webMI.query["SeriesSource"],
+		InitialRange: webMI.query["InitialRange"],
+		InitialRangeUnit: webMI.query["InitialRangeUnit"]
+	},
+	
+	// Data Optimization
+	DataOptimization: {
+		DataReductionEnabled: webMI.query["DataReductionEnabled"],
+		DataReductionMaxSize: webMI.query["DataReductionMaxSize"]
+	},
+	
+	// Limit Analysis	
+	LimitAnalysis: {
+		DataLimitEnabled: webMI.query["DataLimitEnabled"],
+		DataMaxLimit: webMI.query["DataMaxLimit"],
+		DataMinLimit: webMI.query["DataMinLimit"]
+	},
+	
+	// Data Processing
+	DataProcessing: {
+		DataProcessingEnabled: webMI.query["DataProcessingEnabled"]=== "true",
+		ProcessingType: webMI.query["DataProcessingType"] !== undefined ? webMI.query["DataProcessingType"] : "Simple-None"
+	},
+	
+	// Category
+	Category: {
+		CategoryType: webMI.query["CategoryType"],
+		CategoryRound: webMI.query["CategoryRound"],
+		CategoryCustomText: webMI.query["CategoryCustomText"] !== undefined ? webMI.query["CategoryCustomText"] : "",
+		CategoryCustomIntervalLength: webMI.query["CategoryCustomIntervalLength"],
+		CategoryCustomIntervalUnit: webMI.query["CategoryCustomIntervalUnit"],
+		CategoryTimeOffset: webMI.query["CategoryTimeOffset"],
+	},
+	
+	// EnumList
+	EnumList: {
+		EnumList: webMI.query["EnumList"]
+	},
+	
+	// Series
+	Series: [
+		{
+		  SeriesNode: webMI.query["Series1Node"],
+		  SeriesLabel: webMI.query["Series1Label"],
+		  SeriesColor: webMI.query["Series1Color"]
+		},
+		{
+		  SeriesNode: webMI.query["Series2Node"],
+		  SeriesLabel: webMI.query["Series2Label"],
+		  SeriesColor: webMI.query["Series2Color"]
+		},
+		{
+		  SeriesNode: webMI.query["Series3Node"],
+		  SeriesLabel: webMI.query["Series3Label"],
+		  SeriesColor: webMI.query["Series3Color"]
+		},
+		{
+		  SeriesNode: webMI.query["Series4Node"],
+		  SeriesLabel: webMI.query["Series4Label"],
+		  SeriesColor: webMI.query["Series4Color"]
+		},
+		{
+		  SeriesNode: webMI.query["Series5Node"],
+		  SeriesLabel: webMI.query["Series5Label"],
+		  SeriesColor: webMI.query["Series5Color"]
+		}
+	],
+	
+	// Appearance
+	Appearance: {
+		Title: webMI.query["Title"],
+		TitleAlign: webMI.query["TitleAlign"],
+		Subtitle: webMI.query["Subtitle"],
+		YName: webMI.query["YName"],
+		XName: webMI.query["XName"],
+		ColorSeriesType:webMI.query["ColorSeriesType"],
+		ColorSeriesPalette: webMI.query["ColorSeriesPalette"],
+		ColorBackgroundTranspartentEnable:webMI.query["ColorBackgroundTranspartentEnable"],
+		ColorBackground: webMI.query["ColorB"],
+		ColorGrid: webMI.query["ColorG"],
+		ColorLimit: webMI.query["ColorL"],
+		ColorTitle: webMI.query["ColorTitle"],
+		ColorSubTitle: webMI.query["ColorSubTitle"],
+		ColorLegend: webMI.query["ColorLegend"],
+		ColorXaxis: webMI.query["ColorxAxis"],
+		ColorYaxis: webMI.query["ColoryAxis"],
+		ColorDataLabels: webMI.query["ColordataLabels"],
+		FontSizeTitle: webMI.query["FontSizeTitle"],
+		FontSizeXaxis: webMI.query["FontSizexAxis"],
+		FontSizeYaxis: webMI.query["FontSizeyAxis"],
+		FontSizeLegend: webMI.query["FontSizeLegend"],
+		FontSizeDataLabels: webMI.query["FontSizedataLabels"]
+	},
+	 
+	// Column
+	Column: {
+		LabelType: webMI.query["ColumnLabelType"],
+		LabelPosition: webMI.query["ColumnLabelPosition"],
+		StackEnabled: webMI.query["ColumnStackEnabled"]
+	},
+	
+	// SolidGauge
+	SolidGauge: {
+		Unit: webMI.query["SolidGaugeUnit"],
+		MaxValue: webMI.query["SolidGaugeMaxValue"],
+		OuterRadius: webMI.query["SolidGaugeOuterRadius"],
+		InnerRadius: webMI.query["SolidGaugeInnerRadius"]
+	},
+	
+	//Gauge
+	Gauge: {
+		Unit: webMI.query["GaugeUnit"],
+		Min: webMI.query["GaugeMin"],
+		Max: webMI.query["GaugeMax"],
+		PaneColor:webMI.query["GaugePaneColor"],
+		Band1Min: webMI.query["GaugeBand1Min"],
+		Band1Max: webMI.query["GaugeBand1Max"],
+		Band1Color:webMI.query["GaugeBand1Color"],
+		Band2Min: webMI.query["GaugeBand2Min"],
+		Band2Max: webMI.query["GaugeBand2Max"],
+		Band2Color:webMI.query["GaugeBand2Color"],
+		Band3Min: webMI.query["GaugeBand3Min"],
+		Band3Max: webMI.query["GaugeBand3Max"],
+		Band3Color:webMI.query["GaugeBand3Color"],
+		OuterRadius: webMI.query["GaugeOuterRadius"],
+		InnerRadius: webMI.query["GaugeInnerRadius"]
+	},
+	
+	// OEE
+	OEE: {
+		OEEProductionSpeed: webMI.query["OEEProductionSpeed"],
+		OEECompleteRangeAnalisis: webMI.query["OEECompleteRangeAnalisis"]
+	}
+	
+};
+
+
+//Initialize Process
+webMI.addOnload(function() {
+	
+	//Get Chart container
+	chartContainter=document.getElementById("Chart_Container");
+	webMI.gfx.setScaledEvents(chartContainter);
+	
+	//Create Chart Manager
+    const singleChartManagerI=new singleChartManager(elementRawConfig);
+    
+    //Initialize Chart
+    singleChartManagerI.initialize();
+
+
+});
+
+
+//Single Chart Manager
+class singleChartManager {
+	// Attributes
+	elementRawConfig;
+	elementConfig;
+	elementID;
+	elementData;
+	elementNodes;
+	operationMode;
+	singleDataRequest;
+	chartReference;
+	specialParameters;	
+	chartLabels;
+	configConflicts;
+	
+	// Constructor
+	constructor(elementRawConfig) {
+		this.chartReference;
+		this.elementData;
+		this.elementDataRT;
+		this.elementID;
+		this.chartLabels=[];
+		this.configConflicts={};
+		this.chartID=this.createChartID();
+		this.chartTimeRange;
+		this.elementRawConfig=elementRawConfig;   
+		this.specialParameters=this.createSpecialParameters(); 
+		this.operationMode="RealTime"; //Real time by default
+		this.elementConfig=this.elementConfigCreator(elementRawConfig);
+		this.elementNodes=this.elementConfig.chartNodes;   
+		this.dashboardReady=false;
+		this.elementDataReady=false;
+		this.firstTime=true;
+		this.firstTimeRT=true;
+		this.chartColors;	
+		this.isPiePyramid=this.elementRawConfig.GeneralConfig.ChartType.toLowerCase() === "pie" || this.elementRawConfig.GeneralConfig.ChartType.toLowerCase() === "pyramid";		this.isSG=this.elementRawConfig.GeneralConfig.ChartType.toLowerCase() === "solidgauge";
+		
+	}
+	
+	//Initialize everything
+	async initialize() {
+		
+		console.log("-----------Element Config------------");
+		console.log(this.elementConfig);	
+		console.log(this.chartLabels);
+		
+		//Add listeners           
+		this.addListeners(); 
+		
+		//-----------------------------------------------//
+		//----------For Single Chart Requests-----------//	
+		
+		if (this.elementRawConfig.GeneralConfig.DashboardID == "") {
+						
+			//Create Single Data Request
+			this.singleDataRequest = await this.singleDataRequestCreator();
+			console.log("-----------Single Data Request------------");
+			console.log(this.singleDataRequest);
+			
+			//Call for data
+			this.elementData = await this.singleelementDataCreator();
+			console.log("-----------Single Element Data------------");
+			console.log(this.elementData);
+			
+			//Initialize Chart
+			this.initializeChart();
+	
+			//UpdateChart
+			this.updateChart();
+			
+		}
+			   
+		//-----------------------------------------------//
+		//----------In Dashboard Chart Requests---------//       
+		else {   
+			
+			console.log("-----Registering from chart: "+this.chartID+"----------");
+			
+			//Wait for Dashboard ready
+			await this.waitForDashboardReady();
+			
+			//First Register Elements
+			this.registerElements();
+			
+			//Wait for Data Ready
+			await this.waitForElementDataReady();	
+			
+			console.log("-----------Single Element Data------------");
+			console.log(this.elementData);
+			
+			//Initialize Chart
+			this.initializeChart();
+	
+			//UpdateChart
+			this.updateChart();
+			
+		}
+			 
+		
+	}
+	
+	//-----------------------------------------------//
+	//----------------Data Methods-----------------//	
+	//---------------------------------------------//
+	
+	// Adds Listeners
+	addListeners() {
+	
+		//Dashboard Ready Listener
+		webMI.trigger.connect("Dashboard_Ready_"+this.DashboardID, (e) => {
+			this.dashboardReady=e;
+			
+			setTimeout((e) => {
+				this.dashboardReady=false;
+			},200);
+		});	
+		
+		//Recieve Element Info		
+		webMI.trigger.connect("Element_Data_"+this.chartID, (e) => {
+			
+			this.elementData=e.value;
+			console.log("-------------this.elementData------------");	
+			console.log(this.elementData);	
+			
+			//Historic Data
+			if(this.elementData.RTInfo.OperationMode=="Hist"){
+			
+				//First time receives Element Data
+				if(this.firstTime){
+					this.elementDataReady=true;
+					this.firstTime=false;
+					
+					//Toggle
+					setTimeout((e) => {
+						this.elementDataReady=false;
+					},200);
+				}
+				
+				//After Initialization
+				else{
+					
+					console.log("-------------Updating Chart------------")
+					//UpdateChart
+					this.updateChart();
+				
+				}
+			}
+			
+			//Real Time Data
+			else if(this.elementData.RTInfo.OperationMode=="RealTime"){
+				
+				this.elementDataRT=this.elementData;
+				
+				console.log("-------------Updating RT Chart------------");				
+				//UpdateChart RT
+				this.updateRTChart();
+			}
+			
+		});
+		
+		//Subcribe to Variable Changes	
+		/*
+		webMI.data.subscribe(this.elementNodes,(e) => {
+			console.log("-------------New Value------------");
+			console.log(e.address);
+			
+			// Updates chart with RT data
+			this.updateChartRT(e.value); 
+		});	*/
+		
+	}	
+	
+	// Registers Element in Menu
+	registerElements() {
+	
+		//Register Element
+		webMI.trigger.fire("Element_Config_Receiver_"+this.DashboardID, this.elementConfig); 
+			
+	}	
+		
+	// Creates Element Config
+	elementConfigCreator() {  
+	
+		// ElementConfig Structure
+		var elementConfig = {
+			chartNodes: [],
+			chartsConfig: {
+				chartID: this.chartID,
+				chartType: this.elementRawConfig.GeneralConfig.ChartType,
+				dataType: this.elementRawConfig.GeneralConfig.DataType,
+				dataProcessingType: this.elementRawConfig.DataProcessing.DataProcessingEnabled == true ? this.elementRawConfig.DataProcessing.ProcessingType:"Simple-None",
+				dataReductionEnable: this.elementRawConfig.DataOptimization.DataReductionEnabled === "true",
+				dataReductionMaxSize: Number(this.elementRawConfig.DataOptimization.DataReductionMaxSize),
+				dataoutOfLimitEnable: this.elementRawConfig.LimitAnalysis.DataLimitEnabled === "true",
+				dataMaxLimit: this.elementRawConfig.LimitAnalysis.DataMaxLimit,
+				dataMinLimit: this.elementRawConfig.LimitAnalysis.DataMinLimit,
+				categoryType: this.elementRawConfig.Category.CategoryType,
+				categoryRound: this.elementRawConfig.Category.CategoryRound,
+				categorCustomValue: this.elementRawConfig.Category.CategoryCustomText,				
+				categoryCustomIntervalLength: this.elementRawConfig.Category.CategoryCustomIntervalLength,
+				categoryCustomIntervalUnit: this.elementRawConfig.Category.CategoryCustomIntervalUnit,
+				categoryTimeOffset:this.elementRawConfig.Category.CategoryTimeOffset,
+				specialParameters:this.specialParameters
+			}
+		};
+		
+		// Data Source Text
+		if (this.elementRawConfig.GeneralConfig.SeriesSource === "Text") {		
+			//Take source from parameters
+			this.elementRawConfig.Series.forEach((seriesItem) => {
+				if (seriesItem.SeriesNode && !elementConfig.chartNodes.includes(seriesItem.SeriesNode)) { // Check if SeriesNode is not undefined and not already included
+					elementConfig.chartNodes.push(seriesItem.SeriesNode);
+					this.chartLabels.push(seriesItem.SeriesLabel);
+				}
+				else if (elementConfig.chartNodes.includes(seriesItem.SeriesNode)){
+					this.configConflicts["repeatedNode"]=true;
+				}
+			});
+		}
+		
+		// Data Source Enum
+		else if (this.elementRawConfig.GeneralConfig.SeriesSource === "EnumList") {
+			for (const key in this.elementRawConfig.EnumList.EnumList) {
+				if (this.elementRawConfig.EnumList.EnumList.hasOwnProperty(key)) {
+					const enumItem = this.elementRawConfig.EnumList.EnumList[key];
+					if (enumItem.Node && !elementConfig.chartNodes.includes(enumItem.Node)) { // Check if Node is not undefined and not already included
+						elementConfig.chartNodes.push(enumItem.Node);
+						this.chartLabels.push(enumItem.Label);
+					}
+					else if (elementConfig.chartNodes.includes(seriesItem.SeriesNode)){
+						this.configConflicts["repeatedNode"]=true;
+					}
+				}
+			}
+		}
+			// Return elementConfig
+			return elementConfig;
+	}	
+	
+	// Creates ChartID based position and size
+	createChartID() {
+		const thisElement = document.getElementById('Chart_Container');
+		let index = thisElement.id.indexOf('_Chart_Container');
+		return thisElement.id.substring(0, index);	
+	}
+		
+	// Create Special Parameters
+	createSpecialParameters() {
+	
+		var specialParametersI={};
+		//Add Production Speed
+		if (this.elementRawConfig.OEE.OEEProductionSpeed!=null){
+			specialParametersI["OEEProductionSpeed"]=this.elementRawConfig.OEE.OEEProductionSpeed;
+		}
+		
+		//Add Full Range Analisis
+		if (this.elementRawConfig.OEE.OEECompleteRangeAnalisis!=null){
+			specialParametersI["OEECompleteRangeAnalisis"]=this.elementRawConfig.OEE.OEECompleteRangeAnalisis;
+		}
+		
+		return specialParametersI;
+		
+	}
+	
+	// Wait for Dashboard ready
+	waitForDashboardReady() {
+		return new Promise((resolve) => {
+			const checkReady = () => {
+				if (this.dashboardReady) {
+					resolve();
+				} else {
+					setTimeout(checkReady, 100);
+				}
+			};
+			checkReady();
+		});
+	}
+	
+	// Wait for Element Data ready
+	waitForElementDataReady() {
+		return new Promise((resolve) => {
+			const checkReady = () => {
+				if (this.elementDataReady) {
+					console.log("-------Element Data Ready--------")
+					resolve();
+				} else {
+					setTimeout(checkReady, 100);
+				}
+			};
+			checkReady();
+		});
+	}
+  
+  
+  
+	//-----------------------------------------------//
+	//----------------Chart Methods-----------------//	
+	//---------------------------------------------//
+	
+	
+	//-----------------------------------------------//
+	//--------Historical Chart Functions------------//		
+	
+	// Initialize Chart
+	initializeChart() {
+	
+		//Hide Label and Border
+		webMI.gfx.setVisible("Label", false);
+		webMI.gfx.setVisible("Border", false);	
+		
+		
+		//Chart Options
+		const chartOptions =  {
+			chart: {
+				type: (this.elementRawConfig.GeneralConfig.ChartType).toLowerCase(),
+				backgroundColor: this.defineBackgroundColor()
+			},
+			title: {
+				text: this.elementRawConfig.Appearance.Title,
+				style: {
+						fontSize: this.elementRawConfig.Appearance.FontSizeTitle + 'px',
+						color: this.elementRawConfig.Appearance.ColorTitle
+					}	
+			},
+			subtitle: {
+				text: this.elementRawConfig.Appearance.Subtitle,
+				style: {
+					color: this.elementRawConfig.Appearance.ColorSubTitle
+				}
+			},
+			xAxis: {
+				title: {
+					text: this.elementRawConfig.Appearance.XName,
+					style: {
+						color: this.elementRawConfig.Appearance.ColorYaxis,
+						fontSize: this.elementRawConfig.Appearance.FontSizeYaxis + 'px'
+					  }
+				},
+				labels: {
+					style: {
+						color: this.elementRawConfig.Appearance.ColorXaxis,  
+						fontSize: this.elementRawConfig.Appearance.FontSizeXaxis + 'px' 
+					}
+				},						
+			},
+			yAxis: {
+				title: {
+					text: this.elementRawConfig.Appearance.YName,
+					style: {
+						color: this.elementRawConfig.Appearance.ColorYaxis,
+						fontSize: this.elementRawConfig.Appearance.FontSizeYaxis + 'px'
+					  }
+				},
+				visible: true,
+				labels: {
+				  style: {
+					color: this.elementRawConfig.Appearance.ColorYaxis,
+					fontSize: this.elementRawConfig.Appearance.FontSizeYaxis + 'px'
+				  }
+				}
+			},
+			legend: {
+				itemStyle: {
+				  color: this.elementRawConfig.Appearance.ColorLegend,
+				  fontSize: this.elementRawConfig.Appearance.FontSizeLegend + 'px'
+				}
+			  },
+			series: [{
+				name: '',
+				data: []
+			}]
+		}
+		console.log("-----------Chart Selected Options------------");
+		console.log(chartOptions);
+	
+		this.chartReference = Highcharts.chart(chartContainter, chartOptions);
+		
+	}
+	
+	// Updates chart 
+	updateChart() {
+		
+		console.log("-----------Update Chart------------");
+		
+		//Prepare conditions
+		const isDateTime = this.elementRawConfig.Category.CategoryType === "AllData-DateTime";
+		const elementDataI = this.elementData.chartData;
+		
+		//Update chartRange
+		this.chartTimeRange=this.elementData.RTInfo.ChartRange;	    
+	    
+		//--------Update Category-----//	
+		
+		//DateTime Category
+		if (isDateTime) { 
+			
+			//Use Site Time Zone
+			Highcharts.setOptions({
+				global: {
+					useUTC: false
+				}
+			});
+			
+			this.chartReference.xAxis[0].update({
+				type: 'datetime',
+			}, false);			
+		} 
+		
+		// Other Category		
+		else {
+			if (elementDataI!=null) {
+				this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
+			}
+		}
+		
+		//--------Update Series-----//	
+		// Remove existing series 
+		while (this.chartReference.series.length > 0) {
+			this.chartReference.series[0].remove(false);
+		}
+		
+		//Create Colors
+		this.chartColors=this.createChartColors();
+		
+		// Check if chart type is Pie or Pyramid
+		if (this.isPiePyramid) {
+			console.log("---------Is Pie-------");
+			// For Pie or Pyramid charts, apply different colors to each datapoint
+			const seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
+				y:dataPoint.y,
+				color: this.chartColors[index],
+				name: this.defineChartLabel(dataPoint.name)
+			}));
+			this.chartReference.addSeries({
+				name: this.elementRawConfig.GeneralConfig.ChartType,
+				data: seriesData
+			}, false);
+			
+		} 
+		
+		else if(this.isSG){
+		
+			console.log("---------Is SG-------");
+			// For Pie or Pyramid charts, apply different colors to each datapoint
+			const seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
+				y:dataPoint,
+				color: this.chartColors[index],
+			}));			
+						
+			this.chartReference.addSeries({
+				name: this.defineChartLabel(elementDataI.chartSeries[0].name),
+				data: seriesData
+			}, false);		
+		}
+		
+		else {
+			// Add new series for other chart types
+			elementDataI.chartSeries.forEach((series, index) => {
+				this.chartReference.addSeries({
+					name: this.defineChartLabel(series.name),
+					data: series.data,
+					color: this.chartColors[index]
+				}, false);
+			});
+		}
+			
+		//Specific Type Update
+		this.specificUpdate();
+		
+		// Redraw Chart
+		this.chartReference.redraw();
+		
+		console.log("-------Chart reference-----");		
+		console.log(this.chartReference);
+		
+	}
+	
+	//Specific Chart Update
+	specificUpdate() {
+		
+		console.log("----------Apply Specific Config------------");
+		//Apply Specific Config
+		switch (this.elementRawConfig.GeneralConfig.ChartType) {
+			
+			//Line Chart
+			case "Line":
+				this.chartReference.update({
+				
+				}, false); 
+				break;
+			
+			//Spline Chart
+			case "Spline":
+				this.chartReference.update({
+			
+				}, false);  
+				break;
+			
+			//Area Chart
+			case "Area":
+				this.chartReference.update({
+					plotOptions: {
+						area: {
+							fillOpacity: 0.5
+						}
+					}
+				}, false);  // Set redraw to false
+				break;
+				
+			//Column Chart
+			case "Column":
+				let labelType=this.elementRawConfig.Column.LabelType;
+				this.chartReference.update({
+					plotOptions: {
+						column: {
+							stacking: this.elementRawConfig.Column.StackEnabled == "true" ? 'normal':undefined, // Enable stacking here
+							borderWidth: 0,
+							groupPadding: 0.2,
+							dataLabels: {
+								enabled: true,
+								style: {
+									color: this.elementRawConfig.Appearance.ColorDataLabels,
+									fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px'
+								  },
+								align: this.elementRawConfig.Column.LabelPosition,
+								verticalAlign: 'bottom',	
+								formatter: function() {
+									if (labelType === "Time") {
+										let time = this.y;
+										if (time < 60000) {
+											return (time / 1000).toFixed(0) + ' sec'; // seconds
+										} else if (time < 3600000) {
+											return (time / 60000).toFixed(0) + ' min'; // minutes
+										} else if (time < 86400000) {
+											return (time / 3600000).toFixed(0) + ' hrs'; // hours
+										} else if (time < 2592000000) {
+											return (time / 86400000).toFixed(0) + ' days'; // days
+										} else {
+											return (time / 2592000000).toFixed(0) + ' months'; // months
+										}
+									}  else {
+										// Number formatting logic when not handling 'Time'
+										if (this.y >= 1000000) {
+											return (this.y / 1000000).toFixed(2) + 'M'; // millions
+										} else if (this.y >= 1000) {
+											return (this.y / 1000).toFixed(2) + 'k'; // thousands
+										} else {
+											return this.y.toFixed(2); // less than 1000
+										}
+									}
+								}
+							}
+						}
+					},
+					tooltip: {
+						formatter: function () {
+							return `<b>${this.series.name}</b>: ${this.y}`;
+						}
+					}
+				}, false);  // Set redraw to false
+				break;
+			
+			//Bar Chart
+			case "Bar":
+				this.chartReference.update({
+					plotOptions: {
+						bar: {
+							dataLabels: {
+								enabled: true
+							}
+						}
+					}
+				}, false);  // Set redraw to false
+				break;
+			case "Pie":
+				this.chartReference.update({
+					plotOptions: {
+						pie: {
+							allowPointSelect: true,
+							cursor: 'pointer',
+							dataLabels: {
+								enabled: true,
+								format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+							}
+						}
+					}
+				}, false);  // Set redraw to false
+				break;
+				
+			//Pyramid Chart
+			case "Pyramid":
+				this.chartReference.update({
+					plotOptions: {
+						pyramid: {
+							reversed: false,
+							width: '70%',
+							height: '80%'
+						}
+					}
+				}, false);  // Set redraw to false
+				break;
+			
+			case "Histogram":
+				this.chartReference.update({
+					xAxis: [{	
+						title: { text: 'Data' },
+						alignTicks: true
+					}, {
+						title: { text: 'Histogram' },
+						alignTicks: true,
+						opposite: true
+					}],
+					yAxis: [{
+						title: { text: 'Data' }
+					}, {
+						title: { text: 'Histogram' },
+						opposite: true
+					}],
+					plotOptions: {
+						histogram: {
+							binWidth: 10,
+							dataLabels: {
+								enabled: true,
+								style: {
+									color: this.elementRawConfig.Appearance.ColorDataLabels,
+									fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px'
+								  },
+								align: this.elementRawConfig.Column.LabelPosition,
+								verticalAlign: 'top',
+							},
+							accessibility: {
+								point: {
+									valueDescriptionFormat: '{index}. {point.x:.3f} to {point.x2:.3f}, {point.y}.'
+								}
+							}
+						}
+					},
+					tooltip: {
+						formatter: function () {
+							return `<b>${this.series.name}</b>: ${this.y}`;
+						}
+					}
+				}, false);  // Set redraw to false
+				break;
+				
+			//Solidgauge
+			case "Solidgauge":			
+				this.chartReference.update({
+					chart: {
+						height: '100%',
+						marginTop: -10 
+					},
+					tooltip: {
+						headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+						pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+									 '<td style="padding:0"><b>{point.y:.3f}' + this.elementRawConfig.SolidGauge.Unit + '</b></td></tr>',
+						footerFormat: '</table>',
+						shared: true,
+						useHTML: true
+					},
+					pane: {
+						startAngle: 0,
+						endAngle: 360,
+						background: [{
+							outerRadius: this.elementRawConfig.SolidGauge.OuterRadius+"%",
+							innerRadius: this.elementRawConfig.SolidGauge.InnerRadius+"%",
+							backgroundColor: Highcharts.color(this.chartColors[0])
+								.setOpacity(0.3)
+								.get(),
+							borderWidth: 0
+						}]
+					},
+					yAxis: {
+						min: 0,
+						max: this.elementRawConfig.SolidGauge.MaxValue,
+						lineWidth: 0,
+						tickPositions: []
+					},
+					plotOptions: {
+						solidgauge: {
+							innerRadius: this.elementRawConfig.SolidGauge.InnerRadius+"%",
+							radius: this.elementRawConfig.SolidGauge.OuterRadius+"%", 
+							dataLabels: {
+								enabled: true,
+								backgroundColor: 'none',
+								borderWidth: 0,
+								color: this.elementRawConfig.Appearance.ColorDataLabels,
+								format: '{point.y:.2f}' +  this.elementRawConfig.SolidGauge.Unit,
+								shadow: false,
+								style: {
+									fontSize: "22px", // Default font size
+								},
+								valueSuffix: 'H',
+								y: -18,
+								align: 'center',
+								formatter: function () {
+									var value = this.y;
+									var valueString = value.toString();
+									var length = valueString.replace('.', '').length; // Remove decimal point for length calculation
+									var fontSize;
+							
+									// Adjust font size based on the number of digits
+									if (length > 5) {
+										fontSize = '10px'; // Adjust as needed
+									} else if (length > 4) {
+										fontSize = '12px'; // Adjust as needed
+									} else if (length > 3) {
+										fontSize = '16px'; // Adjust as needed
+									} else {
+										fontSize = '26px'; // Default size
+									}
+							
+									// Return the custom label format
+									return '<span style="font-size: ' + fontSize + '; color: ' + this.color + '">' + Highcharts.numberFormat(this.y, 2) + this.elementRawConfig.SolidGauge.Unit + 'H</span>';
+								}
+							},
+							linecap: 'square',
+							stickyTracking: false,
+						}
+					}
+				}, false); // Set redraw to false
+				break;
+				
+			//SimpleGauge
+			case "Gauge":
+				const Gauge_unit=this.elementRawConfig.Gauge.Unit;
+				
+				this.chartReference.update({
+					chart: {
+						plotBackgroundColor: null,
+						plotBackgroundImage: null,
+						plotBorderWidth: 0,
+						plotShadow: false,
+						height: '80%'
+					},
+				
+					pane: {
+						startAngle: -90,
+						endAngle: 89.9,
+						background: [{
+							backgroundColor: this.elementRawConfig.Gauge.PaneColor.length>0 ? this.elementRawConfig.Gauge.PaneColor: 'transparent',
+							borderWidth: 0
+						}],
+						center: ['50%', '75%'],
+						size: '110%'
+					},
+				
+					// the value axis
+					yAxis: {
+						min: Number(this.elementRawConfig.Gauge.Min),
+						max: Number(this.elementRawConfig.Gauge.Max),
+						tickPixelInterval: 72,
+						tickPosition: 'inside',
+						tickColor: Highcharts.defaultOptions.chart.backgroundColor || '#FFFFFF',
+						tickLength: 20,
+						tickWidth: 2,
+						minorTickInterval: null,
+						labels: {
+							distance: 20,
+							style: {
+								fontSize: this.elementRawConfig.Appearance.FontSizeYaxis + 'px'
+							}
+						},
+						lineWidth: 0,
+						plotBands: [{
+							from: this.elementRawConfig.Gauge.Band1Min,
+							to: this.elementRawConfig.Gauge.Band1Max,
+							color: this.elementRawConfig.Gauge.Band1Color, // green
+							thickness: 20,
+							borderRadius: '50%'
+						}, {
+							from: this.elementRawConfig.Gauge.Band2Min,
+							to: this.elementRawConfig.Gauge.Band2Max,
+							color: this.elementRawConfig.Gauge.Band2Color, // yellow
+							thickness: 20
+						}, {
+							from: this.elementRawConfig.Gauge.Band3Min,
+							to: this.elementRawConfig.Gauge.Band3Max,
+							color: this.elementRawConfig.Gauge.Band3Color, // red
+							thickness: 20,
+							borderRadius: '50%'
+						}]
+					},
+					
+					plotOptions: {
+						gauge: {
+							dataLabels: {
+								format: '{point.y:.2f}' +  Gauge_unit,
+								borderWidth: 0,
+								color: this.elementRawConfig.Appearance.ColorDataLabels,
+								style: {
+									fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px'
+								}
+							},
+							dial: {
+								radius: '80%',
+								backgroundColor: 'gray',
+								baseWidth: 12,
+								baseLength: '0%',
+								rearLength: '0%'
+							},
+							pivot: {
+								backgroundColor: 'gray',
+								radius: 6
+							},
+							tooltip: {
+								pointFormatter: function() {
+									return '<b>' + this.series.name + '</b><br/>' +
+										   'Value: ' + this.y.toFixed(2) +' ' +Gauge_unit;
+								}
+							}
+						}
+					},
+				}, false); // Set redraw to false
+			break;
+			
+			default:
+				console.log("No specific configurations applied.");
+		}
+	}
+	
+	//-----------------------------------------------//
+	//--------RT Chart Functions------------//
+
+	updateRTChart() {
+
+		const dataProcessingType = this.elementConfig.chartsConfig.dataProcessingType;
+		const elementDataRT = this.elementDataRT;
+		
+		//Simple Processing (All Data)
+		if (dataProcessingType.includes("Simple")) {
+			this.updateSimpleData();
+		} 
+		//FullRange/SinglePoint Processing (One Point)
+		else if (dataProcessingType.includes("FullRange") || dataProcessingType.includes("SinglePoint")) {
+		
+			console.log("-----Updating Full Range--------")
+			if (this.firstTimeRT)	{
+				setTimeout((e) => {	
+					this.updateFullRangeOrSinglePointData();
+				},200);
+			}
+			else{				
+				this.updateFullRangeOrSinglePointData();				
+			}
+		} 
+		//Interval Processing (Intervals)
+		else if (dataProcessingType.includes("Interval")) {
+			if (this.firstTimeRT)	{
+				setTimeout((e) => {	
+					this.updateIntervalData();
+				},200);
+			}
+			else{				
+				this.updateIntervalData();				
+			}
+			
+		} 
+		else {
+			console.error("Unsupported dataProcessingType: ", dataProcessingType);
+		}
+	
+	}	
+	
+	// Process data for "Simple" type
+	updateSimpleData() {
+		// Check if the category type is "AllData-DateTime"
+		if (this.elementConfig.chartsConfig.categoryType === "AllData-DateTime") {
+			// Processing simple data
+			console.log("---------Updating Simple Data-----------");
+	
+			// Get the series from the chart reference
+			const chartSeries = this.chartReference.series;
+	
+			// Iterate through the updatingData to find the matching series by name
+			this.elementDataRT.chartData.chartSeries.forEach(updatingSeries => {
+				
+				
+			   // Find the corresponding series in the chart
+				const chartSeriesItem = chartSeries.find(series => series.name === this.defineChartLabel(updatingSeries.name));
+				var dataLength = chartSeriesItem.data.length;
+				const chartrange= this.chartTimeRange;
+				
+				if (chartSeriesItem) {
+					// Check if there are new data points to add
+					if (updatingSeries.data.length > 0) {
+						// Add new data points to the series
+						updatingSeries.data.forEach(dataPoints => {
+							// Ensure dataPoints is an array of points
+							if (Array.isArray(dataPoints) && dataPoints.length > 0) {
+								dataPoints.forEach(dataPoint => {
+									chartSeriesItem.addPoint(dataPoint, false); // Set redraw to false
+								});
+							}
+						});
+	
+						// Calculate the chart range
+						dataLength = chartSeriesItem.data.length;
+						if (dataLength > 1) {
+							const minTime = chartSeriesItem.data[dataLength - 1].x - chartrange;
+	
+							// Remove the first point if it is outside the calculated range
+							if (chartSeriesItem.data.length > 0 && chartSeriesItem.data[0].x < minTime) {
+								chartSeriesItem.data[0].remove(false); // Set redraw to false
+							}
+						}
+					}
+				}
+			});
+	
+			// Redraw the chart after updates
+			this.chartReference.redraw();
+		}
+	}
+	
+	// Process data for "FullRange Or SinglePoint" type
+	updateFullRangeOrSinglePointData() {
+		// Processing full range or single point data
+		console.log("---------Updating Full Range or Single Point Data-----------");
+		// Get the series from the chart reference
+		const chartSeries = this.chartReference.series;
+		
+		//Pie and Pyramid Case
+		if (this.isPiePyramid) {  //For Pie chart Data
+		   
+			// Update each data point in the pie chart based on the name
+			const updatingData = this.elementDataRT.chartData.chartSeries[0].data;		
+			updatingData.forEach(updatingPoint => {
+				const dataPoint = chartSeries[0].data.find(point => point.name === this.defineChartLabel(updatingPoint.name));
+				if (dataPoint) {
+					dataPoint.update(updatingPoint.y, false); // Update the data point, no redraw yet
+				}
+			});
+		}
+		
+		//Any other case
+		else{		
+			// Iterate through the updatingData to find the matching series by name
+			this.elementDataRT.chartData.chartSeries.forEach(updatingSeries => {
+				// Find the corresponding series in the chart
+				const chartSeriesItem = chartSeries.find(series => series.name === this.defineChartLabel(updatingSeries.name));
+				if (chartSeriesItem) {
+					// Check if there is a new data point to add
+					if (updatingSeries.data.length > 0) {
+						// Update the series with the new data point
+						const newValue = updatingSeries.data[0];
+						const lastPoint = chartSeriesItem.data[chartSeriesItem.data.length - 1];
+		
+						// Update the last point with the new value or add the point if the series is empty
+						if (lastPoint) {
+							lastPoint.update(newValue, true); // Update last point, no redraw
+						} 
+					}
+				}
+			});
+			
+		}
+	
+		// Redraw the chart after updates
+		this.chartReference.redraw();
+	}
+	
+	// Process data for "Interval" type
+    updateIntervalData() {
+		console.log("---------Processing Interval Data-----------");
+	
+		const elementDataI = this.elementDataRT.chartData;
+		const intervalInfo = elementDataI.informationRT;
+	
+		// Check if it is necessary to go to a new interval
+		const newInterval = intervalInfo.some(info => info.IntervalInfo.newInterval);
+	
+		// Update series data
+		elementDataI.chartSeries.forEach(updatingSeries => {
+			// Find the corresponding series in the chart by name
+			const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
+			if (chartSeriesItem) {
+				const newValue = updatingSeries.data[0];
+	
+				if (newInterval) {
+					// Add new data point and remove the first point
+					chartSeriesItem.addPoint(newValue, false);
+					if (chartSeriesItem.data.length > 1) {
+						chartSeriesItem.data[0].remove(false); // Remove the first point
+					}
+				} else {
+					// Update the last point with the new value
+					const lastPoint = chartSeriesItem.data[chartSeriesItem.data.length - 1];
+					lastPoint.update(newValue, false);
+				}
+			}
+		});
+	
+	    
+		if (newInterval) {
+			// Add missing series with a value of 0
+			this.chartReference.series.forEach(chartSeriesItem => {
+				const isSeriesPresent = elementDataI.chartSeries.some(updatingSeries =>  this.defineChartLabel(updatingSeries.name) ===chartSeriesItem.name);
+				if (!isSeriesPresent) {
+					chartSeriesItem.addPoint(0, false);
+					if (chartSeriesItem.data.length > 1) {
+						chartSeriesItem.data[0].remove(false); // Remove the first point
+					}
+				}
+			});
+		}
+	
+		// Update categories
+		const xAxis = this.chartReference.xAxis[0];
+		let updatedCategories;
+	
+		if (newInterval) {
+			// Remove the first category and add the new one using elementDataI.chartCategories[0]
+			xAxis.categories.push(elementDataI.chartCategories[0]);
+			updatedCategories = xAxis.categories;
+			this.chartReference.redraw(true); // Enable animation on redraw	
+		} else {
+			// Update the last category with the new one
+			updatedCategories = xAxis.categories;
+			updatedCategories[updatedCategories.length - 1] = elementDataI.chartCategories[0];
+			this.chartReference.redraw(false); // Disable animation on redraw
+		}
+	}
+	
+	//-----------------------------------------------//
+	//----------For Single Chart Requests-----------//	
+	
+	// Single Chart Request
+	async singleDataRequestCreator() {
+	
+		// Final Time
+		const Final_Time = new Date();
+	
+		// Initial Time
+		let Initial_Time = new Date(Final_Time); // Clone Final_Time
+	
+		switch (this.elementRawConfig.GeneralConfig.InitialRangeUnit) {
+			case 's': // Seconds
+				Initial_Time.setSeconds(Final_Time.getSeconds() - this.elementRawConfig.GeneralConfig.InitialRange);
+			break;
+			case 'min': // Minutes
+				Initial_Time.setMinutes(Final_Time.getMinutes() - this.elementRawConfig.GeneralConfig.InitialRange);
+			break;
+			case 'h': // Hours
+				Initial_Time.setHours(Final_Time.getHours() - this.elementRawConfig.GeneralConfig.InitialRange);
+			break;
+			case 'day': // Days
+				Initial_Time.setDate(Final_Time.getDate() - this.elementRawConfig.GeneralConfig.InitialRange);
+				break;
+			case 'month': // Months
+				Initial_Time.setMonth(Final_Time.getMonth() - this.elementRawConfig.GeneralConfig.InitialRange);
+				break;
+			default:
+			console.error('Unsupported InitialRangeUnit:', this.elementRawConfig.GeneralConfig.InitialRangeUnit);
+			break;
+		}
+	
+		// SingledataRequest completed
+		const singledataRequest = {
+		  chartsNodes: [{
+			chartID: this.chartID,
+			chartNodes: this.elementConfig.chartNodes
+		  }],
+		  chartsConfig: [{
+			chartID: this.chartID,
+			chartType: this.elementConfig.chartsConfig.chartType,
+			dataType: this.elementConfig.chartsConfig.dataType,
+			dataProcessingType: this.elementConfig.chartsConfig.dataProcessingType,
+			dataReductionEnable: this.elementConfig.chartsConfig.dataReductionEnable,
+			dataReductionMaxSize: this.elementConfig.chartsConfig.dataReductionMaxSize,
+			dataoutOfLimitEnable: this.elementConfig.chartsConfig.dataoutOfLimitEnable,
+			dataMaxLimit: this.elementConfig.chartsConfig.dataMaxLimit,
+			dataMinLimit: this.elementConfig.chartsConfig.dataMinLimit,
+			categoryType: this.elementConfig.chartsConfig.categoryType,
+			categoryRound: this.elementConfig.chartsConfig.categoryRound,
+			categorCustomValue: this.elementConfig.chartsConfig.categorCustomValue,
+			categoryCustomIntervalLength: this.elementConfig.chartsConfig.categoryCustomIntervalLength,
+			categoryCustomIntervalUnit: this.elementConfig.chartsConfig.categoryCustomIntervalUnit,
+			categoryTimeOffset:this.elementConfig.chartsConfig.categoryTimeOffset,
+			singleDataRequest: true,
+			specialParameters:this.specialParameters
+		  }],
+		  updateRequest: {
+			OperationMode: "Hist",
+			initialTime: Initial_Time,
+			finalTime: Final_Time,
+			customFilterType: ""
+		  }
+		};
+	
+		return singledataRequest;
+	}	
+	
+	//Single Data Calling
+	async singleelementDataCreator() {
+		return new Promise((resolve, reject) => {			
+			//Custom Request
+			webMI.data.customRequest("GET", "Advanced_Dashboard_Data_Creator?DataRequest="+JSON.stringify(this.singleDataRequest)+"&format=binary", "responseType=string", function(e){
+				try {  
+					console.log("----------Single Request Answered--------");
+					
+					//Read dashboardData
+					let dashboardData=e;
+					
+					//Check if it´s valid
+					if (!dashboardData || !dashboardData.chartsData || !Array.isArray(dashboardData.chartsData) || dashboardData.chartsData.length === 0) {
+						throw new Error("Invalid or empty chartsData array");
+					}
+				
+					//Adapt Structure to single Element Data
+					const elementDataI = {
+						chartData: {
+							chartID: dashboardData.chartsData[0].chartID,
+							chartSeries: dashboardData.chartsData[0].chartSeries,
+							chartCategories: dashboardData.chartsData[0].chartCategories
+						},
+						Errors: dashboardData.Errors
+					};
+					resolve (elementDataI);
+				} 
+				catch (error) {
+					console.log("Error found with custom request")
+					console.log(error);
+				}
+			});
+		});
+	}
+	
+	//-----------------------------------------------//
+	//-------------Auxiliary Functions--------------//
+	
+	 // Creates Chart Colors
+    createChartColors() {
+        // Ensure Highcharts.color method is available for color manipulation
+        if (typeof Highcharts === 'undefined' || typeof Highcharts.color !== 'function') {
+            throw new Error("Highcharts library or Highcharts.color method is not available.");
+        }
+		
+		const baseColor = this.elementRawConfig.Appearance.ColorSeriesPalette;
+        const dataLength = this.isPiePyramid ? this.elementData.chartData.chartSeries[0].data.length : this.elementData.chartData.chartSeries.length;
+        const colors = [];        
+        
+        //Color from Color Pallete
+        if ( this.elementRawConfig.Appearance.ColorSeriesType=="Color-Pallete") {
+			for (let i = 0; i < dataLength; i++) {
+				// Calculate color variation
+				const variation = 0.4 * i;
+				const newColor = Highcharts.color(baseColor).brighten(variation).get();
+				colors.push(newColor);
+			}        
+        }
+        
+        
+        else if( this.elementRawConfig.Appearance.ColorSeriesType=="Color-Custom") {
+        
+			// Data Source Text
+			if (this.elementRawConfig.GeneralConfig.SeriesSource === "Text") {		
+				//Take source from parameters
+				this.elementRawConfig.Series.forEach(function(seriesItem) {
+					if (seriesItem.SeriesNode) { // Check if SeriesNode is not undefined
+						colors.push(seriesItem.SeriesColor);
+					}
+				});
+			}
+			
+			// Data Source Enum
+			else if (this.elementRawConfig.GeneralConfig.SeriesSource === "EnumList") {
+				for (const key in this.elementRawConfig.EnumList.EnumList) {
+					if (this.elementRawConfig.EnumList.EnumList.hasOwnProperty(key)) {
+						const enumItem = this.elementRawConfig.EnumList.EnumList[key];
+						if (enumItem.Color) { // Check if Node is not undefined
+							colors.push(enumItem.Color);
+						}
+					}
+				}
+			}
+        
+        }
+        return colors;
+    }
+    
+    defineBackgroundColor(){
+		//If transparen Enabled
+		if (this.elementRawConfig.Appearance.ColorBackgroundTranspartentEnable=="true"||this.elementRawConfig.Appearance.ColorBackground.length<=0){
+			console.log("return transparent")
+			return 'transparent';
+	    }
+	    else{
+			return this.elementRawConfig.Appearance.ColorBackground;
+	    }
+    
+    }
+    
+    defineChartLabel(SeriesName) {
+        // Find the index of the element in this.elementNodes where SeriesName is the last part
+        const index = this.elementNodes.findIndex(node => {
+            return node === SeriesName;
+        });
+
+        // Return the corresponding label from this.chartLabels or the SeriesName if the label is empty
+        if (index !== -1) {
+            const label = this.chartLabels[index];
+            return label !== '' ? label : SeriesName.split('.').pop();
+        } else {
+            return SeriesName; // return SeriesName if index is not found
+        }
+    }
+	
+} 
+]]></script>
+</svg>

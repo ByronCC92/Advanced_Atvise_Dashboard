@@ -1,0 +1,7 @@
+NodeId: ns=1;s=SYSTEM.GLOBALS.Advanced_Dashboard_List
+NodeClass: Object
+BrowseName: 1:Advanced_Dashboard_List
+DisplayName: en|Advanced_Dashboard_List
+Description: en|Advanced_Dashboard_List
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

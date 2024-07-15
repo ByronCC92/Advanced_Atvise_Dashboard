@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.HISTORY.datavalues.AggregateConfiguration.TreatUncertainAsBad
+NodeClass: Variable
+BrowseName: TreatUncertainAsBad
+DisplayName: en|TreatUncertainAsBad
+Description: en|TreatUncertainAsBad
+DataType: Boolean
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition PropertyType

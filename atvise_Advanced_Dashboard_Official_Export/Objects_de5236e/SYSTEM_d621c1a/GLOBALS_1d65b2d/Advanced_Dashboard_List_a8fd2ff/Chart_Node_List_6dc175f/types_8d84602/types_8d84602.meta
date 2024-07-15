@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.GLOBALS.Advanced_Dashboard_List.Chart_Node_List.types
+NodeClass: Variable
+BrowseName: 1:types
+DisplayName: en|types
+Description: en|types
+DataType: String
+ValueRank: 1
+AccessLevel: 103
+Reference: forward HasTypeDefinition PropertyType

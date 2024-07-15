@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy.Power_1
+NodeClass: Variable
+BrowseName: 1:Power_1
+DisplayName: en|Power_1
+Description: en|Power_1
+DataType: Double
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.datavalues

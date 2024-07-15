@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy
+NodeClass: Object
+BrowseName: 1:Energy
+DisplayName: en|Energy
+Description: en|Energy
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

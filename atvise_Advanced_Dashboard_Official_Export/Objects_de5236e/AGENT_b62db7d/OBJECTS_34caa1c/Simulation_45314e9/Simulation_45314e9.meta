@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation
+NodeClass: Object
+BrowseName: 1:Simulation
+DisplayName: en|Simulation
+Description: en|Simulation
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

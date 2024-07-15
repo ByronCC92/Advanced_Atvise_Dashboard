@@ -1,0 +1,8 @@
+NodeId: ns=1;s=AGENT.HISTORY.datavalues
+NodeClass: Object
+BrowseName: 1:datavalues
+DisplayName: en|datavalues
+Description: en|datavalues
+EventNotifier: 0
+Reference: forward HasModellingRule SharedExclusive
+Reference: forward HasTypeDefinition ns=1;s=ObjectTypes.ATVISE.ArchiveGroup.Data

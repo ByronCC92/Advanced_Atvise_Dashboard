@@ -1,0 +1,2910 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Parameters" type="http" trigger="false" relative="false" value=""/>
+  <code><![CDATA[//-------------------------------------------------------------// 
+//-------------------Dashboard Data Creator-------------------//
+/*   The Dashboard Data creator takes instructions called 
+	 Data Request and returns Dashboard Data.
+	 
+	 This is en example of the Data Request Format 
+	 
+	 chartsNodes: [{chartID: 0,
+				   chartNodes: ["AGENT.OBJECTS.Simulacion.Counter.Line_Counter_1",
+							   "AGENT.OBJECTS.Simulacion.Counter.Line_Counter_2"]
+				  },
+				  {chartID: 1,
+				   chartNodes: ["AGENT.OBJECTS.Simulacion.Counter.Line_Counter_1"]
+				  }],
+    chartsConfig: [
+					{chartID: 0,
+					 chartType: "Pie",
+					 dataProcessingType: "SimpleAddition",
+					 dataReductionEnable: true,
+					 dataReductionMaxSize: 1000,
+					 dataoutOfLimitEnable: false,
+					 dataMaxLimit:"",
+					 dataMinLimit:"",
+					 categoryType: "AllData-DateTime",
+					 categorCustomValue: "",
+					 specialParameters: ""
+					},
+					{chartID: 1,
+					 chartType: "Line",
+					 dataProcessingType: "Integration",
+					 dataReductionEnable: true,
+					 dataReductionMaxSize: 1000,
+					 dataoutOfLimitEnable: false,
+					 dataMaxLimit:"",
+					 dataMinLimit:"",
+					 categoryType: "Interval-Dynamic",
+					 categoryRound: "true",
+					 categorCustomValue: "",
+					 categoryCustomIntervalLength: 1
+					 categoryCustomIntervalUnit: "h"
+					 categoryTimeOffset: "30"
+					 specialParameters: ""
+					},
+				], 
+	updateRequest: { 
+					OperationMode: "Hist",
+					initialTime: Initial_Time,
+					finalTime: Final_Time,
+					customFilterType: "",
+					cacheConfig:{					
+						CacheEnabled:true
+						CacheIntervalSize:0
+						CacheMaxSize:0
+						}
+				   }
+}
+	 
+*/
+
+
+
+//Variables Declaration
+
+console.log("---------------------Excecuting--------------");
+console.log("---------------------------------------------");
+console.log("---------------------------------------------");
+console.log("---------------------------------------------");
+
+console.log("DataRequest Excecuting");
+
+console.log(Parameters);
+var ParametersI= Parameters.request.getvalues;
+var dataRequest=JSON.parse(Parameters.request.getvalues["DataRequest"].replace(/'/g, '"'));
+console.log("dataRequest");
+console.log(dataRequest);
+
+//Time Constants
+const ONE_MINUTE = 60 * 1000;
+const HALF_HOUR = 30 * ONE_MINUTE;
+const ONE_HOUR = 60 * ONE_MINUTE;
+const ONE_DAY = 24 * ONE_HOUR;
+
+
+//Key Mapping for decompressing
+const keyMapping = {
+    "chartsConfig": "cChCfg",
+    "categorCustomValue": "cCV",
+    "categoryCustomIntervalLength": "cCIL",
+    "categoryCustomIntervalUnit": "cCIU",
+    "categoryRound": "cRnd",
+    "categoryTimeOffset": "cTO",
+    "categoryType": "cCatTyp",
+    "chartID": "cID",
+    "chartType": "cTyp",
+    "dataMaxLimit": "dMxL",
+    "dataMinLimit": "dMnL",
+    "dataProcessingType": "dPrc",
+    "dataReductionEnable": "dREn",
+    "dataReductionMaxSize": "dRMx",
+    "dataType": "dTyp",
+    "dataoutOfLimitEnable": "dOLE",
+    "singleDataRequest": "sDR",
+    "specialParameters": "sPar",
+    "OEECompleteRangeAnalisis": "OEECRA",
+    "OEEProductionSpeed": "OEESP",
+    "chartsNodes": "cChNds",
+    "chartNodes": "cNds",
+    "updateRequest": "uReq",
+    "OperationMode": "opMd",
+    "cacheConfig": "caCfg",
+    "CacheEnabled": "cEna",
+    "CacheIntervalSize": "cISz",
+    "CacheMaxSize": "cMSz",
+    "customFilterType": "cFT",
+    "finalTime": "fTme",
+    "initialTime": "iTme",
+    "informationRT": "iRT",
+    "AllDataRequired": "ADR",
+    "IntervalInfo": "iInf",
+    "end": "end",
+    "intervalLength": "iLen",
+    "newInterval": "nInt",
+    "start": "strt",
+    "LastDataPointProcessed": "lDPP",
+    "LastDataPointRT": "lDPRT",
+    "Value": "Val",
+    "status": "sts",
+    "timestamps": "tStmp",
+    "LastDataPointRaw": "lDPR",
+    "Node": "Nd",
+    "OEEInfo": "OEEI",
+    "ReduceInfo": "RInf",
+    "reductionStepSize": "rSSz",
+    "reductioniterationsBeforeNextStepRT": "rINS"
+};
+
+
+
+//---------------Dashboard Data Processor----------------//
+//-----------------------------------------------------//
+
+class dashboardDataProcessor {
+	
+	//Attributes
+	processedData;
+	dynamicCategory;
+	
+	constructor() {
+		this.processedData = null; // Initialize processedData 
+		this.dataRequest;
+		this.rawData;
+		this.timeRange;
+		this.OperationMode;
+		this.intervalLength;
+		this.uniqueCategoriesConfig=[]; // Initialize unique Config
+		this.uniqueCategoriesConfigRT=[];
+		this.uniqueCategories=[]; // Initialize unique Categories complete
+		this.uniqueCategoriesRT=[];
+		
+		//For each Element Config
+		this.uniqueCategoriesConfigI;
+		this.intervalLengthI;
+		this.processedDataI;
+		this.chartConfigI;
+		this.updateRequestI;
+		this.chartNodesI;
+		this.chartCategoriesI=[];
+		this.categoryTimeOffsetI;
+		this.rawDataI;
+		this.nodeI;
+		this.reductionExcecutedI=false;
+		this.partialDashboardDataI;
+		this.LimitDashboardDataI;
+		this.DataInfoRTI;
+		this.informationRTI;
+		this.reductionStepSizeI=0;
+		this.reductionreductioniterationsBeforeNextStepRTI=0;
+		this.OEEinfoRTI={};
+		
+		this.newIntervalI=false;
+		this.processedDataII;
+		this.processedDataStruct;
+	}
+
+	//Initialize Elements
+	initialize(dataRequest,rawData) { 
+	
+		console.log("----------Initialize Processor----------");		
+		this.dataRequest=dataRequest;
+		this.OperationMode=this.dataRequest.updateRequest[0].OperationMode;
+		this.rawData=rawData;
+		this.timeRange=(new Date(this.dataRequest.updateRequest[0].finalTime)).getTime() - (new Date(this.dataRequest.updateRequest[0].initialTime)).getTime();
+		
+		//Operation in Hist Mode
+		if (this.OperationMode==="Hist"){
+			
+			console.log("Initial Time");
+			console.log((new Date(this.dataRequest.updateRequest[0].initialTime)).getTime());
+			console.log((new Date(this.dataRequest.updateRequest[0].initialTime)).toString());
+			console.log("Final Time");
+			console.log((new Date(this.dataRequest.updateRequest[0].finalTime)).getTime());
+			console.log((new Date(this.dataRequest.updateRequest[0].finalTime)).toString());
+				
+			//Find all the unique Chart Categories
+			this.uniqueCategoriesConfig=this.uniqueChartCategoriesFinder();
+			console.log("----------Unique Config Categories----------");
+			console.log(this.uniqueCategoriesConfig);
+			
+			//Create all unique Chart Categories
+			this.uniqueCategories=this.uniqueCategoriesCreator();
+			console.log("----------Unique Categories Created----------");
+			console.log(this.uniqueCategories)
+		}
+		else if (this.OperationMode==="RealTime"){
+			
+			//Find all the unique Chart Categories
+			this.uniqueCategoriesConfigRT=this.uniqueChartCategoriesFinder();
+			console.log("----------Unique RT Config Categories----------");
+			console.log(this.uniqueCategoriesConfigRT);
+			
+			//Create all unique Chart Categories
+			this.uniqueCategoriesRT=this.uniqueCategoriesCreatorRT();
+			console.log("----------Unique RT Categories Created----------");
+			console.log(this.uniqueCategoriesRT)
+			
+		}
+		
+	}
+
+	// Method to handle the processing of requests
+	processRequestHandler(dataRequest,rawData) { 
+		
+		//Process each chartConfig request
+		this.processedData = this.dataRequest.chartsConfig.map((chartConfigI, index) => {
+		
+		
+			//Define current chartConfig
+			this.chartConfigI=this.dataRequest.chartsConfig[index];
+			
+			//Define current UpdateRequest
+			this.updateRequestI=this.dataRequest.updateRequest[index];
+			console.log("this.updateRequestI");
+			console.log(this.updateRequestI);
+			//Find Nodes of ChartConfig
+			this.chartNodesI=this.chartNodesIFinder();
+			
+			//Process each Data Series (each node)
+			this.processedDataI=this.chartNodesI.map((nodeI) => {
+			
+				//Current Node
+				this.nodeI=nodeI;	
+				console.log("------------this.nodeI--------------");	
+				console.log(this.nodeI);
+				
+				//Operation in Hist Mode
+				if (this.updateRequestI.OperationMode==="Hist"){	
+				
+					//Current rawData
+					this.rawDataI=rawData[rawData.findIndex(data => data.Nodeaddress === this.nodeI)];	
+	
+					//Category Handling				
+					this.chartCategoriesI=this.categoryHandling();				
+					console.log("------------Selecting Categories------------");
+					console.log(this.chartCategoriesI);
+					console.log(this.chartCategoriesI.chartCategory.categories[0]);
+					 
+					//Data Reduction
+					var dataReduction=this.dataReductor();
+					this.partialDashboardDataI=dataReduction.reducedData;
+					this.updateChartCategory();
+					console.log("------------Partial Dahsboard Data------------");
+					console.log(this.partialDashboardDataI);
+					
+					//Limits
+					this.LimitDashboardDataI=dataReduction.filteredData;
+					console.log("------------Limits Found------------");
+					//console.log(this.LimitDashboardDataI);
+		
+		
+					//Data Processing
+					this.processedDataII=this.dataProcessingHandling();
+					console.log("------------Processed Data------------");
+					console.log(this.processedDataII);
+					
+					
+					//Data for RT Creation 
+					this.DataInfoRTI=this.dataInfoRTCreator();	
+					console.log("------------Data for RT------------");
+					console.log(this.DataInfoRTI);
+				
+					
+					//Create Structure for processed Data				
+					this.processedDataStruct=this.createProcessedDataStruct();
+					console.log("------------Processed Structure------------");
+					console.log(this.processedDataStruct);
+					
+					
+					return this.processedDataStruct
+				}
+					
+				//Operation in Real time Mode
+				else if (this.updateRequestI.OperationMode==="RealTime"){
+					
+					this.informationRTI=this.dataInfoRTFinder();
+					console.log("----------Information RT----------");
+					console.log(this.informationRTI);
+					
+					//Category Handling				
+					this.chartCategoriesI=this.categoryHandling();				
+					console.log("------------Selecting RT Categories------------");
+					console.log(this.chartCategoriesI);
+										
+					//Data Reduction
+					var dataReduction=this.dataReductor();
+					this.partialDashboardDataI=dataReduction.reducedData;
+					console.log("------------Partial RT Dahsboard Data------------");
+					console.log(this.partialDashboardDataI);
+					
+					//Limits
+					this.LimitDashboardDataI=dataReduction.filteredData;
+					console.log("------------Limits RT Found------------");
+					console.log(this.LimitDashboardDataI);
+
+					//Data Processing
+					this.processedDataII=this.dataProcessingHandling();
+					console.log("------------Processed RT Data------------");
+					console.log(this.processedDataII);	
+					
+					//Data for RT Creation 
+					this.DataInfoRTI=this.dataInfoRTCreator();	
+					console.log("------------Data for RT in RT------------");
+					console.log(this.DataInfoRTI);				
+					
+					//Create Structure for processed Data				
+					this.processedDataStruct=this.createProcessedDataStruct();
+					console.log("------------Processed Structure------------");
+					console.log(this.processedDataStruct);
+					
+					return this.processedDataStruct;
+				}	
+			});
+			
+			return {chartID:this.chartConfigI.chartID,
+					processedDataStruct:this.processedDataI,
+					chartType:this.chartConfigI.chartType,
+					categoryType:this.chartConfigI.categoryType}
+		});	
+	
+		return this.processedData;
+	} 
+  
+	//----------Auxiliary Functions---------------------//
+	//--------------------------------------------------//
+  
+	//Handles Category Per node
+	categoryHandling() {
+		try {
+			return this.chartCategoryIFinder();		  
+		} catch (error) {
+		  console.error("Error handling category: ", error);
+		  console.error(error.message);
+		  return { categories: [] }; // Return an empty categories array or handle the error as needed
+		}
+	}
+  
+    //Chart Nodes Finder
+	chartNodesIFinder() {
+		try {
+		  // Find index of matching ID
+		  const nodesIndex = this.dataRequest.chartsNodes.findIndex(chart => chart.chartID === this.chartConfigI.chartID);
+		  
+		  if (nodesIndex === -1) {
+			throw new Error(`Chart ID ${this.chartConfigI.chartID} not found`);
+		  }
+		  
+		  // Get the Nodes Corresponding to the chartID
+		  const chartNodesI = this.dataRequest.chartsNodes[nodesIndex].chartNodes;
+		  
+		  return chartNodesI;
+		} catch (error) {
+		  console.error("Error finding chart nodes: ", error);
+		  console.error(error.message);
+		  return []; // Return an empty array or handle the error as needed
+		}
+	}
+	
+	//Find current Chart Category 
+	chartCategoryIFinder() {
+		
+		var uniqueCategories;
+		
+		if (this.OperationMode==="Hist"){
+			uniqueCategories=this.uniqueCategories;
+		}
+		else if (this.OperationMode==="RealTime"){
+			uniqueCategories=this.uniqueCategoriesRT;
+		}
+        // Find the category entry where the current chartID is included in the chartIDs array
+        const categoryEntry = uniqueCategories.find(category => category.chartIDs.includes(this.chartConfigI.chartID));
+        
+        // Return the categories array if an entry is found, otherwise return null or an empty array
+        return categoryEntry ? categoryEntry: null;
+    }
+  
+	//Data Processing Handling
+	dataProcessingHandling(){
+	
+	 console.log("------------Processing Type------------")
+	 console.log(this.chartConfigI.dataProcessingType);
+	 
+	 switch (this.chartConfigI.dataProcessingType) {
+		case "Simple-None": //No change
+			console.log("Not changed");
+			return {ProcessedData:this.partialDashboardDataI.Values};
+			break;	
+		case "SinglePoint-LastValue": 	//Use Last Value
+			console.log("Last Value")
+			return this.SinglePoint_lastValue(this.partialDashboardDataI);
+			break;	
+		case "SinglePoint-FirstValue": 	//Use Last Value
+			console.log("First Value")
+			return this.SinglePoint_firstValue(this.partialDashboardDataI);
+			break;
+		case "Interval-Addition": 	//Add all the elements within intervals	
+			console.log("Adding Intervals")
+			return this.Interval_Addition(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+			break;
+		case "Interval-CountChanges":  //Count Number of Changes
+			console.log("Counting Changes")
+			return this.Interval_ChangesCounter(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+			break;
+		case "Interval-CountTimeOn":  //Count Number of Changes
+			console.log("Count Time On")
+			return this.Interval_CountTimeOn(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+			break;
+		case "Interval-Difference": 	//Add all the elements	
+			console.log("Interval Difference");
+			return this.Interval_Difference(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+			break;
+		case "Interval-Integration":  //Integrate Data
+			console.log("Integrated Data")
+			return this.Interval_Integration(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+			break;		
+		case "Interval-Histogram": 	//Use Last Value
+			console.log("Histogram")
+			return this.Interval_Histogram(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.categories);
+			break;	
+		case "FullRange-Addition": 	//Add all the elements	
+			console.log("Simple Addition")
+			return this.FullRange_Addition(this.partialDashboardDataI);
+			break;
+		case "FullRange-Difference": 	//Add all the elements	
+			console.log("Interval Difference")
+			return this.FullRange_Difference(this.partialDashboardDataI);
+			break;																		
+		case "FullRange-OEEProductivity": 	//OEE Productivity
+			console.log("OEE Productivity")
+			return this.FullRange_OEEProductivity(this.partialDashboardDataI);
+			break;	
+		case "FullRange-OEEAvailability": 	//OEE Productivity
+			console.log("OEE Availability")
+			return this.FullRange_OEEAvailability(this.partialDashboardDataI, this.chartCategoriesI.chartCategory.intervals);
+			break;																
+		default: //No processing done
+			console.log("No processing done")
+			return {ProcessedData:this.partialDashboardDataI.Values};
+			break;
+	}
+	
+	}
+	
+	//Creating Process Data Structure
+	createProcessedDataStruct() {
+	
+	//Create structure based on if it has limits or not
+	if(this.chartConfigI.dataReductionEnable==true&&this.chartConfigI.dataoutOfLimitEnable==true)
+		{
+			return {processedDataI:this.processedDataII.ProcessedData,
+								 chartCategories:this.chartCategoriesI.chartCategory.categories,
+								 LimitDashboardData:this.LimitDashboardDataI,
+								 informationRT: this.DataInfoRTI,
+								 processedNode:this.nodeI
+								 }
+		}
+		else{
+			return {processedDataI:this.processedDataII.ProcessedData,
+								 chartCategories:this.chartCategoriesI.chartCategory.categories,
+								 informationRT: this.DataInfoRTI,
+								 processedNode:this.nodeI
+								 }
+		}  
+	}
+	
+	// Method to reduce data as needed
+	dataReductor() {
+        try {
+            console.log("----------Reducing Data--------------");
+            let reducedData = { Values: [], status: [], timestamps: [] };
+            let filteredData = { Values: [], status: [], timestamps: [] };
+
+            if (this.OperationMode === "Hist") {
+				const step = this.rawDataI.DataSize > this.chartConfigI.dataReductionMaxSize ? Math.ceil(this.rawDataI.DataSize / this.chartConfigI.dataReductionMaxSize) : 0;
+				this.reductionStepSizeI=step;
+                if (this.chartConfigI.dataReductionEnable === true && step > 0) {
+                    
+					
+					
+                    // Reduce the data to MaxSize by removing elements
+                    for (let i = 0; i < this.rawDataI.Values.length; i += step) {
+                        reducedData.Values.push(this.rawDataI.Values[i]);
+                        reducedData.status.push(this.rawDataI.status[i]);
+                        reducedData.timestamps.push(this.rawDataI.timestamps[i]);
+
+                        // Track the iterations needed for the next step
+                        this.iterationsBeforeNextStep = i + step - this.rawDataI.Values.length;
+                    }
+
+                    if (this.chartConfigI.dataoutOfLimitEnable && this.chartConfigI.dataMaxLimit !== "" && this.chartConfigI.dataMinLimit !== "") {
+                        // Filter data by MaxValue and MinValue
+                        for (let i = 0; i < this.rawDataI.Values.length; i++) {
+                            if (this.rawDataI.Values[i] > this.chartConfigI.dataMaxLimit || this.rawDataI.Values[i] < this.chartConfigI.dataMinLimit) {
+                                filteredData.Values.push(this.rawDataI.Values[i]);
+                                filteredData.status.push(this.rawDataI.status[i]);
+                                filteredData.timestamps.push(this.rawDataI.timestamps[i]);
+                            }
+                        }
+                    }
+                    this.reductionExcecutedI = true;
+                    // Update DataSize for both objects
+                    reducedData.DataSize = reducedData.Values.length;
+                    filteredData.DataSize = filteredData.Values.length;
+                } else {
+                    this.reductionExcecutedI = false;
+                    reducedData = this.rawDataI;
+                    filteredData = [];
+                }
+            } else if (this.OperationMode === "RealTime") {
+				if (this.chartConfigI.dataReductionEnable === true) {
+					let reductionStepSize = this.informationRTI.ReduceInfo.reductionStepSize;
+					let reductionIterationsBeforeNextStepRT = this.informationRTI.ReduceInfo.reductionIterationsBeforeNextStepRT;
+					
+					if (this.informationRTI.ReduceInfo.reductionStepSize<=0){
+							this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+						    reducedData.Values.push(dataPoint.Value);
+							reducedData.status.push(dataPoint.status);
+							reducedData.timestamps.push(dataPoint.timestamps)
+						});
+					}
+					else{
+						this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+							if (reductionIterationsBeforeNextStepRT === 0) {
+								reducedData.Values.push(dataPoint.Value);
+								reducedData.status.push(dataPoint.status);
+								reducedData.timestamps.push(dataPoint.timestamps);
+		
+								reductionIterationsBeforeNextStepRT = reductionStepSize;
+							} else {
+								reductionIterationsBeforeNextStepRT--;
+							}
+						});
+					}
+	
+					this.iterationsBeforeNextStep = reductionIterationsBeforeNextStepRT;
+	
+					if (this.chartConfigI.dataoutOfLimitEnable && this.chartConfigI.dataMaxLimit !== "" && this.chartConfigI.dataMinLimit !== "") {
+						this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+							if (dataPoint.Value > this.chartConfigI.dataMaxLimit || dataPoint.Value < this.chartConfigI.dataMinLimit) {
+								filteredData.Values.push(dataPoint.Value);
+								filteredData.status.push(dataPoint.status);
+								filteredData.timestamps.push(dataPoint.timestamps);
+							}
+						});
+					}
+					this.reductionExcecutedI = true;
+					reducedData.DataSize = reducedData.Values.length;
+					filteredData.DataSize = filteredData.Values.length;
+                }
+                //Reduction Disabled
+                else{
+					this.reductionExcecutedI = false;
+                    reducedData = this.informationRTI.LastDataPointRT;
+                    filteredData = [];               
+                }
+            }
+
+            console.log({ reducedData, filteredData });
+            console.log("Iterations before next step: ", this.iterationsBeforeNextStep);
+
+            return { reducedData, filteredData };
+        } catch (error) {
+            console.error("Error reducing data: ", error);
+            console.error(error.message);
+            return { reducedData: {}, filteredData: [] }; // Return empty objects or handle the error as needed
+        }
+    }
+
+	//----------Interval/Category Functions--------------//
+	//--------------------------------------------------//
+	
+	//Find all unique categories
+	uniqueChartCategoriesFinder() {
+        const categoriesMap = new Map();
+        const isRealTimeMode = this.OperationMode === "RealTime";
+
+        // Analyze each chart configuration and group by unique category settings
+        this.dataRequest.chartsConfig.forEach(chartConfig => {
+            const {
+                categoryType,
+                categoryRound,
+                categorCustomValue,
+                categoryCustomIntervalLength,
+                categoryCustomIntervalUnit,
+                categoryTimeOffset,
+                chartID
+            } = chartConfig;
+
+            // Find the nodes associated with the chartID
+            const chartNodes = this.dataRequest.chartsNodes.find(chart => chart.chartID === chartID)?.chartNodes || [];
+
+            // Find the corresponding informationRT for the chartID if in RealTime mode
+            const informationRT = isRealTimeMode 
+                ? this.dataRequest.updateRequest.find(update => update.chartID === chartID)?.informationRT || [] 
+                : [];
+
+            // Create a key for the category configuration including the nodes (and informationRT if in RealTime mode)
+            const categoryKey = JSON.stringify({
+                categoryType,
+                categoryRound,
+                categorCustomValue,
+                categoryCustomIntervalLength,
+                categoryCustomIntervalUnit,
+                categoryTimeOffset,
+                chartNodes,  // Include nodes in the category key
+                ...(isRealTimeMode && { informationRT })  // Conditionally include informationRT in the category key
+            });
+
+            if (categoriesMap.has(categoryKey)) {
+                categoriesMap.get(categoryKey).chartIDs.push(chartID);
+            } else {
+                categoriesMap.set(categoryKey, {
+                    categoryConfig: {
+                        categoryType,
+                        categoryRound,
+                        categorCustomValue,
+                        categoryCustomIntervalLength,
+                        categoryCustomIntervalUnit,
+                        categoryTimeOffset,
+                        chartNodes,  // Include nodes in the category configuration
+                        ...(isRealTimeMode && { informationRT })  // Conditionally include informationRT in the category configuration
+                    },
+                    chartIDs: [chartID]
+                });
+            }
+        });
+
+        // Convert the map to an array of category configurations
+        return Array.from(categoriesMap.values());
+    }
+	
+	//Create All Unique Categories
+	uniqueCategoriesCreator() {
+	
+		console.log("----------Creating Categories--------")
+		return this.uniqueCategoriesConfig.map(config => {
+			
+			//Update Current Category Config
+			this.uniqueCategoriesConfigI=config;			
+			
+			//Create Specific Interval
+			this.intervalLengthI= this.intevalLengthcreator();
+			
+			console.log("-----------This Interval Length----------");
+			console.log(this.intervalLengthI);
+			
+			let chartCategory;
+			var intervalInfo;
+			switch (config.categoryConfig.categoryType) {
+				case "AllData-DateTime":  // DateTime
+					chartCategory=this.allDataCategoryCreator();
+					intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime, newInterval:this.newIntervalI};
+					break;
+				case "Interval-Dynamic": //Dynamic					
+					chartCategory = this.intervalCategoryCreator();
+					var intervalInfoI=chartCategory.intervals[chartCategory.intervals.length-1];
+					intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};
+					break;
+				case "Interval-CustomInterval": //Custom Interval
+					chartCategory = this.intervalCategoryCreator();
+					var intervalInfoI=chartCategory.intervals[chartCategory.intervals.length-1];
+					intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};				
+					break;
+				case "Interval-CustomText": //Custom 
+					chartCategory = {categories:config.categoryConfig.categorCustomValue};
+					intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+					break;
+				case "Interval-Histogram":  // Histogram
+				    chartCategory = this.histogramCategoryCreator();
+				    intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+				    break;
+				case "Single-Simple":  // Simple
+				    chartCategory= { categories: [] };
+				    intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+				    break;
+				default:
+					// Handle other types or do nothing if not applicable
+					chartCategory = { categories: [] };
+					intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+					break;
+			}
+			
+			//Add Interval Length
+			intervalInfo["intervalLength"]=this.intervalLengthI;
+			
+			if (chartCategory) {
+				return {
+					chartCategory,
+					intervalInfo: intervalInfo,
+					chartIDs: config.chartIDs
+				};
+			}
+		}).filter(entry => entry !== undefined); // Filter out any undefined entries due to unsupported category types
+	}
+	
+	//Update Category If reduction
+    updateChartCategory() {
+		if (this.reductionExcecutedI) {
+			// Iterate over the categories to find the matching chartNode
+			this.chartCategoriesI.chartCategory.categories.forEach(category => {
+				if (category.chartNode === this.nodeI) {
+					category.categories = this.partialDashboardDataI.timestamps;
+					console.log(`Chart categories for node ${this.nodeI} updated successfully`);
+				}
+			});
+		} else {
+			console.log("Reduction not executed. Chart categories not updated.");
+		}
+	}
+		
+	//Method to create interval length
+	intevalLengthcreator(){			
+		
+		
+		//Dynamic Interval Length	
+		if(this.uniqueCategoriesConfigI.categoryConfig.categoryType=="Interval-Dynamic")	{	
+			if (this.timeRange <= ONE_MINUTE) {
+				return 5 * 1000; // 5 seconds
+			} else if (this.timeRange <= HALF_HOUR) {
+				return ONE_MINUTE;
+			} else if (this.timeRange <= ONE_HOUR) {
+				return 5 * ONE_MINUTE;
+			} else if (this.timeRange <= ONE_DAY) {
+				return ONE_HOUR;
+			} else if (this.timeRange <= 31 * ONE_DAY) { // Assuming an average month length
+				return ONE_DAY;
+			} else if (this.timeRange <= 365 * ONE_DAY) { // Assuming an average year length
+				return 'month'; // Dynamic handling for months
+			} else {
+				return 'year'; // Dynamic handling for years
+			}
+		}
+		
+		// Custom Interval Length
+		else if(this.uniqueCategoriesConfigI.categoryConfig.categoryType=="Interval-CustomInterval")	{
+			const { categoryCustomIntervalLength, categoryCustomIntervalUnit } = this.uniqueCategoriesConfigI.categoryConfig;
+			switch (categoryCustomIntervalUnit) {
+				case 's':   // seconds
+					return categoryCustomIntervalLength * 1000;
+					break;
+				case 'min': // minutes
+					return categoryCustomIntervalLength * 60 * 1000;
+					break;
+				case 'h':   // hours
+					return categoryCustomIntervalLength * 3600 * 1000;
+					break;
+				case 'day':   // day
+					return categoryCustomIntervalLength * 24 * 3600 * 1000;
+					break;
+				case 'month':   // month
+					return categoryCustomIntervalLength * 30 * 24 * 3600 * 1000;
+				break;
+				default:
+					throw new Error('Unsupported interval unit');
+			}
+		}
+		
+		//DateTime Interval Length	
+		else if(this.uniqueCategoriesConfigI.categoryConfig.categoryType=="AllData-DateTime")	{	
+			return this.timeRange; 
+		}	
+		
+		else{	
+			return this.timeRange; 
+		}	
+	}	
+	
+	//Creates Time Offset
+	categoryTimeOffsetCreator() {
+		// Read the current unit and offset from the config
+		const intervalUnit = this.uniqueCategoriesConfigI.categoryConfig.categoryCustomIntervalUnit;
+		const timeOffset = parseInt(this.uniqueCategoriesConfigI.categoryConfig.categoryTimeOffset);
+		console.log("intervalUnit: "+intervalUnit)
+		// Determine the offset unit based on the interval unit
+		let offsetUnitMilliseconds;
+		switch (intervalUnit) {
+			case 's':   // Seconds
+				offsetUnitMilliseconds = 1000; // 1 second = 1000 milliseconds
+				break;
+			case 'min': // Minutes
+				offsetUnitMilliseconds = 1000; // 1 minute = 60,000 milliseconds
+				break;
+			case 'h':   // Hours
+				offsetUnitMilliseconds = 1000 * 60; // 1 minute = 60,000 milliseconds
+				break;
+			case 'day':   // Days
+				offsetUnitMilliseconds = 1000 * 60 * 60; // 1 hour = 3,600,000 milliseconds
+				break;
+			case 'month':   // Months
+				offsetUnitMilliseconds = 1000 * 60 * 60 * 24; // 1 day = 86,400,000 milliseconds
+			break;
+			default:
+				throw new Error('Unsupported interval unit');
+		}
+	
+		// Calculate the time offset in milliseconds
+		return timeOffset * offsetUnitMilliseconds;
+	}
+	
+	//IntervalLength in Millis
+	getIntervalLengthInMillis(timestamp) {
+		if (typeof this.intervalLengthI === 'number') {
+			return this.intervalLengthI;
+		} else if (this.intervalLengthI === 'month') {
+			let date = new Date(timestamp);
+			let monthLater = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate());
+			return monthLater - timestamp;
+		} else if (this.intervalLengthI === 'year') {
+			let date = new Date(timestamp);
+			let yearLater = new Date(date.getFullYear() + 1, date.getMonth(), date.getDate());
+			return yearLater - timestamp;
+		}
+		return 0; // Default fallback if intervalLength is not properly set
+	}
+	
+	//Get Category String
+	getCategory(timeRange, num) {
+		if (timeRange <= ONE_DAY) {
+			return (new Date(num)).toTimeString().split(' ')[0];
+		} else if (timeRange <= 31 * ONE_DAY) {
+			return (new Date(num)).toDateString().split(' ').slice(1).join(' ');
+		} else if (timeRange <= 365 * ONE_DAY) {
+			let parts = (new Date(num)).toDateString().split(' ');
+			return `${parts[1]} ${parts[3]}`;
+		} else {
+			return (new Date(num)).getFullYear().toString();
+		}
+	}	
+	
+	//All Data Category
+	allDataCategoryCreator() {
+		const { categoryConfig } = this.uniqueCategoriesConfigI;
+		const { chartNodes } = categoryConfig;
+		const categoriesData = [];
+	
+		chartNodes.forEach(node => {
+			const rawDataNode = this.rawData.find(data => data.Nodeaddress === node);
+	
+			if (rawDataNode) {
+				categoriesData.push({
+					chartNode: node,
+					categories: rawDataNode.timestamps
+				});
+			}
+		});
+	
+		return {categories:categoriesData};
+	}
+	
+	//Category Creator	
+	intervalCategoryCreator() {
+
+		var Initial_Time=(new Date(this.dataRequest.updateRequest[0].initialTime)).getTime();
+		var Final_Time=(new Date(this.dataRequest.updateRequest[0].finalTime)).getTime();
+		
+		const intervals = [];
+		const categories = [];
+	
+		// Apply rounding if category rounding is enabled
+		if (this.uniqueCategoriesConfigI.categoryConfig.categoryRound=== "true") {
+			Initial_Time = this.roundDate(Initial_Time,"down").getTime();
+		}
+		console.log("Raw Offset")
+		console.log(this.uniqueCategoriesConfigI.categoryConfig.categoryTimeOffset);
+		//Apply Offset
+		if (this.uniqueCategoriesConfigI.categoryConfig.categoryTimeOffset>0 && this.uniqueCategoriesConfigI.categoryConfig.categoryType=="Interval-CustomInterval") {
+			this.categoryTimeOffsetI=this.categoryTimeOffsetCreator();
+			console.log("------------Category Time Offset------------");
+			console.log(this.categoryTimeOffsetI);
+			
+			Initial_Time = Initial_Time+this.categoryTimeOffsetI;
+		}
+		
+		let currentTime = new Date(Initial_Time);
+		
+		while (currentTime.getTime() < Final_Time) {
+			let currentEndTime = new Date(currentTime);
+	
+			if (typeof this.intervalLengthI === 'number') {
+				currentEndTime = new Date(currentTime.getTime() + this.intervalLengthI);
+			} else if (this.intervalLengthI=== 'month') {
+				currentEndTime.setMonth(currentEndTime.getMonth() + 1);
+			} else if (this.intervalLengthI === 'year') {
+				currentEndTime.setFullYear(currentEndTime.getFullYear() + 1);
+			}
+	
+			// Make sure we don't exceed Final_Time in our last interval
+			if (currentEndTime.getTime() > Final_Time) {
+				currentEndTime = new Date(Final_Time);
+			}
+	
+			intervals.push({ start: currentTime.getTime(), end: currentEndTime.getTime() });
+			categories.push(this.getCategory(this.timeRange, currentTime.getTime()));
+	
+			// Prepare for the next iteration
+			currentTime = currentEndTime;
+		}
+	
+		// Correct the last category if necessary to ensure it represents the end time accurately
+		if (categories.length > 0) {
+			categories[categories.length - 1] = this.getCategory(this.timeRange, Final_Time);
+		}
+		return { intervals, categories };
+	}      
+		
+	//Ceates Histogram Category
+	histogramCategoryCreator() {
+		const { categoryConfig } = this.uniqueCategoriesConfigI;
+		const firstNode = categoryConfig.chartNodes[0];
+	
+		// Find the raw data for the first node
+		const rawData = this.rawData.find(data => data.Nodeaddress === firstNode);
+	
+		if (!rawData) {
+			throw new Error(`No raw data found for node ${firstNode}`);
+		}
+	
+		const n = rawData.Values.length;
+		const sortedData = rawData.Values.slice().sort((a, b) => a - b); // Copy and sort data
+		const q1 = sortedData[Math.floor(n / 4)];
+		const q3 = sortedData[Math.floor(3 * n / 4)];
+		const iqr = q3 - q1; // Interquartile range
+	
+		let binSize;
+		let numBins;
+	
+		// Use Freedman-Diaconis Rule to determine bin size if possible
+		if (iqr > 0) { // Avoid division by zero in IQR calculations
+			binSize = 2 * (iqr / Math.cbrt(n));
+			numBins = Math.ceil((sortedData[n - 1] - sortedData[0]) / binSize);
+		} else {
+			// Fallback to Sturges' formula if IQR is 0
+			numBins = Math.ceil(Math.log2(n) + 1);
+			binSize = (sortedData[n - 1] - sortedData[0]) / numBins;
+		}
+	
+		const minData = sortedData[0];
+		const categories = [];
+	
+		for (let i = 0; i < numBins; i++) {
+			const binMin = minData + i * binSize;
+			const binMax = minData + (i + 1) * binSize;
+			// Create a string representation for each category/bin
+			categories.push(`${binMin.toFixed(2)} - ${binMax.toFixed(2)}`);
+		}
+		return { categories: categories};
+	}
+	
+	//---------------RT Processing Functions----------------//
+	//--------------------------------------------------//
+	
+		
+	
+	//Create Categories for RT
+	uniqueCategoriesCreatorRT() {
+        console.log("----------Creating Categories for RT--------");
+
+        return this.uniqueCategoriesConfigRT.map(config => {
+        
+            // Update Current Category Config
+            this.uniqueCategoriesConfigI = config;
+
+            let chartCategory;
+            let intervalInfo = config.categoryConfig.informationRT[0].IntervalInfo;
+            
+            // Create Specific Interval
+            this.intervalLengthI =intervalInfo.intervalLength;
+            console.log("-----------This Interval Length----------");
+            console.log(this.intervalLengthI);
+            
+            switch (config.categoryConfig.categoryType) {
+                case "AllData-DateTime":  // DateTime
+                    chartCategory = this.allDataCategoryCreatorRT();
+                    intervalInfo = this.allDataIntervalInfoRT();
+                    break;
+                case "Interval-Dynamic": // Dynamic
+                    chartCategory = this.intervalCategoryCreatorRT();
+                    var intervalInfoI=chartCategory.intervals[0];
+                    intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};
+                    break;
+                case "Interval-CustomInterval": // Custom Interval
+                    chartCategory = this.intervalCategoryCreatorRT();
+                    var intervalInfoI=chartCategory.intervals[0];
+                    intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};
+                    break;
+                case "Interval-CustomText": // Custom
+                    chartCategory = { categories: config.categoryConfig.categorCustomValue.split(',') };
+                    intervalInfo = { start: intervalInfo.start, end: intervalInfo.end };
+                    break;
+                case "Interval-Histogram":  // Histogram
+                    chartCategory = this.histogramCategoryCreatorRT();
+                    intervalInfo = this.allDataIntervalInfoRT();
+                    break;
+                case "Single-Simple":  // Simple
+                    chartCategory = { categories: [] };
+                    intervalInfo = this.allDataIntervalInfoRT();;
+                    break;
+                default:
+                    // Handle other types or do nothing if not applicable
+                    chartCategory = { categories: [] };
+                    intervalInfo = this.allDataIntervalInfoRT();;
+                    break;
+            }
+
+            // Add Interval Length
+            intervalInfo["intervalLength"] = this.intervalLengthI;
+
+            return {
+                chartCategory,
+                intervalInfo: intervalInfo,
+                chartIDs: config.chartIDs
+            };
+        }).filter(entry => entry !== undefined); // Filter out any undefined entries due to unsupported category types
+    }
+    
+    //Creates Categories for allDataTypes
+    allDataCategoryCreatorRT() {
+        const { chartNodes, informationRT } = this.uniqueCategoriesConfigI.categoryConfig;
+        const categoriesData = [];
+
+        chartNodes.forEach(node => {
+            const infoRTNode = informationRT.find(info => info.Node === node);
+
+            if (infoRTNode) {
+                categoriesData.push({
+                    chartNode: node,
+                    categories: infoRTNode.LastDataPointRT.map(point => point.timestamps)
+                });
+            }
+        });
+
+        return { categories: categoriesData };
+    }
+        
+    //Calculate Interval Info 
+    allDataIntervalInfoRT() {
+        const { informationRT } = this.uniqueCategoriesConfigI.categoryConfig;
+        let highestTimestamp = 0;
+
+        informationRT.forEach(info => {
+            info.LastDataPointRT.forEach(point => {
+                if (point.timestamps > highestTimestamp) {
+                    highestTimestamp = point.timestamps;
+                }
+            });
+        });
+
+        const intervalInfo = {
+            start: highestTimestamp - this.intervalLengthI,
+            end: highestTimestamp
+        };
+
+        return intervalInfo;
+    }
+    
+    //Create Interval Category RT
+    intervalCategoryCreatorRT() {
+        const { informationRT } = this.uniqueCategoriesConfigI.categoryConfig;
+        let highestTimestamp = 0;
+        let correspondingIntervalInfo = null;
+
+        // Find the highest timestamp and corresponding interval info
+        informationRT.forEach(info => {
+            info.LastDataPointRT.forEach(point => {
+                if (point.timestamps > highestTimestamp) {
+                    highestTimestamp = point.timestamps;
+                    correspondingIntervalInfo = info.IntervalInfo;
+                }
+            });
+        });
+
+        if (!correspondingIntervalInfo) {
+            throw new Error('No valid IntervalInfo found in informationRT');
+        }
+
+        let newIntervalI = false;
+        const { start, intervalLength } = correspondingIntervalInfo;
+        const calculatedStart = highestTimestamp - intervalLength;
+
+        if (start +1000 < calculatedStart) {
+            newIntervalI = true;
+            this.newIntervalI=newIntervalI;
+        }
+
+        const intervals = newIntervalI
+            ? [{ start: new Date(start).getTime() + intervalLength, end: highestTimestamp }]
+            : [{ start: new Date(start).getTime(), end: highestTimestamp }];
+
+        const categories = [this.getCategory(this.timeRange, highestTimestamp)];
+
+        return { intervals, categories };
+    }
+    	
+	//Function to Create Data for RT
+	dataInfoRTCreator() {
+		try {
+			// Handle All data Required
+			let allDataRequired = false;
+			
+			if (this.chartConfigI.dataProcessingType === "SinglePoint-FirstValue") {
+				allDataRequired = true;
+			}		
+			
+			//Defined LastDataPointRaw based on Operation Mode
+			var LastDataPointRaw;
+			
+			//Hist Mode
+			if (this.updateRequestI.OperationMode==="Hist"){
+				LastDataPointRaw={
+					Value: this.rawDataI.Values[this.rawDataI.DataSize - 1],
+					status: this.rawDataI.status[this.rawDataI.DataSize - 1],
+					timestamps: this.rawDataI.timestamps[this.rawDataI.DataSize - 1]
+				}
+			
+			}	
+			//Real Time Mode
+			else if (this.updateRequestI.OperationMode==="RealTime"){
+				LastDataPointRaw=this.informationRTI.LastDataPointRT[this.informationRTI.LastDataPointRT.length - 1];
+			}
+			
+			return {
+				Node: this.nodeI,
+				LastDataPointRT: 0,
+				LastDataPointProcessed: this.processedDataII.ProcessedData[this.processedDataII.ProcessedData.length - 1],
+				LastDataPointRaw:LastDataPointRaw,
+				AllDataRequired: allDataRequired,
+				IntervalInfo: this.chartCategoriesI.intervalInfo,
+				ReduceInfo: {
+					reductionStepSize: this.reductionStepSizeI,
+					reductioniterationsBeforeNextStepRT: this.reductionreductioniterationsBeforeNextStepRTI
+				},
+				OEEInfo:this.OEEinfoRTI
+			};
+		} catch (error) {
+			console.error("Error in dataInfoRTCreator: ", error.message);
+			console.error(error.message);
+			return null; // or handle the error appropriately
+		}
+	}
+	
+	//Function to find all RTInfo
+	dataInfoRTFinder() {
+        const node = this.nodeI;
+        const updateRequest = this.updateRequestI;
+
+        // Find the informationRT object that corresponds to this.nodeI
+        const dataInfoRT = updateRequest.informationRT.find(info => info.Node === node);
+
+        if (dataInfoRT) {
+            console.log(`DataInfoRT found for node ${node}:`);
+            console.log(dataInfoRT);
+            return dataInfoRT;
+        } else {
+            console.log(`No DataInfoRT found for node ${node}`);
+            return null;
+        }
+    }
+	
+	//---------------Processing Functions----------------//
+	//--------------------------------------------------//
+	//--------------------------------------------------//
+	
+	//---------------Single Point Functions----------------//
+	
+	//Calculates Last Value
+	SinglePoint_lastValue(rawData) {
+		let lastValidValue = null;
+	
+		// Iterate from end to start
+		for (let i = rawData.Values.length - 1; i >= 0; i--) {
+			if (rawData.status[i] === 0) {
+				lastValidValue = rawData.Values[i];
+				break;
+			}
+		}
+	
+		// Return the last valid value
+		return { ProcessedData: [lastValidValue ?? 0] };  // Default to 0 if no valid values found
+	}
+	
+	//Bring First Value
+	SinglePoint_firstValue(rawData) {
+		let firstValidValue = null;
+	
+		// Iterate from start to end
+		for (let i = 0; i < rawData.Values.length; i++) {
+			if (rawData.status[i] === 0) {
+				firstValidValue = rawData.Values[i];
+				break;
+			}
+		}
+	
+		// Return the first valid value
+		return { ProcessedData: [firstValidValue ?? 0] };  // Default to 0 if no valid values found
+	}	
+	
+	//---------------Full Range Functions----------------//
+	
+	// Sums all data from rawData
+	FullRange_Addition(rawData) {
+		if (this.OperationMode === "Hist") {
+			let sum = 0;
+			// Iterate through the rawData.Values and sum values where rawData.status is 0
+			rawData.Values.forEach((value, index) => {
+				if (rawData.status[index] === 0) {
+					sum += value;
+				}
+			});
+		
+			return { ProcessedData: [sum] };
+		} else if (this.OperationMode === "RealTime") {
+			let sum = this.informationRTI.LastDataPointProcessed;
+	
+			this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+				if (dataPoint.status === 0) {
+					sum += dataPoint.Value;
+				}
+			});
+	
+			return { ProcessedData: [sum] };
+		}
+	}
+	
+	//Full Range Diference
+	FullRange_Difference(rawData) {
+		if (this.OperationMode === "Hist") {
+			if (rawData == undefined) {
+				console.log("No raw data available");
+				return { ProcessedData: [] }; // Return an empty array if not enough data
+			}
+		
+			if (rawData.Values.length < 2) {
+				console.log("Not enough data points to calculate the difference.");
+				return { ProcessedData: [] }; // Return an empty array if not enough data
+			}
+		
+			let accumulatedDifference = 0;
+			let previousValue = rawData.Values[0];
+		
+			for (let i = 1; i < rawData.Values.length; i++) {
+				let currentValue = rawData.Values[i];
+				let difference = currentValue - previousValue;
+		
+				if (difference < -100) {
+					console.log("Potential rollover detected between values:", previousValue, " and ", currentValue);
+					// Double check if this is a genuine rollover
+					if (this.isRollover(rawData.Values)) {
+						const maxValue = this.getMaxValue(rawData.Values);
+						const powerOfTwo = this.closestPowerOfTwo(maxValue);
+						accumulatedDifference += (powerOfTwo - previousValue) + currentValue;
+					} else {
+						accumulatedDifference += difference; // if not a rollover, treat as normal negative difference
+					}
+				} else {
+					accumulatedDifference += difference;
+				}
+				previousValue = currentValue;
+			}
+		
+			return { ProcessedData: [accumulatedDifference] };
+		} else if (this.OperationMode === "RealTime") {
+			let accumulatedDifference = this.informationRTI.LastDataPointProcessed;
+			let previousValue = this.informationRTI.LastDataPointRaw.Value;
+			let currentValue = this.informationRTI.LastDataPointRT[this.informationRTI.LastDataPointRT.length - 1].Value;
+			let difference = currentValue - previousValue;
+	
+			if (difference < -100) {
+				console.log("Potential rollover detected between values:", previousValue, " and ", currentValue);
+				// Double check if this is a genuine rollover
+				if (this.isRollover([previousValue, currentValue])) {
+					const maxValue = this.getMaxValue([previousValue, currentValue]);
+					const powerOfTwo = this.closestPowerOfTwo(maxValue);
+					accumulatedDifference += (powerOfTwo - previousValue) + currentValue;
+				} else {
+					accumulatedDifference += difference; // if not a rollover, treat as normal negative difference
+				}
+			} else {
+				accumulatedDifference += difference;
+			}
+	
+			return { ProcessedData: [accumulatedDifference] };
+		}
+	}
+	
+	//Productivity Calculator
+	FullRange_OEEProductivity(rawData) {
+		if (this.OperationMode === "Hist") {
+			let initialTime = new Date(this.dataRequest.updateRequest[0].initialTime).getTime();
+			let finalTime = new Date(this.dataRequest.updateRequest[0].finalTime).getTime();
+			let changesPerInterval = {};
+			let totalChanges = 0;
+			let OEEProductionSpeed = this.chartConfigI.specialParameters.OEEProductionSpeed;
+			let OEECompleteRangeAnalisis = this.chartConfigI.specialParameters.OEECompleteRangeAnalisis;
+			
+			
+			//Find Interval with changes
+			rawData.timestamps.forEach((timestamp, index) => {
+				if (timestamp >= initialTime && timestamp <= finalTime) {
+					let intervalLengthMillis = typeof this.intervalLength === 'number' ? this.intervalLength : this.getIntervalLengthInMillis(timestamp);
+					//Update IntervalLengthI for OEE Productivity
+					const intervalIndex = Math.floor((timestamp - initialTime) / intervalLengthMillis);
+	
+					// Initialize the count for each interval if not already done
+					if (!changesPerInterval[intervalIndex]) {
+						changesPerInterval[intervalIndex] = 0;
+					}
+	
+					if (index > 0 && rawData.Values[index] !== rawData.Values[index - 1]) {
+						changesPerInterval[intervalIndex]++;
+					}
+				}
+			});
+			
+			//Calculated number of changes
+			totalChanges=this.FullRange_Difference(rawData).ProcessedData;
+	
+			// Determine the number of intervals based on OEECompleteRangeAnalisis setting
+			let intervalsWithChanges;
+			let hoursEquivalent;
+			
+			//Check what strategy we want to use
+			if (OEECompleteRangeAnalisis === "true") {
+				const totalIntervals = Math.ceil((finalTime - initialTime) / this.getIntervalLengthInMillis(initialTime));
+				intervalsWithChanges = totalIntervals+1;
+				hoursEquivalent = totalIntervals * (this.getIntervalLengthInMillis(initialTime) / (3600 * 1000));
+				
+			} else {
+				intervalsWithChanges = Object.keys(changesPerInterval).length+1;
+				hoursEquivalent = intervalsWithChanges * (this.getIntervalLengthInMillis(initialTime) / (3600 * 1000));
+			}
+			
+			
+			//Calculate expected Productivity
+			let expectedProductivity = hoursEquivalent * OEEProductionSpeed;
+			
+			this.OEEinfoRTI["OEEPrevioustotalChanges"]=totalChanges;
+			this.OEEinfoRTI["OEEIntervalHours"]=(this.getIntervalLengthInMillis(initialTime) / (3600 * 1000));
+						
+			// Check to prevent division by zero
+			if (expectedProductivity === 0) {
+				return { ProcessedData: ["No change or zero productivity expected"] };
+			}
+			
+			//Calculate Productivity
+			let OEEProductivityValue = (totalChanges / expectedProductivity) * 100;
+	
+			return { ProcessedData: [OEEProductivityValue] };
+	
+		} else if (this.OperationMode === "RealTime") {
+			
+			let totalChanges = this.informationRTI.OEEInfo.OEEPrevioustotalChanges;
+			let previousValue = this.informationRTI.LastDataPointRaw.Value;
+			let OEEProductionSpeed = this.chartConfigI.specialParameters.OEEProductionSpeed;
+			let OEECompleteRangeAnalisis = this.chartConfigI.specialParameters.OEECompleteRangeAnalisis;
+			let initialTime = new Date(this.informationRTI.IntervalInfo.start);
+			let finalTime = new Date(this.informationRTI.IntervalInfo.end);
+				
+			
+			this.informationRTI.LastDataPointRT.forEach((dataPoint, index) => {
+				if (dataPoint.status === 0) {
+					totalChanges++;
+				}
+			});
+						
+			//Update OEE RT Info
+			this.OEEinfoRTI["OEEPrevioustotalChanges"]=totalChanges;
+			this.OEEinfoRTI["OEEIntervalHours"]=this.informationRTI.OEEInfo.OEEIntervalHours;
+			
+			const totalInterval = Math.ceil((finalTime - initialTime)/1000); //Interval in second
+			let hoursEquivalent = (totalInterval / (3600))+this.informationRTI.OEEInfo.OEEIntervalHours;			
+						
+			//Calculate Expected productivity
+			let expectedProductivity = hoursEquivalent * OEEProductionSpeed;
+			
+			// Check to prevent division by zero
+			if (expectedProductivity === 0) {
+				return { ProcessedData: ["No change or zero productivity expected"] };
+			}
+	
+			let OEEProductivityValue = (totalChanges / expectedProductivity) * 100;
+			
+			return { ProcessedData: [OEEProductivityValue] };
+		}
+	}
+	
+	//Avalilability Calculator
+	FullRange_OEEAvailability(rawData, intervals) {
+        const { ProcessedData: timeOnArray } = this.Interval_CountTimeOn(rawData, intervals);
+        const totalTimeOn = timeOnArray.reduce((acc, curr) => acc + curr, 0);
+        const expectedTimeOn = intervals.length * this.getIntervalLengthInMillis(new Date(this.dataRequest.updateRequest[0].initialTime).getTime());
+        const OEEAvailabilityValue = (totalTimeOn / expectedTimeOn) * 100;
+
+        return { ProcessedData: [OEEAvailabilityValue] };
+    }	
+    
+    //---------------Interval Functions----------------//
+    
+	//Create Histogram Data
+	Interval_Histogram(rawData, chartCategories) {
+		// Initialize histogram count array with zeros for each category
+		let histogramCountArray = new Array(chartCategories.length).fill(0);
+		// Parse chartCategories to get min and max for each bin
+		const bins = chartCategories.map(category => {
+			const parts = category.split(' - ');
+			return {
+				min: parseFloat(parts[0]),
+				max: parseFloat(parts[1])
+			};
+		});
+	
+		// Iterate over each value in the dashboard data
+		rawData.Values.forEach(value => {
+			// Find which bin this value belongs to
+			for (let i = 0; i < bins.length; i++) {
+				if (value >= bins[i].min && value < bins[i].max) {
+					histogramCountArray[i]++;
+					break; // Stop checking once the correct bin is found
+				}
+			}
+		});
+	
+		return { ProcessedData: histogramCountArray };
+	}
+	
+	// Method to count changes in data
+	Interval_ChangesCounter(rawData, intervals) {
+		if (this.OperationMode === "Hist") {
+			let changesCountArray = intervals.map(interval => {
+				let previousValue = null;
+				let changesCount = 0;
+	
+				for (let i = 0; i < rawData.timestamps.length; i++) {
+					const timestamp = rawData.timestamps[i];
+					if (timestamp >= interval.start && timestamp <= interval.end) {
+						const currentValue = rawData.Values[i];
+						const currentStatus = rawData.status[i];
+	
+						// Increment changesCount only if the status is 0 and the value changed
+						if (previousValue !== null && currentValue !== previousValue && currentStatus === 0) {
+							changesCount++;
+						}
+						previousValue = currentValue;
+					}
+				}
+	
+				return changesCount;
+			});
+	
+			return { ProcessedData: changesCountArray };
+		} else if (this.OperationMode === "RealTime") {
+			//Reset if new Interval
+			if(this.chartCategoriesI.intervalInfo.newInterval==true){
+				 this.informationRTI.LastDataPointProcessed=0;
+			}
+				
+			let changesCount = this.informationRTI.LastDataPointProcessed;
+	
+			this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+				if (dataPoint.status === 0) {
+					changesCount++;
+				}
+			});
+	
+			return { ProcessedData: [changesCount] };
+		}
+	}
+	
+	//Count time On
+	Interval_CountTimeOn(rawData, intervals) {
+		let timeOnArray = new Array(intervals.length).fill(0);
+	
+		// Loop through each interval to determine the ON time
+		intervals.forEach((interval, idx) => {
+			let intervalStart = interval.start;
+			let intervalEnd = interval.end;
+			let timeOn = 0;
+			let lastKnownOn = false;
+			let lastTimestamp = intervalStart;
+	
+			// Iterate through timestamps to calculate ON time within the interval
+			rawData.timestamps.forEach((timestamp, i) => {
+				if (timestamp >= intervalStart && timestamp <= intervalEnd) {
+					// Check if we're inside the interval and there is a state change
+					if (lastKnownOn) {
+						// Accumulate ON time from the last timestamp or the start of the interval
+						timeOn += Math.min(timestamp, intervalEnd) - lastTimestamp;
+					}
+					// Update the last known state and the last timestamp
+					lastKnownOn = rawData.Values[i];
+					lastTimestamp = timestamp;
+				}
+			});
+	
+			// After processing all timestamps, if the last state was ON and the last timestamp is within the interval,
+			// extend the ON time to the end of the interval
+			if (lastKnownOn && lastTimestamp < intervalEnd) {
+				timeOn += intervalEnd - lastTimestamp;
+			}
+	
+			// Check if any timestamps fall into the interval
+			const timestampsInInterval = rawData.timestamps.filter(t => t >= intervalStart && t <= intervalEnd);
+			if (timestampsInInterval.length === 0) {
+				// No timestamps in the interval, use the last known value from the previous intervals
+				if (idx > 0 && rawData.Values[rawData.timestamps.length - 1]) {
+					timeOn = intervalEnd - intervalStart; // If the machine was ON in the last known check, assume it stayed ON
+				}
+			}
+	
+			timeOnArray[idx] = timeOn;
+		});
+	
+		return { ProcessedData: timeOnArray };
+	}
+	
+	// Method to integrate data within Intervals
+	Interval_Integration(rawData, intervals) {
+		let integratedDataArray = [];
+	
+		if (this.OperationMode === "Hist") {
+			intervals.forEach(interval => {
+				// Variables to store the previous value for trapezoidal calculation
+				let previousValue = null;
+				let previousTime = null;
+				let area = 0;
+	
+				rawData.timestamps.forEach((timestamp, index) => {
+					if (timestamp >= interval.start && timestamp <= interval.end && rawData.status[index] === 0) {
+						// Convert timestamp from milliseconds to seconds for the x-axis
+						let currentTime = timestamp / 1000;
+						let currentValue = rawData.Values[index];
+	
+						// Calculate the area using the trapezoidal rule if it's not the first data point
+						if (previousValue !== null) {
+							let base = currentTime - previousTime; // The difference in time (in seconds)
+							area += (currentValue + previousValue) / 2 * base; // Trapezoidal area calculation
+						}
+	
+						// Update the previous values for the next iteration
+						previousValue = currentValue;
+						previousTime = currentTime;
+					}
+				});
+	
+				// Add the calculated area for the current interval to the array
+				integratedDataArray.push(area);
+			});
+	
+			return { ProcessedData: integratedDataArray };
+		} else if (this.OperationMode === "RealTime") {
+		
+			//Reset if new Interval
+			if(this.chartCategoriesI.intervalInfo.newInterval==true){
+				 this.informationRTI.LastDataPointProcessed=0;
+			}
+			
+			let area = this.informationRTI.LastDataPointProcessed;
+			let previousValue = null;
+			let previousTime = this.informationRTI.LastDataPointRaw.timestamps / 1000;
+	
+			// Concatenate LastDataPointRaw at the beginning of LastDataPointRT
+			let allDataPoints = [this.informationRTI.LastDataPointRaw].concat(this.informationRTI.LastDataPointRT);
+	
+			allDataPoints.forEach((dataPoint, index) => {
+				if (dataPoint.status === 0) {
+					// Convert timestamp from milliseconds to seconds for the x-axis
+					let currentTime = dataPoint.timestamps / 1000;
+					let currentValue = dataPoint.Value;
+	
+					// Calculate the area using the trapezoidal rule if it's not the first data point
+					if (previousValue !== null) {
+						let base = currentTime - previousTime; // The difference in time (in seconds)
+						area += (currentValue + previousValue) / 2 * base; // Trapezoidal area calculation
+					}
+	
+					// Update the previous values for the next iteration
+					previousValue = currentValue;
+					previousTime = currentTime;
+				}
+			});
+	
+			return { ProcessedData: [area] };
+		}
+	}
+		
+	// Interval Difference
+	Interval_Difference(rawData, intervals) {
+        let differenceArray = [];
+
+        if (this.OperationMode === "Hist") {
+            try {
+                differenceArray = intervals.map(interval => {
+                    let startIndex = rawData.timestamps.findIndex(time => time >= interval.start && time < interval.end);
+                    let endIndex = rawData.timestamps.findIndex(time => time > interval.end);
+
+                    if (endIndex === -1 || endIndex > rawData.Values.length - 1) {
+                        endIndex = rawData.Values.length - 1;
+                    }
+                    if (startIndex === -1 || startIndex > endIndex) {
+                        return null; // no valid data in this interval
+                    }
+
+                    let firstValue = rawData.Values[startIndex];
+                    let lastValue = rawData.Values[endIndex];
+                    let difference = lastValue - firstValue;
+
+                    if (difference < -100) {
+                        console.log("Potential rollover detected between values:", firstValue, " and ", lastValue);
+                        if (this.isRollover(rawData.Values)) {
+                            const maxValue = this.getMaxValue(rawData.Values);
+                            const powerOfTwo = this.closestPowerOfTwo(maxValue);
+                            difference = (powerOfTwo - firstValue) + lastValue;
+                        }
+                    }
+
+                    return difference;
+                });
+            } catch (error) {
+                console.error("An error occurred in Interval_Difference:", error);
+                throw new Error("Failed to calculate interval differences: " + error.message);
+            }
+
+            return { ProcessedData: differenceArray };
+        } else if (this.OperationMode === "RealTime") {
+            try {
+				//Reset if new Interval
+				if(this.chartCategoriesI.intervalInfo.newInterval==true){
+					 this.informationRTI.LastDataPointProcessed=0;
+				}
+				
+                let latestValueRT = this.informationRTI.LastDataPointRT[this.informationRTI.LastDataPointRT.length - 1].Value;
+                let lastValueRaw = this.informationRTI.LastDataPointRaw.Value;
+                let difference = latestValueRT - lastValueRaw;
+				console.log("Difference: "+difference);
+				console.log("this.informationRTI.LastDataPointProcessed: "+this.informationRTI.LastDataPointProcessed);
+                if (difference < -100) {
+                    console.log("Potential rollover detected between values:", lastValueRaw, " and ", latestValueRT);
+                    if (this.isRollover([lastValueRaw, latestValueRT])) { // Assuming this.isRollover can handle a small array
+                        const maxValue = this.getMaxValue([lastValueRaw, latestValueRT]);
+                        const powerOfTwo = this.closestPowerOfTwo(maxValue);
+                        difference = (powerOfTwo - lastValueRaw) + latestValueRT;
+                    }
+                }
+
+                let result = this.informationRTI.LastDataPointProcessed + difference;
+                
+                console.log("result: "+result);
+                return { ProcessedData: [result] };
+            } catch (error) {
+                console.error("An error occurred in Interval_Difference (RealTime):", error);
+                throw new Error("Failed to calculate interval differences (RealTime): " + error.message);
+            }
+        }
+    }
+			
+	//Interval addition
+	Interval_Addition(rawData, intervals) {
+		if (this.OperationMode === "Hist") {
+			let sumsArray = intervals.map(interval => {
+				let sum = 0;
+				
+				for (let i = 0; i < rawData.timestamps.length; i++) {
+					const timestamp = rawData.timestamps[i];
+					if (timestamp >= interval.start && timestamp <= interval.end && rawData.status[i] === 0) {
+						sum += rawData.Values[i];
+					}
+				}
+				
+				return sum;
+			});
+			
+			return { ProcessedData: sumsArray };
+		} else if (this.OperationMode === "RealTime") {
+			let sum = this.informationRTI.LastDataPointProcessed;
+			//Reset if new Interval
+			if(this.chartCategoriesI.intervalInfo.newInterval==true){
+				 this.informationRTI.LastDataPointProcessed=0;
+			}
+			
+			this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+				if (dataPoint.status === 0) {
+					sum += dataPoint.Value;
+				}
+			});
+			
+			return { ProcessedData: [sum] };
+		}
+	}
+	
+	
+
+	
+	
+	//---------------Data Analisis Helper Methods--------------//
+	//--------------------------------------------------------//
+	
+	// Auxiliary function
+	getMaxValue(values) {
+		return values.reduce((max, v) => v > max ? v : max, values[0]);
+	}
+	
+	//Auxiliary function
+	closestPowerOfTwo(maxValue) {
+		if (maxValue < 65536) {
+			return 65536; // 2^16
+		} else if (maxValue < 4294967296) {
+			return 4294967296; // 2^32
+		} else {
+			return 18446744073709551616; // 2^64
+		}
+	}
+	
+	//Calculate stats
+	calculateStats(values) {
+		const n = values.length;
+		let mean = values.reduce((acc, val) => acc + val, 0) / n;
+		let variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n;
+		let stdDev = Math.sqrt(variance);
+		return { mean, stdDev };
+	}
+	
+	//Check for Rollovers
+	isRollover(values) {
+		const { mean, stdDev } = this.calculateStats(values);
+		return values.some((val, i, arr) => i > 0 && (val - arr[i-1] < -stdDev * 2));
+	}
+	
+	// Function to round date
+	roundDate(date, orientation) {
+		var date = new Date(date); // Clone to avoid mutating the original date
+		if (typeof this.intervalLengthI === 'number') {
+			if (this.intervalLengthI <= ONE_MINUTE) {
+				date.setSeconds(0, 0);
+				if (orientation === 'up' && date.getSeconds() > 0) {
+					date.setMinutes(date.getMinutes() + 1);
+				}
+			} else if (this.intervalLengthI <= ONE_HOUR) {
+				date.setSeconds(0, 0);
+				if (orientation === 'up' && date.getMinutes() > 0) {
+					date.setHours(date.getHours() + 1);
+					date.setMinutes(0);
+				} else {
+					date.setMinutes(0);
+				}
+			} else if (this.intervalLengthI <= ONE_DAY) {
+				date.setMinutes(0, 0, 0);
+				if (orientation === 'up' && date.getHours() > 0) {
+					date.setDate(date.getDate() + 1);
+					date.setHours(0);
+				} else {
+					date.setHours(0);
+				}
+			}
+		} else if (this.intervalLengthI === 'month') {
+			date.setHours(0, 0, 0, 0);
+			date.setDate(1);
+			if (orientation === 'up' && date.getMonth() > 0) {
+				date.setMonth(date.getMonth() + 1);
+			}
+		} else if (this.intervalLengthI === 'year') {
+			date.setMonth(0, 1);
+			date.setHours(0, 0, 0, 0);
+			date.setDate(1);
+			if (orientation === 'up' && date.getFullYear() > 0) {
+				date.setFullYear(date.getFullYear() + 1);
+			}
+		}
+		return date;
+	};
+}
+
+//---------------Dashboard Cache Manager Class----------------//
+//-----------------------------------------------------//
+
+class DashboardCacheManager {
+
+    // Attributes
+    cacheDataRequest;
+    cacheData;
+    cacheRawData;
+    cacheProcessedData;
+    initialTime;
+    finalTime;
+
+    // Constructor
+    constructor() {    
+		this.cacheConfig;
+		this.cacheKey="cacheData";
+        this.initialTime;
+        this.finalTime;
+        this.cacheDataRequest = {};
+        this.cachedData = [];
+        this.cacheRawData;
+        this.cacheProcessedData = [];
+        this.intervalLength=ONE_HOUR;
+    }
+	
+    // Initialize cache data based on initial setup
+    initialize(initialTime, finalTime, rawData, nodes) {
+		
+			
+    	
+    	//Initialize Variables
+    	this.initialTime = initialTime;
+        this.finalTime = finalTime;
+
+        this.cacheRawData = rawData;
+        
+		//Store Data
+		this.storeCacheData();
+		
+		console.log("--------------Initial Cache Store-----------");
+    }
+    
+    setCacheConfig(cacheConfig){
+		//Initialize Cache Config
+		this.cacheConfig=cacheConfig    
+    }
+
+    // Store data in the cache
+    storeCacheData() {
+    
+		//Store in global Variable
+		globals.set(this.cacheKey, this.cacheRawData);
+		
+    }
+
+	// Update existing cache data
+	async updateCacheData(data) {
+		try {
+		  console.log("---------------Updating Cache data-------------");
+		  // Get current cached data
+		  const cachedData = globals.get(this.cacheKey);
+		  
+		  // Fix initial time and final time
+		  const fixedcachedData = this.fixCacheToTimestamps(cachedData);
+		  console.log("Initial CacheData: ", fixedcachedData);
+		  console.log("New Data: ", data);
+		  
+		  // Sort data
+		  let combinedData = [fixedcachedData];
+		  combinedData.push(data[0]);
+		  
+		  // Merge with other data
+		  this.cacheRawData = await this.rawDataMerger(combinedData);
+		  
+		  console.log("Merged Data: ", this.cacheRawData);
+		  
+		  // Store new data
+		  this.storeCacheData();
+		} catch (error) {
+		  console.error("Error updating cache data: ", error);
+		}
+	}
+		
+	//Query Cache data
+	queryCacheData(query) {
+			console.log("----------Querying Cache-----------");
+			const cachedData = globals.get(this.cacheKey);
+			console.log("Complete cacheData: ")
+			//console.log(cachedData);
+			if (!cachedData) {
+				console.log("No cache data available.");
+				return [];
+			}
+		
+			const dataMap = new Map();
+			cachedData.forEach(data => {
+				if (!dataMap.has(data.Nodeaddress)) {
+					dataMap.set(data.Nodeaddress, []);
+				}
+				dataMap.get(data.Nodeaddress).push(data);
+			});
+		
+			let results = [];
+			query.forEach(q => {
+				const initialTime = new Date(q.initialTime).getTime();
+				const finalTime = new Date(q.finalTime).getTime();
+		
+				q.nodes.forEach(node => {
+					if (dataMap.has(node)) {
+						const nodeData = dataMap.get(node);
+						nodeData.forEach(data => {
+							const filteredValues = [];
+							const filteredStatus = [];
+							const filteredTimestamps = [];
+		
+							let startIdx = this.binarySearch(data.timestamps, initialTime, true);
+							let endIdx = this.binarySearch(data.timestamps, finalTime, false);
+		
+							for (let i = startIdx; i <= endIdx; i++) {
+								filteredValues.push(data.Values[i]);
+								filteredStatus.push(data.status[i]);
+								filteredTimestamps.push(data.timestamps[i]);
+							}
+		
+							if (filteredValues.length > 0) {
+								results.push({
+									Nodeaddress: node,
+									InitialTimeevaluated: q.initialTime,
+									FinalTimeevaluated: q.finalTime,
+									Values: filteredValues,
+									status: filteredStatus,
+									timestamps: filteredTimestamps,
+									DataSize: filteredValues.length
+								});
+							}
+						});
+					}
+				});
+			});
+		
+		return results;
+	}
+	
+	//QueryCacheData
+	queryCacheData2(query) {
+		console.log("----------Querying Cache-----------");
+		const cachedData = globals.get(this.cacheKey);
+		console.log("Complete cacheData: ");
+		//console.log(cachedData);
+		if (!cachedData) {
+			console.log("No cache data available.");
+			return [];
+		}
+		
+		// Extract initial and final times from the query
+		const initialTime = new Date(query.initialTime).getTime();
+		const finalTime = new Date(query.finalTime).getTime();
+		
+		// Filter data for the specified node
+		const nodeData = cachedData.filter(data => data.Nodeaddress === query.nodes[0]);
+		console.log("nodeData");
+		console.log(nodeData);
+		if (nodeData.length === 0) {
+			console.log("No data found for the specified node.");
+			return [];
+		}
+	
+		// Find intervals that intersect with the query time range
+		const relevantIntervals = nodeData[0].Data.filter(interval => {
+			return !(interval.FinalTime < initialTime || interval.InitialTime > finalTime);
+		});
+	
+		if (relevantIntervals.length === 0) {
+			console.log("No intervals found within the specified time range.");
+			return [];
+		}
+	
+		// Reconstruct data from the relevant intervals
+		const reconstructedData = this.cacheDataReconstructor([{
+			CacheDataType: 'RawDataInIntervals',
+			Data: relevantIntervals,
+			FinalTimeevaluated: nodeData[0].FinalTimeevaluated,
+			InitialTimeevaluated: nodeData[0].InitialTimeevaluated,
+			IntervalLength: nodeData[0].IntervalLength,
+			Nodeaddress: nodeData[0].Nodeaddress
+		}]);
+	
+		console.log("reconstructedData");
+		console.log(reconstructedData);
+		// Filter data to match the query time range
+		const filteredResults = reconstructedData.map(data => {
+			const startIdx = this.binarySearch(data.timestamps, initialTime, true);
+			const endIdx = this.binarySearch(data.timestamps, finalTime, false);
+	
+			console.log("startIdx: ", startIdx);
+			console.log("endIdx: ", endIdx);
+			console.log("timestamps: ", data.timestamps);
+			console.log("initialTime: ", initialTime);
+			console.log("finalTime: ", finalTime);
+	
+			return {
+				Nodeaddress: data.Nodeaddress,
+				InitialTimeevaluated: query.initialTime,
+				FinalTimeevaluated: query.finalTime,
+				Values: data.Values.slice(startIdx, endIdx + 1),
+				status: data.status.slice(startIdx, endIdx + 1),
+				timestamps: data.timestamps.slice(startIdx, endIdx + 1),
+				DataSize: endIdx - startIdx + 1
+			};
+		});
+	
+		return filteredResults;
+	}
+    
+    //Check data available
+    checkCacheData() {
+		
+        this.cachedData = globals.get(this.cacheKey); // Retrieve data from global cache
+        
+        if (!this.cachedData) {
+            console.log("No cache data available.");
+            return [];
+        }		
+        // Create an array of structures 
+        const formattedData = this.cachedData.map(dataEntry => ({
+            Nodeaddress: dataEntry.Nodeaddress,
+            initialTimeevaluated: new Date(dataEntry.InitialTimeevaluated).getTime(),
+            finalTimeevaluated: new Date(dataEntry.FinalTimeevaluated).getTime()
+        }));
+
+        return formattedData;
+    }
+   
+   //Merge data to later store it
+    rawDataMerger(dataArrays) {
+		try {
+			// Exclude empty arrays
+			const nonEmptyDataArrays = dataArrays.filter(array => Array.isArray(array) && array.length > 0);
+			
+			// Validate and organize data
+			nonEmptyDataArrays.forEach((array, index) => {
+				if (!array[0].hasOwnProperty('InitialTimeevaluated')) {
+					console.error(`Invalid data structure at index ${index}:`, array);
+					throw new Error(`Invalid data structure at index ${index}`);
+					}
+			});
+			
+			// First Organize Data
+			nonEmptyDataArrays.sort((a, b) => a[0].InitialTimeevaluated - b[0].InitialTimeevaluated); // Sort by initial time
+			console.log("---------CombinedData Updating Cache-------------");
+			//console.log(nonEmptyDataArrays);
+			
+			const mergedData = {};
+			
+			// Flatten the array of arrays structure and process each data entry
+			nonEmptyDataArrays.flat(2).forEach((data, index) => {
+				if (!data || typeof data !== 'object') {
+					console.error(`Invalid data entry at index ${index}:`, data);
+					throw new Error(`Invalid data entry at index ${index}`);
+				}
+				
+				const { Nodeaddress, Values, status, timestamps, InitialTimeevaluated, FinalTimeevaluated, DataSize } = data;
+				if (!Nodeaddress || !Values || !status || !timestamps || InitialTimeevaluated === undefined || FinalTimeevaluated === undefined || DataSize === undefined) {
+					console.error(`Incomplete data entry at index ${index}:`, data);
+					throw new Error(`Incomplete data entry at index ${index}`);
+				}
+				
+				const node = Nodeaddress;
+				
+				if (!mergedData[node]) {
+					// Initialize with the first data entry for the node
+					mergedData[node] = { ...data };
+				} 
+				else {
+				// Merge subsequent data entries
+					mergedData[node].Values = mergedData[node].Values.concat(Values);
+					mergedData[node].status = mergedData[node].status.concat(status);
+					mergedData[node].timestamps = mergedData[node].timestamps.concat(timestamps);
+					mergedData[node].DataSize += DataSize;
+					mergedData[node].FinalTimeevaluated = Math.max(
+					new Date(mergedData[node].FinalTimeevaluated).getTime(),
+					FinalTimeevaluated
+					);
+					mergedData[node].InitialTimeevaluated = Math.min(
+					new Date(mergedData[node].InitialTimeevaluated).getTime(),
+					InitialTimeevaluated
+					);
+				}
+			});
+			
+			// Convert the merged data object back into an array
+			return Object.values(mergedData);
+		} catch (error) {
+			console.error("Error merging raw data: ", error);
+			console.error(error.message);
+		return []; // Return an empty array or handle the error as needed
+		}
+	}
+
+	//Clear Cache
+	clearCacheData(){
+	
+		//Store in global Variable
+		globals.set(this.cacheKey, []);
+		
+	}
+	
+	//Prepare Cache data with Intervals
+	cacheDataPreparator(rawData, cacheDataType) {
+        if (cacheDataType !== "RawDataInIntervals") {
+            console.error(`Unsupported cache data type: ${cacheDataType}`);
+            return [];
+        }
+
+        const intervalLength = this.intervalLength || ONE_HOUR; // Default to one hour if not set
+
+        return rawData.map(dataEntry => {
+            const { Nodeaddress, Values, status, timestamps, InitialTimeevaluated, FinalTimeevaluated, DataSize } = dataEntry;
+
+            const startTime = this.roundDate(new Date(InitialTimeevaluated), 'down').getTime();
+            const endTimerounded=this.roundDate(new Date(FinalTimeevaluated), 'up').getTime();
+            const endTime = endTimerounded+intervalLength;
+
+            const intervals = [];
+            let currentStartTime = startTime;
+			console.log("currentStartTime");
+			console.log(new Date (currentStartTime).toString());
+			console.log("endTime");
+			console.log(new Date (endTime).toString());
+            while (currentStartTime < endTime) {
+                const currentEndTime = Math.min(currentStartTime + intervalLength, endTime);
+                const intervalData = {
+                    InitialTime: currentStartTime,
+                    FinalTime: currentEndTime,
+                    Values: [],
+                    status: [],
+                    timestamps: []
+                };
+
+                for (let i = 0; i < timestamps.length; i++) {
+                    const timestamp = new Date(timestamps[i]).getTime();
+                    if (timestamp >= currentStartTime && timestamp < currentEndTime) {
+                        intervalData.Values.push(Values[i]);
+                        intervalData.status.push(status[i]);
+                        intervalData.timestamps.push(timestamp);
+                    }
+                }
+
+                intervals.push(intervalData);
+                currentStartTime = currentEndTime;
+            }
+
+            return {
+                Nodeaddress,
+                InitialTimeevaluated,
+                FinalTimeevaluated,
+                IntervalLength: intervalLength,
+                CacheDataType: cacheDataType,
+                Data: intervals
+            };
+        });
+    }
+    
+    //Reconstruct Cache data
+    cacheDataReconstructor(cacheData) {
+        return cacheData.map(entry => {
+            try {
+                switch (entry.CacheDataType) {
+                    case 'RawDataInIntervals':
+                        const allValues = [];
+                        const allStatus = [];
+                        const allTimestamps = [];
+
+                        entry.Data.forEach(interval => {
+                            allValues.push(...interval.Values);
+                            allStatus.push(...interval.status);
+                            allTimestamps.push(...interval.timestamps);
+                        });
+
+                        return {
+                            DataSize: allValues.length,
+                            FinalTimeevaluated: entry.FinalTimeevaluated,
+                            InitialTimeevaluated: entry.InitialTimeevaluated,
+                            Nodeaddress: entry.Nodeaddress,
+                            Values: allValues,
+                            status: allStatus,
+                            timestamps: allTimestamps
+                        };
+
+                    // Add more cases for different CacheDataType as needed
+                    default:
+                        throw new Error(`Unsupported cache data type: ${entry.CacheDataType}`);
+                }
+            } catch (error) {
+                console.error(`Error reconstructing data entry for Nodeaddress ${entry.Nodeaddress}:`, error);
+                return {
+                    DataSize: 0,
+                    FinalTimeevaluated: entry.FinalTimeevaluated,
+                    InitialTimeevaluated: entry.InitialTimeevaluated,
+                    Nodeaddress: entry.Nodeaddress,
+                    Values: [],
+                    status: [],
+                    timestamps: [],
+                    Error: error.message
+                };
+            }
+        });
+    }
+
+	
+	//----------Auxiliary Functions---------------------//
+	//--------------------------------------------------//
+	roundDate(date, orientation) {
+        const roundedDate = new Date(date);
+        roundedDate.setMinutes(0, 0, 0);
+
+        if (orientation === 'down') {
+            return roundedDate;
+        }
+
+        if (orientation === 'up' && roundedDate.getMinutes() > 0) {
+            roundedDate.setHours(roundedDate.getHours() + 1);
+        }
+
+        return roundedDate;
+    }	
+	
+	//Fix Cache Timestamps
+	fixCacheToTimestamps(dataArray) {
+		return dataArray.map(item => ({
+			...item,
+			InitialTimeevaluated: new Date(item.InitialTimeevaluated).getTime(),
+			FinalTimeevaluated: new Date(item.FinalTimeevaluated).getTime()
+		}));
+	}
+	
+	//Find intersection of Time intervals
+	findTimeIntersection(interval1, interval2) {
+		// Extract start and end times from both intervals
+		let [start1, end1] = interval1;
+		let [start2, end2] = interval2;
+	
+		// Initialize arrays to store the common and uncommon intervals
+		let commonIntervals = [];
+		let uncommonIntervals = [];
+	
+		// Calculate the intersection (common interval)
+		let commonStart = Math.max(start1, start2);
+		let commonEnd = Math.min(end1, end2);
+	
+		// There is overlap if the common end is after the common start
+		if (commonEnd >= commonStart) {
+			commonIntervals.push([commonStart, commonEnd]);
+		}
+	
+		// Calculate the non-overlapping interval for the first interval only
+		if (start1 < commonStart) {
+			uncommonIntervals.push([start1, commonStart]);
+		}
+		if (end1 > commonEnd) {
+			uncommonIntervals.push([commonEnd, end1]);
+		}
+	
+		// If there's no common interval, the entire first interval is uncommon
+		if (commonIntervals.length === 0) {
+			uncommonIntervals = [[start1, end1]];
+		}
+	
+		return { commonIntervals, uncommonIntervals };
+	}
+	
+	//Auxiliary Function to increase Cache Performance
+	binarySearch(arr, target, findStart) {
+		let low = 0;
+		let high = arr.length - 1;
+		let result = -1;
+	
+		while (low <= high) {
+			const mid = Math.floor((low + high) / 2);
+			if (arr[mid] === target) {
+				result = mid;
+				if (findStart) {
+					high = mid - 1;
+				} else {
+					low = mid + 1;
+				}
+			} else if (arr[mid] < target) {
+				low = mid + 1;
+			} else {
+				high = mid - 1;
+			}
+		}
+	
+		return findStart ? (result === -1 ? low : result) : (result === -1 ? high : result);
+	}
+}
+
+//---------------Dashboard Creator Class----------------//
+//-----------------------------------------------------//
+
+class DashboardDataCreator {
+	// Attributes
+	dataRequest; // Holds the specifics of the data request
+	dashboardData; // Holds processed data ready for the dashboard/Highcharts
+	processRequest; // May contain request processing logic or status
+	processedData; // Flag or data that indicates the data has been processed
+	rawData; // The raw data retrieved based on rawDataRequest
+	nodes;
+
+	// Constructor: Initialize Attributes
+	constructor(dataRequest) {
+		//this.dataRequest = this.decompressData(dataRequest,keyMapping);
+		this.dataRequest = dataRequest;
+		this.initialTime = this.dataRequest.updateRequest[0].initialTime;
+		this.finalTime =this.dataRequest.updateRequest[0].finalTime;
+		this.initialTimeI = this.initialTime;
+		this.finalTimeI = this.finalTime;
+		this.intervalQuery=2*86400*1000;
+		this.dashboardData = null;
+		this.processRequest = null;
+		this.processedData = false;
+		this.nodes=this.rawDataRequestProcessor(this.dataRequest,"nodesRequest"); //Find all Unique Nodes
+		this.rawDataRequestRTInfo;
+		this.rawData = null;
+	}
+	
+	// Methods
+	// Handles rawDataRequest and orchestrate everything related to rawData
+	async initialize(dashboardDataProcessor,dashboardCacheManager) {
+		try {
+			console.log("------Decompressed DataRequest--------");
+			console.log(this.dataRequest);
+			
+			console.log("------------Operation Mode---------");
+			console.log(this.dataRequest.updateRequest[0].OperationMode);
+			
+			//Gets Raw Data History Mode
+			if (this.dataRequest.updateRequest[0].OperationMode==="Hist"){
+				
+				this.rawData = await this.rawDataCreator(dashboardCacheManager);
+				console.log("-----------Raw Data-----------");
+				console.log(this.rawData);
+				
+				// Process Data			
+				dashboardDataProcessor.initialize(this.dataRequest,this.rawData);
+				const processedData = dashboardDataProcessor.processRequestHandler(this.dataRequest, this.rawData);
+				console.log("-----------ProcessedData-----------");
+				console.log(processedData);
+		
+				//Gives format to data
+				this.dashboardData=this.dashboardDataFormater(processedData);
+				console.log("-----------Final Format Data-----------");
+				console.log(this.dashboardData);
+				
+				
+				//Sends response to webclient			
+				this.dashboardDataWriter();				
+			} 
+			
+			//Gets Raw Data Real Time Mode
+			else if (this.dataRequest.updateRequest[0].OperationMode==="RealTime"){			
+				
+				//Prepare data required
+				this.rawDataRequestRTInfo=this.rawDataRequestProcessor(dataRequest,"rawDataRequestRTInfo"); //Find all Unique RT Nodes
+				console.log("this.rawDataRequestRTInfo");
+				console.log(this.rawDataRequestRTInfo);
+				
+				this.rawData = await this.rawDataCreatorRT(dashboardCacheManager);
+				console.log("-----------Raw Data-----------");
+				console.log(this.rawData);	
+				
+				// Process Data			
+				dashboardDataProcessor.initialize(this.dataRequest,this.rawData);
+				const processedData = dashboardDataProcessor.processRequestHandler(this.dataRequest, this.rawData);
+				console.log("-----------ProcessedData-----------");
+				console.log(processedData);				
+				
+				//Gives format to data
+				this.dashboardData=this.dashboardDataFormater(processedData);
+				console.log("-----------Final Format Data-----------");
+				console.log(this.dashboardData);
+				
+				//Sends response to webclient			
+				this.dashboardDataWriter();	
+			}			
+			
+		} catch (error) {
+			console.error("An error occurred while processing dashboard data:");
+			console.error(error.message);
+		}
+	}
+	
+	async rawDataCreator(dashboardCacheManager) {
+		
+		if(this.dataRequest.updateRequest[0].cacheConfig.CacheEnabled==="false"){ //Don´t use Cache Data
+			
+			console.log("----------------Cache Disabled-------------");
+			//Clear existing cache
+			dashboardCacheManager.clearCacheData();
+			
+			//Bring Data
+			this.rawData = await this.rawDataRequestExecutor(this.nodes);
+			
+			return this.rawData;
+		} 
+		
+		
+		else{//Use Cache	
+			
+			//Initialize Cache
+			dashboardCacheManager.setCacheConfig(this.dataRequest.updateRequest.cacheConfig);	
+			
+			// Check Cached Data
+			var checkedCacheData = await dashboardCacheManager.checkCacheData();
+		
+			console.log("----------------Cache Enabled-------------");					
+			//No data already in Cache
+			if (checkedCacheData.length === 0) {
+				this.rawData = await this.rawDataRequestExecutor(this.nodes);
+				console.log("Fetched all data due to empty cache.");
+				dashboardCacheManager.initialize(this.initialTimeI, this.finalTimeI, this.rawData);
+				return this.rawData;
+			} 	
+				
+			//Data in Cache
+			else {
+				// Time Available in Cache
+				const cacheInitialTime = new Date(checkedCacheData[0].initialTimeevaluated).getTime();
+				const cacheFinalTime = new Date(checkedCacheData[0].finalTimeevaluated).getTime();
+				
+				// Calculate intervals
+				var intervals_intersection = dashboardCacheManager.findTimeIntersection(
+					[(new Date(this.initialTime)).getTime(), (new Date(this.finalTime)).getTime()],
+					[cacheInitialTime, cacheFinalTime]
+				);
+				
+				console.log("Initial time required");
+				console.log((new Date(this.initialTime)).toString());
+				console.log("Final time required");
+				console.log((new Date(this.finalTime)).toString());
+				console.log("Cached Initial time");
+				console.log(new Date(cacheInitialTime).toString());
+				console.log("Cached Final time");
+				console.log(new Date(cacheFinalTime).toString());
+				console.log("--------------intervals_intersecction-------------");
+				console.log("Common Intervals");
+				console.log(intervals_intersection);			
+				
+	
+				let rawDataFetched = [];
+				let cachedDataResults = [];
+		
+				//------------------Fetch data from the cache-------------------//
+				//-------------------Common Intervals--------------------------//
+				
+				if (intervals_intersection.commonIntervals.length > 0) {
+				
+					intervals_intersection.commonIntervals.forEach(async interval => {
+						let query = {
+							nodes: this.nodes,
+							initialTime: interval[0],
+							finalTime: interval[1]
+						};
+						
+						let commonData = dashboardCacheManager.queryCacheData([query]);
+						//let commonData = dashboardCacheManager.queryCacheData2([query]);
+
+						cachedDataResults.push(commonData);
+					});
+					console.log("-------------cachedDataResults-----------");
+					//console.log(cachedDataResults[0]);
+				
+					if(intervals_intersection.uncommonIntervals.length <= 0){ //No Uncommondata
+						return cachedDataResults[0];
+					}
+				}
+				
+				//Add first cachedDataResults
+				let combinedData = [cachedDataResults[0]];	
+				let updateTimeRanges=[];
+				let timethreshold=28800000;
+				
+				//------------------Fetch data from the Raw Data-------------------//
+				//--------------------Uncommon Intervals--------------------------//
+				
+				if (intervals_intersection.uncommonIntervals.length > 0) {
+					
+					for (let i = 0; i < intervals_intersection.uncommonIntervals.length; i++) {
+						this.initialTimeI = new Date(intervals_intersection.uncommonIntervals[i][0]).getTime();
+						this.finalTimeI = new Date(intervals_intersection.uncommonIntervals[i][1]).getTime();
+						let fetchedData = await this.rawDataRequestExecutor(this.nodes);
+						rawDataFetched.push(fetchedData);
+						
+						//Add Upated time Ranges
+						updateTimeRanges.push(this.finalTimeI-this.initialTimeI);			
+						
+						//Add to combined data
+						combinedData.push(fetchedData);
+						
+						
+					}
+					
+					console.log("-------------rawDataFetched-----------");
+					//console.log(rawDataFetched);
+					
+					//---------Update Cache if it has commonIntervals--------------//
+					//-------------------------------------------------------------//
+					
+					if(intervals_intersection.commonIntervals.length > 0 && updateTimeRanges.some(value => value > timethreshold)){ //It has common data
+						
+						//Update Cache data with Data Requested
+						dashboardCacheManager.updateCacheData(rawDataFetched);
+					}		
+					
+					//------------------Only Uncommon Intervals---------------------//
+					//-------------------------------------------------------------//
+					
+					else if(intervals_intersection.commonIntervals.length <= 0){ //No Common data
+					
+						const uncommonIntervalStart = intervals_intersection.uncommonIntervals[0][0];
+						
+						//Check order
+						if (uncommonIntervalStart < cacheInitialTime) {
+							// Before tail
+							this.initialTimeI = new Date(intervals_intersection.uncommonIntervals[0][1]).getTime();
+							this.finalTimeI = cacheInitialTime;
+							
+							updateTimeRanges.push(this.finalTimeI-this.initialTimeI);
+							
+						} else {
+							// After tail
+							this.initialTimeI = cacheFinalTime;
+							this.finalTimeI = new Date(intervals_intersection.uncommonIntervals[0][0]).getTime();
+							
+							updateTimeRanges.push(this.finalTimeI-this.initialTimeI);
+						}
+						
+						//Fit missing data in cache
+						 const fetchedDataI = await this.rawDataRequestExecutor(this.nodes);	
+						 
+						 //Update only if is relevant
+						if (updateTimeRanges.some(value => value > timethreshold)) { 					 	 
+							dashboardCacheManager.updateCacheData([fetchedDataI]);
+						}
+						
+						//Only return rawDataFetched
+						return rawDataFetched[0];
+					}
+				}
+				
+				//---------------Merge Common and Uncommon data-----------------//
+				//-------------------------------------------------------------//
+				
+				let mergedData=dashboardCacheManager.rawDataMerger(combinedData);
+				return mergedData;
+			}
+		}
+	}
+	
+	async rawDataCreatorRT(dashboardCacheManager) {
+        try {			
+        
+			if (this.rawDataRequestRTInfo.length>0){
+			 return [];
+			}
+			
+			else{
+				var rawDataI=new Array();
+				
+				// Iterate over each element in rawDataRequestRTInfo
+				for (let rtInfo of this.rawDataRequestRTInfo) {
+					// Update initialTime, finalTime, and nodes
+					this.initialTime = rtInfo.initialTime;
+					this.finalTime = rtInfo.finalTime;
+					this.nodes = [rtInfo.Nodeaddress];
+					
+					let rawDataII= await this.rawDataCreator(dashboardCacheManager);
+				 
+					// Fetch raw data using rawDataCreator
+					rawDataI.push(rawDataII[0]);
+				}            
+				return rawDataI; // Optionally return the last fetched raw data
+            }
+        } catch (error) {
+            console.error("Error executing rawDataCreatorRT:", error);
+        }
+    }
+	
+	//Extract specific info from the rawDataRequest 
+	rawDataRequestProcessor(dataRequest,infoRequired) {
+		console.log(this.dataRequest);
+		switch (infoRequired) {
+		  case "nodesRequest":
+			var dataRequestI=dataRequest.chartsNodes;
+			// Use a Set to store unique nodes
+			const uniqueNodes = new Set();
+		
+			// Iterate over each chart object in the array
+			dataRequestI.forEach(chart => {
+				// Add each node to the Set (duplicates will be ignored)
+				chart.chartNodes.forEach(node => uniqueNodes.add(node));
+			});
+		
+			// Convert the Set back to an array and return it
+			return Array.from(uniqueNodes);
+			
+		case "rawDataRequestRTInfo":
+            // Collect information for RT update
+            const rtInfo = [];
+            
+            // Iterate over updateRequest array
+            dataRequest.updateRequest.forEach(request => {
+                // Check the informationRT array within the request
+                request.informationRT.forEach(info => {
+                    if (info.AllDataRequired) {
+                        rtInfo.push({
+                            Nodeaddress: info.Node,
+                            finalTime: info.IntervalInfo.end,
+                            initialTime: info.IntervalInfo.start
+                        });
+                    }
+                });
+            });
+            
+            return rtInfo;
+		
+		  default:
+			statements
+		}
+	
+	}	
+	
+	// Executes the rawDataRequest 
+	rawDataRequestExecutor(nodes) {
+		console.log("Initiating queries...");
+		const startTime = new Date().getTime();
+		
+		const queries = nodes.map(node => this.asyncHistQuery(node));
+	
+		return Promise.allSettled(queries).then(results => {
+			const endTime = new Date().getTime();
+			console.log(`Total execution time for queries: ${endTime - startTime} milliseconds.`);
+			console.log("results");
+			//console.log(results);
+			
+			// Map each result to include the desired structure along with DataSize
+			const structuredResults = results.map((result, index) => {
+				if (result.status === 'fulfilled' && result.value.result) {
+					const values = result.value.result.map(item => item.value);					
+					const timestamps = result.value.result.map(item => item.timestamp);
+					const statuses = result.value.result.map(item => item.status);
+					return {
+						Nodeaddress: nodes[index], // Assuming the node address can be directly taken from the nodes array
+						InitialTimeevaluated: new Date(this.initialTimeI),  // Include initial time
+						FinalTimeevaluated: new Date(this.finalTimeI),  // Include final time
+						Values: values,
+						timestamps: timestamps,
+						status: statuses,
+						DataSize: values.length // Add the DataSize key here
+					};
+				} else {
+					console.error(`Error querying data for node ${nodes[index]}:`, result.reason);
+					return {
+						Nodeaddress: nodes[index],
+						InitialTimeevaluated: new Date(this.initialTimeI),  // Include initial time
+						FinalTimeevaluated: new Date(this.finalTimeI),  // Include final time
+						Values: [],
+						timestamps: [],
+						status: [],
+						DataSize: 0 // DataSize is 0 in case of error
+					};
+				}
+			});
+			
+			return structuredResults;
+		});
+	}	
+	
+	async asyncHistQuery(node) {
+		const initialTime = new Date(this.initialTimeI);
+		const finalTime = new Date(this.finalTimeI);
+		const intervalQuery = this.intervalQuery || 3600 * 1000; // Default to 1 hour if not set
+	
+		// Break the time range into smaller intervals
+		let currentStartTime = initialTime.getTime();
+		let allValues = [];
+	
+		while (currentStartTime < finalTime.getTime()) {
+			let currentEndTime = Math.min(currentStartTime + intervalQuery, finalTime.getTime());
+	
+			const filter = {
+				type: ["v:1"], // Example type, adjust based on actual requirements
+				timestamp: [`n:>=${currentStartTime}<${currentEndTime}`],
+				address: [`g:${node}`]
+			};
+	
+			console.log("-----------Query filter-------------");
+			console.log(filter);
+			console.log("Initial time query");
+			console.log(new Date(currentStartTime).toString());
+			console.log("Final time query");
+			console.log(new Date(currentEndTime).toString());
+	
+			try {
+				let continuationPoint = null;
+				let hasMoreData = true;
+	
+				while (hasMoreData) {
+					const options = {
+						continuationpoint: continuationPoint,
+						timeout: 3600 // Set a timeout of 1 hour
+					};
+	
+					// Wrap the history.query in a promise to use with await
+					const result = await new Promise((resolve, reject) => {
+						try {
+							const queryResult = history.query(filter, options);
+							console.log("result: ");
+							//console.log(queryResult);
+							resolve(queryResult);
+						} catch (error) {
+							reject(error);
+						}
+					});
+	
+					if (result.error) {
+						throw new Error(result.error.message);
+					}
+	
+					// Concatenate the result array
+					allValues = allValues.concat(result.result);
+	
+					if (result.continuationpoint) {
+						continuationPoint = result.continuationpoint;
+					} else {
+						hasMoreData = false;
+					}
+				}
+			} catch (error) {
+				console.error(`Error querying data for node ${node}:`, error);
+				return [{
+					status: "rejected",
+					reason: error.message
+				}];
+			}
+	
+			currentStartTime = currentEndTime;
+		}
+	
+		// After collecting all results, format them correctly
+		return {
+			
+				More: false,
+				continuationpoint: 0,
+				result: allValues
+			
+		};
+	}
+	
+	dashboardDataFormater(processedData) {
+		let chartsData = [];
+		let errors = [];
+	
+		try {
+			processedData.forEach(chart => {
+				let informationRT=chart.processedDataStruct.map((dataStruct) => {
+					return dataStruct.informationRT;
+				});
+				let chartData = {
+					chartID: chart.chartID,
+					informationRT: informationRT,
+					chartSeries: [],
+					chartCategories: chart.processedDataStruct[0]?.chartCategories || []
+				};
+	
+				// Determining how to process based on chartType
+				switch (chart.chartType) {
+					case "Line":
+					case "Spline":
+					case "Area":
+					case "Column":
+					case "Bar":
+						// For these types, each processedDataStruct item becomes a series
+						chart.processedDataStruct.forEach(dataStruct => {
+							const seriesName = dataStruct.processedNode; // Using processedNode for series name
+							let series = {
+								name: seriesName,
+								data: dataStruct.processedDataI.map((dataPoint, i) => {
+									if (chart.categoryType === "AllData-DateTime") {
+										const category = chartData.chartCategories.find(c => c.chartNode === dataStruct.processedNode);
+										return category ? [category.categories[i], dataPoint] : dataPoint;
+									} else {
+										return dataPoint;
+									}
+								})
+							};
+							chartData.chartSeries.push(series);
+						});
+						break;
+					case "Pie":
+					case "Pyramid":
+						// For Pie/Pyramid, use processedDataI directly as the series data
+						let seriesData = chart.processedDataStruct.map(dataStruct => ({
+							name: dataStruct.processedNode,
+							y: dataStruct.processedDataI[0],
+						}));
+						chartData.chartSeries.push({name: "Aggregate", data: seriesData});
+						break;
+					case "Gauge":
+					case "Solidgauge":
+						// Use the last value of processedDataI
+						if (chart.processedDataStruct.length > 0) {
+							let lastDataStruct = chart.processedDataStruct[chart.processedDataStruct.length - 1];
+							let gaugeData = {
+								name: lastDataStruct.processedNode,
+								data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]  // Assuming the last value in the array
+							};
+							chartData.chartSeries.push(gaugeData);
+						}
+					break;
+					case "Histogram":
+						const seriesName = chart.processedDataStruct[0].processedNode;
+						const scatterData = chart.processedDataStruct[0].processedDataI.map(dataPoint => dataPoint);
+						chartData.chartSeries.push({
+							name: 'Data',
+							type: 'scatter',
+							data: scatterData,
+							id: 's1',
+							marker: {
+								radius: 1.5
+							}
+						});						
+						chartData.chartSeries.push({
+							name: 'Histogram',
+							type: 'histogram',
+							xAxis: 1,
+							yAxis: 1,
+							baseSeries: 's1',
+							zIndex: -1
+						});					
+						
+					break;
+					default:
+						errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);
+				}
+	
+				chartsData.push(chartData);
+			});
+		} catch (error) {
+			errors.push(`Error processing data: ${error.message}`);
+		}
+	
+		return {
+			chartsData: chartsData,
+			Errors: errors
+		};
+	}
+	
+	//Writes to the node
+	dashboardDataWriter() {
+		// Assuming this function is part of a class that has access to this.dataRequest and this.dashboardData
+		if (this.dashboardData) {
+			 Parameters.response.setHeader("Content-Type", "application");
+			 Parameters.response.write(JSON.stringify(this.dashboardData), "");
+			}
+		else {
+			Parameters.response.setHeader("Content-Type", "application");
+			Parameters.response.write("Error creating Dashboard Data", "");
+			console.log("Single data request is not set to true.");
+		}
+	}
+	
+	decompressData(data, keyMapping) {
+		const reverseMapping = Object.fromEntries(Object.entries(keyMapping).map(([key, value]) => [value, key]));
+		if (Array.isArray(data)) {
+			return data.map(item => this.decompressData(item, keyMapping));
+		} else if (typeof data === 'object' && data !== null) {
+			const decompressed = {};
+			for (let key in data) {
+				if (data.hasOwnProperty(key)) {
+					const decompressedKey = reverseMapping[key] || key;
+					decompressed[decompressedKey] = this.decompressData(data[key], keyMapping);
+				}
+			}
+			return decompressed;
+		}
+		return data;
+    }
+}
+
+
+//Create Dashboard Processor used by DashboardDataCreator
+const dashboardDataProcessor1 = new dashboardDataProcessor();
+
+//Create Dashboard Cache Manager used by DashboardDataCreator
+const dashboardCacheManager1 = new DashboardCacheManager();
+
+//Create Dashboard Data Creator
+const dashboardDataCreator1 = new DashboardDataCreator(dataRequest);
+
+//Create and Send Dashboard data
+dashboardDataCreator1.initialize(dashboardDataProcessor1,dashboardCacheManager1);]]></code>
+</script>

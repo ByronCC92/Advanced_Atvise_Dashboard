@@ -1,0 +1,7 @@
+NodeId: i=84
+NodeClass: Object
+BrowseName: Root
+DisplayName: en|Root
+Description: en|Root
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Menu
+NodeClass: Variable
+BrowseName: 1:Advanced_Dashboard_Menu
+DisplayName: en|Advanced_Dashboard_Menu
+Description: en|Advanced_Dashboard_Menu
+DataType: XmlElement
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.Display
