@@ -59,6 +59,8 @@
   <atv:parameter behavior="optional" defaultvalue="12" desc="yAxis FontSize" group="Appereance" name="FontSizeyAxis" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="12" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="12" desc="Data Labels FontSize" group="Appereance" name="FontSizedataLabels" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="2" desc="Line Width" group="Line Only" name="LineLineWidth" valuetype="number"/>
+  <atv:parameter behavior="optional" config="Dash;DashDot;Dot;LongDash;LongDashDot;LongDashDotDot;ShortDash;ShortDashDot;ShortDashDotDot;ShortDot;Solid" defaultvalue="Solid" desc="Line Dash Style" group="Line Only" name="LineDashStyle" valuetype="enum"/>
   <atv:parameter behavior="optional" config="Time;Value" defaultvalue="Value" desc="Label Type" group="Column Only" name="ColumnLabelType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="left;center;right" defaultvalue="center" desc="Label Position" group="Column Only" name="ColumnLabelPosition" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Stack Enabled" group="Column Only" name="ColumnStackEnabled" valuetype="bool"/>
@@ -204,6 +206,12 @@ const elementRawConfig = {
 		FontSizeLegend: webMI.query["FontSizeLegend"],
 		FontSizeDataLabels: webMI.query["FontSizedataLabels"]
 	},
+	
+	// Line
+	Line: {
+		LineLineWidth: webMI.query["LineLineWidth"],
+		LineDashStyle: webMI.query["LineDashStyle"]
+	},	
 	 
 	// Column
 	Column: {
@@ -752,7 +760,12 @@ class singleChartManager {
 			//Line Chart
 			case "Line":
 				this.chartReference.update({
-				
+					plotOptions: {
+						line: {
+							dashStyle: this.elementRawConfig.Line.LineDashStyle, // Solid, ShortDash, ShortDot, etc.
+							lineWidth: this.elementRawConfig.Line.LineLineWidth // Width of the line
+						}
+					}
 				}, false); 
 				break;
 			
@@ -1163,7 +1176,7 @@ class singleChartManager {
 	
 						// Calculate the chart range
 						dataLength = chartSeriesItem.data.length;
-						if (dataLength > 1) {
+						if (dataLength > 1 && chartSeriesItem.data[dataLength - 1] !=null) {
 							const minTime = chartSeriesItem.data[dataLength - 1].x - chartrange;
 	
 							// Remove the first point if it is outside the calculated range
