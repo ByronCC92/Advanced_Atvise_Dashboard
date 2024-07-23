@@ -7,7 +7,7 @@
   <atv:parameter behavior="optional" config="Values;Alarms;Aggregates" defaultvalue="Values" desc="Data Type" group="GeneralConfig" name="DataType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="EnumList;Text" defaultvalue="Text" desc="Series Source" group="GeneralConfig" name="SeriesSource" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="InitialRange" group="GeneralConfig" name="InitialRange" valuetype="number"/>
-  <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="" desc="Initial Range Unit" group="GeneralConfig" name="InitialRangeUnit" valuetype="global"/>
+  <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="min" desc="Initial Range Unit" group="GeneralConfig" name="InitialRangeUnit" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Data Reduction Enabled" group="DataOptimization" name="DataReductionEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="1000" desc="Data Reduction Max Size" group="DataOptimization" name="DataReductionMaxSize" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="DataLimitEnabled" group="LimitAnalysis" name="DataLimitEnabled" valuetype="bool"/>
@@ -83,6 +83,7 @@
   <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Gauge Band 3 Color" group="Gauge Only" name="GaugeBand3Color" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Outer Radius" group="Gauge Only" name="GaugeOuterRadius" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Inner Radius" group="Gauge Only" name="GaugeInnerRadius" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Number of Bins" group="Histogram Only" name="HistogramNumberBins" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Production Speed (U/h)" group="OEE Only" name="OEEProductionSpeed" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Complete Range Analisis" group="OEE Only" name="OEECompleteRangeAnalisis" valuetype="bool"/>
   <atv:gridconfig enabled="true" gridstyle="lines" height="20" width="20"/>
@@ -246,6 +247,12 @@ const elementRawConfig = {
 		OuterRadius: webMI.query["GaugeOuterRadius"],
 		InnerRadius: webMI.query["GaugeInnerRadius"]
 	},
+	
+	// Histogram
+	Histogram: {
+		NumberBins: webMI.query["HistogramNumberBins"]
+	},
+	
 	
 	// OEE
 	OEE: {
@@ -523,14 +530,20 @@ class singleChartManager {
 	createSpecialParameters() {
 	
 		var specialParametersI={};
-		//Add Production Speed
-		if (this.elementRawConfig.OEE.OEEProductionSpeed!=null){
-			specialParametersI["OEEProductionSpeed"]=this.elementRawConfig.OEE.OEEProductionSpeed;
-		}
 		
-		//Add Full Range Analisis
-		if (this.elementRawConfig.OEE.OEECompleteRangeAnalisis!=null){
-			specialParametersI["OEECompleteRangeAnalisis"]=this.elementRawConfig.OEE.OEECompleteRangeAnalisis;
+		if (this.elementRawConfig.DataProcessing.ProcessingType.includes("OEE")){
+			//Add Production Speed
+			if (this.elementRawConfig.OEE.OEEProductionSpeed!=null){
+				specialParametersI["OEEProductionSpeed"]=this.elementRawConfig.OEE.OEEProductionSpeed;
+			}
+			
+			//Add Full Range Analisis
+			if (this.elementRawConfig.OEE.OEECompleteRangeAnalisis!=null){
+				specialParametersI["OEECompleteRangeAnalisis"]=this.elementRawConfig.OEE.OEECompleteRangeAnalisis;
+			}
+		}
+		else if (this.elementRawConfig.GeneralConfig.ChartType=="Histogram"){
+			specialParametersI["HistogramNumberBins"]=this.elementRawConfig.Histogram.NumberBins;
 		}
 		
 		return specialParametersI;
