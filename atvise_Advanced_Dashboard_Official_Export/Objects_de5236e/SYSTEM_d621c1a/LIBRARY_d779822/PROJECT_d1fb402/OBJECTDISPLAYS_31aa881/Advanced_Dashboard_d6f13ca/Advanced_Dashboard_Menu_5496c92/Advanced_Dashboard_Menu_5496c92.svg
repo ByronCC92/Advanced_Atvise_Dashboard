@@ -6,6 +6,7 @@
   <atv:parameter behavior="optional" config="CustomRange;CurrentHour;LastHour;Last_8Hours;FirstShift;SecondShift;ThirdShift;Today;Last_7Days;Yesterday;CurrentWeek;LastWeek;Last_2Weeks;CurrentMonth;LastMonth;Last_6Months;CurrentYear" defaultvalue="CustomRange" desc="Initial Range Method" group="General Configuration" name="InitialRangeMethod" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="Initial Range" group="General Configuration" name="InitialRange" valuetype="number"/>
   <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="min" desc="Initial Range Unit" group="General Configuration" name="InitialRangeUnit" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Real Time Enabled" group="General Configuration" name="RealTimeEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="1000" desc="RealTime Update Time (ms)" group="General Configuration" name="RealTimeUpdateTime" valuetype="number"/>
   <atv:parameter behavior="optional" config="true;false" defaultvalue="true" desc="Cache Enabled" group="Cache Configuration" name="CacheEnabled" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="0" desc="Cache Max Size" group="Cache Configuration" name="CacheMaxSize" valuetype="number"/>
@@ -84,6 +85,7 @@ const dashboardMenuRawConfig = {
         InitialRangeMethod: webMI.query["InitialRangeMethod"],
         InitialRange: webMI.query["InitialRange"],  
         InitialRangeUnit: webMI.query["InitialRangeUnit"],
+        RealTimeEnabled:webMI.query["RealTimeEnabled"],
         RealTimeUpdateTime:webMI.query["RealTimeUpdateTime"]
     },
     CacheConfig:{
@@ -215,9 +217,9 @@ class userInterfaceHandler {
 
     // Constructor
     constructor(dashboardMenuRawConfig,uIElements,initialRangeMethods) {
-		this.RealTime=true;
-		this.FirstTime=true;
 		this.dashboardMenuRawConfig=dashboardMenuRawConfig;
+		this.RealTime=dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? true: false;
+		this.FirstTime=true;
 		this.uIElements=uIElements;
 		this.InitialRangeMethods=initialRangeMethods;
 		this.InitialRangeMethod=dashboardMenuRawConfig.GeneralConfig.InitialRangeMethod;
@@ -248,18 +250,18 @@ class userInterfaceHandler {
        
 	   //Initialize Triggers
 	   this.addListeners();       
-       
+      
        //Real Time Trigger
 	   this.changeMode(this.RealTime);
        
        //Set Active RT
-	   this.setactive(0);   	   
+	   this.setactive(this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? 0: 1);   	   
 	   
 	   //Create First Update Request
 	   this.createUpdateRequest();	   
 	   
 	   //Init Dashboard Manager
-	   dashboardManager.initialize(this.updateRequest,false,this.dashboardMenuRawConfig.GeneralConfig.RealTimeUpdateTime);    
+	   dashboardManager.initialize(this.updateRequest,false,this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled,this.dashboardMenuRawConfig.GeneralConfig.RealTimeUpdateTime);    
        
     }
 
@@ -270,14 +272,16 @@ class userInterfaceHandler {
        //Listener Real Time
 		webMI.addEvent(this.uIElements.Click_Area[0], "click", (e) => {
 			
-			//Back to Original Initial Range
-			this.InitialRangeMethod=this.InitialRangeMethodOriginal;
-						
-			//Real Time Trigger
-			this.changeMode(true);
-			
-			//Change Colors
-			this.setactive(0);
+			if (this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true")				{
+				//Back to Original Initial Range
+				this.InitialRangeMethod=this.InitialRangeMethodOriginal;
+							
+				//Real Time Trigger
+				this.changeMode(true);
+				
+				//Change Colors
+				this.setactive(0);
+			}
 		});
 		
 		//Listener Historic
@@ -574,19 +578,21 @@ class userInterfaceHandler {
     // Method to change from realTime to Historic
     changeMode(RTactive) {
 		
+		const RTactiveI=dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? RTactive:false;		
+		
 		//Set RT Active
-		this.RealTime=RTactive;    	
-    	this.dashboardManager.RealTime=RTactive; 
-    	
+		this.RealTime=RTactiveI;    	
+    	this.dashboardManager.RealTime=RTactiveI; 
+
 		//Show/hide
-		webMI.gfx.setVisible("Date_Element", !RTactive);
+		webMI.gfx.setVisible("Date_Element", !RTactiveI);
 		
 		//Fill Combobox
-		if (!RTactive) {
+		if (!RTactiveI) {
 			this.fillCombobox(this.uIElements.Combobox, this.InitialRangeMethods);
 		}	
 		//Recalculate Real Time
-		else if(RTactive&&!this.FirstTime){
+		else if(RTactiveI&&!this.FirstTime){
 			console.log("Updating to RT")
 			//Update Evaluation time
 			this.calculateTime();
@@ -600,7 +606,7 @@ class userInterfaceHandler {
 		}
 		
 		//Send command
-        webMI.trigger.fire("RealTime_"+this.DashboardID, RTactive); 
+        webMI.trigger.fire("RealTime_"+this.DashboardID, RTactiveI); 
         
         //No longer First time
         if(this.FirstTime){
@@ -630,7 +636,8 @@ class dashboardManager {
         this.NodesRT=new Array();
         this.UpdateRequest;
         this.ChartTimeRange;
-        this.RealTimeUpdateTime,
+        this.RealTimeEnabled;
+        this.RealTimeUpdateTime;
         this.DashboardData;
         this.DashboardDataRTProcessed;
         this.DashboardDataRTDirect;
@@ -641,10 +648,13 @@ class dashboardManager {
     }
     
     // Initialize
-    async initialize(updateRequest,operationMode,RealTimeUpdateTime) {
+    async initialize(updateRequest,operationMode,RealTimeEnabled,RealTimeUpdateTime) {
 		
 		 //Define Operation Mode 
 		 this.RealTime=operationMode;
+		 
+		 //Determine if RT is enabled
+		 this.RealTimeEnabled=RealTimeEnabled;
 		 
 		 //Define RT Updatetime
 		 this.RealTimeUpdateTime=RealTimeUpdateTime;
@@ -679,13 +689,12 @@ class dashboardManager {
 				 this.DashboardDataBase=this.DashboardData;
 				 console.log("-----------Dashboard Data--------------");
 				 console.log(this.DashboardData);
-				 console.log(JSON.stringify(this.DashboardData));
 				 
 				 //Distribuite Dashboard Data
 				 this.distributeDashboardData();
 				 
 				 //Initialize RT
-				 this.RealTime=true;
+				 this.RealTime= this.RealTimeEnabled=="true" ? true:false;
 				 this.UniqueNodes= await this.rawDataRequestProcessor(this.DataRequest,"nodesRequest");
 				 this.addRTListeners();
 			 }
@@ -822,8 +831,7 @@ class dashboardManager {
 		 //Update Real time		
 		 this.RealTime=RealTime;
     }    
-    
-    
+        
     // Method to create dashboard data	
 	async dashboardDataCreator() {
 		const MAX_CHARTS_PER_REQUEST_HIST = 5;
@@ -879,7 +887,6 @@ class dashboardManager {
 		return new Promise((resolve, reject) => {
 			const requestString = JSON.stringify(dataRequest);
 			const url = `Advanced_Dashboard_Data_Creator?DataRequest=${requestString}&format=binary`;
-	
 			webMI.data.customRequest("GET", url, "responseType=string", (response) => {
 				try {
 					resolve(response);
@@ -1235,7 +1242,8 @@ class dashboardManager {
 				baseInfo.LastDataPointRaw = rtProcessedInfo.LastDataPointRaw;
 				baseInfo.ReduceInfo = rtProcessedInfo.ReduceInfo;
 				baseInfo.OEEInfo = rtProcessedInfo.OEEInfo;
-	
+				baseInfo.HistInfo = rtProcessedInfo.HistInfo;
+				
 				// Always update IntervalInfo (except start)
 				baseInfo.IntervalInfo = {
 					...baseInfo.IntervalInfo,

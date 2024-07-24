@@ -896,18 +896,13 @@ class singleChartManager {
 			case "Histogram":
 				this.chartReference.update({
 					xAxis: [{	
-						title: { text: 'Data' },
-						alignTicks: true
-					}, {
-						title: { text: 'Histogram' },
+						
 						alignTicks: true,
-						opposite: true
-					}],
-					yAxis: [{
-						title: { text: 'Data' }
-					}, {
-						title: { text: 'Histogram' },
-						opposite: true
+						labels: {
+							align: 'left', // Center the labels
+							x: 0, // Adjust x position if needed
+							y: 35,
+						},
 					}],
 					plotOptions: {
 						histogram: {
@@ -1263,55 +1258,104 @@ class singleChartManager {
 		// Check if it is necessary to go to a new interval
 		const newInterval = intervalInfo.some(info => info.IntervalInfo.newInterval);
 	
-		// Update series data
-		elementDataI.chartSeries.forEach(updatingSeries => {
-			// Find the corresponding series in the chart by name
-			const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
-			if (chartSeriesItem) {
-				const newValue = updatingSeries.data[0];
+		// If the chart type is Histogram
+		if (this.elementRawConfig.GeneralConfig.ChartType === "Histogram") {
+			console.log("---------Processing Histogram Data-----------");
 	
-				if (newInterval) {
-					// Add new data point and remove the first point
-					chartSeriesItem.addPoint(newValue, false);
-					if (chartSeriesItem.data.length > 1) {
-						chartSeriesItem.data[0].remove(false); // Remove the first point
-					}
-				} else {
-					// Update the last point with the new value
-					const lastPoint = chartSeriesItem.data[chartSeriesItem.data.length - 1];
-					lastPoint.update(newValue, false);
+			// Get existing categories from the xAxis
+			const existingCategories = this.chartReference.xAxis[0].categories;
+			const newCategories = elementDataI.chartCategories;
+	
+			 // Merge existing and new categories, ensuring they are in the correct order
+			newCategories.forEach((category) => {
+				if (!existingCategories.includes(category)) {
+					existingCategories.push(category);
 				}
-			}
-		});
+			});
 	
-	    
-		if (newInterval) {
-			// Add missing series with a value of 0
-			this.chartReference.series.forEach(chartSeriesItem => {
-				const isSeriesPresent = elementDataI.chartSeries.some(updatingSeries =>  this.defineChartLabel(updatingSeries.name) ===chartSeriesItem.name);
-				if (!isSeriesPresent) {
-					chartSeriesItem.addPoint(0, false);
-					if (chartSeriesItem.data.length > 1) {
-						chartSeriesItem.data[0].remove(false); // Remove the first point
+			// Sort the categories
+			existingCategories.sort((a, b) => {
+				const aStart = parseFloat(a.split('-')[0]);
+				const bStart = parseFloat(b.split('-')[0]);
+				return aStart - bStart;
+			});
+			
+			// Update the xAxis with the new categories
+			this.chartReference.xAxis[0].setCategories(existingCategories, false);
+	
+			// Update series data
+			elementDataI.chartSeries.forEach(updatingSeries => {
+				// Find the corresponding series in the chart by name
+				const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
+				if (chartSeriesItem) {
+					// Check and update each data point in the series
+					updatingSeries.data.forEach((dataPoint, index) => {
+						if (chartSeriesItem.data[index] && chartSeriesItem.data[index].y !== dataPoint) {
+							chartSeriesItem.data[index].update(dataPoint, false);
+						} else if (!chartSeriesItem.data[index]) {
+							chartSeriesItem.addPoint(dataPoint, false);
+						}
+					});
+				}
+			});
+			
+			// Redraw the chart after updates
+			this.chartReference.redraw(true);
+		}
+		
+		//NON-Histogram charts
+		 else {
+			
+	
+			// Update series data
+			elementDataI.chartSeries.forEach(updatingSeries => {
+				// Find the corresponding series in the chart by name
+				const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
+				if (chartSeriesItem) {
+					const newValue = updatingSeries.data[0];
+	
+					if (newInterval) {
+						// Add new data point and remove the first point
+						chartSeriesItem.addPoint(newValue, false);
+						if (chartSeriesItem.data.length > 1) {
+							chartSeriesItem.data[0].remove(false); // Remove the first point
+						}
+					} else {
+						// Update the last point with the new value
+						const lastPoint = chartSeriesItem.data[chartSeriesItem.data.length - 1];
+						lastPoint.update(newValue, false);
 					}
 				}
 			});
-		}
 	
-		// Update categories
-		const xAxis = this.chartReference.xAxis[0];
-		let updatedCategories;
+			if (newInterval) {
+				// Add missing series with a value of 0
+				this.chartReference.series.forEach(chartSeriesItem => {
+					const isSeriesPresent = elementDataI.chartSeries.some(updatingSeries => this.defineChartLabel(updatingSeries.name) === chartSeriesItem.name);
+					if (!isSeriesPresent) {
+						chartSeriesItem.addPoint(0, false);
+						if (chartSeriesItem.data.length > 1) {
+							chartSeriesItem.data[0].remove(false); // Remove the first point
+						}
+					}
+				});
+			}
 	
-		if (newInterval) {
-			// Remove the first category and add the new one using elementDataI.chartCategories[0]
-			xAxis.categories.push(elementDataI.chartCategories[0]);
-			updatedCategories = xAxis.categories;
-			this.chartReference.redraw(true); // Enable animation on redraw	
-		} else {
-			// Update the last category with the new one
-			updatedCategories = xAxis.categories;
-			updatedCategories[updatedCategories.length - 1] = elementDataI.chartCategories[0];
-			this.chartReference.redraw(false); // Disable animation on redraw
+			// Update categories
+			const xAxis = this.chartReference.xAxis[0];
+			let updatedCategories;
+	
+			if (newInterval) {
+				// Remove the first category and add the new one using elementDataI.chartCategories[0]
+				xAxis.categories.push(elementDataI.chartCategories[0]);
+				updatedCategories = xAxis.categories;
+				this.chartReference.redraw(true); // Enable animation on redraw    
+			} else {
+				// Update the last category with the new one
+				updatedCategories = xAxis.categories;
+				updatedCategories[updatedCategories.length - 1] = elementDataI.chartCategories[0];
+				this.chartReference.redraw(false); // Disable animation on redraw
+			}
 		}
 	}
 	
