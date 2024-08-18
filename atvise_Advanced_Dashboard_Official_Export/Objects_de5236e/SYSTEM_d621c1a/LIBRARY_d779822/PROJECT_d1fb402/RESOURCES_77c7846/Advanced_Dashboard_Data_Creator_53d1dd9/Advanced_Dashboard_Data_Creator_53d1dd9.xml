@@ -74,12 +74,10 @@ console.log("---------------------------------------------");
 console.log("---------------------------------------------");
 console.log("---------------------------------------------");
 
-console.log("DataRequest Excecuting");
 
-console.log(Parameters);
 var ParametersI= Parameters.request.getvalues;
 var dataRequest=JSON.parse(Parameters.request.getvalues["DataRequest"].replace(/'/g, '"'));
-console.log("dataRequest");
+console.log("-----------DataRequest------------");
 console.log(dataRequest);
 
 //Time Constants
@@ -183,7 +181,9 @@ class dashboardDataProcessor {
 		this.informationRTI;
 		this.reductionStepSizeI=0;
 		this.reductionreductioniterationsBeforeNextStepRTI=0;
+		this.limitAnalysisEnabledI=false;
 		this.OEEinfoRTI={};
+		this.HistInfoRTI={};
 		
 		this.newIntervalI=false;
 		this.processedDataII;
@@ -198,7 +198,7 @@ class dashboardDataProcessor {
 		this.OperationMode=this.dataRequest.updateRequest[0].OperationMode;
 		this.rawData=rawData;
 		this.timeRange=(new Date(this.dataRequest.updateRequest[0].finalTime)).getTime() - (new Date(this.dataRequest.updateRequest[0].initialTime)).getTime();
-		
+
 		//Operation in Hist Mode
 		if (this.OperationMode==="Hist"){
 			
@@ -247,8 +247,7 @@ class dashboardDataProcessor {
 			
 			//Define current UpdateRequest
 			this.updateRequestI=this.dataRequest.updateRequest[index];
-			console.log("this.updateRequestI");
-			console.log(this.updateRequestI);
+
 			//Find Nodes of ChartConfig
 			this.chartNodesI=this.chartNodesIFinder();
 			
@@ -273,23 +272,20 @@ class dashboardDataProcessor {
 					console.log(this.chartCategoriesI.chartCategory.categories[0]);
 					 
 					//Data Reduction
-					var dataReduction=this.dataReductor();
-					this.partialDashboardDataI=dataReduction.reducedData;
+					this.partialDashboardDataI=this.dataReductor().reducedData;
 					this.updateChartCategory();
 					console.log("------------Partial Dahsboard Data------------");
-					console.log(this.partialDashboardDataI);
-					
-					//Limits
-					this.LimitDashboardDataI=dataReduction.filteredData;
-					console.log("------------Limits Found------------");
-					//console.log(this.LimitDashboardDataI);
-		
+					console.log(this.partialDashboardDataI);					
 		
 					//Data Processing
 					this.processedDataII=this.dataProcessingHandling();
 					console.log("------------Processed Data------------");
 					console.log(this.processedDataII);
 					
+					//Limits
+					this.LimitDashboardDataI=this.limitCalculator().filteredData;;
+					console.log("------------Limits Found------------");
+					console.log(this.LimitDashboardDataI);					
 					
 					//Data for RT Creation 
 					this.DataInfoRTI=this.dataInfoRTCreator();	
@@ -317,22 +313,21 @@ class dashboardDataProcessor {
 					this.chartCategoriesI=this.categoryHandling();				
 					console.log("------------Selecting RT Categories------------");
 					console.log(this.chartCategoriesI);
-										
+					
 					//Data Reduction
-					var dataReduction=this.dataReductor();
-					this.partialDashboardDataI=dataReduction.reducedData;
+					this.partialDashboardDataI=this.dataReductor().reducedData;
 					console.log("------------Partial RT Dahsboard Data------------");
 					console.log(this.partialDashboardDataI);
 					
-					//Limits
-					this.LimitDashboardDataI=dataReduction.filteredData;
-					console.log("------------Limits RT Found------------");
-					console.log(this.LimitDashboardDataI);
-
 					//Data Processing
 					this.processedDataII=this.dataProcessingHandling();
 					console.log("------------Processed RT Data------------");
 					console.log(this.processedDataII);	
+					
+					//Limits					
+					this.LimitDashboardDataI=this.limitCalculator().filteredData;
+					console.log("------------Limits RT Found------------");
+					console.log(this.LimitDashboardDataI);							
 					
 					//Data for RT Creation 
 					this.DataInfoRTI=this.dataInfoRTCreator();	
@@ -413,67 +408,67 @@ class dashboardDataProcessor {
 	//Data Processing Handling
 	dataProcessingHandling(){
 	
-	 console.log("------------Processing Type------------")
-	 console.log(this.chartConfigI.dataProcessingType);
-	 
-	 switch (this.chartConfigI.dataProcessingType) {
-		case "Simple-None": //No change
-			console.log("Not changed");
-			return {ProcessedData:this.partialDashboardDataI.Values};
-			break;	
-		case "SinglePoint-LastValue": 	//Use Last Value
-			console.log("Last Value")
-			return this.SinglePoint_lastValue(this.partialDashboardDataI);
-			break;	
-		case "SinglePoint-FirstValue": 	//Use Last Value
-			console.log("First Value")
-			return this.SinglePoint_firstValue(this.partialDashboardDataI);
-			break;
-		case "Interval-Addition": 	//Add all the elements within intervals	
-			console.log("Adding Intervals")
-			return this.Interval_Addition(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
-			break;
-		case "Interval-CountChanges":  //Count Number of Changes
-			console.log("Counting Changes")
-			return this.Interval_ChangesCounter(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
-			break;
-		case "Interval-CountTimeOn":  //Count Number of Changes
-			console.log("Count Time On")
-			return this.Interval_CountTimeOn(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
-			break;
-		case "Interval-Difference": 	//Add all the elements	
-			console.log("Interval Difference");
-			return this.Interval_Difference(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
-			break;
-		case "Interval-Integration":  //Integrate Data
-			console.log("Integrated Data")
-			return this.Interval_Integration(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
-			break;		
-		case "Interval-Histogram": 	//Use Last Value
-			console.log("Histogram")
-			return this.Interval_Histogram(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.categories);
-			break;	
-		case "FullRange-Addition": 	//Add all the elements	
-			console.log("Simple Addition")
-			return this.FullRange_Addition(this.partialDashboardDataI);
-			break;
-		case "FullRange-Difference": 	//Add all the elements	
-			console.log("Interval Difference")
-			return this.FullRange_Difference(this.partialDashboardDataI);
-			break;																		
-		case "FullRange-OEEProductivity": 	//OEE Productivity
-			console.log("OEE Productivity")
-			return this.FullRange_OEEProductivity(this.partialDashboardDataI);
-			break;	
-		case "FullRange-OEEAvailability": 	//OEE Productivity
-			console.log("OEE Availability")
-			return this.FullRange_OEEAvailability(this.partialDashboardDataI, this.chartCategoriesI.chartCategory.intervals);
-			break;																
-		default: //No processing done
-			console.log("No processing done")
-			return {ProcessedData:this.partialDashboardDataI.Values};
-			break;
-	}
+		console.log("------------Processing Type------------")
+		console.log(this.chartConfigI.dataProcessingType);
+		
+		switch (this.chartConfigI.dataProcessingType) {
+			case "Simple-None": //No change
+				console.log("Not changed");
+				return {ProcessedData:this.partialDashboardDataI.Values};
+				break;	
+			case "SinglePoint-LastValue": 	//Use Last Value
+				console.log("Last Value")
+				return this.SinglePoint_lastValue(this.partialDashboardDataI);
+				break;	
+			case "SinglePoint-FirstValue": 	//Use Last Value
+				console.log("First Value")
+				return this.SinglePoint_firstValue(this.partialDashboardDataI);
+				break;
+			case "Interval-Addition": 	//Add all the elements within intervals	
+				console.log("Adding Intervals")
+				return this.Interval_Addition(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+				break;
+			case "Interval-CountChanges":  //Count Number of Changes
+				console.log("Counting Changes")
+				return this.Interval_ChangesCounter(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+				break;
+			case "Interval-CountTimeOn":  //Count Number of Changes
+				console.log("Count Time On")
+				return this.Interval_CountTimeOn(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+				break;
+			case "Interval-Difference": 	//Add all the elements	
+				console.log("Interval Difference");
+				return this.Interval_Difference(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+				break;
+			case "Interval-Integration":  //Integrate Data
+				console.log("Integrated Data")
+				return this.Interval_Integration(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+				break;		
+			case "Interval-Histogram": 	//Use Histogram Calculatio
+				console.log("Interval-Histogram")
+				return this.Interval_Histogram(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.categories);
+				break;	
+			case "FullRange-Addition": 	//Add all the elements	
+				console.log("Simple Addition")
+				return this.FullRange_Addition(this.partialDashboardDataI);
+				break;
+			case "FullRange-Difference": 	//Add all the elements	
+				console.log("Interval Difference")
+				return this.FullRange_Difference(this.partialDashboardDataI);
+				break;																		
+			case "FullRange-OEEProductivity": 	//OEE Productivity
+				console.log("OEE Productivity")
+				return this.FullRange_OEEProductivity(this.partialDashboardDataI);
+				break;	
+			case "FullRange-OEEAvailability": 	//OEE Productivity
+				console.log("OEE Availability")
+				return this.FullRange_OEEAvailability(this.partialDashboardDataI, this.chartCategoriesI.chartCategory.intervals);
+				break;																
+			default: //No processing done
+				console.log("No processing done")
+				return {ProcessedData:this.partialDashboardDataI.Values};
+				break;
+		}
 	
 	}
 	
@@ -481,7 +476,7 @@ class dashboardDataProcessor {
 	createProcessedDataStruct() {
 	
 	//Create structure based on if it has limits or not
-	if(this.chartConfigI.dataReductionEnable==true&&this.chartConfigI.dataoutOfLimitEnable==true)
+	if(this.limitAnalysisEnabledI)
 		{
 			return {processedDataI:this.processedDataII.ProcessedData,
 								 chartCategories:this.chartCategoriesI.chartCategory.categories,
@@ -504,15 +499,13 @@ class dashboardDataProcessor {
         try {
             console.log("----------Reducing Data--------------");
             let reducedData = { Values: [], status: [], timestamps: [] };
-            let filteredData = { Values: [], status: [], timestamps: [] };
 
             if (this.OperationMode === "Hist") {
 				const step = this.rawDataI.DataSize > this.chartConfigI.dataReductionMaxSize ? Math.ceil(this.rawDataI.DataSize / this.chartConfigI.dataReductionMaxSize) : 0;
 				this.reductionStepSizeI=step;
+				
+				//Reduction needed
                 if (this.chartConfigI.dataReductionEnable === true && step > 0) {
-                    
-					
-					
                     // Reduce the data to MaxSize by removing elements
                     for (let i = 0; i < this.rawDataI.Values.length; i += step) {
                         reducedData.Values.push(this.rawDataI.Values[i]);
@@ -520,28 +513,16 @@ class dashboardDataProcessor {
                         reducedData.timestamps.push(this.rawDataI.timestamps[i]);
 
                         // Track the iterations needed for the next step
-                        this.iterationsBeforeNextStep = i + step - this.rawDataI.Values.length;
-                    }
-
-                    if (this.chartConfigI.dataoutOfLimitEnable && this.chartConfigI.dataMaxLimit !== "" && this.chartConfigI.dataMinLimit !== "") {
-                        // Filter data by MaxValue and MinValue
-                        for (let i = 0; i < this.rawDataI.Values.length; i++) {
-                            if (this.rawDataI.Values[i] > this.chartConfigI.dataMaxLimit || this.rawDataI.Values[i] < this.chartConfigI.dataMinLimit) {
-                                filteredData.Values.push(this.rawDataI.Values[i]);
-                                filteredData.status.push(this.rawDataI.status[i]);
-                                filteredData.timestamps.push(this.rawDataI.timestamps[i]);
-                            }
-                        }
-                    }
+                        this.iterationsBeforeNextStep = i + step - this.rawDataI.Values.length;        
+                    }                   
                     this.reductionExcecutedI = true;
                     // Update DataSize for both objects
-                    reducedData.DataSize = reducedData.Values.length;
-                    filteredData.DataSize = filteredData.Values.length;
-                } else {
+                    reducedData.DataSize = reducedData.Values.length;                    
+                }               
+                else {
                     this.reductionExcecutedI = false;
                     reducedData = this.rawDataI;
-                    filteredData = [];
-                }
+                }				      
             } else if (this.OperationMode === "RealTime") {
 				if (this.chartConfigI.dataReductionEnable === true) {
 					let reductionStepSize = this.informationRTI.ReduceInfo.reductionStepSize;
@@ -569,37 +550,137 @@ class dashboardDataProcessor {
 					}
 	
 					this.iterationsBeforeNextStep = reductionIterationsBeforeNextStepRT;
-	
-					if (this.chartConfigI.dataoutOfLimitEnable && this.chartConfigI.dataMaxLimit !== "" && this.chartConfigI.dataMinLimit !== "") {
-						this.informationRTI.LastDataPointRT.forEach(dataPoint => {
-							if (dataPoint.Value > this.chartConfigI.dataMaxLimit || dataPoint.Value < this.chartConfigI.dataMinLimit) {
-								filteredData.Values.push(dataPoint.Value);
-								filteredData.status.push(dataPoint.status);
-								filteredData.timestamps.push(dataPoint.timestamps);
-							}
-						});
-					}
+
 					this.reductionExcecutedI = true;
 					reducedData.DataSize = reducedData.Values.length;
-					filteredData.DataSize = filteredData.Values.length;
                 }
                 //Reduction Disabled
                 else{
 					this.reductionExcecutedI = false;
-                    reducedData = this.informationRTI.LastDataPointRT;
-                    filteredData = [];               
+                    reducedData = this.informationRTI.LastDataPointRT;            
                 }
             }
 
-            console.log({ reducedData, filteredData });
+            console.log({reducedData});
             console.log("Iterations before next step: ", this.iterationsBeforeNextStep);
 
-            return { reducedData, filteredData };
+            return { reducedData};
         } catch (error) {
             console.error("Error reducing data: ", error);
             console.error(error.message);
             return { reducedData: {}, filteredData: [] }; // Return empty objects or handle the error as needed
         }
+    }
+	
+	//Limit Calculator Handling
+	
+	limitCalculator(){
+	
+		 //Determine If Analysis is Enabled
+		this.limitAnalysisEnabledI = this.chartConfigI.dataoutOfLimitEnable==true && (this.chartConfigI.dataMaxLimit.length >0 || this.chartConfigI.dataMinLimit.length >0) ;
+		
+		let filteredData;
+		
+		if (this.limitAnalysisEnabledI ){
+			//For Data processing Simple-None
+			if(this.chartConfigI.dataProcessingType.includes("Simple")){
+				filteredData=this.limitCalculatorAllData().filteredData;
+			}
+			else if(this.chartConfigI.dataProcessingType.includes("Interval")){
+				filteredData=this.limitCalculatorInterval().filteredData;
+			}
+		}
+		else{
+			let filteredData = {"Enabled":this.limitAnalysisEnabledI};
+		} 
+		 return {filteredData};		
+	}
+    
+    // Limit Calculator for Intervals
+    limitCalculatorInterval() {
+        let filteredData = { Values: [] };
+        
+        if (this.OperationMode === "Hist") {
+
+			// Iterate through processedDataII.ProcessedData and check limits
+			this.processedDataII.ProcessedData.forEach((value, i) => {
+				if (value !== null) {
+					if ((this.chartConfigI.dataMaxLimit.length > 0 && value >= this.chartConfigI.dataMaxLimit) || 
+						(this.chartConfigI.dataMinLimit.length > 0 && value <= this.chartConfigI.dataMinLimit)) {
+						filteredData.Values.push(1);
+					} else {
+						filteredData.Values.push(0);
+					}
+				} else {
+					filteredData.Values.push(null);
+				}
+			});
+	
+			// Add additional attributes
+			filteredData.Enabled = this.limitAnalysisEnabledI;
+			filteredData.DataSize = filteredData.Values.length;
+			
+			}
+			
+			else if (this.OperationMode === "RealTime") {       
+
+				this.processedDataII.ProcessedData.forEach((value, i) => {
+					if (value !== null) {
+						if ((this.chartConfigI.dataMaxLimit.length > 0 && value >= this.chartConfigI.dataMaxLimit) || 
+							(this.chartConfigI.dataMinLimit.length > 0 && value <= this.chartConfigI.dataMinLimit)) {
+							filteredData.Values.push(1);
+						} else {
+							filteredData.Values.push(0);
+						}
+					} else {
+						filteredData.Values.push(null);
+					}
+				});
+				
+				filteredData.DataSize = filteredData.Values.length;			
+				filteredData.Enabled = this.limitAnalysisEnabledI;	 	
+			}	
+
+        return { filteredData };
+    }
+
+    
+    //Limit Calculator for All Data
+    limitCalculatorAllData(){       
+
+		 let filteredData = { Values: [], status: [], timestamps: [] };
+
+		 if (this.OperationMode === "Hist") {
+			
+				// Filter data by MaxValue and MinValue
+				for (let i = 0; i < this.rawDataI.Values.length; i++) {
+					if ((this.chartConfigI.dataMaxLimit.length >0 && this.rawDataI.Values[i] > this.chartConfigI.dataMaxLimit) || (this.chartConfigI.dataMinLimit.length >0 && this.rawDataI.Values[i] < this.chartConfigI.dataMinLimit)) {
+														
+						filteredData.Values.push(this.rawDataI.Values[i]);
+						filteredData.status.push(this.rawDataI.status[i]);
+						filteredData.timestamps.push(this.rawDataI.timestamps[i]);
+					}
+				}
+				filteredData.Enabled = this.limitAnalysisEnabledI;
+				filteredData.DataSize = filteredData.Values.length;
+			}
+		
+		else if (this.OperationMode === "RealTime") {       
+
+			this.informationRTI.LastDataPointRT.forEach((dataPoint,i) => {
+				if ((this.chartConfigI.dataMaxLimit.length >0 && dataPoint.Value> this.chartConfigI.dataMaxLimit) || (this.chartConfigI.dataMinLimit.length >0 &&  dataPoint.Value < this.chartConfigI.dataMinLimit)) {
+					filteredData.Values.push(dataPoint.Value);
+					filteredData.status.push(dataPoint.status);
+					filteredData.timestamps.push(dataPoint.timestamps);
+				}
+			});
+			
+			filteredData.DataSize = filteredData.Values.length;			
+			filteredData.Enabled = this.limitAnalysisEnabledI;	 	
+		}			
+	
+
+		 return {filteredData};
     }
 
 	//----------Interval/Category Functions--------------//
@@ -619,6 +700,7 @@ class dashboardDataProcessor {
                 categoryCustomIntervalLength,
                 categoryCustomIntervalUnit,
                 categoryTimeOffset,
+                specialParameters,
                 chartID
             } = chartConfig;
 
@@ -638,6 +720,7 @@ class dashboardDataProcessor {
                 categoryCustomIntervalLength,
                 categoryCustomIntervalUnit,
                 categoryTimeOffset,
+                specialParameters,
                 chartNodes,  // Include nodes in the category key
                 ...(isRealTimeMode && { informationRT })  // Conditionally include informationRT in the category key
             });
@@ -653,6 +736,7 @@ class dashboardDataProcessor {
                         categoryCustomIntervalLength,
                         categoryCustomIntervalUnit,
                         categoryTimeOffset,
+                        specialParameters,
                         chartNodes,  // Include nodes in the category configuration
                         ...(isRealTimeMode && { informationRT })  // Conditionally include informationRT in the category configuration
                     },
@@ -956,18 +1040,24 @@ class dashboardDataProcessor {
 		const q1 = sortedData[Math.floor(n / 4)];
 		const q3 = sortedData[Math.floor(3 * n / 4)];
 		const iqr = q3 - q1; // Interquartile range
-	
 		let binSize;
-		let numBins;
+		let numBins=categoryConfig.specialParameters.HistogramNumberBins; /*this.chartConfigI.specialParameters.HistogramNumberBins;*/ // Get the number of bins from the config if provided
 	
-		// Use Freedman-Diaconis Rule to determine bin size if possible
-		if (iqr > 0) { // Avoid division by zero in IQR calculations
-			binSize = 2 * (iqr / Math.cbrt(n));
-			numBins = Math.ceil((sortedData[n - 1] - sortedData[0]) / binSize);
+		if (numBins === undefined||numBins === null||numBins.length<=0) { // Only if it is not specified
+			// Use Freedman-Diaconis Rule to determine bin size if possible
+			if (iqr > 0) { // Avoid division by zero in IQR calculations
+				binSize = 2 * (iqr / Math.cbrt(n));
+				numBins = Math.ceil((sortedData[n - 1] - sortedData[0]) / binSize);
+			} else {
+				// Fallback to Sturges' formula if IQR is 0
+				numBins = Math.ceil(Math.log2(n) + 1);
+				binSize = (sortedData[n - 1] - sortedData[0]) / numBins;
+			}
 		} else {
-			// Fallback to Sturges' formula if IQR is 0
-			numBins = Math.ceil(Math.log2(n) + 1);
-			binSize = (sortedData[n - 1] - sortedData[0]) / numBins;
+			// Calculate binSize based on the specified number of bins
+			const minData = sortedData[0];
+			const maxData = sortedData[sortedData.length - 1];
+			binSize = (maxData - minData) / numBins;
 		}
 	
 		const minData = sortedData[0];
@@ -977,9 +1067,14 @@ class dashboardDataProcessor {
 			const binMin = minData + i * binSize;
 			const binMax = minData + (i + 1) * binSize;
 			// Create a string representation for each category/bin
-			categories.push(`${binMin.toFixed(2)} - ${binMax.toFixed(2)}`);
+			categories.push(`${binMin.toFixed(2)}-${binMax.toFixed(2)}`);
 		}
-		return { categories: categories};
+		
+		//Safe for further analisis
+		this.HistInfoRTI["categories"]= categories.map(str => str.replace(/ /g, ''));
+		this.HistInfoRTI["BinSize"]=binSize;
+		
+		return { categories: categories };
 	}
 	
 	//---------------RT Processing Functions----------------//
@@ -1083,7 +1178,8 @@ class dashboardDataProcessor {
 
         const intervalInfo = {
             start: highestTimestamp - this.intervalLengthI,
-            end: highestTimestamp
+            end: highestTimestamp,
+            newInterval:this.newIntervalI
         };
 
         return intervalInfo;
@@ -1126,6 +1222,84 @@ class dashboardDataProcessor {
 
         return { intervals, categories };
     }
+    
+    //Create Interval Category RT
+    histogramCategoryCreatorRT() {
+		console.log("Creating Histogram Category RT");
+		const { informationRT } = this.uniqueCategoriesConfigI.categoryConfig;
+		const histInfo = informationRT[0].HistInfo;
+		const { BinSize, categories } = histInfo;
+	
+		let newCategories = [...categories]; // Start with existing categories
+		let initialTailAdded = false;
+		let finalTailAdded = false;
+	
+		informationRT[0].LastDataPointRT.forEach(dataPoint => {
+			let pointInBin = false;
+	
+			// Recalculate bins after each iteration
+			let bins = newCategories.map(category => {
+				const parts = category.split('-');
+				return {
+					min: parseFloat(parts[0]),
+					max: parseFloat(parts[1])
+				};
+			});
+	
+			bins.forEach(bin => {
+				if (dataPoint.Value >= bin.min && dataPoint.Value < bin.max) {
+					pointInBin = true;
+				}
+			});
+	
+			if (!pointInBin) {
+				// Add bins at the beginning until the data point fits into a bin
+				while (dataPoint.Value < bins[0].min) {
+					const initialTail = `${(bins[0].min - BinSize).toFixed(2)}-${bins[0].min.toFixed(2)}`;
+					if (!newCategories.includes(initialTail)) {
+						newCategories.unshift(initialTail);
+						initialTailAdded = true;
+					}
+					// Recalculate bins to include the new initial tail
+					bins = newCategories.map(category => {
+						const parts = category.split('-');
+						return {
+							min: parseFloat(parts[0]),
+							max: parseFloat(parts[1])
+						};
+					});
+				}
+	
+				// Add bins at the end until the data point fits into a bin
+				while (dataPoint.Value >= bins[bins.length - 1].max) {
+					const finalTail = `${bins[bins.length - 1].max.toFixed(2)}-${(bins[bins.length - 1].max + BinSize).toFixed(2)}`;
+					if (!newCategories.includes(finalTail)) {
+						newCategories.push(finalTail);
+						finalTailAdded = true;
+					}
+					// Recalculate bins to include the new final tail
+					bins = newCategories.map(category => {
+						const parts = category.split('-');
+						return {
+							min: parseFloat(parts[0]),
+							max: parseFloat(parts[1])
+						};
+					});
+					
+				}
+			}
+		});
+		
+		this.HistInfoRTI["categories"]= newCategories.map(str => str.replace(/ /g, ''));
+		this.HistInfoRTI["BinSize"]=BinSize;			
+		
+		if (initialTailAdded || finalTailAdded) {
+			this.newIntervalI = true;
+			return { categories: newCategories };
+		}
+	
+		return { categories: categories.map(str => str.replace(/ /g, '')) };
+	}
     	
 	//Function to Create Data for RT
 	dataInfoRTCreator() {
@@ -1165,7 +1339,8 @@ class dashboardDataProcessor {
 					reductionStepSize: this.reductionStepSizeI,
 					reductioniterationsBeforeNextStepRT: this.reductionreductioniterationsBeforeNextStepRTI
 				},
-				OEEInfo:this.OEEinfoRTI
+				OEEInfo:this.OEEinfoRTI,
+				HistInfo:this.HistInfoRTI
 			};
 		} catch (error) {
 			console.error("Error in dataInfoRTCreator: ", error.message);
@@ -1437,23 +1612,72 @@ class dashboardDataProcessor {
 		let histogramCountArray = new Array(chartCategories.length).fill(0);
 		// Parse chartCategories to get min and max for each bin
 		const bins = chartCategories.map(category => {
-			const parts = category.split(' - ');
+			const parts = category.split('-');
 			return {
 				min: parseFloat(parts[0]),
 				max: parseFloat(parts[1])
 			};
 		});
 	
-		// Iterate over each value in the dashboard data
-		rawData.Values.forEach(value => {
-			// Find which bin this value belongs to
-			for (let i = 0; i < bins.length; i++) {
-				if (value >= bins[i].min && value < bins[i].max) {
-					histogramCountArray[i]++;
-					break; // Stop checking once the correct bin is found
+		if (this.OperationMode === "Hist") {
+			// Iterate over each value in the raw data
+			rawData.Values.forEach(value => {
+				// Find which bin this value belongs to
+				for (let i = 0; i < bins.length; i++) {
+					if (value >= bins[i].min && value < bins[i].max) {
+						histogramCountArray[i]++;
+						break; // Stop checking once the correct bin is found
+					}
 				}
+			});
+		} 
+		else if (this.OperationMode === "RealTime") {
+			const originalCategories = this.informationRTI.HistInfo.categories;
+			const originalProcessedData = this.informationRTI.HistInfo.ProcessedData;
+			
+			console.log("originalCategories");
+			console.log(originalCategories);
+			console.log("originalProcessedData");
+			console.log(originalProcessedData);
+			
+			console.log("Updated Chart Categories");
+			console.log(chartCategories);
+			
+			let newProcessedData = [...originalProcessedData];
+	
+			// Find new bins added at the beginning
+			let addedBinsAtBeginning = 0;
+			while (!originalCategories.includes(chartCategories[addedBinsAtBeginning])) {
+				newProcessedData.unshift(0);
+				addedBinsAtBeginning++;
 			}
-		});
+	
+			// Find new bins added at the end
+			let addedBinsAtEnd = 0;
+			while (!originalCategories.includes(chartCategories[chartCategories.length - 1 - addedBinsAtEnd])) {
+				newProcessedData.push(0);
+				addedBinsAtEnd++;
+			}
+	
+			// Iterate over each value in the LastDataPointRT
+			this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+				// Find which bin this value belongs to
+				for (let i = 0; i < bins.length; i++) {
+					if (dataPoint.Value >= bins[i].min && dataPoint.Value < bins[i].max) {
+						newProcessedData[i]++;
+						break; // Stop checking once the correct bin is found
+					}
+				}
+			});
+			
+			console.log("newProcessedData");
+			console.log(newProcessedData);
+	
+			histogramCountArray = newProcessedData;
+		}
+	
+		// Update this.HistInfoRTI["ProcessedData"]
+		this.HistInfoRTI["ProcessedData"] = histogramCountArray;
 	
 		return { ProcessedData: histogramCountArray };
 	}
@@ -1721,9 +1945,6 @@ class dashboardDataProcessor {
 			return { ProcessedData: [sum] };
 		}
 	}
-	
-	
-
 	
 	
 	//---------------Data Analisis Helper Methods--------------//
@@ -2334,10 +2555,7 @@ class DashboardDataCreator {
 	// Methods
 	// Handles rawDataRequest and orchestrate everything related to rawData
 	async initialize(dashboardDataProcessor,dashboardCacheManager) {
-		try {
-			console.log("------Decompressed DataRequest--------");
-			console.log(this.dataRequest);
-			
+		try {			
 			console.log("------------Operation Mode---------");
 			console.log(this.dataRequest.updateRequest[0].OperationMode);
 			
@@ -2595,7 +2813,7 @@ class DashboardDataCreator {
 	
 	//Extract specific info from the rawDataRequest 
 	rawDataRequestProcessor(dataRequest,infoRequired) {
-		console.log(this.dataRequest);
+
 		switch (infoRequired) {
 		  case "nodesRequest":
 			var dataRequestI=dataRequest.chartsNodes;
@@ -2773,13 +2991,15 @@ class DashboardDataCreator {
 				let informationRT=chart.processedDataStruct.map((dataStruct) => {
 					return dataStruct.informationRT;
 				});
+			
 				let chartData = {
 					chartID: chart.chartID,
 					informationRT: informationRT,
 					chartSeries: [],
+					LimitDashboardData: [],
 					chartCategories: chart.processedDataStruct[0]?.chartCategories || []
 				};
-	
+							
 				// Determining how to process based on chartType
 				switch (chart.chartType) {
 					case "Line":
@@ -2788,8 +3008,10 @@ class DashboardDataCreator {
 					case "Column":
 					case "Bar":
 						// For these types, each processedDataStruct item becomes a series
-						chart.processedDataStruct.forEach(dataStruct => {
+						chart.processedDataStruct.forEach((dataStruct, k) => {
 							const seriesName = dataStruct.processedNode; // Using processedNode for series name
+							
+							//For ValueType Series
 							let series = {
 								name: seriesName,
 								data: dataStruct.processedDataI.map((dataPoint, i) => {
@@ -2801,7 +3023,37 @@ class DashboardDataCreator {
 									}
 								})
 							};
+							
+							
+							//For LimitType Series
+							let seriesLimint;			
+							
+							//If there is LimitDashboardData add it
+							let limitAnalysisEnabledI=dataStruct.LimitDashboardData==undefined?false:dataStruct.LimitDashboardData.Enabled;
+
+							if (limitAnalysisEnabledI) {
+								if (chart.categoryType === "AllData-DateTime") {
+									seriesLimint = {
+										name: seriesName+"_Limit",
+										data: dataStruct.LimitDashboardData.Values.map((dataPoint, i) => {
+												const category = dataStruct.LimitDashboardData.timestamps[i];
+												return  [category, dataPoint];
+										})
+									}
+								}
+								else if (chart.categoryType.includes("Interval")) {
+									seriesLimint= {
+										name: seriesName+"_Limit",
+										data:dataStruct.LimitDashboardData.Values,
+									}
+								}
+							}							
+							else	{
+								seriesLimint={};
+								
+							}				
 							chartData.chartSeries.push(series);
+							chartData.LimitDashboardData.push(seriesLimint);
 						});
 						break;
 					case "Pie":
@@ -2829,23 +3081,10 @@ class DashboardDataCreator {
 						const seriesName = chart.processedDataStruct[0].processedNode;
 						const scatterData = chart.processedDataStruct[0].processedDataI.map(dataPoint => dataPoint);
 						chartData.chartSeries.push({
-							name: 'Data',
+							name: seriesName,
 							type: 'scatter',
 							data: scatterData,
-							id: 's1',
-							marker: {
-								radius: 1.5
-							}
-						});						
-						chartData.chartSeries.push({
-							name: 'Histogram',
-							type: 'histogram',
-							xAxis: 1,
-							yAxis: 1,
-							baseSeries: 's1',
-							zIndex: -1
-						});					
-						
+						});										
 					break;
 					default:
 						errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);

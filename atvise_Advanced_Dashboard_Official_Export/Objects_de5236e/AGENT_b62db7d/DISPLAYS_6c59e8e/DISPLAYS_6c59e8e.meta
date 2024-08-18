@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.DISPLAYS
+NodeClass: Object
+BrowseName: 1:DISPLAYS
+DisplayName: en|DISPLAYS
+Description: en|DISPLAYS
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType
