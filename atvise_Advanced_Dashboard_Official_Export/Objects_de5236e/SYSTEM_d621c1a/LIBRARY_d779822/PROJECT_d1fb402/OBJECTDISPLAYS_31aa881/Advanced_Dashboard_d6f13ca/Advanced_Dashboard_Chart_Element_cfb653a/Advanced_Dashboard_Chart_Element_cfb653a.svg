@@ -8,6 +8,7 @@
   <atv:parameter behavior="optional" config="EnumList;Text" defaultvalue="Text" desc="Series Source" group="GeneralConfig" name="SeriesSource" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="InitialRange" group="GeneralConfig" name="InitialRange" valuetype="number"/>
   <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="min" desc="Initial Range Unit" group="GeneralConfig" name="InitialRangeUnit" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="ZoomEnabled" group="Zoom" name="ZoomEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Data Reduction Enabled" group="DataOptimization" name="DataReductionEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="1000" desc="Data Reduction Max Size" group="DataOptimization" name="DataReductionMaxSize" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="DataLimitEnabled" group="LimitAnalysis" name="DataLimitEnabled" valuetype="bool"/>
@@ -120,6 +121,11 @@ const elementRawConfig = {
 		SeriesSource: webMI.query["SeriesSource"],
 		InitialRange: webMI.query["InitialRange"],
 		InitialRangeUnit: webMI.query["InitialRangeUnit"]
+	},
+	
+	// Zoom Configuration
+	Zoom: {
+		ZoomEnabled: webMI.query["ZoomEnabled"] 
 	},
 	
 	// Data Optimization
@@ -274,7 +280,6 @@ webMI.addOnload(function() {
 	
 	//Get Chart container
 	chartContainter=document.getElementById("Chart_Container");
-	webMI.gfx.setScaledEvents(chartContainter);
 	
 	//Create Chart Manager
     const singleChartManagerI=new singleChartManager(elementRawConfig);
@@ -378,7 +383,6 @@ class singleChartManager {
 			console.log("-----------Single Element Data------------");
 			console.log(this.elementData);
 			console.log(this.elementData);
-			console.log(JSON.stringify(this.elementData)); 
 			
 			
 			//Initialize Chart
@@ -702,7 +706,6 @@ class singleChartManager {
 		
 	}
 	
-	
 	//Update Categories
 	updateCategories(){
 		console.log("-----------Update Categories------------");
@@ -730,11 +733,25 @@ class singleChartManager {
 		// Other Category		
 		else {
 			if (elementDataI!=null) {
-				this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
+
+				//Special Categories for Singlepoint Processing
+				if(this.elementRawConfig.DataProcessing.DataProcessingEnabled&&(this.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint"))){
+					let customCategories=elementDataI.chartCategories.map((category, index) => ({
+						name:this.defineChartLabel(elementDataI.chartSeries[0].data[index].name),
+						x:category
+					}));
+					console.log("customCategories");
+					console.log(customCategories);
+					this.chartReference.xAxis[0].setCategories(customCategories, false);
+					
+				}
+				//Common Categories
+				else{
+					this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
+				}
 			}
 		}
 	}
-	
 	
 	//Update Series
 	updateSeries(){
@@ -758,41 +775,80 @@ class singleChartManager {
 			case "Pie":
 			case "Pyramid":
 				console.log("---------Is Pie or Pyramid-------");
-				// For Pie or Pyramid charts, apply different colors to each datapoint
-				 var seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
-					y:dataPoint.y,
-					color: this.chartColors[index],
-					name: this.defineChartLabel(dataPoint.name)
-				}));
-				this.chartReference.addSeries({
-					name: this.elementRawConfig.GeneralConfig.ChartType,
-					data: seriesData
-				}, false);
+				var seriesData;
+				var seriesI={};
+				
+				//Add limits to the series
+				if (this.limitAnalysisEnabled){ 
+					console.log("-------Adding limits-----");	
+					this.addLimitSeries();	
+					
+					seriesData=this.elementData.chartData.chartSeries[0].data;
+					seriesI={
+							name: this.elementRawConfig.GeneralConfig.ChartType,
+							data: seriesData
+							}
+				}	
+				
+				else{
+					seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
+						y:dataPoint.y,
+						color: this.chartColors[index],
+						name: this.defineChartLabel(dataPoint.name)
+					}));
+					seriesI={
+						name: this.elementRawConfig.GeneralConfig.ChartType,
+						data: seriesData
+					}
+				}
+				this.chartReference.addSeries(seriesI, false);
 			break;		
 				
 			case "Solidgauge":
 			case "Gauge":
 				console.log("---------Is SG o Gauge-------");
-				// For Pie or Pyramid charts, apply different colors to each datapoint
-				var seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
-					y:dataPoint,
-					color: this.chartColors[index],
-				}));			
-							
-				this.chartReference.addSeries({
-					name: this.defineChartLabel(elementDataI.chartSeries[0].name),
-					data: seriesData
-				}, false);
+				var seriesData;
+				var seriesI={};
+				
+				//Add limits to the series
+				if (this.limitAnalysisEnabled){ 
+					console.log("-------Adding limits-----");	
+					this.addLimitSeries();	
+
+					seriesData= this.elementData.chartData.chartSeries[0].data;
+					seriesI={
+						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
+						data: seriesData,
+						dial:this.elementData.chartData.chartSeries[0].dial
+					}
+				}				
+				else{				
+					// For Pie or Pyramid charts, apply different colors to each datapoint
+					seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
+						y:dataPoint,
+						color: this.chartColors[index],
+					}));	
+					seriesI={
+						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
+						data: seriesData
+					}				
+				}	
+				
+				this.chartReference.addSeries(seriesI, false);
 			break;			
 			
 			case "Line":
 			case "Area":
 			case "Spline":
+				console.log("---------Is Line,Area or Spline-------");
+				
 				//Add limits to the series
 				if (this.limitAnalysisEnabled){ 
 					console.log("-------Adding limits-----");	
 					this.addLimitSeries();		
 				}
+				
+
 				// Add new series for other chart types
 				elementDataI.chartSeries.forEach((series, index) => {
 				
@@ -811,19 +867,25 @@ class singleChartManager {
 				break;
 						
 				case "Column":
+				case "Histogram":
 				default:
-				
+					console.log("---------Is Column or Histogram-------");
 					if (this.limitAnalysisEnabled){ 
-							console.log("-------Adding limits-----");	
+							console.log("-------Adding limits-----");
+							console.log("elementDataI.chartSeries");
+							console.log(elementDataI.chartSeries);	
 							this.addLimitSeries();	
 					}
+							console.log("elementDataI.chartSeries");
+							console.log(elementDataI.chartSeries);	
 						// Add new series for other chart types
 					elementDataI.chartSeries.forEach((series, index) => {
-						if (this.limitAnalysisEnabled){ 						
+						if (this.limitAnalysisEnabled){ 				
 							this.chartReference.addSeries(series, false);	
 						}					
 						//No limits
 						else{
+							
 							this.chartReference.addSeries({
 								name: this.defineChartLabel(series.name),
 								data: series.data,
@@ -839,6 +901,9 @@ class singleChartManager {
 	specificUpdate() {
 		
 		console.log("----------Apply Specific Config------------");
+		let DataProcessingEnabledI=this.elementRawConfig.DataProcessing.DataProcessingEnabled;
+		let ProcessingTypeI=this.elementRawConfig.DataProcessing.ProcessingType;			
+		
 		//Apply Specific Config
 		switch (this.elementRawConfig.GeneralConfig.ChartType) {
 			
@@ -846,6 +911,13 @@ class singleChartManager {
 			case "Line":
 				console.log("Updating line");
 				this.chartReference.update({
+					chart: {
+						zooming: this.elementRawConfig.Zoom.ZoomEnabled ? {
+							type: 'x'
+						}: {},
+						panning: this.elementRawConfig.Zoom.ZoomEnabled ? true:false,
+						panKey: this.elementRawConfig.Zoom.ZoomEnabled ? 'shift':''
+					},					
 					plotOptions: {
 						line: {
 							dashStyle: this.elementRawConfig.Line.LineDashStyle, // Solid, ShortDash, ShortDot, etc.
@@ -890,6 +962,12 @@ class singleChartManager {
 								}
 							}
 						}] : []
+					},
+					tooltip: {
+						formatter: function () {
+							const date = new Date(this.x).toLocaleString(); // Converts x-value to a formatted date string
+							return `<b style="color: ${this.series.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.series.color};">${this.series.name}</b>: ${(this.y).toFixed(3)}`;
+						}
 					}
 				}, false); 
 				break;
@@ -897,6 +975,13 @@ class singleChartManager {
 			//Spline Chart
 			case "Spline":
 				this.chartReference.update({
+					chart: {
+						zooming: this.elementRawConfig.Zoom.ZoomEnabled ? {
+							type: 'x'
+						}: {},
+						panning: this.elementRawConfig.Zoom.ZoomEnabled ? true:false,
+						panKey: this.elementRawConfig.Zoom.ZoomEnabled ? 'shift':''
+					},	
 					plotOptions: {
 						line: {
 							dashStyle: this.elementRawConfig.Line.LineDashStyle, // Solid, ShortDash, ShortDot, etc.
@@ -933,6 +1018,12 @@ class singleChartManager {
 								}
 							}
 						}] : []
+					},
+					tooltip: {
+						formatter: function () {
+							const date = new Date(this.x).toLocaleString(); // Converts x-value to a formatted date string
+							return `<b style="color: ${this.series.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.series.color};">${this.series.name}</b>: ${(this.y).toFixed(3)}`;
+						}
 					}
 				}, false);  
 				break;
@@ -940,6 +1031,13 @@ class singleChartManager {
 			//Area Chart
 			case "Area":
 				this.chartReference.update({
+					chart: {
+						zooming: this.elementRawConfig.Zoom.ZoomEnabled ? {
+							type: 'x'
+						}: {},
+						panning: this.elementRawConfig.Zoom.ZoomEnabled ? true:false,
+						panKey: this.elementRawConfig.Zoom.ZoomEnabled ? 'shift':''
+					},	
 					plotOptions: {
 						area: {
 							fillOpacity: 0.5
@@ -979,6 +1077,12 @@ class singleChartManager {
 								}
 							}
 						}] : []
+					},
+					tooltip: {
+						formatter: function () {
+							const date = new Date(this.x).toLocaleString(); // Converts x-value to a formatted date string
+							return `<b style="color: ${this.series.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.series.color};">${this.series.name}</b>: ${(this.y).toFixed(3)}`;
+						}
 					}
 				}, false);  // Set redraw to false
 				break;
@@ -987,6 +1091,13 @@ class singleChartManager {
 			case "Column":
 				let labelType=this.elementRawConfig.Column.LabelType;
 				this.chartReference.update({
+					chart: {
+						zooming: this.elementRawConfig.Zoom.ZoomEnabled ? {
+							type: 'x'
+						}: {},
+						panning: this.elementRawConfig.Zoom.ZoomEnabled ? true:false,
+						panKey: this.elementRawConfig.Zoom.ZoomEnabled ? 'shift':''
+					},	
 					plotOptions: {
 						column: {
 							stacking: this.elementRawConfig.Column.StackEnabled == "true" ? 'normal':undefined, // Enable stacking here
@@ -1062,7 +1173,7 @@ class singleChartManager {
 					},
 					tooltip: {
 						formatter: function () {
-							return `<b>${this.series.name}</b>: ${this.y}`;
+							return `<b style="color: ${this.series.color};">${"Date"}</b>: ${this.key}<br><b style="color: ${this.series.color};">${this.series.name}</b>: ${this.y}`;
 						}
 					}
 				}, false);  // Set redraw to false
@@ -1081,6 +1192,8 @@ class singleChartManager {
 				}, false);  // Set redraw to false
 				break;
 			case "Pie":
+				console.log("Updating Pie");						
+				
 				this.chartReference.update({
 					plotOptions: {
 						pie: {
@@ -1091,18 +1204,52 @@ class singleChartManager {
 								format: '<b>{point.name}</b>: {point.percentage:.1f} %'
 							}
 						}
+					},
+					tooltip: {
+						formatter: function () {
+								
+							if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){
+								let chartReferenceI = this.series.chart;
+								let chartCategoriesI=chartReferenceI.xAxis[0].categories;
+								console.log("chartCategoriesI");
+								console.log(chartCategoriesI);				
+								const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
+								const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
+								return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+							}
+							else{
+								return `<b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+							}
+						}
 					}
 				}, false);  // Set redraw to false
 				break;
 				
 			//Pyramid Chart
 			case "Pyramid":
+				console.log("Updating Pyramid");		
+				
 				this.chartReference.update({
 					plotOptions: {
 						pyramid: {
 							reversed: false,
 							width: '70%',
 							height: '80%'
+						}
+					},
+					tooltip: {
+						formatter: function () {
+								
+							if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){
+								let chartReferenceI = this.series.chart;
+								let chartCategoriesI=chartReferenceI.xAxis[0].categories;							
+								const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
+								const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
+								return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+							}
+							else{
+								return `<b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+							}
 						}
 					}
 				}, false);  // Set redraw to false
@@ -1119,6 +1266,38 @@ class singleChartManager {
 							y: 35,
 						},
 					}],
+					yAxis: {
+						plotLines: this.limitAnalysisEnabled ? [
+						
+						//Min Limit						
+						{
+							color: this.elementRawConfig.Appearance.ColorLimitLineMin, // Color of the min limit line
+							value: this.elementRawConfig.LimitAnalysis.DataMinLimit, // Value where the min limit line will appear
+							width: 2, // Width of the min limit line
+							label: {
+								text: 'Min',
+								align: 'right',
+								style: {
+									color: this.elementRawConfig.Appearance.ColorLimitLineMin,
+									fontWeight: 'bold'
+								}
+							}
+						},
+						//Max Limit	
+						{
+							color: this.elementRawConfig.Appearance.ColorLimitLineMax, // Color of the max limit line
+							value: this.elementRawConfig.LimitAnalysis.DataMaxLimit, // Value where the max limit line will appear
+							width: 2, // Width of the max limit line
+							label: {
+								text: 'Max',
+								align: 'right',
+								style: {
+									color: this.elementRawConfig.Appearance.ColorLimitLineMax,
+									fontWeight: 'bold'
+								}
+							}
+						}] : []
+					},
 					plotOptions: {
 						histogram: {
 							binWidth: 10,
@@ -1320,8 +1499,7 @@ class singleChartManager {
 			default:
 				console.log("No specific configurations applied.");
 		}
-	}
-	
+	}	
 	
 	//Add limits	
 	addLimitSeries() {
@@ -1335,7 +1513,9 @@ class singleChartManager {
 	
 		// Check the category type
 		if (this.elementConfig.chartsConfig.categoryType === "AllData-DateTime") {
+			
 			this.limitData.forEach(limitData => {
+
 				// Create a new series for the limit data
 				const limitSeries = {
 					type: 'scatter',
@@ -1369,34 +1549,97 @@ class singleChartManager {
 				const limitData = this.limitData.find(limit => limit.name === (series.name)+this.limitKey);
 				const colorIndex = this.elementNodes.findIndex(node => node === (series.name));
 				
-				if (limitData) {
+				if(this.elementRawConfig.GeneralConfig.ChartType== "Column"){				
+					if (limitData) {
+						series.name= this.defineChartLabel(series.name);
+						series.color= this.chartColors[colorIndex];
+						
+						series.data = series.data.map((dataPoint, index) => {
+							if (limitData.data[index] === 1) {
+								return {
+									y: dataPoint,
+									color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
+											? this.elementRawConfig.Appearance.ColorLimitPointMin
+											: this.chartColors[colorIndex] // Default color if within limits
+								};
+							} else {
+								return {
+									y: dataPoint,
+									color:this.chartColors[colorIndex] // Default color if within limits
+								};
+							}
+						});
+					}
+				}
+				
+				else if(this.elementRawConfig.GeneralConfig.ChartType== "Histogram"){
+					console.log("Entering to Histogram")
 					series.name= this.defineChartLabel(series.name);
-					series.color= this.chartColors[colorIndex];
-					
-					series.data = series.data.map((dataPoint, index) => {
-						if (limitData.data[index] === 1) {
-							return {
-								y: dataPoint,
-								color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-									? this.elementRawConfig.Appearance.ColorLimitPointMax
-									: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMin
-										: this.chartColors[colorIndex] // Default color if within limits
-							};
-						} else {
-							return {
-								y: dataPoint,
-								color:this.chartColors[colorIndex] // Default color if within limits
-							};
-						}
+					series.type="histogram";
+					series.data = series.data.map((dataPoint, index) => {						
+						return {
+							y: dataPoint,
+							color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+								? this.elementRawConfig.Appearance.ColorLimitPointMax
+								: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
+									? this.elementRawConfig.Appearance.ColorLimitPointMin
+									: this.chartColors[colorIndex] // Default color if within limits
+						};
 					});
 				}
 			});
 		}
+		
+		else if (this.elementConfig.chartsConfig.categoryType.includes("Single")) {
+			console.log("Excecuting Single logic")
+			// Find the corresponding limitData by name		
+			
+			const colorIndex = this.elementNodes.findIndex(node => node === (chartSeries[0].name));
+			var chartSeriesI={};
+				
+			if (this.elementRawConfig.GeneralConfig.ChartType== "Gauge"||this.elementRawConfig.GeneralConfig.ChartType== "Solidgauge"){			
+				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
+					y:dataPoint,
+					color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+									? this.elementRawConfig.Appearance.ColorLimitPointMax
+									: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
+									? this.elementRawConfig.Appearance.ColorLimitPointMin
+									: this.chartColors[colorIndex], // Default color if within limits,
+				}));
+				
+				//Special Dial Update
+				if (this.elementRawConfig.GeneralConfig.ChartType== "Gauge"){
+					const limitDialColor=chartSeriesI.data[0].color==this.chartColors[colorIndex] ? "#808080":chartSeriesI.data[0].color;
+					chartSeriesI["dial"]= {
+						backgroundColor: limitDialColor, // Custom color for the needle
+						borderColor: limitDialColor // Border color for the needle
+					
+					}
+					chartSeries[0]["dial"]=chartSeriesI.dial;				
+				}
+
+			}
+		
+			else if	(this.elementRawConfig.GeneralConfig.ChartType== "Pie"||this.elementRawConfig.GeneralConfig.ChartType== "Pyramid")
+			{
+				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
+						y:dataPoint.y,
+						color: dataPoint.y > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										: dataPoint.y < this.elementRawConfig.LimitAnalysis.DataMinLimit
+										? this.elementRawConfig.Appearance.ColorLimitPointMin
+										: this.chartColors[this.elementNodes.findIndex(node => node === (dataPoint.name))], // Default color if within limits,
+						name: this.defineChartLabel(dataPoint.name)
+				}));
+			}	
+			chartSeries[0].data=chartSeriesI.data;						
+						
+		}
 		// Update this.elementData.chartData.chartSeries
-		this.elementData.chartData.chartSeries = chartSeries;
+		this.elementData.chartData.chartSeries = chartSeries;		
 	}
-    
 	
 	//-----------------------------------------------//
 	//--------RT Chart Functions------------//
@@ -1405,7 +1648,7 @@ class singleChartManager {
 
 		const dataProcessingType = this.elementConfig.chartsConfig.dataProcessingType;
 		const elementDataRT = this.elementDataRT;
-		
+
 		//Add limits to the series
 		if (this.limitAnalysisEnabled){ 
 			console.log("-------Adding limits-----");	
@@ -1423,7 +1666,7 @@ class singleChartManager {
 			if (this.firstTimeRT)	{
 				setTimeout((e) => {	
 					this.updateFullRangeOrSinglePointData();
-				},200);
+				},500);
 			}
 			else{				
 				this.updateFullRangeOrSinglePointData();				
@@ -1452,13 +1695,6 @@ class singleChartManager {
 			console.error("Element data is not available or does not contain limit data.");
 			return;
 		}
-		console.log("Adding limits RT Series")
-		console.log("this.elementNodes");
-		console.log(this.elementNodes);
-		
-
-
-		
 		
 		const chartSeries = this.elementDataRT.chartData.chartSeries;
 		this.limitData = this.elementDataRT.chartData.LimitDashboardData;
@@ -1489,7 +1725,9 @@ class singleChartManager {
 				// Add the limit series to the chart series
 				chartSeries.push(limitSeries);
 			});
-		} else if (this.elementConfig.chartsConfig.categoryType.includes("Interval")) {
+		} 
+		
+		else if (this.elementConfig.chartsConfig.categoryType.includes("Interval")) {
 			console.log("For Interval")
 			// Process interval data
 			chartSeries.forEach((series, indexS) => {
@@ -1497,29 +1735,86 @@ class singleChartManager {
 				const limitData = this.limitData.find(limit => limit.name === (series.name + this.limitKey));
 				const colorIndex = this.elementNodes.findIndex(node => node === (series.name));
 				
+				if(this.elementRawConfig.GeneralConfig.ChartType== "Column"){	
+					if (limitData) {
+						console.log("Entered Limit Data");
+						series.data = series.data.map((dataPoint, index) => {
+							if (limitData.data[index] === 1) {
+								return {
+									y: dataPoint,
+									color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
+											? this.elementRawConfig.Appearance.ColorLimitPointMin
+											: this.chartColors[colorIndex] // Default color if within limits
+								};
+							} else {
+								return {
+									y: dataPoint,
+									color:this.chartColors[colorIndex] // Default color if within limits
+								};
+							}
+						});
+					}					
+				}	
 				
-				if (limitData) {
-					console.log("Entered Limit Data");
-					series.data = series.data.map((dataPoint, index) => {
-						if (limitData.data[index] === 1) {
-							return {
-								y: dataPoint,
-								color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+				else if(this.elementRawConfig.GeneralConfig.ChartType== "Histogram"){
+					console.log("Entering to Histogram")
+					series.name= this.defineChartLabel(series.name);
+					series.type="histogram";
+					series.data = series.data.map((dataPoint, index) => {						
+						return {
+							y: dataPoint,
+							color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+								? this.elementRawConfig.Appearance.ColorLimitPointMax
+								: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
+									? this.elementRawConfig.Appearance.ColorLimitPointMin
+									: this.chartColors[colorIndex] // Default color if within limits
+						};
+					});
+				}			
+			});
+		}
+		else if (this.elementConfig.chartsConfig.categoryType.includes("Single")) {
+						
+			// Find the corresponding limitData by name		
+			const colorIndex = this.elementNodes.findIndex(node => node === (chartSeries[0].name));			
+			var chartSeriesI={};
+
+			if (this.elementRawConfig.GeneralConfig.ChartType== "Gauge"||this.elementRawConfig.GeneralConfig.ChartType== "Solidgauge"){						
+				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
+					y:dataPoint,
+					color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
 									? this.elementRawConfig.Appearance.ColorLimitPointMax
 									: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
 										? this.elementRawConfig.Appearance.ColorLimitPointMin
-										: this.chartColors[colorIndex] // Default color if within limits
-							};
-						} else {
-							return {
-								y: dataPoint,
-								color:this.chartColors[colorIndex] // Default color if within limits
-							};
-						}
-					});
-				}				
-			});
-		}
+										: this.chartColors[colorIndex], // Default color if within limits,
+				}));
+				
+				if (this.elementRawConfig.GeneralConfig.ChartType== "Gauge"){
+					const limitDialColor=chartSeriesI.data[0].color==this.chartColors[colorIndex] ? "#808080":chartSeriesI.data[0].color;
+					chartSeriesI["dial"]= {
+						backgroundColor: limitDialColor, // Custom color for the needle
+						borderColor: limitDialColor // Border color for the needle
+					}	
+					chartSeries[0]["dial"]=chartSeriesI.dial;			
+				}
+			}
+			else if	(this.elementRawConfig.GeneralConfig.ChartType== "Pie"||this.elementRawConfig.GeneralConfig.ChartType== "Pyramid")
+			{
+				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
+						y:dataPoint.y,
+						color: dataPoint.y > this.elementRawConfig.LimitAnalysis.DataMaxLimit
+										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										: dataPoint.y < this.elementRawConfig.LimitAnalysis.DataMinLimit
+										? this.elementRawConfig.Appearance.ColorLimitPointMin
+										: this.chartColors[this.elementNodes.findIndex(node => node === (dataPoint.name))], // Default color if within limits,
+						name: this.defineChartLabel(dataPoint.name)
+				}));
+			}
+			
+			chartSeries[0].data=chartSeriesI.data;			
+		}	
 	
 		// Update this.elementDataRT.chartData.chartSeries
 		this.elementDataRT.chartData.chartSeries = chartSeries;
@@ -1537,7 +1832,7 @@ class singleChartManager {
 	
 			// Iterate through the updatingData to find the matching series by name
 			this.elementDataRT.chartData.chartSeries.forEach(updatingSeries => {
-			
+				
 				// Find the corresponding series in the chart
 				const chartSeriesItem = chartSeries.find(series => series.name === this.defineChartLabel(updatingSeries.name));
 				const chartrange = this.chartTimeRange;
@@ -1589,14 +1884,47 @@ class singleChartManager {
 		const chartSeries = this.chartReference.series;
 		
 		//Pie and Pyramid Case
-		if (this.isPiePyramid) {  //For Pie chart Data
-		   
+		if (this.isPiePyramid) {  //For Pie chart Data		
+			
 			// Update each data point in the pie chart based on the name
-			const updatingData = this.elementDataRT.chartData.chartSeries[0].data;		
+			const updatingData = this.elementDataRT.chartData.chartSeries[0].data;	
+			const elementDataI=this.elementDataRT.chartData;
+			
+			//Special Categories for Singlepoint Processing
+			if(this.elementRawConfig.DataProcessing.DataProcessingEnabled&&(this.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint"))){
+				
+				let updatedCategories=this.chartReference.xAxis[0].categories.map((category, index) => {
+
+					const foundIndex = elementDataI.chartSeries[0].data.findIndex(dataPoint => this.defineChartLabel(dataPoint.name) === category.name);;
+					const foundcategory =elementDataI.chartCategories[foundIndex];
+		
+					//Updated category
+					if(foundcategory!=undefined){
+						return ({
+							name:this.defineChartLabel(category.name),
+							x:foundcategory
+						})				
+					}
+					//Keep the same category
+					else{
+						return category;
+					}
+					
+				});
+				
+				this.chartReference.xAxis[0].setCategories(updatedCategories, false);
+			}
+			
+			//Updating points
 			updatingData.forEach(updatingPoint => {
 				const dataPoint = chartSeries[0].data.find(point => point.name === this.defineChartLabel(updatingPoint.name));
-				if (dataPoint) {
-					dataPoint.update(updatingPoint.y, false); // Update the data point, no redraw yet
+				if (dataPoint) {							
+					if (this.limitAnalysisEnabled){
+						dataPoint.update(updatingPoint, false); // Update the data point, no redraw yet
+					}
+					else{										
+						dataPoint.update(updatingPoint.y, false); // Update the data point, no redraw yet
+					}								
 				}
 			});
 		}
@@ -1617,6 +1945,11 @@ class singleChartManager {
 						// Update the last point with the new value or add the point if the series is empty
 						if (lastPoint) {
 							lastPoint.update(newValue, true); // Update last point, no redraw
+							if(this.elementRawConfig.GeneralConfig.ChartType== "Gauge" &&this.limitAnalysisEnabled){
+								chartSeriesItem.update({
+										dial:updatingSeries.dial
+								});
+							} 
 						} 
 					}
 				}
@@ -1668,6 +2001,10 @@ class singleChartManager {
 				// Find the corresponding series in the chart by name
 				const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
 				if (chartSeriesItem) {
+					console.log("chartSeriesItem");
+					console.log(chartSeriesItem);
+					console.log("updatingSeries");
+					console.log(updatingSeries);
 					// Check and update each data point in the series
 					updatingSeries.data.forEach((dataPoint, index) => {
 						if (chartSeriesItem.data[index] && chartSeriesItem.data[index].y !== dataPoint) {
@@ -1910,7 +2247,7 @@ class singleChartManager {
     
     defineChartLabel(SeriesName) {
 		console.log("---------Definining Chart Labels----------")
-	
+
 		//Series name comming from Dashboard Data Creator
 		if (SeriesName.endsWith(this.limitKey)) { //Series for Limits
 
@@ -1920,7 +2257,8 @@ class singleChartManager {
 
 			// Return the corresponding label from this.chartLabels or the SeriesName if the label is empty
 			if (index_Limit !== -1) {
-				const label = this.chartLabels[index_Limit]+this.limitKey;
+
+				const label = this.chartLabels[index_Limit] !== '' ? this.chartLabels[index_Limit]+this.limitKey: '';
 				return label !== '' ? label : SeriesName.split('.').pop();
 			} else {
 				return SeriesName; // return SeriesName if index is not found
@@ -1929,6 +2267,8 @@ class singleChartManager {
 		}
 		
 		else {
+		
+			console.log("Excecuting chart label logic");
 			// Find the index of the element in this.elementNodes where SeriesName is the last part
 			const index = this.elementNodes.findIndex(node => {
 				return node === SeriesName;
