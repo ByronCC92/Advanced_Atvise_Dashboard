@@ -462,6 +462,10 @@ class dashboardDataProcessor {
 			case "Interval-Integration":  //Integrate Data
 				console.log("Integrated Data")
 				return this.Interval_Integration(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
+				break;	
+			case "Interval-Average":  //Interval Average
+				console.log("Interval Average Data")
+				return this.Interval_Average(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
 				break;		
 			case "Interval-Histogram": 	//Use Histogram Calculatio
 				console.log("Interval-Histogram")
@@ -471,6 +475,10 @@ class dashboardDataProcessor {
 				console.log("Simple Addition")
 				return this.FullRange_Addition(this.partialDashboardDataI);
 				break;
+			case "FullRange-Average": 	//Add all the elements	
+				console.log("FullRange Average")
+				return this.FullRange_Average(this.partialDashboardDataI);
+				break;				
 			case "FullRange-Difference": 	//Add all the elements	
 				console.log("Interval Difference")
 				return this.FullRange_Difference(this.partialDashboardDataI);
@@ -1528,6 +1536,53 @@ class dashboardDataProcessor {
 		}
 	}
 	
+	FullRange_Average(rawData) {
+		let sum = 0;
+		let count = 0;
+	
+		if (this.OperationMode === "Hist") {
+			// Iterate through rawData in a single pass
+			for (let i = 0; i < rawData.Values.length; i++) {
+				if (rawData.status[i] === 0) {  // Only consider valid data points
+					sum += rawData.Values[i];
+					count++;
+				}
+			}
+	
+			// Calculate the average, avoiding division by zero
+			const average = count > 0 ? sum / count : null;
+	
+			return { ProcessedData: [average] };
+		} else if (this.OperationMode === "RealTime") {
+			// For real-time mode, handle incremental updates
+			sum = this.informationRTI.LastDataPointProcessed || 0;
+			count = this.informationRTI.LastDataPointRT.length || 0;
+	
+			// Reset if a new interval starts
+			if (this.chartCategoriesI.intervalInfo.newInterval) {
+				this.informationRTI.LastDataPointProcessed = 0;
+				sum = 0;
+				count = 0;
+			}
+	
+			// Process real-time data points
+			this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+				if (dataPoint.status === 0) {
+					sum += dataPoint.Value;
+					count++;
+				}
+			});
+	
+			// Update the processed data for future use
+			this.informationRTI.LastDataPointProcessed = sum;
+	
+			// Calculate the average, avoiding division by zero
+			const average = count > 0 ? sum / count : null;
+	
+			return { ProcessedData: [average] };
+		}
+	}
+	
 	//Full Range Diference
 	FullRange_Difference(rawData) {
 		if (this.OperationMode === "Hist") {
@@ -1941,7 +1996,10 @@ class dashboardDataProcessor {
 	// Interval Difference
     Interval_Difference(rawData, intervals) {
         let differenceArray = [];
-        
+        console.log("rawData");
+        console.log(rawData);
+        console.log("intervals");
+        console.log(intervals);
 
 		if (this.OperationMode === "Hist") {
 			try {
@@ -2125,6 +2183,59 @@ class dashboardDataProcessor {
 		}
 	}
 	
+	// Interval_Average Method
+	Interval_Average(rawData, intervals) {
+		let averageArray = [];
+		
+		// Use binary search to quickly find ranges for each interval
+		if (this.OperationMode === "Hist") {
+			averageArray = intervals.map(interval => {
+				// Use binary search to find the start and end indices for the current interval
+				let startIndex = this.binarySearchTimestamps(rawData.timestamps, interval.start, 0, rawData.timestamps.length - 1, true);
+				let endIndex = this.binarySearchTimestamps(rawData.timestamps, interval.end, startIndex, rawData.timestamps.length - 1, false);
+				
+				let sum = 0;
+				let count = 0;
+	
+				// Iterate through only the relevant range of rawData for the current interval
+				for (let i = startIndex; i <= endIndex; i++) {
+					if (rawData.status[i] === 0) {
+						sum += rawData.Values[i]; // Sum valid values
+						count++; // Count valid entries
+					}
+				}
+	
+				// Calculate the average for the interval, avoiding division by zero
+				const average = count > 0 ? sum / count : null;
+	
+				return average;
+			});
+	
+			return { ProcessedData: averageArray };
+		} else if (this.OperationMode === "RealTime") {
+			let sum = this.informationRTI.LastDataPointProcessed || 0;
+			let count = this.informationRTI.LastDataPointRT.length || 0;
+	
+			// Reset if it's a new interval
+			if (this.chartCategoriesI.intervalInfo.newInterval) {
+				this.informationRTI.LastDataPointProcessed = 0;
+				sum = 0;
+				count = 0;
+			}
+	
+			this.informationRTI.LastDataPointRT.forEach(dataPoint => {
+				if (dataPoint.status === 0) {
+					sum += dataPoint.Value;
+					count++;
+				}
+			});
+	
+			const average = count > 0 ? sum / count : null;
+	
+			return { ProcessedData: [average] };
+		}
+	}
+	
 	
 	//---------------Data Analisis Helper Methods--------------//
 	//--------------------------------------------------------//
@@ -2201,7 +2312,23 @@ class dashboardDataProcessor {
 			}
 		}
 		return date;
-	};
+	}
+	
+	// Faster Search
+	binarySearchTimestamps(timestamps, target, start = 0, end = timestamps.length - 1, findStart = true) {
+		while (start <= end) {
+			let mid = Math.floor((start + end) / 2);
+			if (timestamps[mid] === target) {
+				return mid;
+			} else if (timestamps[mid] < target) {
+				start = mid + 1;
+			} else {
+				end = mid - 1;
+			}
+		}
+		// If findStart is true, return the first index where the timestamp >= target
+		return findStart ? start : end;
+	}
 }
 
 //---------------Dashboard Cache Manager Class----------------//

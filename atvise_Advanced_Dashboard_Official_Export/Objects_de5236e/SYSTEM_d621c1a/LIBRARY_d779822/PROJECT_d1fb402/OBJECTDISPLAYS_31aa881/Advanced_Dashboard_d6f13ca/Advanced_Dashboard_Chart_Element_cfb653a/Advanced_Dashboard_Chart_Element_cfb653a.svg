@@ -13,9 +13,17 @@
   <atv:parameter behavior="optional" defaultvalue="1000" desc="Data Reduction Max Size" group="DataOptimization" name="DataReductionMaxSize" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="DataLimitEnabled" group="LimitAnalysis" name="DataLimitEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Data Max Limit" group="LimitAnalysis" name="DataMaxLimit" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Point Max" group="LimitAnalysis" name="ColorLimitPointMax" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Line Max" group="LimitAnalysis" name="ColorLimitLineMax" valuetype="color"/>
+  <atv:parameter behavior="optional" config="Dash;DashDot;Dot;LongDash;LongDashDot;LongDashDotDot;ShortDash;ShortDashDot;ShortDashDotDot;ShortDot;Solid" defaultvalue="Solid" desc="Type Limit Line Max" group="LimitAnalysis" name="TypeLimitLineMax" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="Max" desc="Text Limit Line Max" group="LimitAnalysis" name="TextLimitLineMax" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Data Min Limit" group="LimitAnalysis" name="DataMinLimit" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Point Min" group="LimitAnalysis" name="ColorLimitPointMin" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Line Min" group="LimitAnalysis" name="ColorLimitLineMin" valuetype="color"/>
+  <atv:parameter behavior="optional" config="Dash;DashDot;Dot;LongDash;LongDashDot;LongDashDotDot;ShortDash;ShortDashDot;ShortDashDotDot;ShortDot;Solid" defaultvalue="Solid" desc="Type Limit Line Min" group="LimitAnalysis" name="TypeLimitLineMin" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="Min" desc="Text Limit Line Min" group="LimitAnalysis" name="TextLimitLineMin" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Data Processing Enabled" group="DataProcessing" name="DataProcessingEnabled" valuetype="bool"/>
-  <atv:parameter behavior="optional" config="Simple-None;SinglePoint-LastValue;SinglePoint-FirstValue;SinglePoint-Max;SinglePoint-Min;Interval-Addition;Interval-CountChanges;Interval-CountTimeOff;Interval-CountTimeOn;Interval-Difference;Interval-Histogram;Interval-Integration;FullRange-Addition;FullRange-Difference;FullRange-OEEAvailability;FullRange-OEEProductivity" defaultvalue="" desc="Data Processing Type" group="DataProcessing" name="DataProcessingType" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="Simple-None;SinglePoint-LastValue;SinglePoint-FirstValue;SinglePoint-Max;SinglePoint-Min;Interval-Addition;Interval-Average;Interval-CountChanges;Interval-CountTimeOff;Interval-CountTimeOn;Interval-Difference;Interval-Histogram;Interval-Integration;FullRange-Addition;FullRange-Average;FullRange-Difference;FullRange-OEEAvailability;FullRange-OEEProductivity" defaultvalue="Simple-None" desc="Data Processing Type" group="DataProcessing" name="DataProcessingType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="AllData-DateTime;Interval-CustomText;Interval-CustomInterval;Interval-Dynamic;Interval-Histogram;Single-Simple" defaultvalue="" desc="Category Type" group="Category Selection" name="CategoryType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="true" desc="Category Round Up" group="Category Selection" name="CategoryRound" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Custom Category" group="Category Selection" name="CategoryCustomText" valuetype="string"/>
@@ -54,18 +62,17 @@
   <atv:parameter behavior="optional" defaultvalue="#000000" desc="Color xAxis" group="Appereance" name="ColorxAxis" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="#000000" desc="Color yAxis" group="Appereance" name="ColoryAxis" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="SYSTEM.GLOBALS.atvFontColor" desc="Color dataLabels" group="Appereance" name="ColordataLabels" valuetype="global"/>
-  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Point Max" group="Appereance" name="ColorLimitPointMax" valuetype="color"/>
-  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Point Min" group="Appereance" name="ColorLimitPointMin" valuetype="color"/>
-  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Line Max" group="Appereance" name="ColorLimitLineMax" valuetype="color"/>
-  <atv:parameter behavior="optional" defaultvalue="#aa0000" desc="Color Limit Line Min" group="Appereance" name="ColorLimitLineMin" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="14" desc="TitleFontSize" group="Appereance" name="FontSizeTitle" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="12" desc="xAxis FontSize" group="Appereance" name="FontSizexAxis" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="12" desc="yAxis FontSize" group="Appereance" name="FontSizeyAxis" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="12" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="12" desc="Data Labels FontSize" group="Appereance" name="FontSizedataLabels" valuetype="number"/>
+  <atv:parameter behavior="optional" config="Value-Simple;Time-Dynamic;Time-Custom" defaultvalue="Value-Simple" desc="Data Label Type" group="Appereance" name="DatalabelType" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="mm:ss" desc="Data Label CustomTime Format" group="Appereance" name="DatalabelCustomTimeFormat" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="2" desc="Datalabel Number Decimals" group="Appereance" name="DatalabelNumberDecimals" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Datalabel Unit" group="Appereance" name="DatalabelUnit" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="Line Width" group="Line Only" name="LineLineWidth" valuetype="number"/>
   <atv:parameter behavior="optional" config="Dash;DashDot;Dot;LongDash;LongDashDot;LongDashDotDot;ShortDash;ShortDashDot;ShortDashDotDot;ShortDot;Solid" defaultvalue="Solid" desc="Line Dash Style" group="Line Only" name="LineDashStyle" valuetype="enum"/>
-  <atv:parameter behavior="optional" config="Time;Value" defaultvalue="Value" desc="Label Type" group="Column Only" name="ColumnLabelType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="left;center;right" defaultvalue="center" desc="Label Position" group="Column Only" name="ColumnLabelPosition" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Stack Enabled" group="Column Only" name="ColumnStackEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="100" desc="Max Value" group="Solid Gauge Only" name="SolidGaugeMaxValue" valuetype="number"/>
@@ -138,7 +145,15 @@ const elementRawConfig = {
 	LimitAnalysis: {
 		DataLimitEnabled: webMI.query["DataLimitEnabled"],
 		DataMaxLimit: webMI.query["DataMaxLimit"],
-		DataMinLimit: webMI.query["DataMinLimit"]
+		ColorLimitPointMax: webMI.query["ColorLimitPointMax"],
+		ColorLimitLineMax: webMI.query["ColorLimitLineMax"],
+		TypeLimitLineMax: webMI.query["TypeLimitLineMax"],
+		TextLimitLineMax: webMI.query["TextLimitLineMax"],
+		DataMinLimit: webMI.query["DataMinLimit"],		
+		ColorLimitPointMin: webMI.query["ColorLimitPointMin"],		
+		ColorLimitLineMin: webMI.query["ColorLimitLineMin"],
+		TypeLimitLineMin: webMI.query["TypeLimitLineMin"],
+		TextLimitLineMin: webMI.query["TextLimitLineMin"]
 	},
 	
 	// Data Processing
@@ -209,15 +224,15 @@ const elementRawConfig = {
 		ColorXaxis: webMI.query["ColorxAxis"],
 		ColorYaxis: webMI.query["ColoryAxis"],
 		ColorDataLabels: webMI.query["ColordataLabels"],
-		ColorLimitPointMax: webMI.query["ColorLimitPointMax"],
-		ColorLimitPointMin: webMI.query["ColorLimitPointMin"],
-		ColorLimitLineMax: webMI.query["ColorLimitLineMax"],
-		ColorLimitLineMin: webMI.query["ColorLimitLineMin"],
 		FontSizeTitle: webMI.query["FontSizeTitle"],
 		FontSizeXaxis: webMI.query["FontSizexAxis"],
 		FontSizeYaxis: webMI.query["FontSizeyAxis"],
 		FontSizeLegend: webMI.query["FontSizeLegend"],
-		FontSizeDataLabels: webMI.query["FontSizedataLabels"]
+		FontSizeDataLabels: webMI.query["FontSizedataLabels"],
+		DatalabelType: webMI.query["DatalabelType"],
+		DatalabelCustomTimeFormat: webMI.query["DatalabelCustomTimeFormat"],
+		DatalabelNumberDecimals: webMI.query["DatalabelNumberDecimals"],
+		DatalabelUnit: webMI.query["DatalabelUnit"]
 	},
 	
 	// Line
@@ -228,7 +243,6 @@ const elementRawConfig = {
 	 
 	// Column
 	Column: {
-		LabelType: webMI.query["ColumnLabelType"],
 		LabelPosition: webMI.query["ColumnLabelPosition"],
 		StackEnabled: webMI.query["ColumnStackEnabled"]
 	},
@@ -612,6 +626,7 @@ class singleChartManager {
 		webMI.gfx.setVisible("Label", false);
 		webMI.gfx.setVisible("Border", false);	
 		
+		const labelFormatterR=this.dataLabelFormatter.bind(this);
 		
 		//Chart Options
 		const chartOptions =  {
@@ -669,7 +684,7 @@ class singleChartManager {
 				  fontSize: this.elementRawConfig.Appearance.FontSizeLegend + 'px'
 				}
 			  },
-			series: [{
+		   	series: [{
 				name: '',
 				data: []
 			}]
@@ -740,8 +755,7 @@ class singleChartManager {
 						name:this.defineChartLabel(elementDataI.chartSeries[0].data[index].name),
 						x:category
 					}));
-					console.log("customCategories");
-					console.log(customCategories);
+
 					this.chartReference.xAxis[0].setCategories(customCategories, false);
 					
 				}
@@ -903,6 +917,7 @@ class singleChartManager {
 		console.log("----------Apply Specific Config------------");
 		let DataProcessingEnabledI=this.elementRawConfig.DataProcessing.DataProcessingEnabled;
 		let ProcessingTypeI=this.elementRawConfig.DataProcessing.ProcessingType;			
+		const labelFormatterR=this.dataLabelFormatter.bind(this);	
 		
 		//Apply Specific Config
 		switch (this.elementRawConfig.GeneralConfig.ChartType) {
@@ -936,28 +951,30 @@ class singleChartManager {
 						plotLines: this.limitAnalysisEnabled ? [
 						//Min Limit						
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMin, // Color of the min limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin, // Color of the min limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMinLimit, // Value where the min limit line will appear
 							width: 2, // Width of the min limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMin, // Solid, ShortDash, ShortDot, etc.
 							label: {
-								text: 'Min',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMin,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMin,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin,
 									fontWeight: 'bold'
 								}
 							}
 						},
 						//Max Limit	
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMax, // Color of the max limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax, // Color of the max limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMaxLimit, // Value where the max limit line will appear
 							width: 2, // Width of the max limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMax,
 							label: {
-								text: 'Max',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMax,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMax,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax,
 									fontWeight: 'bold'
 								}
 							}
@@ -992,28 +1009,30 @@ class singleChartManager {
 						plotLines: this.limitAnalysisEnabled ? [
 						//Min Limit						
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMin, // Color of the min limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin, // Color of the min limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMinLimit, // Value where the min limit line will appear
 							width: 2, // Width of the min limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMin,
 							label: {
-								text: 'Min',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMin,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMin,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin,
 									fontWeight: 'bold'
 								}
 							}
 						},
 						//Max Limit	
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMax, // Color of the max limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax, // Color of the max limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMaxLimit, // Value where the max limit line will appear
 							width: 2, // Width of the max limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMax,
 							label: {
-								text: 'Max',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMax,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMax,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax,
 									fontWeight: 'bold'
 								}
 							}
@@ -1051,28 +1070,30 @@ class singleChartManager {
 						plotLines: this.limitAnalysisEnabled ? [
 						//Min Limit						
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMin, // Color of the min limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin, // Color of the min limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMinLimit, // Value where the min limit line will appear
 							width: 2, // Width of the min limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMin,
 							label: {
-								text: 'Min',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMin,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMin,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin,
 									fontWeight: 'bold'
 								}
 							}
 						},
 						//Max Limit	
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMax, // Color of the max limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax, // Color of the max limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMaxLimit, // Value where the max limit line will appear
 							width: 2, // Width of the max limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMax,
 							label: {
-								text: 'Max',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMax,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMax,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax,
 									fontWeight: 'bold'
 								}
 							}
@@ -1089,7 +1110,6 @@ class singleChartManager {
 				
 			//Column Chart
 			case "Column":
-				let labelType=this.elementRawConfig.Column.LabelType;
 				this.chartReference.update({
 					chart: {
 						zooming: this.elementRawConfig.Zoom.ZoomEnabled ? {
@@ -1112,29 +1132,9 @@ class singleChartManager {
 								align: this.elementRawConfig.Column.LabelPosition,
 								verticalAlign: 'bottom',	
 								formatter: function() {
-									if (labelType === "Time") {
-										let time = this.y;
-										if (time < 60000) {
-											return (time / 1000).toFixed(0) + ' sec'; // seconds
-										} else if (time < 3600000) {
-											return (time / 60000).toFixed(0) + ' min'; // minutes
-										} else if (time < 86400000) {
-											return (time / 3600000).toFixed(0) + ' hrs'; // hours
-										} else if (time < 2592000000) {
-											return (time / 86400000).toFixed(0) + ' days'; // days
-										} else {
-											return (time / 2592000000).toFixed(0) + ' months'; // months
-										}
-									}  else {
-										// Number formatting logic when not handling 'Time'
-										if (this.y >= 1000000) {
-											return (this.y / 1000000).toFixed(2) + 'M'; // millions
-										} else if (this.y >= 1000) {
-											return (this.y / 1000).toFixed(2) + 'k'; // thousands
-										} else {
-											return this.y.toFixed(2); // less than 1000
-										}
-									}
+									let time = this.y;
+									const label=labelFormatterR(time);
+									return labelFormatterR(time);
 								}
 							}
 						}
@@ -1144,28 +1144,30 @@ class singleChartManager {
 						
 						//Min Limit						
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMin, // Color of the min limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin, // Color of the min limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMinLimit, // Value where the min limit line will appear
 							width: 2, // Width of the min limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMin,
 							label: {
-								text: 'Min',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMin,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMin,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin,
 									fontWeight: 'bold'
 								}
 							}
 						},
 						//Max Limit	
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMax, // Color of the max limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax, // Color of the max limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMaxLimit, // Value where the max limit line will appear
 							width: 2, // Width of the max limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMax,
 							label: {
-								text: 'Max',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMax,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMax,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax,
 									fontWeight: 'bold'
 								}
 							}
@@ -1192,8 +1194,7 @@ class singleChartManager {
 				}, false);  // Set redraw to false
 				break;
 			case "Pie":
-				console.log("Updating Pie");						
-				
+				console.log("Updating Pie");				
 				this.chartReference.update({
 					plotOptions: {
 						pie: {
@@ -1207,15 +1208,15 @@ class singleChartManager {
 					},
 					tooltip: {
 						formatter: function () {
-								
-							if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){
-								let chartReferenceI = this.series.chart;
-								let chartCategoriesI=chartReferenceI.xAxis[0].categories;
-								console.log("chartCategoriesI");
-								console.log(chartCategoriesI);				
-								const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
-								const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
-								return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+							let chartReferenceI = this.series.chart;
+							let chartCategoriesI=chartReferenceI.xAxis[0].categories;
+
+							if(chartCategoriesI!=undefined && chartCategoriesI.length>0){
+								if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){							
+									const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
+									const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
+									return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+								}
 							}
 							else{
 								return `<b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
@@ -1227,8 +1228,7 @@ class singleChartManager {
 				
 			//Pyramid Chart
 			case "Pyramid":
-				console.log("Updating Pyramid");		
-				
+				console.log("Updating Pyramid");					
 				this.chartReference.update({
 					plotOptions: {
 						pyramid: {
@@ -1239,13 +1239,15 @@ class singleChartManager {
 					},
 					tooltip: {
 						formatter: function () {
-								
-							if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){
-								let chartReferenceI = this.series.chart;
-								let chartCategoriesI=chartReferenceI.xAxis[0].categories;							
-								const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
-								const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
-								return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+							let chartReferenceI = this.series.chart;
+							let chartCategoriesI=chartReferenceI.xAxis[0].categories;
+
+							if(chartCategoriesI!=undefined && chartCategoriesI.length>0){
+								if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){							
+									const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
+									const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
+									return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
+								}
 							}
 							else{
 								return `<b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
@@ -1271,28 +1273,30 @@ class singleChartManager {
 						
 						//Min Limit						
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMin, // Color of the min limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin, // Color of the min limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMinLimit, // Value where the min limit line will appear
 							width: 2, // Width of the min limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMin,
 							label: {
-								text: 'Min',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMin,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMin,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMin,
 									fontWeight: 'bold'
 								}
 							}
 						},
 						//Max Limit	
 						{
-							color: this.elementRawConfig.Appearance.ColorLimitLineMax, // Color of the max limit line
+							color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax, // Color of the max limit line
 							value: this.elementRawConfig.LimitAnalysis.DataMaxLimit, // Value where the max limit line will appear
 							width: 2, // Width of the max limit line
+							dashStyle: this.elementRawConfig.LimitAnalysis.TypeLimitLineMax,
 							label: {
-								text: 'Max',
+								text: this.elementRawConfig.LimitAnalysis.TextLimitLineMax,
 								align: 'right',
 								style: {
-									color: this.elementRawConfig.Appearance.ColorLimitLineMax,
+									color: this.elementRawConfig.LimitAnalysis.ColorLimitLineMax,
 									fontWeight: 'bold'
 								}
 							}
@@ -1326,7 +1330,7 @@ class singleChartManager {
 				break;
 				
 			//Solidgauge
-			case "Solidgauge":			
+			case "Solidgauge":				
 				this.chartReference.update({
 					chart: {
 						height: '100%',
@@ -1367,33 +1371,19 @@ class singleChartManager {
 								backgroundColor: 'none',
 								borderWidth: 0,
 								color: this.elementRawConfig.Appearance.ColorDataLabels,
-								format: '{point.y:.2f}' +  this.elementRawConfig.SolidGauge.Unit,
 								shadow: false,
 								style: {
-									fontSize: "22px", // Default font size
+									color: this.elementRawConfig.Appearance.ColorDataLabels,
+									fontSize: (this.elementRawConfig.Appearance.FontSizeDataLabels == 12 ? 22: this.elementRawConfig.Appearance.FontSizeDataLabels)+ 'px'
 								},
 								valueSuffix: 'H',
 								y: -18,
 								align: 'center',
 								formatter: function () {
 									var value = this.y;
-									var valueString = value.toString();
-									var length = valueString.replace('.', '').length; // Remove decimal point for length calculation
-									var fontSize;
-							
-									// Adjust font size based on the number of digits
-									if (length > 5) {
-										fontSize = '10px'; // Adjust as needed
-									} else if (length > 4) {
-										fontSize = '12px'; // Adjust as needed
-									} else if (length > 3) {
-										fontSize = '16px'; // Adjust as needed
-									} else {
-										fontSize = '26px'; // Default size
-									}
-							
+									const label=labelFormatterR(value);
 									// Return the custom label format
-									return '<span style="font-size: ' + fontSize + '; color: ' + this.color + '">' + Highcharts.numberFormat(this.y, 2) + this.elementRawConfig.SolidGauge.Unit + 'H</span>';
+									return label;
 								}
 							},
 							linecap: 'square',
@@ -1467,11 +1457,17 @@ class singleChartManager {
 					plotOptions: {
 						gauge: {
 							dataLabels: {
-								format: '{point.y:.2f}' +  Gauge_unit,
 								borderWidth: 0,
 								color: this.elementRawConfig.Appearance.ColorDataLabels,
 								style: {
-									fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px'
+									color: this.elementRawConfig.Appearance.ColorDataLabels,
+									fontSize: (this.elementRawConfig.Appearance.FontSizeDataLabels == 12 ? 16: this.elementRawConfig.Appearance.FontSizeDataLabels)+ 'px'
+								},
+								formatter: function () {
+									var value = this.y;
+									const label=labelFormatterR(value);
+									// Return the custom label format
+									return label;
 								}
 							},
 							dial: {
@@ -1525,9 +1521,9 @@ class singleChartManager {
 						x: limitPoint[0],
 						y: limitPoint[1],
 						color: limitPoint[1] > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-							? this.elementRawConfig.Appearance.ColorLimitPointMax
+							? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 							: limitPoint[1] < this.elementRawConfig.LimitAnalysis.DataMinLimit
-								? this.elementRawConfig.Appearance.ColorLimitPointMin
+								? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 								: undefined // Default color if within limits
 					})),
 					marker: {
@@ -1559,9 +1555,9 @@ class singleChartManager {
 								return {
 									y: dataPoint,
 									color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 										: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
-											? this.elementRawConfig.Appearance.ColorLimitPointMin
+											? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 											: this.chartColors[colorIndex] // Default color if within limits
 								};
 							} else {
@@ -1582,9 +1578,9 @@ class singleChartManager {
 						return {
 							y: dataPoint,
 							color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-								? this.elementRawConfig.Appearance.ColorLimitPointMax
+								? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 								: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
-									? this.elementRawConfig.Appearance.ColorLimitPointMin
+									? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 									: this.chartColors[colorIndex] // Default color if within limits
 						};
 					});
@@ -1603,9 +1599,9 @@ class singleChartManager {
 				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
 					y:dataPoint,
 					color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-									? this.elementRawConfig.Appearance.ColorLimitPointMax
+									? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 									: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
-									? this.elementRawConfig.Appearance.ColorLimitPointMin
+									? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 									: this.chartColors[colorIndex], // Default color if within limits,
 				}));
 				
@@ -1627,9 +1623,9 @@ class singleChartManager {
 				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
 						y:dataPoint.y,
 						color: dataPoint.y > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 										: dataPoint.y < this.elementRawConfig.LimitAnalysis.DataMinLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMin
+										? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 										: this.chartColors[this.elementNodes.findIndex(node => node === (dataPoint.name))], // Default color if within limits,
 						name: this.defineChartLabel(dataPoint.name)
 				}));
@@ -1710,9 +1706,9 @@ class singleChartManager {
 						x: limitPoint[0],
 						y: limitPoint[1],
 						color: limitPoint[1] > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-							? this.elementRawConfig.Appearance.ColorLimitPointMax
+							? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 							: limitPoint[1] < this.elementRawConfig.LimitAnalysis.DataMinLimit
-								? this.elementRawConfig.Appearance.ColorLimitPointMin
+								? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 								: undefined // Default color if within limits
 					})),
 					marker: {
@@ -1743,9 +1739,9 @@ class singleChartManager {
 								return {
 									y: dataPoint,
 									color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 										: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
-											? this.elementRawConfig.Appearance.ColorLimitPointMin
+											? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 											: this.chartColors[colorIndex] // Default color if within limits
 								};
 							} else {
@@ -1766,9 +1762,9 @@ class singleChartManager {
 						return {
 							y: dataPoint,
 							color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-								? this.elementRawConfig.Appearance.ColorLimitPointMax
+								? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 								: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
-									? this.elementRawConfig.Appearance.ColorLimitPointMin
+									? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 									: this.chartColors[colorIndex] // Default color if within limits
 						};
 					});
@@ -1785,9 +1781,9 @@ class singleChartManager {
 				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
 					y:dataPoint,
 					color: dataPoint > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-									? this.elementRawConfig.Appearance.ColorLimitPointMax
+									? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 									: dataPoint < this.elementRawConfig.LimitAnalysis.DataMinLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMin
+										? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 										: this.chartColors[colorIndex], // Default color if within limits,
 				}));
 				
@@ -1805,9 +1801,9 @@ class singleChartManager {
 				chartSeriesI["data"] = chartSeries[0].data.map((dataPoint, index) => ({
 						y:dataPoint.y,
 						color: dataPoint.y > this.elementRawConfig.LimitAnalysis.DataMaxLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMax
+										? this.elementRawConfig.LimitAnalysis.ColorLimitPointMax
 										: dataPoint.y < this.elementRawConfig.LimitAnalysis.DataMinLimit
-										? this.elementRawConfig.Appearance.ColorLimitPointMin
+										? this.elementRawConfig.LimitAnalysis.ColorLimitPointMin
 										: this.chartColors[this.elementNodes.findIndex(node => node === (dataPoint.name))], // Default color if within limits,
 						name: this.defineChartLabel(dataPoint.name)
 				}));
@@ -2283,6 +2279,162 @@ class singleChartManager {
         }
     }
 	
-} 
+	dataLabelFormatter(rawLabel) {
+
+		const labelType = this.elementRawConfig.Appearance.DatalabelType;
+		const customFormat = this.elementRawConfig.Appearance.DatalabelCustomTimeFormat;
+		const numberDecimals = this.elementRawConfig.Appearance.DatalabelNumberDecimals;
+		const DatalabelUnit = this.elementRawConfig.Appearance.DatalabelUnit;
+
+
+		if (labelType === "Value-Simple") {
+			// Number formatting logic when handling 'Value'
+			if (rawLabel >= 1000000) {
+				return (rawLabel / 1000000).toFixed(numberDecimals) + 'M '+ DatalabelUnit; // millions
+			} else if (rawLabel >= 1000) {
+				return (rawLabel / 1000).toFixed(numberDecimals) + 'k '+DatalabelUnit; // thousands
+			} else {
+				return rawLabel.toFixed(numberDecimals)+DatalabelUnit; // less than 1000
+			}
+		} 
+		else if (labelType === "Time-Dynamic") {
+			let time = rawLabel;
+	
+			if (time <= 3600000) {
+				const minutes = Math.floor(time / 60000);
+				const seconds = Math.floor((time % 60000) / 1000);
+				return `${minutes} m ${seconds} s`;
+			} else if (time < 86400000) {
+				const hours = Math.floor(time / 3600000);
+				const minutes = Math.floor((time % 3600000) / 60000);
+				return `${hours} h ${minutes} m`;
+			} else if (time < 2592000000) {
+				const days = Math.floor(time / 86400000);
+				const hours = Math.floor((time % 86400000) / 3600000);
+				return `${days} days ${hours} h`;
+			} else {
+				const months = Math.floor(time / 2592000000);
+				const days = Math.floor((time % 2592000000) / 86400000);
+				return `${months} M ${days} d`;
+			}
+		} 		
+		else if (labelType === "Time-Custom") {
+			let time = rawLabel;
+		
+			// Extract components for all time hierarchies
+			let years = Math.floor(time / 31536000000); // Total milliseconds in a year
+			time %= 31536000000;
+		
+			let months = Math.floor(time / 2592000000); // Total milliseconds in a month
+			time %= 2592000000;
+		
+			let days = Math.floor(time / 86400000); // Total milliseconds in a day
+			time %= 86400000;
+		
+			let hours = Math.floor(time / 3600000); // Total milliseconds in an hour
+			time %= 3600000;
+		
+			let minutes = Math.floor(time / 60000); // Total minutes (including hours)
+			let seconds = Math.floor((time % 60000) / 1000); // Remaining seconds
+		
+			// Determine the highest hierarchy present in the custom format
+			const hierarchy = ['YYYY', 'MM', 'DD', 'hh', 'mm', 'ss'];
+			const presentHierarchy = hierarchy.filter(unit => customFormat.includes(unit));
+			
+			console.log("presentHierarchy: "+presentHierarchy);
+			
+			
+			if (presentHierarchy.length > 0) {
+				const highestHierarchy = presentHierarchy[0];
+		
+				// Convert higher units to the highest present unit
+				switch (highestHierarchy) {
+					case 'YYYY':
+						// No higher unit to convert
+						break;
+					case 'MM':
+						months = years * 12 + months; // Convert years to months;
+						break;
+					case 'DD':
+						days = years * 365 + months * 30 + days;
+						break;
+					case 'hh':
+						hours = (years * 365 + months * 30 + days) * 24 + hours; // Convert years, months, days to hours
+						break;
+					case 'mm':
+						minutes = ((years * 365 + months * 30 + days) * 24 + hours) * 60 + minutes; // Convert everything to minutes
+						break;
+					case 'ss':
+						seconds = (((years * 365 + months * 30 + days) * 24 + hours) * 60 + minutes) * 60 + seconds; // Convert everything to seconds;
+						break;
+				}
+		
+				// Now, for the second highest hierarchy, if it exists, we convert the higher values into that unit as well
+				for (let i = 1; i < presentHierarchy.length; i++) {
+					const currentHierarchy = presentHierarchy[i];
+					const previousHierarchy = presentHierarchy[i - 1];
+		
+					switch (currentHierarchy) {
+						case 'DD':
+							if (previousHierarchy === 'YYYY') {
+								days += months * 30; // Convert years to days if YYYY is missing but DD is present
+							}
+							break;
+						case 'hh':
+
+							if (previousHierarchy === 'MM') {
+								hours += (days * 24); // Convert months to hours if MM is missing but hh is present
+							}
+							if (previousHierarchy === 'YYYY') {
+								hours += (days* 24)+(months* 30 * 24); // Convert years to hours if YYYY is missing but hh is present
+							}
+							break;
+						case 'mm':
+							if (previousHierarchy === 'DD') {
+								minutes += (hours * 60); // Convert days to minutes if DD is missing but mm is present
+							}
+							if (previousHierarchy === 'MM') {
+								minutes += (hours * 60) + (days* 24 * 60); // Convert months to minutes if MM is missing but mm is present
+							}
+							if (previousHierarchy === 'YYYY') {
+								minutes += (hours * 60) + (days* 24 * 60)+(months* 30 * 24 * 60); // Convert years to minutes if YYYY is missing but mm is present
+								years = 0;
+							}
+							break;
+						case 'ss':
+							if (previousHierarchy === 'hh') {
+								seconds += minutes * 60; // Convert hours to seconds if hh is missing but ss is present
+							}
+							if (previousHierarchy === 'DD') {
+								seconds += (minutes * 60) + (hours* 60 * 60); // Convert days to seconds if DD is missing but ss is present
+							}
+							if (previousHierarchy === 'MM') {
+								seconds += (minutes * 60) + (hours* 60 * 60) + (days* 24 * 60 * 60); // Convert months to seconds if MM is missing but ss is present
+							}
+							if (previousHierarchy === 'YYYY') {
+								seconds += (minutes * 60) + (hours* 60 * 60) + (days* 24 * 60 * 60)+(months* 30 * 24 * 60 * 60); // Convert years to seconds if YYYY is missing but ss is present
+							}
+							break;
+					}
+				}
+				let formattedTime = customFormat;
+				
+				// Format the custom string with the remaining values
+				formattedTime = customFormat.replace('YYYY', years.toString().padStart(4, '0'));
+				formattedTime = formattedTime.replace('MM', months.toString().padStart(2, '0'));
+				formattedTime = formattedTime.replace('DD', days.toString().padStart(2, '0'));
+				formattedTime = formattedTime.replace('hh', hours.toString().padStart(2, '0'));
+				formattedTime = formattedTime.replace('mm', minutes.toString().padStart(2, '0'));
+				formattedTime = formattedTime.replace('ss', seconds.toString().padStart(2, '0'));
+		
+				return formattedTime;
+			} 
+		}	
+		 else {
+			return rawLabel; // Default case: return raw label without formatting
+		}	
+	} 
+}
+
 ]]></script>
 </svg>
