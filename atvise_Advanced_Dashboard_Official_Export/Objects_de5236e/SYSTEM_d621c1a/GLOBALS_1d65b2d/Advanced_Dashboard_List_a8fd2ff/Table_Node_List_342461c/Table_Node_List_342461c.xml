@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Value xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd">
+	<uax:ListOfString>
+		<uax:String>&quot;0&quot;:{&quot;Color&quot;:&quot;#1b60a1&quot;,&quot;ColumnType&quot;:&quot;Time&quot;,&quot;Label&quot;:&quot;Tiempo&quot;,&quot;Node&quot;:&quot;AGENT.OBJECTS.Simulation.Temperature.Temperature_1&quot;}</uax:String>
+		<uax:String>&quot;1&quot;:{&quot;Color&quot;:&quot;#1b60a1&quot;,&quot;ColumnType&quot;:&quot;Value&quot;,&quot;Label&quot;:&quot;Temperature_1&quot;,&quot;Node&quot;:&quot;AGENT.OBJECTS.Simulation.Temperature.Temperature_1&quot;}</uax:String>
+		<uax:String>&quot;2&quot;:{&quot;Color&quot;:&quot;#1b60a1&quot;,&quot;ColumnType&quot;:&quot;Value&quot;,&quot;Label&quot;:&quot;Temperature_2&quot;,&quot;Node&quot;:&quot;AGENT.OBJECTS.Simulation.Temperature.Temperature_2&quot;}</uax:String>
+		<uax:String>&quot;3&quot;:{&quot;Color&quot;:&quot;#ff557f&quot;,&quot;ColumnType&quot;:&quot;Value&quot;,&quot;Label&quot;:&quot;Humedad&quot;,&quot;Node&quot;:&quot;AGENT.OBJECTS.Simulation.Humidity.Humidity_1&quot;}</uax:String>
+	</uax:ListOfString>
+</Value>

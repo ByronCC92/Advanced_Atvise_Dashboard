@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.HISTORY.Historicos.Stepped
+NodeClass: Variable
+BrowseName: Stepped
+DisplayName: en|Stepped
+Description: en|Stepped
+DataType: Boolean
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition PropertyType

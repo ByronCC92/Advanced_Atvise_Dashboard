@@ -10,8 +10,8 @@
 var TI = Ua.findNode("AGENT.OBJECTS.Simulation.Temperature.Temperature_1");
 
 //Variables Internas
-var Vmax=20;
-var Vmin=25;
+var Vmax=35;
+var Vmin=20;
 
 //Ejecuto Logica
 TI.result.assign({value: Vmin + (Math.random()*(Vmax-Vmin))});]]></code>

@@ -62,11 +62,11 @@
   <atv:parameter behavior="optional" defaultvalue="#000000" desc="Color xAxis" group="Appereance" name="ColorxAxis" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="#000000" desc="Color yAxis" group="Appereance" name="ColoryAxis" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="SYSTEM.GLOBALS.atvFontColor" desc="Color dataLabels" group="Appereance" name="ColordataLabels" valuetype="global"/>
-  <atv:parameter behavior="optional" defaultvalue="14" desc="TitleFontSize" group="Appereance" name="FontSizeTitle" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="12" desc="xAxis FontSize" group="Appereance" name="FontSizexAxis" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="12" desc="yAxis FontSize" group="Appereance" name="FontSizeyAxis" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="12" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="12" desc="Data Labels FontSize" group="Appereance" name="FontSizedataLabels" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="18" desc="TitleFontSize" group="Appereance" name="FontSizeTitle" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="14" desc="xAxis FontSize" group="Appereance" name="FontSizexAxis" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="14" desc="yAxis FontSize" group="Appereance" name="FontSizeyAxis" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="16" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="16" desc="Data Labels FontSize" group="Appereance" name="FontSizedataLabels" valuetype="number"/>
   <atv:parameter behavior="optional" config="Value-Simple;Time-Dynamic;Time-Custom" defaultvalue="Value-Simple" desc="Data Label Type" group="Appereance" name="DatalabelType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="mm:ss" desc="Data Label CustomTime Format" group="Appereance" name="DatalabelCustomTimeFormat" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="Datalabel Number Decimals" group="Appereance" name="DatalabelNumberDecimals" valuetype="number"/>
@@ -326,6 +326,7 @@ class singleChartManager {
 		this.elementData;
 		this.limitData;
 		this.elementDataRT;
+		this.previousTooltip=[];
 		this.elementID;
 		this.chartLabels=[];
 		this.configConflicts={};
@@ -333,7 +334,7 @@ class singleChartManager {
 		this.chartTimeRange;
 		this.elementRawConfig=elementRawConfig;   
 		this.specialParameters=this.createSpecialParameters(); 
-		this.operationMode="RealTime"; //Real time by default
+		this.operationMode="Hist"; //Real time by default
 		this.elementConfig=this.elementConfigCreator(elementRawConfig);
 		this.elementNodes=this.elementConfig.chartNodes;   
 		this.dashboardReady=false;
@@ -435,7 +436,10 @@ class singleChartManager {
 			
 			//Historic Data
 			if(this.elementData.RTInfo.OperationMode=="Hist"){
-			
+				
+				//Update current Operation mode
+				this.operationMode="Hist";
+				
 				//First time receives Element Data
 				if(this.firstTime){
 					this.elementDataReady=true;
@@ -454,11 +458,15 @@ class singleChartManager {
 					//UpdateChart
 					this.updateChart();
 				
-				}
+				}				
+				
 			}
 			
 			//Real Time Data
 			else if(this.elementData.RTInfo.OperationMode=="RealTime"){
+				
+				//Update current Operation mode
+				this.operationMode="RealTime";
 				
 				this.elementDataRT=this.elementData;
 				console.log("this.elementDataRT");
@@ -497,6 +505,7 @@ class singleChartManager {
 		var elementConfig = {
 			chartNodes: [],
 			chartsConfig: {
+				elementType: "Chart",
 				chartID: this.chartID,
 				chartType: this.elementRawConfig.GeneralConfig.ChartType,
 				dataType: this.elementRawConfig.GeneralConfig.DataType,
@@ -632,7 +641,8 @@ class singleChartManager {
 		const chartOptions =  {
 			chart: {
 				type: (this.elementRawConfig.GeneralConfig.ChartType).toLowerCase(),
-				backgroundColor: this.defineBackgroundColor()
+				backgroundColor: this.defineBackgroundColor(),
+				chartManager: this
 			},
 			title: {
 				text: this.elementRawConfig.Appearance.Title,
@@ -714,6 +724,9 @@ class singleChartManager {
 		this.specificUpdate();
 		
 		//--------Specific Type Update-----//	
+		this.tooltipUpdater();			
+		
+		//--------Specific Type Update-----//	
 		this.chartReference.redraw();
 		
 		console.log("-------Chart reference-----");		
@@ -751,14 +764,27 @@ class singleChartManager {
 
 				//Special Categories for Singlepoint Processing
 				if(this.elementRawConfig.DataProcessing.DataProcessingEnabled&&(this.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint"))){
-					let customCategories=elementDataI.chartCategories.map((category, index) => ({
-						name:this.defineChartLabel(elementDataI.chartSeries[0].data[index].name),
-						x:category
-					}));
-
-					this.chartReference.xAxis[0].setCategories(customCategories, false);
 					
-				}
+					let customCategories;
+					
+					//Apply Specific Config
+					switch (this.elementRawConfig.GeneralConfig.ChartType) {
+						case "Pie":
+						case "Pyramid":
+						case "Gauge":
+						case "Solidgauge":
+							let customCategories=elementDataI.chartCategories.map((category, index) => ({
+								name:this.defineChartLabel(elementDataI.chartSeries[0].data[index].name),
+								x:category
+							}));
+							this.chartReference.xAxis[0].setCategories(customCategories, false);							
+						break;
+						case "Column":
+							 this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
+						break;
+						
+					}				
+				} 
 				//Common Categories
 				else{
 					this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
@@ -917,7 +943,8 @@ class singleChartManager {
 		console.log("----------Apply Specific Config------------");
 		let DataProcessingEnabledI=this.elementRawConfig.DataProcessing.DataProcessingEnabled;
 		let ProcessingTypeI=this.elementRawConfig.DataProcessing.ProcessingType;			
-		const labelFormatterR=this.dataLabelFormatter.bind(this);	
+		const labelFormatterR=this.dataLabelFormatter.bind(this);
+		var tooltip;
 		
 		//Apply Specific Config
 		switch (this.elementRawConfig.GeneralConfig.ChartType) {
@@ -1175,7 +1202,11 @@ class singleChartManager {
 					},
 					tooltip: {
 						formatter: function () {
-							return `<b style="color: ${this.series.color};">${"Date"}</b>: ${this.key}<br><b style="color: ${this.series.color};">${this.series.name}</b>: ${this.y}`;
+						
+							let tooltip=this.series.chart.options.chart.chartManager.tooltipCreator(this)
+							console.log(tooltip);
+							return tooltip;
+								
 						}
 					}
 				}, false);  // Set redraw to false
@@ -1208,19 +1239,11 @@ class singleChartManager {
 					},
 					tooltip: {
 						formatter: function () {
-							let chartReferenceI = this.series.chart;
-							let chartCategoriesI=chartReferenceI.xAxis[0].categories;
-
-							if(chartCategoriesI!=undefined && chartCategoriesI.length>0){
-								if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){							
-									const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
-									const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
-									return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
-								}
-							}
-							else{
-								return `<b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
-							}
+						
+							let tooltip=this.series.chart.options.chart.chartManager.tooltipCreator(this)
+							console.log(tooltip);
+							return tooltip;
+								
 						}
 					}
 				}, false);  // Set redraw to false
@@ -1239,19 +1262,10 @@ class singleChartManager {
 					},
 					tooltip: {
 						formatter: function () {
-							let chartReferenceI = this.series.chart;
-							let chartCategoriesI=chartReferenceI.xAxis[0].categories;
-
-							if(chartCategoriesI!=undefined && chartCategoriesI.length>0){
-								if(DataProcessingEnabledI==true&&(ProcessingTypeI.includes("SinglePoint"))){							
-									const foundcategory= chartCategoriesI.find(obj => obj.name === this.key).x;		
-									const date = new Date(foundcategory).toLocaleString(); // Converts x-value to a formatted date string
-									return `<b style="color: ${this.color};">${"Date"}</b>: ${date}<br><b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
-								}
-							}
-							else{
-								return `<b style="color: ${this.color};">${this.key}</b>: ${(this.y).toFixed(3)}`;
-							}
+						
+							let tooltip=this.series.chart.options.chart.chartManager.tooltipCreator(this);
+							return tooltip;
+								
 						}
 					}
 				}, false);  // Set redraw to false
@@ -1495,6 +1509,134 @@ class singleChartManager {
 			default:
 				console.log("No specific configurations applied.");
 		}
+		
+	}	
+	
+	//Creates tooltip when called it
+	tooltipCreator (thisI) {						
+	
+	
+		const chartManager = thisI.series.chart.options.chart.chartManager;
+		const operationMode = chartManager.operationMode;
+		let tooltipInfo=chartManager.previousTooltip;
+		var tooltip;
+		var foundTooltip;
+
+		switch (this.elementRawConfig.GeneralConfig.ChartType) {
+			
+			//Line Chart
+			case "Pie":
+			case "Pyramid":
+				foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.key);
+				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {				
+					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.key}</b>: ${thisI.y.toFixed(3)}`;
+				}
+				else if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
+					tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br><b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br><b style="color: ${thisI.series.color};">${thisI.key}</b>: ${thisI.y.toFixed(3)}`;
+				}
+				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Simple")) {				
+					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.key}</b>: ${thisI.y.toFixed(3)}`;
+				}
+				break;
+			case "Column":			
+				foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.series.name);
+				//Simple Processing type
+				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {
+					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;	
+				}
+				else if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
+					tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br><b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;	
+				}
+				else if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Interval")) {
+					const index = thisI.point.index;
+					tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo[index].start}<br><b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo[index].end}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;	
+				}
+				
+				
+				break;
+		}
+		return tooltip;
+	}
+	
+	//Update tooltip
+	tooltipUpdater(){
+	
+		const operationMode = this.operationMode;
+		let tooltipInfo;
+		var tooltip;
+		var foundTooltip;
+		var newInterval=false;
+		
+		//Historic Operation
+		if (operationMode === "Hist") {								
+			
+			// Save the updated previousTooltip back to chartManager
+			this.previousTooltip = this.elementData.chartData.tooltipInfo;;
+			
+		}
+		
+		// Real-time Operation
+		else if (operationMode === "RealTime") {
+			
+	
+			const currentTooltip = this.elementDataRT.chartData.tooltipInfo;
+			const previousTooltip = this.previousTooltip;
+	
+			// Step 2: Iterate through previousTooltip and check if there's new info in currentTooltip
+			previousTooltip.forEach((prevTooltip, i) => {
+				const currentTooltipfound = currentTooltip.find(curr => curr.name === prevTooltip.name);
+	
+				// Step 3: Update if there's a match
+				if (currentTooltipfound) {
+					if (this.elementConfig.chartsConfig.categoryType.includes("Single")) {
+						// Direct update for "Single" category type
+						previousTooltip[i].tooltipInfo = currentTooltipfound.tooltipInfo;
+	
+						// Also check if any currentTooltip element has a new name not present in previousTooltip
+						const currentTooltipdifferent = currentTooltip.find(curr => !previousTooltip.some(prev => prev.name === curr.name));
+						if (currentTooltipdifferent) {
+							// Push new element to previousTooltip
+							previousTooltip.push(currentTooltipdifferent);
+						}
+	
+					} 
+					else if (this.elementConfig.chartsConfig.categoryType.includes("Interval") && !(this.elementConfig.chartsConfig.categoryType==("Interval-Histogram"))) {
+						
+						//Check if it's a new interval
+						const intervalInfo = this.elementDataRT.chartData.informationRT;
+						newInterval = intervalInfo.some(info => info.IntervalInfo.newInterval);
+						
+						if (!newInterval){
+							// Step 4: Update the last element if not a new interval
+							previousTooltip[i].tooltipInfo[previousTooltip[i].tooltipInfo.length - 1] = currentTooltipfound.tooltipInfo;		}
+					}
+					else if (this.elementConfig.chartsConfig.categoryType.includes("Histogram")) {
+					
+					}
+				}
+			});
+	
+			// Step 5: Handle new interval (this is done separately, outside the previousTooltip loop)
+			if (this.elementConfig.chartsConfig.categoryType.includes("Interval") && newInterval) {
+				previousTooltip.forEach((prevTooltip) => {
+					// Find the corresponding tooltip in currentTooltip
+					const currentTooltipfound = currentTooltip.find(curr => curr.name === prevTooltip.name);
+	
+					if (currentTooltipfound) {
+						// Push new info and shift (remove first element)
+						prevTooltip.tooltipInfo.push(currentTooltipfound.tooltipInfo);
+						prevTooltip.tooltipInfo.shift();
+	
+					} else {
+						// If no match, use the first element from currentTooltip and shift
+						const firstTooltip = currentTooltip[0];
+						prevTooltip.tooltipInfo.push(firstTooltip.tooltipInfo);
+						prevTooltip.tooltipInfo.shift();
+					}
+				});
+			}
+			this.previousTooltip = previousTooltip;			
+		}		
 	}	
 	
 	//Add limits	
@@ -1644,7 +1786,10 @@ class singleChartManager {
 
 		const dataProcessingType = this.elementConfig.chartsConfig.dataProcessingType;
 		const elementDataRT = this.elementDataRT;
-
+		
+		//Update tooltips
+		this.tooltipUpdater();		
+		
 		//Add limits to the series
 		if (this.limitAnalysisEnabled){ 
 			console.log("-------Adding limits-----");	
@@ -1937,19 +2082,25 @@ class singleChartManager {
 						// Update the series with the new data point
 						const newValue = updatingSeries.data[0];
 						const lastPoint = chartSeriesItem.data[chartSeriesItem.data.length - 1];
-		
 						// Update the last point with the new value or add the point if the series is empty
 						if (lastPoint) {
-							lastPoint.update(newValue, true); // Update last point, no redraw
+							lastPoint.update(newValue, false); // Update last point, no redraw		
+												
 							if(this.elementRawConfig.GeneralConfig.ChartType== "Gauge" &&this.limitAnalysisEnabled){
 								chartSeriesItem.update({
 										dial:updatingSeries.dial
 								});
 							} 
-						} 
+						} 						
 					}
 				}
 			});
+			
+			//Update categories
+			let updatedCategories=this.elementDataRT.chartData.chartCategories;
+			this.chartReference.xAxis[0].setCategories(updatedCategories, false);
+
+			//Update Tooltip
 			
 		}
 	
@@ -1997,10 +2148,7 @@ class singleChartManager {
 				// Find the corresponding series in the chart by name
 				const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
 				if (chartSeriesItem) {
-					console.log("chartSeriesItem");
-					console.log(chartSeriesItem);
-					console.log("updatingSeries");
-					console.log(updatingSeries);
+				
 					// Check and update each data point in the series
 					updatingSeries.data.forEach((dataPoint, index) => {
 						if (chartSeriesItem.data[index] && chartSeriesItem.data[index].y !== dataPoint) {
@@ -2034,8 +2182,6 @@ class singleChartManager {
 						}
 					} else {
 						// Update the last point with the new value
-						console.log("Updating New Value:");
-						console.log(newValue);
 						const lastPoint = chartSeriesItem.data[chartSeriesItem.data.length - 1];
 						lastPoint.update(newValue, false);
 					}
@@ -2113,6 +2259,7 @@ class singleChartManager {
 			chartNodes: this.elementConfig.chartNodes
 		  }],
 		  chartsConfig: [{
+			elementType: this.elementConfig.chartsConfig.elementType,
 			chartID: this.chartID,
 			chartType: this.elementConfig.chartsConfig.chartType,
 			dataType: this.elementConfig.chartsConfig.dataType,
@@ -2131,12 +2278,17 @@ class singleChartManager {
 			singleDataRequest: true,
 			specialParameters:this.specialParameters
 		  }],
-		  updateRequest: {
+		  updateRequest: [{
 			OperationMode: "Hist",
 			initialTime: Initial_Time,
 			finalTime: Final_Time,
-			customFilterType: ""
-		  }
+			customFilterType: "",
+			cacheConfig:{
+				CacheEnabled:"false",
+				CacheIntervalSize:0,
+				CacheMaxSize:0},
+			chartID: this.chartID
+		  }]
 		};
 	
 		return singledataRequest;

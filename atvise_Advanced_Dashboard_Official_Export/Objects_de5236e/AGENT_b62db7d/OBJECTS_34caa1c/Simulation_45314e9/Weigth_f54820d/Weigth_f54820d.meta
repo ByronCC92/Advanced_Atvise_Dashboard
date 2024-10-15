@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Weigth
+NodeClass: Object
+BrowseName: 1:Weigth
+DisplayName: en|Weigth
+Description: en|Weigth
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

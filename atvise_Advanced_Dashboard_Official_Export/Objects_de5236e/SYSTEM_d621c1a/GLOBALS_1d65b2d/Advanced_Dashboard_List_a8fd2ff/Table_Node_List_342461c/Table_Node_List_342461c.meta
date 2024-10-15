@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.GLOBALS.Advanced_Dashboard_List.Table_Node_List
+NodeClass: Variable
+BrowseName: 1:Table_Node_List
+DisplayName: en|Table_Node_List
+Description: en|Table_Node_List
+DataType: String
+ValueRank: 1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.GlobalVariable

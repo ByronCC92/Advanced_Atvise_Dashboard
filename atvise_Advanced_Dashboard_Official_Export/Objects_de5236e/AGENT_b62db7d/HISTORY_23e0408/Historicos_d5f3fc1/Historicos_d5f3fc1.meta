@@ -1,0 +1,8 @@
+NodeId: ns=1;s=AGENT.HISTORY.Historicos
+NodeClass: Object
+BrowseName: 1:Historicos
+DisplayName: en|Historicos
+Description: en|Historicos
+EventNotifier: 0
+Reference: forward HasModellingRule SharedExclusive
+Reference: forward HasTypeDefinition ns=1;s=ObjectTypes.ATVISE.ArchiveGroup.Data

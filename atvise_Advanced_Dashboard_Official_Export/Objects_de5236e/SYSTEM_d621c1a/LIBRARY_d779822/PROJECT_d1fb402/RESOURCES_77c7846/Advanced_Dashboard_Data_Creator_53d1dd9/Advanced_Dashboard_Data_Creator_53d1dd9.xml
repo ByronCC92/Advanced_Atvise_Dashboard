@@ -87,60 +87,6 @@ const ONE_HOUR = 60 * ONE_MINUTE;
 const ONE_DAY = 24 * ONE_HOUR;
 
 
-//Key Mapping for decompressing
-const keyMapping = {
-    "chartsConfig": "cChCfg",
-    "categorCustomValue": "cCV",
-    "categoryCustomIntervalLength": "cCIL",
-    "categoryCustomIntervalUnit": "cCIU",
-    "categoryRound": "cRnd",
-    "categoryTimeOffset": "cTO",
-    "categoryType": "cCatTyp",
-    "chartID": "cID",
-    "chartType": "cTyp",
-    "dataMaxLimit": "dMxL",
-    "dataMinLimit": "dMnL",
-    "dataProcessingType": "dPrc",
-    "dataReductionEnable": "dREn",
-    "dataReductionMaxSize": "dRMx",
-    "dataType": "dTyp",
-    "dataoutOfLimitEnable": "dOLE",
-    "singleDataRequest": "sDR",
-    "specialParameters": "sPar",
-    "OEECompleteRangeAnalisis": "OEECRA",
-    "OEEProductionSpeed": "OEESP",
-    "chartsNodes": "cChNds",
-    "chartNodes": "cNds",
-    "updateRequest": "uReq",
-    "OperationMode": "opMd",
-    "cacheConfig": "caCfg",
-    "CacheEnabled": "cEna",
-    "CacheIntervalSize": "cISz",
-    "CacheMaxSize": "cMSz",
-    "customFilterType": "cFT",
-    "finalTime": "fTme",
-    "initialTime": "iTme",
-    "informationRT": "iRT",
-    "AllDataRequired": "ADR",
-    "IntervalInfo": "iInf",
-    "end": "end",
-    "intervalLength": "iLen",
-    "newInterval": "nInt",
-    "start": "strt",
-    "LastDataPointProcessed": "lDPP",
-    "LastDataPointRT": "lDPRT",
-    "Value": "Val",
-    "status": "sts",
-    "timestamps": "tStmp",
-    "LastDataPointRaw": "lDPR",
-    "Node": "Nd",
-    "OEEInfo": "OEEI",
-    "ReduceInfo": "RInf",
-    "reductionStepSize": "rSSz",
-    "reductioniterationsBeforeNextStepRT": "rINS"
-};
-
-
 
 //---------------Dashboard Data Processor----------------//
 //-----------------------------------------------------//
@@ -151,7 +97,7 @@ class dashboardDataProcessor {
 	processedData;
 	dynamicCategory;
 	
-	constructor() {
+	constructor(dashboardCreatorNotifier) {
 		this.processedData = null; // Initialize processedData 
 		this.dataRequest;
 		this.rawData;
@@ -162,6 +108,7 @@ class dashboardDataProcessor {
 		this.uniqueCategoriesConfigRT=[];
 		this.uniqueCategories=[]; // Initialize unique Categories complete
 		this.uniqueCategoriesRT=[];
+		this.DCNotfier;
 		
 		//For each Element Config
 		this.uniqueCategoriesConfigI;
@@ -174,9 +121,11 @@ class dashboardDataProcessor {
 		this.categoryTimeOffsetI;
 		this.rawDataI;
 		this.nodeI;
+		this.indexNodeI;
 		this.reductionExcecutedI=false;
 		this.partialDashboardDataI;
 		this.LimitDashboardDataI;
+		this.TooltipDashboardDataI;
 		this.DataInfoRTI;
 		this.informationRTI;
 		this.reductionStepSizeI=0;
@@ -184,16 +133,18 @@ class dashboardDataProcessor {
 		this.limitAnalysisEnabledI=false;
 		this.OEEinfoRTI={};
 		this.HistInfoRTI={};
+		this.DCNotfier=dashboardCreatorNotifier;
 		
 		this.newIntervalI=false;
 		this.processedDataII;
+		this.relevantTimestampII;
 		this.processedDataStruct;
 	}
 
 	//Initialize Elements
 	initialize(dataRequest,rawData) { 
-	
-		console.log("----------Initialize Processor----------");		
+		
+		this.DCNotfier.dgConsole("----------Initialize Processor----------");		
 		this.dataRequest=dataRequest;
 		this.OperationMode=this.dataRequest.updateRequest[0].OperationMode;
 		this.rawData=rawData;
@@ -202,34 +153,34 @@ class dashboardDataProcessor {
 		//Operation in Hist Mode
 		if (this.OperationMode==="Hist"){
 			
-			console.log("Initial Time");
-			console.log((new Date(this.dataRequest.updateRequest[0].initialTime)).getTime());
-			console.log((new Date(this.dataRequest.updateRequest[0].initialTime)).toString());
-			console.log("Final Time");
-			console.log((new Date(this.dataRequest.updateRequest[0].finalTime)).getTime());
-			console.log((new Date(this.dataRequest.updateRequest[0].finalTime)).toString());
+			this.DCNotfier.dgConsole("Initial Time");
+			this.DCNotfier.dgConsole((new Date(this.dataRequest.updateRequest[0].initialTime)).getTime());
+			this.DCNotfier.dgConsole((new Date(this.dataRequest.updateRequest[0].initialTime)).toString());
+			this.DCNotfier.dgConsole("Final Time");
+			this.DCNotfier.dgConsole((new Date(this.dataRequest.updateRequest[0].finalTime)).getTime());
+			this.DCNotfier.dgConsole((new Date(this.dataRequest.updateRequest[0].finalTime)).toString());
 				
 			//Find all the unique Chart Categories
 			this.uniqueCategoriesConfig=this.uniqueChartCategoriesFinder();
-			console.log("----------Unique Config Categories----------");
-			console.log(this.uniqueCategoriesConfig);
+			this.DCNotfier.dgConsole("----------Unique Config Categories----------");
+			this.DCNotfier.dgConsole(this.uniqueCategoriesConfig);
 			
 			//Create all unique Chart Categories
 			this.uniqueCategories=this.uniqueCategoriesCreator();
-			console.log("----------Unique Categories Created----------");
-			console.log(this.uniqueCategories);
+			this.DCNotfier.dgConsole("----------Unique Categories Created----------");
+			this.DCNotfier.dgConsole(this.uniqueCategories);
 		}
 		else if (this.OperationMode==="RealTime"){
 			
 			//Find all the unique Chart Categories
 			this.uniqueCategoriesConfigRT=this.uniqueChartCategoriesFinder();
-			console.log("----------Unique RT Config Categories----------");
-			console.log(this.uniqueCategoriesConfigRT);
+			this.DCNotfier.dgConsole("----------Unique RT Config Categories----------");
+			this.DCNotfier.dgConsole(this.uniqueCategoriesConfigRT);
 			
 			//Create all unique Chart Categories
 			this.uniqueCategoriesRT=this.uniqueCategoriesCreatorRT();
-			console.log("----------Unique RT Categories Created----------");
-			console.log(this.uniqueCategoriesRT)
+			this.DCNotfier.dgConsole("----------Unique RT Categories Created----------");
+			this.DCNotfier.dgConsole(this.uniqueCategoriesRT)
 			
 		}
 		
@@ -252,12 +203,13 @@ class dashboardDataProcessor {
 			this.chartNodesI=this.chartNodesIFinder();
 			
 			//Process each Data Series (each node)
-			this.processedDataI=this.chartNodesI.map((nodeI) => {
+			this.processedDataI=this.chartNodesI.map((nodeI,indexNodeI) => {
 			
 				//Current Node
-				this.nodeI=nodeI;	
-				console.log("------------this.nodeI--------------");	
-				console.log(this.nodeI);
+				this.nodeI=nodeI;
+				this.indexNodeI=indexNodeI;
+				this.DCNotfier.dgConsole("------------this.nodeI--------------");	
+				this.DCNotfier.dgConsole(this.nodeI);
 				
 				//Operation in Hist Mode
 				if (this.updateRequestI.OperationMode==="Hist"){	
@@ -267,35 +219,39 @@ class dashboardDataProcessor {
 	
 					//Category Handling				
 					this.chartCategoriesI=this.categoryHandling();				
-					console.log("------------Selecting Categories------------");
-					console.log(this.chartCategoriesI);
+					this.DCNotfier.dgConsole("------------Selecting Categories------------");
+					this.DCNotfier.dgConsole(this.chartCategoriesI);
 					 
 					//Data Reduction
 					this.partialDashboardDataI=this.dataReductor().reducedData;
 					this.updateChartCategory();
-					console.log("------------Partial Dahsboard Data------------");
-					//console.log(this.partialDashboardDataI);					
+					this.DCNotfier.dgConsole("------------Partial Dahsboard Data------------");
+					this.DCNotfier.dgConsole(this.partialDashboardDataI);					
 		
 					//Data Processing
 					this.processedDataII=this.dataProcessingHandling();
-					console.log("------------Processed Data------------");
-					console.log(this.processedDataII);
+					this.DCNotfier.dgConsole("------------Processed Data------------");
+					this.DCNotfier.dgConsole(this.processedDataII);
 					
 					//Limits
-					this.LimitDashboardDataI=this.limitCalculator().filteredData;;
-					console.log("------------Limits Found------------");
-					console.log(this.LimitDashboardDataI);					
+					this.LimitDashboardDataI=this.limitCalculator().filteredData;
+					this.DCNotfier.dgConsole("------------Limits Found------------");
+					this.DCNotfier.dgConsole(this.LimitDashboardDataI);	
+					
+					//Tooltip
+					this.TooltipDashboardDataI=this.tooltipInfoCreator();
+					this.DCNotfier.dgConsole("------------Tooltip Created------------");
+					this.DCNotfier.dgConsole(this.TooltipDashboardDataI);			
 					
 					//Data for RT Creation 
 					this.DataInfoRTI=this.dataInfoRTCreator();	
-					console.log("------------Data for RT------------");
-					console.log(this.DataInfoRTI);
-				
+					this.DCNotfier.dgConsole("------------Data for RT------------");
+					this.DCNotfier.dgConsole(this.DataInfoRTI);				
 					
 					//Create Structure for processed Data				
 					this.processedDataStruct=this.createProcessedDataStruct();
-					console.log("------------Processed Structure------------");
-					console.log(this.processedDataStruct);
+					this.DCNotfier.dgConsole("------------Processed Structure------------");
+					this.DCNotfier.dgConsole(this.processedDataStruct);
 					
 					
 					return this.processedDataStruct
@@ -305,38 +261,43 @@ class dashboardDataProcessor {
 				else if (this.updateRequestI.OperationMode==="RealTime"){
 					
 					this.informationRTI=this.dataInfoRTFinder();
-					console.log("----------Information RT----------");
-					console.log(this.informationRTI);
+					this.DCNotfier.dgConsole("----------Information RT----------");
+					this.DCNotfier.dgConsole(this.informationRTI);
 					
 					//Category Handling				
 					this.chartCategoriesI=this.categoryHandling();				
-					console.log("------------Selecting RT Categories------------");
-					console.log(this.chartCategoriesI);
+					this.DCNotfier.dgConsole("------------Selecting RT Categories------------");
+					this.DCNotfier.dgConsole(this.chartCategoriesI);
 					
 					//Data Reduction
 					this.partialDashboardDataI=this.dataReductor().reducedData;
-					console.log("------------Partial RT Dahsboard Data------------");
-					console.log(this.partialDashboardDataI);
+					this.DCNotfier.dgConsole("------------Partial RT Dahsboard Data------------");
+					this.DCNotfier.dgConsole(this.partialDashboardDataI);
 					
 					//Data Processing
 					this.processedDataII=this.dataProcessingHandling();
-					console.log("------------Processed RT Data------------");
-					console.log(this.processedDataII);	
+					this.DCNotfier.dgConsole("------------Processed RT Data------------");
+					this.DCNotfier.dgConsole(this.processedDataII);	
 					
 					//Limits					
 					this.LimitDashboardDataI=this.limitCalculator().filteredData;
-					console.log("------------Limits RT Found------------");
-					console.log(this.LimitDashboardDataI);							
+					this.DCNotfier.dgConsole("------------Limits RT Found------------");
+					this.DCNotfier.dgConsole(this.LimitDashboardDataI);	
+					
+					//Tooltip
+					this.TooltipDashboardDataI=this.tooltipInfoCreator();
+					this.DCNotfier.dgConsole("------------Tooltip Created------------");
+					this.DCNotfier.dgConsole(this.TooltipDashboardDataI)						
 					
 					//Data for RT Creation 
 					this.DataInfoRTI=this.dataInfoRTCreator();	
-					console.log("------------Data for RT in RT------------");
-					console.log(this.DataInfoRTI);				
+					this.DCNotfier.dgConsole("------------Data for RT in RT------------");
+					this.DCNotfier.dgConsole(this.DataInfoRTI);				
 					
 					//Create Structure for processed Data				
 					this.processedDataStruct=this.createProcessedDataStruct();
-					console.log("------------Processed Structure------------");
-					console.log(this.processedDataStruct);
+					this.DCNotfier.dgConsole("------------Processed Structure------------");
+					this.DCNotfier.dgConsole(this.processedDataStruct);
 					
 					return this.processedDataStruct;
 				}	
@@ -345,6 +306,7 @@ class dashboardDataProcessor {
 			return {chartID:this.chartConfigI.chartID,
 					processedDataStruct:this.processedDataI,
 					chartType:this.chartConfigI.chartType,
+					elementType:this.chartConfigI.elementType,
 					categoryType:this.chartConfigI.categoryType}
 		});	
 	
@@ -399,16 +361,10 @@ class dashboardDataProcessor {
 		else if (this.OperationMode==="RealTime"){
 			const uniqueCategoriesI=this.uniqueCategoriesRT;
 			uniqueCategories=uniqueCategoriesI;
-		}
-		
-		console.log("uniqueCategories");
-		console.log(uniqueCategories);		
+		}				
 		
         // Find the category entry where the current chartID is included in the chartIDs array
         const categoryEntry = uniqueCategories.find(category => category.chartIDs.includes(this.chartConfigI.chartID));
-        
-        console.log("categoryEntry");
-		console.log(categoryEntry);
         
         // Return the categories array if an entry is found, otherwise return null or an empty array
         return categoryEntry ? categoryEntry: null;
@@ -417,82 +373,92 @@ class dashboardDataProcessor {
 	//Data Processing Handling
 	dataProcessingHandling(){
 	
-		console.log("------------Processing Type------------")
-		console.log(this.chartConfigI.dataProcessingType);
+		this.DCNotfier.dgConsole("------------Processing Type------------")
+		this.DCNotfier.dgConsole(this.chartConfigI.dataProcessingType);
 		
 		switch (this.chartConfigI.dataProcessingType) {
 			case "Simple-None": //No change
-				console.log("Not changed");
-				if (this.OperationMode === "Hist") {
-					return {ProcessedData:this.partialDashboardDataI.Values};
+				this.DCNotfier.dgConsole("Not changed");
+				if (this.chartConfigI.elementType === "Chart") {
+					if (this.OperationMode === "Hist") {
+						return {ProcessedData:this.partialDashboardDataI.Values};
+					}
+					else if (this.OperationMode === "RealTime") {
+						let ProcessedDataI=this.informationRTI.LastDataPointRT.map(DataPointRT=>DataPointRT.Value)
+						return {ProcessedData:ProcessedDataI};
+					}
 				}
-				else if (this.OperationMode === "RealTime") {
-					let ProcessedDataI=this.informationRTI.LastDataPointRT.map(DataPointRT=>DataPointRT.Value)
-					return {ProcessedData:ProcessedDataI};
+				else if (this.chartConfigI.elementType === "Table"){
+					this.DCNotfier.dgConsole("Simple-None Table")
+					return this.SimpleNoneTableProcessing();
 				}
 				break;	
 			case "SinglePoint-LastValue": 	//Use Last Value
-				console.log("Last Value")
+				this.DCNotfier.dgConsole("Last Value")
 				return this.SinglePoint_lastValue(this.partialDashboardDataI);
 				break;	
 			case "SinglePoint-FirstValue": 	//Use Last Value
-				console.log("First Value")
+				this.DCNotfier.dgConsole("First Value")
 				return this.SinglePoint_firstValue(this.partialDashboardDataI);
 				break;
 			case "SinglePoint-Max": 	//Use Last Value
-				console.log("Single Point Max")
+				this.DCNotfier.dgConsole("Single Point Max")
 				return this.SinglePoint_Max(this.rawDataI);
 				break;
+			case "SinglePoint-Min": 	//Use Last Value
+				this.DCNotfier.dgConsole("Single Point Min")
+				return this.SinglePoint_Min(this.rawDataI);
+				break;
 			case "Interval-Addition": 	//Add all the elements within intervals	
-				console.log("Adding Intervals")
+				this.DCNotfier.dgConsole("Adding Intervals")
 				return this.Interval_Addition(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
 				break;
 			case "Interval-CountChanges":  //Count Number of Changes
-				console.log("Counting Changes")
+				this.DCNotfier.dgConsole("Counting Changes")
 				return this.Interval_ChangesCounter(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
 				break;
 			case "Interval-CountTimeOn":  //Count Number of Changes
-				console.log("Count Time On")
+				this.DCNotfier.dgConsole("Count Time On")
 				return this.Interval_CountTimeOn(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
 				break;
 			case "Interval-Difference": 	//Add all the elements	
-				console.log("Interval Difference");
+				this.DCNotfier.dgConsole("Interval Difference");
 				return this.Interval_Difference(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
 				break;
 			case "Interval-Integration":  //Integrate Data
-				console.log("Integrated Data")
+				this.DCNotfier.dgConsole("Integrated Data")
 				return this.Interval_Integration(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
 				break;	
 			case "Interval-Average":  //Interval Average
-				console.log("Interval Average Data")
+				this.DCNotfier.dgConsole("Interval Average Data")
 				return this.Interval_Average(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.intervals);
 				break;		
 			case "Interval-Histogram": 	//Use Histogram Calculatio
-				console.log("Interval-Histogram")
+				this.DCNotfier.dgConsole("Interval-Histogram")
 				return this.Interval_Histogram(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.categories);
 				break;	
 			case "FullRange-Addition": 	//Add all the elements	
-				console.log("Simple Addition")
+				this.DCNotfier.dgConsole("Simple Addition")
 				return this.FullRange_Addition(this.partialDashboardDataI);
 				break;
 			case "FullRange-Average": 	//Add all the elements	
-				console.log("FullRange Average")
+				this.DCNotfier.dgConsole("FullRange Average")
 				return this.FullRange_Average(this.partialDashboardDataI);
 				break;				
 			case "FullRange-Difference": 	//Add all the elements	
-				console.log("Interval Difference")
+				this.DCNotfier.dgConsole("Interval Difference")
 				return this.FullRange_Difference(this.partialDashboardDataI);
 				break;																		
 			case "FullRange-OEEProductivity": 	//OEE Productivity
-				console.log("OEE Productivity")
+				this.DCNotfier.dgConsole("OEE Productivity")
 				return this.FullRange_OEEProductivity(this.partialDashboardDataI);
 				break;	
 			case "FullRange-OEEAvailability": 	//OEE Productivity
-				console.log("OEE Availability")
+				this.DCNotfier.dgConsole("OEE Availability")
 				return this.FullRange_OEEAvailability(this.partialDashboardDataI, this.chartCategoriesI.chartCategory.intervals);
 				break;																
 			default: //No processing done
-				console.log("No processing done")
+				this.DCNotfier.dgConsole("No processing done")
 				return {ProcessedData:this.partialDashboardDataI.Values};
 				break;
 		}
@@ -508,6 +474,7 @@ class dashboardDataProcessor {
 			return {processedDataI:this.processedDataII.ProcessedData,
 								 chartCategories:this.chartCategoriesI.chartCategory.categories,
 								 LimitDashboardData:this.LimitDashboardDataI,
+								 tooltipInfo:this.TooltipDashboardDataI,
 								 informationRT: this.DataInfoRTI,
 								 processedNode:this.nodeI
 								 }
@@ -516,6 +483,7 @@ class dashboardDataProcessor {
 			return {processedDataI:this.processedDataII.ProcessedData,
 								 chartCategories:this.chartCategoriesI.chartCategory.categories,
 								 informationRT: this.DataInfoRTI,
+								 tooltipInfo:this.TooltipDashboardDataI,
 								 processedNode:this.nodeI
 								 }
 		}  
@@ -528,7 +496,7 @@ class dashboardDataProcessor {
 	// Method to reduce data as needed
 	dataReductor() {
         try {
-            console.log("----------Reducing Data--------------");
+            this.DCNotfier.dgConsole("----------Reducing Data--------------");
             let reducedData = { Values: [], status: [], timestamps: [] };
 			if (this.rawDataI != undefined) {
 				if (this.OperationMode === "Hist") {
@@ -593,8 +561,8 @@ class dashboardDataProcessor {
 				}
             }
 
-            //console.log({reducedData});
-            console.log("Iterations before next step: ", this.iterationsBeforeNextStep);
+            //this.DCNotfier.dgConsole({reducedData});
+            this.DCNotfier.dgConsole("Iterations before next step: ", this.iterationsBeforeNextStep);
 
             return { reducedData};
         } catch (error) {
@@ -603,6 +571,48 @@ class dashboardDataProcessor {
             return { reducedData: {}, filteredData: [] }; // Return empty objects or handle the error as needed
         }
     }
+    
+    tableCategoryProcessor(categoriesData) {
+    
+    try {
+        this.DCNotfier.dgConsole("----------Processing Table Categories--------------");
+        this.DCNotfier.dgConsole(this.uniqueCategoriesConfigI.categoryConfig);
+		this.DCNotfier.dgConsole(this.uniqueCategoriesConfigI.categoryConfig.dataReductionEnable);
+        if (this.uniqueCategoriesConfigI.categoryConfig.dataReductionEnable === true) {
+			this.DCNotfier.dgConsole("----------Redudcing categories---------");
+            const maxSize = this.uniqueCategoriesConfigI.categoryConfig.dataReductionMaxSize;
+            const categories = categoriesData[0].categories;
+            const chartNode = categoriesData[0].chartNode;
+
+            // Calculate the step size for reduction
+            const step = categories.length > maxSize ? Math.ceil(categories.length / maxSize) : 0;
+            let reducedCategories = [];
+            let reducedChartNode = chartNode; // Assuming chartNode remains the same
+
+            if (step > 0) {
+                // Reduce the categories array
+                for (let i = 0; i < categories.length; i += step) {
+                    reducedCategories.push(categories[i]);
+                }
+                this.DCNotfier.dgConsole("Categories reduced from", categories.length, "to", reducedCategories.length);
+            } else {
+                // No reduction needed
+                reducedCategories = categories;
+            }
+
+            // Return the reduced data
+            return { categories: reducedCategories, chartNode: reducedChartNode };
+
+        } else {
+            // Data reduction not enabled, return original data
+            return categoriesData;
+        }
+    } catch (error) {
+        console.error("Error in tableCategoryProcessor: ", error);
+        console.error(error.message);
+        return { categories: [], chartNode: [] };
+    }
+	}
     
     //----------Limit Functions---------------------//
 	//--------------------------------------------------//
@@ -734,9 +744,12 @@ class dashboardDataProcessor {
         this.dataRequest.chartsConfig.forEach(chartConfig => {
             const {
 				chartType,
+				elementType,
                 categoryType,
                 categoryRound,
                 categorCustomValue,
+                dataReductionEnable,
+                dataReductionMaxSize,
                 categoryCustomIntervalLength,
                 categoryCustomIntervalUnit,
                 categoryTimeOffset,
@@ -755,9 +768,12 @@ class dashboardDataProcessor {
             // Create a key for the category configuration including the nodes (and informationRT if in RealTime mode)
             const categoryKey = JSON.stringify({
 				chartType,
+				elementType,
                 categoryType,
                 categoryRound,
                 categorCustomValue,
+                dataReductionEnable,
+                dataReductionMaxSize,
                 categoryCustomIntervalLength,
                 categoryCustomIntervalUnit,
                 categoryTimeOffset,
@@ -772,9 +788,12 @@ class dashboardDataProcessor {
                 categoriesMap.set(categoryKey, {
                     categoryConfig: {
 						chartType,
+						elementType,
                         categoryType,
                         categoryRound,
                         categorCustomValue,
+                        dataReductionEnable,
+						dataReductionMaxSize,
                         categoryCustomIntervalLength,
                         categoryCustomIntervalUnit,
                         categoryTimeOffset,
@@ -794,7 +813,7 @@ class dashboardDataProcessor {
 	//Create All Unique Categories
 	uniqueCategoriesCreator() {
 	
-		console.log("----------Creating Categories--------")
+		this.DCNotfier.dgConsole("----------Creating Categories--------")
 		return this.uniqueCategoriesConfig.map(config => {
 			
 			//Update Current Category Config
@@ -803,15 +822,22 @@ class dashboardDataProcessor {
 			//Create Specific Interval
 			this.intervalLengthI= this.intevalLengthcreator();
 			
-			console.log("-----------This Interval Length----------");
-			console.log(this.intervalLengthI);
+			this.DCNotfier.dgConsole("-----------This Interval Length----------");
+			this.DCNotfier.dgConsole(this.intervalLengthI);
 			
 			let chartCategory;
 			var intervalInfo;
+			
 			switch (config.categoryConfig.categoryType) {
 				case "AllData-DateTime":  // DateTime
-					chartCategory=this.allDataCategoryCreator();
-					intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime, newInterval:this.newIntervalI};
+					if(config.categoryConfig.elementType=="Chart"){
+						chartCategory=this.allDataCategoryCreator();
+						intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime, newInterval:this.newIntervalI};
+					}
+					else if(config.categoryConfig.elementType=="Table"){
+						chartCategory=this.allDataTableCategoryCreator();
+						intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime, newInterval:this.newIntervalI};
+					}					
 					break;
 				case "Interval-Dynamic": //Dynamic					
 					chartCategory = this.intervalCategoryCreator();
@@ -832,8 +858,25 @@ class dashboardDataProcessor {
 				    intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
 				    break;
 				case "Single-Simple":  // Simple
-				    chartCategory= { categories: [] };
-				    intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+					if(config.categoryConfig.elementType=="Chart"){
+						if(config.categoryConfig.chartType=="Column"){
+							
+							chartCategory= { categories: [this.getCategory(this.timeRange,new Date(this.dataRequest.updateRequest[0].initialTime))+" - "+ this.getCategory(this.timeRange,new Date(this.dataRequest.updateRequest[0].finalTime))] };
+							intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+						}
+						else{
+							chartCategory= { categories: [] };
+							intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+						}
+				    }
+				    else if(config.categoryConfig.elementType=="Table"){
+						chartCategory= { categories: [] };
+						intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime, newInterval:this.newIntervalI};
+					}
+					else{
+						chartCategory= { categories: [] };
+						intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime, newInterval:this.newIntervalI};
+					}		    
 				    break;
 				default:
 					// Handle other types or do nothing if not applicable
@@ -860,14 +903,21 @@ class dashboardDataProcessor {
 		if (this.reductionExcecutedI) {
 			// Iterate over the categories to find the matching chartNode
 			this.chartCategoriesI.chartCategory.categories.forEach(category => {
-				if (category.chartNode === this.nodeI) {
-					category.categories = this.partialDashboardDataI.timestamps;
-					console.log(`Chart categories for node ${this.nodeI} updated successfully`);
+				if (this.chartConfigI.elementType === "Chart") {
+					if (category.chartNode === this.nodeI) {
+						category.categories = this.partialDashboardDataI.timestamps;
+						this.DCNotfier.dgConsole(`Chart categories for node ${this.nodeI} updated successfully`);
+					}
 				}
-			});
-		} else {
-			console.log("Reduction not executed. Chart categories not updated.");
+				else if(this.chartConfigI.elementType === "Table") {
+					
+				}
+			}); 
 		}
+		else {
+			this.DCNotfier.dgConsole("Reduction not executed. Chart categories not updated.");
+		}
+		
 	}
 		
 	//Method to create interval length
@@ -932,7 +982,7 @@ class dashboardDataProcessor {
 		// Read the current unit and offset from the config
 		const intervalUnit = this.uniqueCategoriesConfigI.categoryConfig.categoryCustomIntervalUnit;
 		const timeOffset = parseInt(this.uniqueCategoriesConfigI.categoryConfig.categoryTimeOffset);
-		console.log("intervalUnit: "+intervalUnit)
+		this.DCNotfier.dgConsole("intervalUnit: "+intervalUnit)
 		// Determine the offset unit based on the interval unit
 		let offsetUnitMilliseconds;
 		switch (intervalUnit) {
@@ -1009,6 +1059,63 @@ class dashboardDataProcessor {
 		return {categories:categoriesData};
 	}
 	
+	//All Data for Tables
+		
+	allDataTableCategoryCreator() {
+		const { categoryConfig } = this.uniqueCategoriesConfigI;
+		const allNodes = this.rawData.map(data => data.Nodeaddress); // Extract all Nodeaddresses
+		let categoriesData = [];
+	
+		// Use a Set to efficiently store unique timestamps
+		const uniqueTimestamps = new Set();
+	
+		// Determine the CategorySource
+		if (categoryConfig.specialParameters.TableConfig.CategorySource === 'Input-AllInputs') {
+			this.DCNotfier.dgConsole("------Input-AllInputs----");
+			// Collect timestamps and add them directly to the Set for uniqueness
+			this.rawData.forEach(data => {
+				data.timestamps.forEach(timestamp => uniqueTimestamps.add(timestamp));
+			});
+	
+			// Convert the Set to an array and sort it only once
+			const allTimestampsClean = [...uniqueTimestamps].sort((a, b) => a - b);
+	
+			// Create the final object with allNodes and clean timestamps
+			categoriesData.push({
+				chartNode: allNodes,
+				categories: allTimestampsClean
+			});
+	
+		} else if (categoryConfig.specialParameters.TableConfig.CategorySource === 'Input-LeadingInput') {
+			this.DCNotfier.dgConsole("------Input-LeadingInput----");
+			// Get the CategoryLeadingInput
+			const leadingInputNode = categoryConfig.specialParameters.TableConfig.CategoryLeadingInput;
+	
+			// Find the rawData object that corresponds to the leadingInputNode
+			const leadingData = this.rawData.find(data => data.Nodeaddress === leadingInputNode);
+	
+			// If we find the data, use its timestamps
+			if (leadingData) {
+				leadingData.timestamps.forEach(timestamp => uniqueTimestamps.add(timestamp));
+	
+				// Convert the Set to an array and sort it once
+				const leadingTimestampsClean = [...uniqueTimestamps].sort((a, b) => a - b);
+	
+				// Create the final object with allNodes and clean timestamps
+				categoriesData.push({
+					chartNode: allNodes,
+					categories: leadingTimestampsClean
+				});
+			} else {
+				console.error(`No data found for leading input node: ${leadingInputNode}`);
+			}
+		}
+		this.DCNotfier.dgConsole("Partial Categories Before Reduction");
+		this.DCNotfier.dgConsole("Length: "+categoriesData[0].categories.length);
+		this.DCNotfier.dgConsole(categoriesData);
+		return { categories: [this.tableCategoryProcessor(categoriesData)]};
+	}
+	
 	//Category Creator	
 	intervalCategoryCreator() {
 
@@ -1022,13 +1129,13 @@ class dashboardDataProcessor {
 		if (this.uniqueCategoriesConfigI.categoryConfig.categoryRound=== "true") {
 			Initial_Time = this.roundDate(Initial_Time,"down").getTime();
 		}
-		console.log("Raw Offset")
-		console.log(this.uniqueCategoriesConfigI.categoryConfig.categoryTimeOffset);
+		this.DCNotfier.dgConsole("Raw Offset")
+		this.DCNotfier.dgConsole(this.uniqueCategoriesConfigI.categoryConfig.categoryTimeOffset);
 		//Apply Offset
 		if (this.uniqueCategoriesConfigI.categoryConfig.categoryTimeOffset>0 && this.uniqueCategoriesConfigI.categoryConfig.categoryType=="Interval-CustomInterval") {
 			this.categoryTimeOffsetI=this.categoryTimeOffsetCreator();
-			console.log("------------Category Time Offset------------");
-			console.log(this.categoryTimeOffsetI);
+			this.DCNotfier.dgConsole("------------Category Time Offset------------");
+			this.DCNotfier.dgConsole(this.categoryTimeOffsetI);
 			
 			Initial_Time = Initial_Time+this.categoryTimeOffsetI;
 		}
@@ -1119,6 +1226,79 @@ class dashboardDataProcessor {
 		return { categories: categories };
 	}
 	
+	
+	//-------------------Tooltip Functions--------------//
+	//--------------------------------------------------//
+	
+	tooltipInfoCreator(){
+	
+		let tooltipInfo;
+		var intervalInfo=this.chartCategoriesI.intervalInfo;
+
+		
+		if(this.chartConfigI.elementType=="Chart"){
+			
+			//Simple Processing type
+			if(this.chartConfigI.dataProcessingType.includes("Simple")) {
+				tooltipInfo="";			
+			}
+			//SinglePoint Processing type
+			else if(this.chartConfigI.dataProcessingType.includes("SinglePoint")) {
+				tooltipInfo=this.formatTimestampToDateTime(this.relevantTimestampII);		
+			}
+			//Interval Processing type
+			else if(this.chartConfigI.dataProcessingType.includes("Interval")) {
+				if (this.updateRequestI.OperationMode === "Hist") {
+					if (this.chartConfigI.dataProcessingType!="Interval-Histogram"){
+						tooltipInfo = this.chartCategoriesI.chartCategory.intervals.map(interval => ({
+						  start: this.formatTimestampToDateTime(interval.start),
+						  end: this.formatTimestampToDateTime(interval.end)
+						}));
+					}		
+					else{
+						tooltipInfo="";
+					}
+				}
+				else if (this.updateRequestI.OperationMode === "RealTime") {
+					if (this.chartConfigI.dataProcessingType!="Interval-Histogram"){
+						var interval=this.chartCategoriesI.chartCategory.intervals[0];
+						tooltipInfo={
+									start:this.formatTimestampToDateTime(interval.start),
+									end:this.formatTimestampToDateTime(interval.end)
+									};
+						}
+					else{
+						tooltipInfo="";
+					}
+				}
+			}
+			//FullRange Processing type
+			else if(this.chartConfigI.dataProcessingType.includes("FullRange")) {
+				if (this.updateRequestI.OperationMode === "Hist") {
+					tooltipInfo={start:this.formatTimestampToDateTime(new Date(intervalInfo.start)),
+							 end:this.formatTimestampToDateTime(new Date(intervalInfo.end))};
+							 
+					this.relevantTimestampII=new Date(intervalInfo.start).getTime();
+				}
+				else if (this.updateRequestI.OperationMode === "RealTime") {
+					tooltipInfo={start:this.formatTimestampToDateTime(this.informationRTI.LastRelevantTimestamp),
+							 end:this.formatTimestampToDateTime(new Date(intervalInfo.end))};
+					this.relevantTimestampII=new Date(this.informationRTI.LastRelevantTimestamp).getTime();
+				}
+							
+			}
+			//Any other
+			else {
+				tooltipInfo="";			
+			}
+		
+		return {tooltipInfo:tooltipInfo, name:this.nodeI}
+		}
+	
+	}
+	
+	
+	
 	//---------------RT Processing Functions----------------//
 	//--------------------------------------------------//
 	
@@ -1126,7 +1306,7 @@ class dashboardDataProcessor {
 	
 	//Create Categories for RT
 	uniqueCategoriesCreatorRT() {
-        console.log("----------Creating Categories for RT--------");
+        this.DCNotfier.dgConsole("----------Creating Categories for RT--------");
 
         return this.uniqueCategoriesConfigRT.map(config => {
         
@@ -1138,8 +1318,8 @@ class dashboardDataProcessor {
             
             // Create Specific Interval
             this.intervalLengthI =intervalInfo.intervalLength;
-            console.log("-----------This Interval Length----------");
-            console.log(this.intervalLengthI);
+            this.DCNotfier.dgConsole("-----------This Interval Length----------");
+            this.DCNotfier.dgConsole(this.intervalLengthI);
             
             switch (config.categoryConfig.categoryType) {
                 case "AllData-DateTime":  // DateTime
@@ -1165,13 +1345,36 @@ class dashboardDataProcessor {
                     intervalInfo = this.allDataIntervalInfoRT();
                     break;
                 case "Single-Simple":  // Simple
-                    chartCategory = { categories: [] };
-                    intervalInfo = this.allDataIntervalInfoRT();;
+					if(config.categoryConfig.elementType=="Chart"){
+						if(config.categoryConfig.chartType=="Column"){
+							const { informationRT } = this.uniqueCategoriesConfigI.categoryConfig;
+							let highestTimestamp = 0;
+							let correspondingIntervalInfo = null;
+					
+							// Find the highest timestamp and corresponding interval info
+							informationRT.forEach(info => {
+								info.LastDataPointRT.forEach(point => {
+									if (point.timestamps > highestTimestamp) {
+										highestTimestamp = point.timestamps;
+										correspondingIntervalInfo = info.IntervalInfo;
+									}
+								});
+							});
+							
+							chartCategory= { categories: [this.getCategory(this.timeRange,new Date(this.dataRequest.updateRequest[0].initialTime))+" - "+ this.getCategory(this.timeRange,new Date(highestTimestamp))] };
+							intervalInfo=this.allDataIntervalInfoRT();
+						}
+						else{
+							chartCategory = { categories: [] };
+							intervalInfo = this.allDataIntervalInfoRT();
+						}
+				    }
+                    
                     break;
                 default:
                     // Handle other types or do nothing if not applicable
                     chartCategory = { categories: [] };
-                    intervalInfo = this.allDataIntervalInfoRT();;
+                    intervalInfo = this.allDataIntervalInfoRT();
                     break;
             }
 
@@ -1267,7 +1470,7 @@ class dashboardDataProcessor {
     
     //Create Interval Category RT
     histogramCategoryCreatorRT() {
-		console.log("Creating Histogram Category RT");
+		this.DCNotfier.dgConsole("Creating Histogram Category RT");
 		const { informationRT } = this.uniqueCategoriesConfigI.categoryConfig;
 		const histInfo = informationRT[0].HistInfo;
 		const { BinSize, categories } = histInfo;
@@ -1382,7 +1585,8 @@ class dashboardDataProcessor {
 					reductioniterationsBeforeNextStepRT: this.reductionreductioniterationsBeforeNextStepRTI
 				},
 				OEEInfo:this.OEEinfoRTI,
-				HistInfo:this.HistInfoRTI
+				HistInfo:this.HistInfoRTI,
+				LastRelevantTimestamp:this.relevantTimestampII
 			};
 		} catch (error) {
 			console.error("Error in dataInfoRTCreator: ", error.message);
@@ -1400,16 +1604,16 @@ class dashboardDataProcessor {
         const dataInfoRT = updateRequest.informationRT.find(info => info.Node === node);
 
         if (dataInfoRT) {
-            console.log(`DataInfoRT found for node ${node}:`);
-            console.log(dataInfoRT);
+            this.DCNotfier.dgConsole(`DataInfoRT found for node ${node}:`);
+            this.DCNotfier.dgConsole(dataInfoRT);
             return dataInfoRT;
         } else {
-            console.log(`No DataInfoRT found for node ${node}`);
+            this.DCNotfier.dgConsole(`No DataInfoRT found for node ${node}`);
             return null;
         }
     }
 	
-	//---------------Processing Functions----------------//
+	//---------------Chart Processing Functions----------------//
 	//--------------------------------------------------//
 	//--------------------------------------------------//
 	
@@ -1426,6 +1630,7 @@ class dashboardDataProcessor {
 					break;
 				}
 			}
+			this.relevantTimestampII=rawData.timestamps[rawData.Values.length-1];
 		}
 		
 		if (this.updateRequestI.OperationMode==="RealTime"){
@@ -1435,7 +1640,10 @@ class dashboardDataProcessor {
 			for (let i = LastDataPointRTI.length - 1; i >= 0; i--) {
 				if (LastDataPointRTI[i].status === 0) {
 					lastValidValue = LastDataPointRTI[i].Value;
-					console.log("lastValidValue: "+LastDataPointRTI[i])
+					this.DCNotfier.dgConsole("lastValidValue: ");
+					this.DCNotfier.dgConsole(LastDataPointRTI[i]);
+					this.relevantTimestampII=LastDataPointRTI[i].timestamps;
+					
 					break;
 				}
 			}
@@ -1464,7 +1672,7 @@ class dashboardDataProcessor {
 	SinglePoint_Max(rawData) {
 		let maxValidValue = null;
 		let maxTimestamp = null;  // Variable to store the timestamp corresponding to max value
-	
+
 		if (this.updateRequestI.OperationMode === "Hist") {
 			// Loop through the values and statuses to find the max value where status is 0
 			for (let i = 0; i < rawData.Values.length; i++) {
@@ -1477,13 +1685,14 @@ class dashboardDataProcessor {
 			}
 			
 			//Update category
-			this.chartCategoriesI.chartCategory.categories.push(maxTimestamp);
+			this.relevantTimestampII=maxTimestamp;
 
 		}
 				
 		else if (this.updateRequestI.OperationMode === "RealTime") {
 			var LastDataPointRTI=this.informationRTI.LastDataPointRT;
 			maxValidValue=this.informationRTI.LastDataPointProcessed;
+			maxTimestamp=this.informationRTI.LastRelevantTimestamp;
 			
 			// Iterate from end to start
 			for (let i = LastDataPointRTI.length - 1; i >= 0; i--) {				
@@ -1493,12 +1702,15 @@ class dashboardDataProcessor {
 						maxTimestamp = LastDataPointRTI[i].timestamps;  // Store the corresponding timestamp
 						
 						//Update category
-						this.chartCategoriesI.chartCategory.categories.push(maxTimestamp);
-						
-						console.log("New Max value: "+maxValidValue);
+						this.chartCategoriesI.chartCategory.categories.push(maxTimestamp);				
+						this.DCNotfier.dgConsole("New Max value: "+maxValidValue);
 					}
 				}				
 			}
+			
+			//Update Relevant Timestamp
+			this.relevantTimestampII=maxTimestamp;
+			
 		}
 		
 		// If no valid values were found, set default to 0
@@ -1507,6 +1719,54 @@ class dashboardDataProcessor {
 		}
 	
 		return { ProcessedData: [maxValidValue] };  // Return the max value
+	}
+	
+	//Bring Min Value
+	SinglePoint_Min(rawData) {
+		let minValidValue = null;
+		let minTimestamp = null;  // Variable to store the timestamp corresponding to min value
+	
+		if (this.updateRequestI.OperationMode === "Hist") {
+			// Loop through the values and statuses to find the min value where status is 0
+			for (let i = 0; i < rawData.Values.length; i++) {
+				if (rawData.status[i] === 0) { // Valid status check
+					if (minValidValue === null || rawData.Values[i] < minValidValue) {
+						minValidValue = rawData.Values[i];
+						minTimestamp = rawData.timestamps[i];  // Store the corresponding timestamp
+					}
+				}
+			}
+			
+			//Update Relevant Timestamp
+			this.relevantTimestampII=minTimestamp;
+	
+		} 
+		else if (this.updateRequestI.OperationMode === "RealTime") {
+			var LastDataPointRTI = this.informationRTI.LastDataPointRT;
+			minValidValue = this.informationRTI.LastDataPointProcessed;
+			minTimestamp=this.informationRTI.LastRelevantTimestamp;
+			
+			// Iterate from end to start for real-time data
+			for (let i = LastDataPointRTI.length - 1; i >= 0; i--) {
+				if (LastDataPointRTI[i].status === 0) {
+					if (minValidValue === null || LastDataPointRTI[i].Value < minValidValue) {
+						minValidValue = LastDataPointRTI[i].Value;
+						minTimestamp = LastDataPointRTI[i].timestamps;  // Store the corresponding timestamp
+						this.DCNotfier.dgConsole("New Min value: " + minValidValue);
+					}
+				}
+			}
+			
+			//Update Relevant Timestamp
+			this.relevantTimestampII=minTimestamp;
+		}
+	
+		// If no valid values were found, set default to 0
+		if (minValidValue === null) {
+			minValidValue = 0;
+		}
+	
+		return { ProcessedData: [minValidValue], minTimestamp: minTimestamp };  // Return the min value and its timestamp
 	}
 	
 	//---------------Full Range Functions----------------//
@@ -1587,12 +1847,12 @@ class dashboardDataProcessor {
 	FullRange_Difference(rawData) {
 		if (this.OperationMode === "Hist") {
 			if (rawData == undefined) {
-				console.log("No raw data available");
+				this.DCNotfier.dgConsole("No raw data available");
 				return { ProcessedData: [] }; // Return an empty array if not enough data
 			}
 		
 			if (rawData.Values.length < 2) {
-				console.log("Not enough data points to calculate the difference.");
+				this.DCNotfier.dgConsole("Not enough data points to calculate the difference.");
 				return { ProcessedData: [] }; // Return an empty array if not enough data
 			}
 		
@@ -1604,7 +1864,7 @@ class dashboardDataProcessor {
 				let difference = currentValue - previousValue;
 		
 				if (difference < -100) {
-					console.log("Potential rollover detected between values:", previousValue, " and ", currentValue);
+					this.DCNotfier.dgConsole("Potential rollover detected between values:", previousValue, " and ", currentValue);
 					// Double check if this is a genuine rollover
 					if (this.isRollover(rawData.Values)) {
 						const maxValue = this.getMaxValue(rawData.Values);
@@ -1627,7 +1887,7 @@ class dashboardDataProcessor {
 			let difference = currentValue - previousValue;
 	
 			if (difference < -100) {
-				console.log("Potential rollover detected between values:", previousValue, " and ", currentValue);
+				this.DCNotfier.dgConsole("Potential rollover detected between values:", previousValue, " and ", currentValue);
 				// Double check if this is a genuine rollover
 				if (this.isRollover([previousValue, currentValue])) {
 					const maxValue = this.getMaxValue([previousValue, currentValue]);
@@ -1786,13 +2046,13 @@ class dashboardDataProcessor {
 			const originalCategories = this.informationRTI.HistInfo.categories;
 			const originalProcessedData = this.informationRTI.HistInfo.ProcessedData;
 			
-			console.log("originalCategories");
-			console.log(originalCategories);
-			console.log("originalProcessedData");
-			console.log(originalProcessedData);
+			this.DCNotfier.dgConsole("originalCategories");
+			this.DCNotfier.dgConsole(originalCategories);
+			this.DCNotfier.dgConsole("originalProcessedData");
+			this.DCNotfier.dgConsole(originalProcessedData);
 			
-			console.log("Updated Chart Categories");
-			console.log(chartCategories);
+			this.DCNotfier.dgConsole("Updated Chart Categories");
+			this.DCNotfier.dgConsole(chartCategories);
 			
 			let newProcessedData = [...originalProcessedData];
 	
@@ -1821,8 +2081,8 @@ class dashboardDataProcessor {
 				}
 			});
 			
-			console.log("newProcessedData");
-			console.log(newProcessedData);
+			this.DCNotfier.dgConsole("newProcessedData");
+			this.DCNotfier.dgConsole(newProcessedData);
 	
 			histogramCountArray = newProcessedData;
 		}
@@ -1996,10 +2256,10 @@ class dashboardDataProcessor {
 	// Interval Difference
     Interval_Difference(rawData, intervals) {
         let differenceArray = [];
-        console.log("rawData");
-        console.log(rawData);
-        console.log("intervals");
-        console.log(intervals);
+        this.DCNotfier.dgConsole("rawData");
+        this.DCNotfier.dgConsole(rawData);
+        this.DCNotfier.dgConsole("intervals");
+        this.DCNotfier.dgConsole(intervals);
 
 		if (this.OperationMode === "Hist") {
 			try {
@@ -2057,7 +2317,7 @@ class dashboardDataProcessor {
 						
 						//Potential Roll Over
 						if (difference < -10000) {
-							console.log("Potential rollover detected between values:", firstValue, " and ", lastValue);
+							this.DCNotfier.dgConsole("Potential rollover detected between values:", firstValue, " and ", lastValue);
 							//Roll Over
 							if (this.isRollover(rawData.Values)) {
 								const maxValue = this.getMaxValue(rawData.Values);
@@ -2127,10 +2387,10 @@ class dashboardDataProcessor {
                 let latestValueRT = this.informationRTI.LastDataPointRT[this.informationRTI.LastDataPointRT.length - 1].Value;
                 let lastValueRaw = this.informationRTI.LastDataPointRaw.Value;
                 let difference = latestValueRT - lastValueRaw;
-				console.log("Difference: "+difference);
-				console.log("this.informationRTI.LastDataPointProcessed: "+this.informationRTI.LastDataPointProcessed);
+				this.DCNotfier.dgConsole("Difference: "+difference);
+				this.DCNotfier.dgConsole("this.informationRTI.LastDataPointProcessed: "+this.informationRTI.LastDataPointProcessed);
                 if (difference < -100) {
-                    console.log("Potential rollover detected between values:", lastValueRaw, " and ", latestValueRT);
+                    this.DCNotfier.dgConsole("Potential rollover detected between values:", lastValueRaw, " and ", latestValueRT);
                     if (this.isRollover([lastValueRaw, latestValueRT])) { // Assuming this.isRollover can handle a small array
                         const maxValue = this.getMaxValue([lastValueRaw, latestValueRT]);
                         const powerOfTwo = this.closestPowerOfTwo(maxValue);
@@ -2140,7 +2400,7 @@ class dashboardDataProcessor {
 
                 let result = this.informationRTI.LastDataPointProcessed + difference;
                 
-                console.log("result: "+result);
+                this.DCNotfier.dgConsole("result: "+result);
                 return { ProcessedData: [result] };
             } catch (error) {
                 console.error("An error occurred in Interval_Difference (RealTime):", error);
@@ -2237,6 +2497,157 @@ class dashboardDataProcessor {
 	}
 	
 	
+	//---------------Table Processing Functions----------------//
+	//--------------------------------------------------//
+	//--------------------------------------------------//
+	
+	//---------------Single Point Functions----------------//
+	
+	//SimpleData
+	SimpleNoneTableProcessing() {
+	
+		const processedDataI = [];
+		const timestampsCategories = this.chartCategoriesI.chartCategory.categories[0].categories;
+		const rawDataTimestamps = this.partialDashboardDataI.timestamps;
+		const rawDataValues = this.partialDashboardDataI.Values;
+		const replacementText = this.chartConfigI.specialParameters.TableConfig.ReplacementText; // Variable for replacement text
+		const fillingMethod=this.chartConfigI.specialParameters.TableConfig.FillingMethod;
+	
+		// Find the index of this.nodeI in this.chartNodesI to match the DataColumnTypes
+		const dataColumnType = this.chartConfigI.specialParameters.TableConfig.DataColumnTypes[this.indexNodeI];
+		this.DCNotfier.dgConsole("------------dataColumnType: "+dataColumnType);
+	
+		// Helper functions to find closest values based on timestamp comparison
+		const findClosestBelow = (targetTimestamp) => {
+			let closestIndex = -1;
+			for (let i = 0; i < rawDataTimestamps.length; i++) {
+				if (rawDataTimestamps[i] <= targetTimestamp) {
+					closestIndex = i;
+				} else {
+					break;
+				}
+			}
+			return closestIndex;
+		};
+	
+		const findClosestAbove = (targetTimestamp) => {
+			for (let i = 0; i < rawDataTimestamps.length; i++) {
+				if (rawDataTimestamps[i] >= targetTimestamp) {
+					return i;
+				}
+			}
+			return -1;
+		};
+	
+		const findAverageBetweenTwo = (targetTimestamp) => {
+			let belowIndex = findClosestBelow(targetTimestamp);
+			let aboveIndex = findClosestAbove(targetTimestamp);
+	
+			if (belowIndex === -1 && aboveIndex === -1) {
+				return replacementText; // No values available
+			}
+			if (belowIndex === -1) {
+				return rawDataValues[aboveIndex]; // Only one available, return above
+			}
+			if (aboveIndex === -1) {
+				return rawDataValues[belowIndex]; // Only one available, return below
+			}
+			// Average of two closest values
+			return (rawDataValues[belowIndex] + rawDataValues[aboveIndex]) / 2;
+		};
+	
+		// Main logic based on fillingMethod and DataColumnTypes
+		for (let timestamp of timestampsCategories) {
+			let processedValue;
+			
+			/*
+			if (fillingMethod === "Fill-NoValue") {
+				// Check for an exact match in timestamps
+				const index = rawDataTimestamps.indexOf(timestamp);
+				if (index !== -1) {
+					processedValue = dataColumnType === "Value" ? rawDataValues[index] : rawDataTimestamps[index];
+				} else {
+					processedValue = replacementText;
+				}
+			}*/
+			
+			if (fillingMethod === "Fill-NoValue") {
+				// Check for an exact match in timestamps
+				const index = rawDataTimestamps.indexOf(timestamp);
+				const threshold=100;
+				
+				if (index !== -1) {
+					// Exact match found
+					processedValue = dataColumnType === "Value" ? rawDataValues[index] : rawDataTimestamps[index];
+				} else {
+					// Find the closest value below the timestamp
+					const closestBelowIndex = findClosestBelow(timestamp);
+					const closestBelowDiff = closestBelowIndex !== -1 ? Math.abs(timestamp - rawDataTimestamps[closestBelowIndex]) : Infinity;
+			
+					// Check if it's within the threshold
+					if (closestBelowDiff <= threshold) {
+						processedValue = dataColumnType === "Value" ? rawDataValues[closestBelowIndex] : rawDataTimestamps[closestBelowIndex];
+					} else {
+						// Find the closest value above the timestamp
+						const closestAboveIndex = findClosestAbove(timestamp);
+						const closestAboveDiff = closestAboveIndex !== -1 ? Math.abs(rawDataTimestamps[closestAboveIndex] - timestamp) : Infinity;
+			
+						// Check if it's within the threshold
+						if (closestAboveDiff <= threshold) {
+							processedValue = dataColumnType === "Value" ? rawDataValues[closestAboveIndex] : rawDataTimestamps[closestAboveIndex];
+						} else {
+							// No suitable match, use replacementText
+							processedValue = replacementText;
+						}
+					}
+				}
+			}			
+			else if (fillingMethod === "Fill-ClosestValueBelow") {
+				// Find the closest timestamp below
+				const closestIndex = findClosestBelow(timestamp);
+				if (closestIndex !== -1) {
+					processedValue = dataColumnType === "Value" ? rawDataValues[closestIndex] : rawDataTimestamps[closestIndex];
+				} else if (rawDataTimestamps.length > 0) {
+					processedValue = dataColumnType === "Value" ? rawDataValues[0] : rawDataTimestamps[0];
+				} else {
+					processedValue = replacementText;
+				}
+			} else if (fillingMethod === "Fill-ClosestValueAbove") {
+				// Find the closest timestamp above
+				const closestIndex = findClosestAbove(timestamp);
+				if (closestIndex !== -1) {
+					processedValue = dataColumnType === "Value" ? rawDataValues[closestIndex] : rawDataTimestamps[closestIndex];
+				} else if (rawDataTimestamps.length > 0) {
+					processedValue = dataColumnType === "Value" ? rawDataValues[rawDataValues.length - 1] : rawDataTimestamps[rawDataTimestamps.length - 1];
+				} else {
+					processedValue = replacementText;
+				}
+			} else if (fillingMethod === "Fill-Average") {
+				// Find the average of the two closest timestamps
+				if (dataColumnType === "Value") {
+					processedValue = findAverageBetweenTwo(timestamp);
+				} else {
+					const belowIndex = findClosestBelow(timestamp);
+					const aboveIndex = findClosestAbove(timestamp);
+					if (belowIndex !== -1 && aboveIndex !== -1) {
+						processedValue = (rawDataTimestamps[belowIndex] + rawDataTimestamps[aboveIndex]) / 2;
+					} else if (belowIndex !== -1) {
+						processedValue = rawDataTimestamps[belowIndex];
+					} else if (aboveIndex !== -1) {
+						processedValue = rawDataTimestamps[aboveIndex];
+					} else {
+						processedValue = replacementText;
+					}
+				}
+			}
+	
+			// Push the processed value or timestamp depending on the DataColumnTypes
+			processedDataI.push(processedValue);
+		}
+	
+		return { ProcessedData: processedDataI };
+	}
+	
 	//---------------Data Analisis Helper Methods--------------//
 	//--------------------------------------------------------//
 	
@@ -2329,6 +2740,24 @@ class dashboardDataProcessor {
 		// If findStart is true, return the first index where the timestamp >= target
 		return findStart ? start : end;
 	}
+	
+	//Format Time
+	formatTimestampToDateTime(unixTimestamp) {
+		const date = new Date(unixTimestamp); // Convert Unix timestamp to Date object
+	
+		// Extract date components
+		const day = String(date.getDate()).padStart(2, '0'); // Pad single-digit days with 0
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, pad single-digit months
+		const year = date.getFullYear();
+	
+		// Extract time components
+		const hours = String(date.getHours()).padStart(2, '0'); // Pad single-digit hours
+		const minutes = String(date.getMinutes()).padStart(2, '0'); // Pad single-digit minutes
+		const seconds = String(date.getSeconds()).padStart(2, '0'); // Pad single-digit seconds
+	
+		// Return formatted string in the desired format
+		return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+	}
 }
 
 //---------------Dashboard Cache Manager Class----------------//
@@ -2345,7 +2774,7 @@ class DashboardCacheManager {
     finalTime;
 
     // Constructor
-    constructor() {    
+    constructor(dashboardCreatorNotifier) {    
 		this.cacheConfig;
 		this.cacheKey="cacheData";
         this.initialTime;
@@ -2355,11 +2784,11 @@ class DashboardCacheManager {
         this.cacheRawData;
         this.cacheProcessedData = [];
         this.intervalLength=ONE_HOUR;
+        this.DCNotfier=dashboardCreatorNotifier;
     }
 	
     // Initialize cache data based on initial setup
     initialize(initialTime, finalTime, rawData, nodes) {
-		
 			
     	
     	//Initialize Variables
@@ -2371,7 +2800,7 @@ class DashboardCacheManager {
 		//Store Data
 		this.storeCacheData();
 		
-		console.log("--------------Initial Cache Store-----------");
+		this.DCNotfier.dgConsole("--------------Initial Cache Store-----------");
     }
     
     setCacheConfig(cacheConfig){
@@ -2390,14 +2819,14 @@ class DashboardCacheManager {
 	// Update existing cache data
 	async updateCacheData(data) {
 		try {
-		  console.log("---------------Updating Cache data-------------");
+		  this.DCNotfier.dgConsole("---------------Updating Cache data-------------");
 		  // Get current cached data
 		  const cachedData = globals.get(this.cacheKey);
 		  
 		  // Fix initial time and final time
 		  const fixedcachedData = this.fixCacheToTimestamps(cachedData);
-		  console.log("Initial CacheData: ", fixedcachedData);
-		  console.log("New Data: ", data);
+		  this.DCNotfier.dgConsole("Initial CacheData: ", fixedcachedData);
+		  this.DCNotfier.dgConsole("New Data: ", data);
 		  
 		  // Sort data
 		  let combinedData = [fixedcachedData];
@@ -2406,7 +2835,7 @@ class DashboardCacheManager {
 		  // Merge with other data
 		  this.cacheRawData = await this.rawDataMerger(combinedData);
 		  
-		  console.log("Merged Data: ", this.cacheRawData);
+		  this.DCNotfier.dgConsole("Merged Data: ", this.cacheRawData);
 		  
 		  // Store new data
 		  this.storeCacheData();
@@ -2417,12 +2846,12 @@ class DashboardCacheManager {
 		
 	//Query Cache data
 	queryCacheData(query) {
-			console.log("----------Querying Cache-----------");
+			this.DCNotfier.dgConsole("----------Querying Cache-----------");
 			const cachedData = globals.get(this.cacheKey);
-			console.log("Complete cacheData: ")
-			//console.log(cachedData);
+			this.DCNotfier.dgConsole("Complete cacheData: ")
+			//this.DCNotfier.dgConsole(cachedData);
 			if (!cachedData) {
-				console.log("No cache data available.");
+				this.DCNotfier.dgConsole("No cache data available.");
 				return [];
 			}
 		
@@ -2477,12 +2906,12 @@ class DashboardCacheManager {
 	
 	//QueryCacheData
 	queryCacheData2(query) {
-		console.log("----------Querying Cache-----------");
+		this.DCNotfier.dgConsole("----------Querying Cache-----------");
 		const cachedData = globals.get(this.cacheKey);
-		console.log("Complete cacheData: ");
-		//console.log(cachedData);
+		this.DCNotfier.dgConsole("Complete cacheData: ");
+		//this.DCNotfier.dgConsole(cachedData);
 		if (!cachedData) {
-			console.log("No cache data available.");
+			this.DCNotfier.dgConsole("No cache data available.");
 			return [];
 		}
 		
@@ -2492,10 +2921,10 @@ class DashboardCacheManager {
 		
 		// Filter data for the specified node
 		const nodeData = cachedData.filter(data => data.Nodeaddress === query.nodes[0]);
-		console.log("nodeData");
-		console.log(nodeData);
+		this.DCNotfier.dgConsole("nodeData");
+		this.DCNotfier.dgConsole(nodeData);
 		if (nodeData.length === 0) {
-			console.log("No data found for the specified node.");
+			this.DCNotfier.dgConsole("No data found for the specified node.");
 			return [];
 		}
 	
@@ -2505,7 +2934,7 @@ class DashboardCacheManager {
 		});
 	
 		if (relevantIntervals.length === 0) {
-			console.log("No intervals found within the specified time range.");
+			this.DCNotfier.dgConsole("No intervals found within the specified time range.");
 			return [];
 		}
 	
@@ -2519,18 +2948,18 @@ class DashboardCacheManager {
 			Nodeaddress: nodeData[0].Nodeaddress
 		}]);
 	
-		console.log("reconstructedData");
-		console.log(reconstructedData);
+		this.DCNotfier.dgConsole("reconstructedData");
+		this.DCNotfier.dgConsole(reconstructedData);
 		// Filter data to match the query time range
 		const filteredResults = reconstructedData.map(data => {
 			const startIdx = this.binarySearch(data.timestamps, initialTime, true);
 			const endIdx = this.binarySearch(data.timestamps, finalTime, false);
 	
-			console.log("startIdx: ", startIdx);
-			console.log("endIdx: ", endIdx);
-			console.log("timestamps: ", data.timestamps);
-			console.log("initialTime: ", initialTime);
-			console.log("finalTime: ", finalTime);
+			this.DCNotfier.dgConsole("startIdx: ", startIdx);
+			this.DCNotfier.dgConsole("endIdx: ", endIdx);
+			this.DCNotfier.dgConsole("timestamps: ", data.timestamps);
+			this.DCNotfier.dgConsole("initialTime: ", initialTime);
+			this.DCNotfier.dgConsole("finalTime: ", finalTime);
 	
 			return {
 				Nodeaddress: data.Nodeaddress,
@@ -2552,7 +2981,7 @@ class DashboardCacheManager {
         this.cachedData = globals.get(this.cacheKey); // Retrieve data from global cache
         
         if (!this.cachedData) {
-            console.log("No cache data available.");
+            this.DCNotfier.dgConsole("No cache data available.");
             return [];
         }		
         // Create an array of structures 
@@ -2580,10 +3009,10 @@ class DashboardCacheManager {
 			});
 			
 			// First Organize Data
-			nonEmptyDataArrays.sort((a, b) => a[0].InitialTimeevaluated - b[0].InitialTimeevaluated); // Sort by initial time
-			console.log("---------CombinedData Updating Cache-------------");
-			//console.log(nonEmptyDataArrays);
-			
+			nonEmptyDataArrays.sort((a, b) => a[0].InitialTimeevaluated - b[0].InitialTimeevaluated); // Sort by initial time			
+			this.DCNotfier.dgConsole("---------CombinedData Updating Cache-------------");
+			this.DCNotfier.dgConsole(nonEmptyDataArrays);
+
 			const mergedData = {};
 			
 			// Flatten the array of arrays structure and process each data entry
@@ -2657,10 +3086,12 @@ class DashboardCacheManager {
 
             const intervals = [];
             let currentStartTime = startTime;
-			console.log("currentStartTime");
-			console.log(new Date (currentStartTime).toString());
-			console.log("endTime");
-			console.log(new Date (endTime).toString());
+            
+			this.DCNotfier.dgConsole("currentStartTime");
+			this.DCNotfier.dgConsole(new Date (currentStartTime).toString());
+			this.DCNotfier.dgConsole("endTime");
+			this.DCNotfier.dgConsole(new Date (endTime).toString());
+			
             while (currentStartTime < endTime) {
                 const currentEndTime = Math.min(currentStartTime + intervalLength, endTime);
                 const intervalData = {
@@ -2856,32 +3287,35 @@ class DashboardDataCreator {
 		this.nodes=this.rawDataRequestProcessor(this.dataRequest,"nodesRequest"); //Find all Unique Nodes
 		this.rawDataRequestRTInfo;
 		this.rawData = null;
+		this.DCN;
 	}
 	
 	// Methods
 	// Handles rawDataRequest and orchestrate everything related to rawData
-	async initialize(dashboardDataProcessor,dashboardCacheManager) {
-		try {			
-			console.log("------------Operation Mode---------");
-			console.log(this.dataRequest.updateRequest[0].OperationMode);
+	async initialize(dashboardDataProcessor,dashboardCacheManager,dashboardCreatorNotifier) {
+		try {
+			this.DCNotfier=dashboardCreatorNotifier;
+			this.DCNotfier.dgConsole();		
+			this.DCNotfier.dgConsole("------------Operation Mode---------");
+			this.DCNotfier.dgConsole(this.dataRequest.updateRequest[0].OperationMode);
 			
 			//Gets Raw Data History Mode
 			if (this.dataRequest.updateRequest[0].OperationMode==="Hist"){
 				
 				this.rawData = await this.rawDataCreator(dashboardCacheManager);
-				console.log("-----------Raw Data-----------");
-				console.log(this.rawData);
+				this.DCNotfier.dgConsole("-----------Raw Data-----------");
+				this.DCNotfier.dgConsole(this.rawData);
 				
 				// Process Data			
 				dashboardDataProcessor.initialize(this.dataRequest,this.rawData);
 				const processedData = dashboardDataProcessor.processRequestHandler(this.dataRequest, this.rawData);
-				console.log("-----------ProcessedData-----------");
-				console.log(processedData);
+				this.DCNotfier.dgConsole("-----------ProcessedData-----------");
+				this.DCNotfier.dgConsole(processedData);
 		
 				//Gives format to data
 				this.dashboardData=this.dashboardDataFormater(processedData);
-				console.log("-----------Final Format Data-----------");
-				console.log(this.dashboardData);
+				this.DCNotfier.dgConsole("-----------Final Format Data-----------");
+				this.DCNotfier.dgConsole(this.dashboardData);
 				
 				
 				//Sends response to webclient			
@@ -2893,23 +3327,23 @@ class DashboardDataCreator {
 				
 				//Prepare data required
 				this.rawDataRequestRTInfo=this.rawDataRequestProcessor(dataRequest,"rawDataRequestRTInfo"); //Find all Unique RT Nodes
-				console.log("this.rawDataRequestRTInfo");
-				console.log(this.rawDataRequestRTInfo);
+				this.DCNotfier.dgConsole("this.rawDataRequestRTInfo");
+				this.DCNotfier.dgConsole(this.rawDataRequestRTInfo);
 				
 				this.rawData = await this.rawDataCreatorRT(dashboardCacheManager);
-				console.log("-----------Raw Data-----------");
-				//console.log(this.rawData);	
+				this.DCNotfier.dgConsole("-----------Raw Data-----------");
+				//this.DCNotfier.dgConsole(this.rawData);	
 				
 				// Process Data			
-				dashboardDataProcessor.initialize(this.dataRequest,this.rawData);
+				dashboardDataProcessor.initialize(this.dataRequest,this.rawData,this.DCNotfier);
 				const processedData = dashboardDataProcessor.processRequestHandler(this.dataRequest, this.rawData);
-				console.log("-----------ProcessedData-----------");
-				console.log(processedData);				
+				this.DCNotfier.dgConsole("-----------ProcessedData-----------");
+				this.DCNotfier.dgConsole(processedData);				
 				
 				//Gives format to data
 				this.dashboardData=this.dashboardDataFormater(processedData);
-				console.log("-----------Final Format Data-----------");
-				console.log(this.dashboardData);
+				this.DCNotfier.dgConsole("-----------Final Format Data-----------");
+				this.DCNotfier.dgConsole(this.dashboardData);
 				
 				//Sends response to webclient			
 				this.dashboardDataWriter();	
@@ -2925,7 +3359,7 @@ class DashboardDataCreator {
 		
 		if(this.dataRequest.updateRequest[0].cacheConfig.CacheEnabled==="false"){ //Don´t use Cache Data
 			
-			console.log("----------------Cache Disabled-------------");
+			this.DCNotfier.dgConsole("----------------Cache Disabled-------------");
 			//Clear existing cache
 			dashboardCacheManager.clearCacheData();
 			
@@ -2944,11 +3378,11 @@ class DashboardDataCreator {
 			// Check Cached Data
 			var checkedCacheData = await dashboardCacheManager.checkCacheData();
 		
-			console.log("----------------Cache Enabled-------------");					
+			this.DCNotfier.dgConsole("----------------Cache Enabled-------------");					
 			//No data already in Cache
 			if (checkedCacheData.length === 0) {
 				this.rawData = await this.rawDataRequestExecutor(this.nodes);
-				console.log("Fetched all data due to empty cache.");
+				this.DCNotfier.dgConsole("Fetched all data due to empty cache.");
 				dashboardCacheManager.initialize(this.initialTimeI, this.finalTimeI, this.rawData);
 				return this.rawData;
 			} 	
@@ -2965,17 +3399,17 @@ class DashboardDataCreator {
 					[cacheInitialTime, cacheFinalTime]
 				);
 				
-				console.log("Initial time required");
-				console.log((new Date(this.initialTime)).toString());
-				console.log("Final time required");
-				console.log((new Date(this.finalTime)).toString());
-				console.log("Cached Initial time");
-				console.log(new Date(cacheInitialTime).toString());
-				console.log("Cached Final time");
-				console.log(new Date(cacheFinalTime).toString());
-				console.log("--------------intervals_intersecction-------------");
-				console.log("Common Intervals");
-				console.log(intervals_intersection);			
+				this.DCNotfier.dgConsole("Initial time required");
+				this.DCNotfier.dgConsole((new Date(this.initialTime)).toString());
+				this.DCNotfier.dgConsole("Final time required");
+				this.DCNotfier.dgConsole((new Date(this.finalTime)).toString());
+				this.DCNotfier.dgConsole("Cached Initial time");
+				this.DCNotfier.dgConsole(new Date(cacheInitialTime).toString());
+				this.DCNotfier.dgConsole("Cached Final time");
+				this.DCNotfier.dgConsole(new Date(cacheFinalTime).toString());
+				this.DCNotfier.dgConsole("--------------intervals_intersecction-------------");
+				this.DCNotfier.dgConsole("Common Intervals");
+				this.DCNotfier.dgConsole(intervals_intersection);			
 				
 	
 				let rawDataFetched = [];
@@ -2998,8 +3432,8 @@ class DashboardDataCreator {
 
 						cachedDataResults.push(commonData);
 					});
-					console.log("-------------cachedDataResults-----------");
-					//console.log(cachedDataResults[0]);
+					this.DCNotfier.dgConsole("-------------cachedDataResults-----------");
+					//this.DCNotfier.dgConsole(cachedDataResults[0]);
 				
 					if(intervals_intersection.uncommonIntervals.length <= 0){ //No Uncommondata
 						return cachedDataResults[0];
@@ -3031,8 +3465,8 @@ class DashboardDataCreator {
 						
 					}
 					
-					console.log("-------------rawDataFetched-----------");
-					//console.log(rawDataFetched);
+					this.DCNotfier.dgConsole("-------------rawDataFetched-----------");
+					//this.DCNotfier.dgConsole(rawDataFetched);
 					
 					//---------Update Cache if it has commonIntervals--------------//
 					//-------------------------------------------------------------//
@@ -3163,14 +3597,14 @@ class DashboardDataCreator {
 	
 	// Executes the rawDataRequest 
 	rawDataRequestExecutor(nodes) {
-		console.log("Initiating queries...");
+		this.DCNotfier.dgConsole("Initiating queries...");
 		const startTime = new Date().getTime();
 		
 		const queries = nodes.map(node => this.asyncHistQuery(node));
 	
 		return Promise.allSettled(queries).then(results => {
 			const endTime = new Date().getTime();
-			console.log(`Total execution time for queries: ${endTime - startTime} milliseconds.`);
+			this.DCNotfier.dgConsole(`Total execution time for queries: ${endTime - startTime} milliseconds.`);
 			
 			// Map each result to include the desired structure along with DataSize
 			const structuredResults = results.map((result, index) => {
@@ -3223,12 +3657,12 @@ class DashboardDataCreator {
 				address: [`g:${node}`]
 			};
 	
-			console.log("-----------Query filter-------------");
-			console.log(filter);
-			console.log("Initial time query");
-			console.log(new Date(currentStartTime).toString());
-			console.log("Final time query");
-			console.log(new Date(currentEndTime).toString());
+			this.DCNotfier.dgConsole("-----------Query filter-------------");
+			this.DCNotfier.dgConsole(filter);
+			this.DCNotfier.dgConsole("Initial time query");
+			this.DCNotfier.dgConsole(new Date(currentStartTime).toString());
+			this.DCNotfier.dgConsole("Final time query");
+			this.DCNotfier.dgConsole(new Date(currentEndTime).toString());
 	
 			try {
 				let continuationPoint = null;
@@ -3244,8 +3678,8 @@ class DashboardDataCreator {
 					const result = await new Promise((resolve, reject) => {
 						try {
 							const queryResult = history.query(filter, options);
-							console.log("result size: ");
-							console.log(queryResult.result.length);
+							this.DCNotfier.dgConsole("result size: ");
+							this.DCNotfier.dgConsole(queryResult.result.length);
 							resolve(queryResult);
 						} catch (error) {
 							reject(error);
@@ -3292,127 +3726,197 @@ class DashboardDataCreator {
 	
 		try {
 			processedData.forEach(chart => {
+			
+				//Pack InformationRT
 				let informationRT=chart.processedDataStruct.map((dataStruct) => {
 					return dataStruct.informationRT;
 				});
+				
+				//Pack Tooltip Info
+				let tooltipInfo=chart.processedDataStruct.map((dataStruct) => {
+					return dataStruct.tooltipInfo;
+				});
+				
 			
 				let chartData = {
 					chartID: chart.chartID,
 					informationRT: informationRT,
+					tooltipInfo:tooltipInfo,
 					chartSeries: [],
 					LimitDashboardData: [],
 					chartCategories: chart.processedDataStruct[0]?.chartCategories || []
 				};
-							
-				// Determining how to process based on chartType
-				switch (chart.chartType) {
-					case "Line":
-					case "Spline":
-					case "Area":
-					case "Column":
-					case "Bar":
-						// For these types, each processedDataStruct item becomes a series
-						chart.processedDataStruct.forEach((dataStruct, k) => {
-							const seriesName = dataStruct.processedNode; // Using processedNode for series name
-							
-							//For ValueType Series
-							let series = {
-								name: seriesName,
-								data: dataStruct.processedDataI.map((dataPoint, i) => {
-									if (chart.categoryType === "AllData-DateTime") {
-										const category = chartData.chartCategories.find(c => c.chartNode === dataStruct.processedNode);
-										return category ? [category.categories[i], dataPoint] : dataPoint;
-									} else {
-										return dataPoint;
-									}
-								})
-							};
-							
-							
-							//For LimitType Series
-							let seriesLimint;			
-							
-							//If there is LimitDashboardData add it
-							let limitAnalysisEnabledI=dataStruct.LimitDashboardData==undefined?false:dataStruct.LimitDashboardData.Enabled;
-
-							if (limitAnalysisEnabledI) {
-								if (chart.categoryType === "AllData-DateTime") {
-									seriesLimint = {
-										name: seriesName+"_Limit",
-										data: dataStruct.LimitDashboardData.Values.map((dataPoint, i) => {
-												const category = dataStruct.LimitDashboardData.timestamps[i];
-												return  [category, dataPoint];
-										})
-									}
-								}
-								else if (chart.categoryType.includes("Interval")) {
-									seriesLimint= {
-										name: seriesName+"_Limit",
-										data:dataStruct.LimitDashboardData.Values,
-									}
-								}
-							}							
-							else	{
-								seriesLimint={};
+				
+				if(chart.elementType=="Chart")	{
+					//For Chart elements
+					switch (chart.chartType) {
+						case "Line":
+						case "Spline":
+						case "Area":
+						case "Column":
+						case "Bar":
+							// For these types, each processedDataStruct item becomes a series
+							chart.processedDataStruct.forEach((dataStruct, k) => {
+								const seriesName = dataStruct.processedNode; // Using processedNode for series name
 								
-							}				
-							chartData.chartSeries.push(series);
-							chartData.LimitDashboardData.push(seriesLimint);
-						});
-						break;
-					case "Pie":
-					case "Pyramid":
-						// For Pie/Pyramid, use processedDataI directly as the series data
-						let seriesData = chart.processedDataStruct.map(dataStruct => ({
-							name: dataStruct.processedNode,
-							y: dataStruct.processedDataI[0],
-						}));
-						chartData.chartSeries.push({name: "Aggregate", data: seriesData});
-						break;
-					case "Gauge":
-					case "Solidgauge":
-						// Use the last value of processedDataI
-						if (chart.processedDataStruct.length > 0) {
-							let lastDataStruct = chart.processedDataStruct[chart.processedDataStruct.length - 1];
-							let gaugeData = {
-								name: lastDataStruct.processedNode,
-								data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]  // Assuming the last value in the array
-							};
-							chartData.chartSeries.push(gaugeData);
-							
-							//For LimitType Series
-							let seriesLimint;			
-							
-							//If there is LimitDashboardData add it
-							let limitAnalysisEnabledI=lastDataStruct.LimitDashboardData==undefined?false:lastDataStruct.LimitDashboardData.Enabled;
-							if (limitAnalysisEnabledI) {
-								if (chart.categoryType.includes("Single")) {
-										seriesLimint= {
-											name: lastDataStruct.processedNode+"_Limit",
-											data:lastDataStruct.LimitDashboardData.Values,
+								//For ValueType Series
+								let series = {
+									name: seriesName,
+									data: dataStruct.processedDataI.map((dataPoint, i) => {
+										if (chart.categoryType === "AllData-DateTime") {
+											const category = chartData.chartCategories.find(c => c.chartNode === dataStruct.processedNode);
+											return category ? [category.categories[i], dataPoint] : dataPoint;
+										} else {
+											return dataPoint;
 										}
-								}		
-												
-								else	{
-									seriesLimint={};									
-								}					
-								chartData.LimitDashboardData.push(seriesLimint);
-							}
-						}
-					break;
-					case "Histogram":
-						const seriesName = chart.processedDataStruct[0].processedNode;
-						const scatterData = chart.processedDataStruct[0].processedDataI.map(dataPoint => dataPoint);
-						chartData.chartSeries.push({
-							name: seriesName,
-							type: 'scatter',
-							data: scatterData,
-						});										
-					break;
-					default:
-						errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);
-				}
+									})
+								};
+								
+								
+								//For LimitType Series
+								let seriesLimint;			
+								
+								//If there is LimitDashboardData add it
+								let limitAnalysisEnabledI=dataStruct.LimitDashboardData==undefined?false:dataStruct.LimitDashboardData.Enabled;
 	
+								if (limitAnalysisEnabledI) {
+									if (chart.categoryType === "AllData-DateTime") {
+										seriesLimint = {
+											name: seriesName+"_Limit",
+											data: dataStruct.LimitDashboardData.Values.map((dataPoint, i) => {
+													const category = dataStruct.LimitDashboardData.timestamps[i];
+													return  [category, dataPoint];
+											})
+										}
+									}
+									else if (chart.categoryType.includes("Interval")) {
+										seriesLimint= {
+											name: seriesName+"_Limit",
+											data:dataStruct.LimitDashboardData.Values,
+										}
+									}
+								}							
+								else	{
+									seriesLimint={};
+									
+								}				
+								chartData.chartSeries.push(series);
+								chartData.LimitDashboardData.push(seriesLimint);
+							});
+							break;
+						case "Pie":
+						case "Pyramid":
+							// For Pie/Pyramid, use processedDataI directly as the series data
+							let seriesData = chart.processedDataStruct.map(dataStruct => ({
+								name: dataStruct.processedNode,
+								y: dataStruct.processedDataI[0],
+							}));
+							chartData.chartSeries.push({name: "Aggregate", data: seriesData});
+							break;
+						case "Gauge":
+						case "Solidgauge":
+							// Use the last value of processedDataI
+							if (chart.processedDataStruct.length > 0) {
+								let lastDataStruct = chart.processedDataStruct[chart.processedDataStruct.length - 1];
+								let gaugeData = {
+									name: lastDataStruct.processedNode,
+									data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]  // Assuming the last value in the array
+								};
+								chartData.chartSeries.push(gaugeData);
+								
+								//For LimitType Series
+								let seriesLimint;			
+								
+								//If there is LimitDashboardData add it
+								let limitAnalysisEnabledI=lastDataStruct.LimitDashboardData==undefined?false:lastDataStruct.LimitDashboardData.Enabled;
+								if (limitAnalysisEnabledI) {
+									if (chart.categoryType.includes("Single")) {
+											seriesLimint= {
+												name: lastDataStruct.processedNode+"_Limit",
+												data:lastDataStruct.LimitDashboardData.Values,
+											}
+									}		
+													
+									else	{
+										seriesLimint={};									
+									}					
+									chartData.LimitDashboardData.push(seriesLimint);
+								}
+							}
+						break;
+						case "Histogram":
+							const seriesName = chart.processedDataStruct[0].processedNode;
+							const scatterData = chart.processedDataStruct[0].processedDataI.map(dataPoint => dataPoint);
+							chartData.chartSeries.push({
+								name: seriesName,
+								type: 'scatter',
+								data: scatterData,
+							});										
+						break;
+						default:
+							errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);
+					}				
+				}
+				//For Table elements
+				else if(chart.elementType == "Table") {
+					let tableSeriesData = [];
+					let seriesNames = [];
+				
+					// Go through each processedDataStruct and extract processedDataI
+					chart.processedDataStruct.forEach((dataStruct) => {
+						// Collect the name of the node for series
+						seriesNames.push(dataStruct.processedNode);
+				
+						// Iterate through each value in processedDataI and organize by index
+						dataStruct.processedDataI.forEach((dataPoint, index) => {
+							if (!tableSeriesData[index]) {
+								tableSeriesData[index] = []; // Initialize the array for this index
+							}
+							tableSeriesData[index].push(dataPoint); // Add the value to the corresponding row
+						});
+					});
+				
+					// Create the series for the table
+					const tableSeries = {
+						name: seriesNames.join(", "), // Join the series names together for the chart series
+						data: tableSeriesData // Array of arrays, where each sub-array represents a row (timestamp)
+					};
+				
+					// Push the constructed series into chartSeries
+					chartData.chartSeries=(tableSeries);
+				}
+				//For Number Elements
+				else if(chart.elementType == "Number") {
+					// Use the last value of processedDataI
+							if (chart.processedDataStruct.length > 0) {
+								let lastDataStruct = chart.processedDataStruct[chart.processedDataStruct.length - 1];
+								let gaugeData = {
+									name: lastDataStruct.processedNode,
+									data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]  // Assuming the last value in the array
+								};
+								chartData.chartSeries.push(gaugeData);
+								
+								//For LimitType Series
+								let seriesLimint;			
+								
+								//If there is LimitDashboardData add it
+								let limitAnalysisEnabledI=lastDataStruct.LimitDashboardData==undefined?false:lastDataStruct.LimitDashboardData.Enabled;
+								if (limitAnalysisEnabledI) {
+									if (chart.categoryType.includes("Single")) {
+											seriesLimint= {
+												name: lastDataStruct.processedNode+"_Limit",
+												data:lastDataStruct.LimitDashboardData.Values,
+											}
+									}		
+													
+									else	{
+										seriesLimint={};									
+									}					
+									chartData.LimitDashboardData.push(seriesLimint);
+								}
+							}
+				}
+				
 				chartsData.push(chartData);
 			});
 		} catch (error) {
@@ -3435,7 +3939,7 @@ class DashboardDataCreator {
 		else {
 			Parameters.response.setHeader("Content-Type", "application");
 			Parameters.response.write("Error creating Dashboard Data", "");
-			console.log("Single data request is not set to true.");
+			this.DCNotfier.dgConsole("Single data request is not set to true.");
 		}
 	}
 	
@@ -3457,16 +3961,36 @@ class DashboardDataCreator {
     }
 }
 
+//---------------Dashboard Creator Notifier----------------//
+//-----------------------------------------------------//
+
+class DashboardCreatorNotifier {
+
+	constructor(dataRequest) {		
+		this.debuggingEnabled=true;		
+	}
+		
+	dgConsole(message){
+		if (this.debuggingEnabled){
+			console.log(message);
+		}
+	}
+}
+
+
+
+//Create Dashboard Notifier used by DashboardDataCreator
+const dashboardCreatorNotifier1 = new DashboardCreatorNotifier();
 
 //Create Dashboard Processor used by DashboardDataCreator
-const dashboardDataProcessor1 = new dashboardDataProcessor();
+const dashboardDataProcessor1 = new dashboardDataProcessor(dashboardCreatorNotifier1);
 
 //Create Dashboard Cache Manager used by DashboardDataCreator
-const dashboardCacheManager1 = new DashboardCacheManager();
+const dashboardCacheManager1 = new DashboardCacheManager(dashboardCreatorNotifier1);
 
 //Create Dashboard Data Creator
 const dashboardDataCreator1 = new DashboardDataCreator(dataRequest);
 
 //Create and Send Dashboard data
-dashboardDataCreator1.initialize(dashboardDataProcessor1,dashboardCacheManager1);]]></code>
+dashboardDataCreator1.initialize(dashboardDataProcessor1,dashboardCacheManager1,dashboardCreatorNotifier1);]]></code>
 </script>

@@ -3,6 +3,6 @@
 	<uax:ListOfString>
 		<uax:String>color</uax:String>
 		<uax:String>string</uax:String>
-		<uax:String>string</uax:String>
+		<uax:String>address</uax:String>
 	</uax:ListOfString>
 </Value>

@@ -136,58 +136,11 @@ const initialRangeMethods = [
 ];
 
 
-//Key Mapping for data transfer
-const keyMapping = {
-    "chartsConfig": "cChCfg",
-    "categorCustomValue": "cCV",
-    "categoryCustomIntervalLength": "cCIL",
-    "categoryCustomIntervalUnit": "cCIU",
-    "categoryRound": "cRnd",
-    "categoryTimeOffset": "cTO",
-    "categoryType": "cCatTyp",
-    "chartID": "cID",
-    "chartType": "cTyp",
-    "dataMaxLimit": "dMxL",
-    "dataMinLimit": "dMnL",
-    "dataProcessingType": "dPrc",
-    "dataReductionEnable": "dREn",
-    "dataReductionMaxSize": "dRMx",
-    "dataType": "dTyp",
-    "dataoutOfLimitEnable": "dOLE",
-    "singleDataRequest": "sDR",
-    "specialParameters": "sPar",
-    "OEECompleteRangeAnalisis": "OEECRA",
-    "OEEProductionSpeed": "OEESP",
-    "chartsNodes": "cChNds",
-    "chartNodes": "cNds",
-    "updateRequest": "uReq",
-    "OperationMode": "opMd",
-    "cacheConfig": "caCfg",
-    "CacheEnabled": "cEna",
-    "CacheIntervalSize": "cISz",
-    "CacheMaxSize": "cMSz",
-    "customFilterType": "cFT",
-    "finalTime": "fTme",
-    "initialTime": "iTme",
-    "informationRT": "iRT",
-    "AllDataRequired": "ADR",
-    "IntervalInfo": "iInf",
-    "end": "end",
-    "intervalLength": "iLen",
-    "newInterval": "nInt",
-    "start": "strt",
-    "LastDataPointProcessed": "lDPP",
-    "LastDataPointRT": "lDPRT",
-    "Value": "Val",
-    "status": "sts",
-    "timestamps": "tStmp",
-    "LastDataPointRaw": "lDPR",
-    "Node": "Nd",
-    "OEEInfo": "OEEI",
-    "ReduceInfo": "RInf",
-    "reductionStepSize": "rSSz",
-    "reductioniterationsBeforeNextStepRT": "rINS"
-};
+//Time Constants
+const ONE_MINUTE = 60 * 1000;
+const HALF_HOUR = 30 * ONE_MINUTE;
+const ONE_HOUR = 60 * ONE_MINUTE;
+const ONE_DAY = 24 * ONE_HOUR;
 
 
 //------Initial Conditions-----------//
@@ -741,6 +694,7 @@ class dashboardManager {
 
             chartsConfig.push({
                 chartID: config.chartsConfig.chartID,
+                elementType: config.chartsConfig.elementType,
                 chartType: config.chartsConfig.chartType,
                 dataType: config.chartsConfig.dataType,
                 dataProcessingType: config.chartsConfig.dataProcessingType,
@@ -1049,8 +1003,6 @@ class dashboardManager {
 				}
 			});
 			
-			console.log("dataRequestRT");
-			console.log(dataRequestRT);
 	
 			// Filter chartsConfig based on the filtered chartsNodes chartID
 			let validChartIDs = Array.from(chartNodesMap.keys());
@@ -1121,6 +1073,7 @@ class dashboardManager {
    
     //Method to create Dashboard data which is direct
 	dashboardDataDirectCreator() {
+		console.log("*******************Creat Dashboard Data Direct");
 		try {
 			// Initialize the preliminary dashboardData structure
 			let dashboardData = {
@@ -1141,9 +1094,7 @@ class dashboardManager {
 	
 			// Filter chartsConfig based on the criteria
 			let filteredConfigs = this.DataRequestRT.chartsConfig.filter(criteria);
-	
-			//console.log("Filtered Configs:", JSON.stringify(filteredConfigs, null, 2));
-	
+			
 			// Iterate over each filteredConfig to create the required structure
 			filteredConfigs.forEach(config => {
 				try {
@@ -1156,7 +1107,8 @@ class dashboardManager {
 					// Create chartSeries and chartCategories based on the updateRequest and config
 					let chartSeries = [];
 					let chartCategories = [];
-	
+					let tooltipInfo = [];
+
 					if (config.categoryType === "AllData-DateTime") {
 						// Process for AllData-DateTime category type
 						updateRequest.informationRT.forEach(infoRT => {
@@ -1168,6 +1120,7 @@ class dashboardManager {
 						});
 					} else if (config.categoryType === "Single-Simple") {
 						if (config.chartType === "Pyramid"||config.chartType === "Pie"){
+
 							let chartDataI = {};
 							let chartDataII=[];
 							chartDataI["name"]="Aggregate";
@@ -1177,18 +1130,39 @@ class dashboardManager {
 									y:infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].Value,
 									name:infoRT.Node										
 								});
+								
+								tooltipInfo.push({
+									name: infoRT.Node,
+									tooltipInfo: this.formatTimestampToDateTime(infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps)
+								});
+								
 							});
 							chartDataI["data"]=chartDataII;
 							chartSeries.push(chartDataI);
 						}
 						else{
+							
+							let timeRange=updateRequest.finalTime-updateRequest.initialTime;
+							let lastTimestamp=updateRequest.finalTime;
 							// Process for Single-Simple category type
 							updateRequest.informationRT.forEach(infoRT => {
 								chartSeries.push({
 									name: infoRT.Node,
 									data: [infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].Value]
 								});
+								
+								tooltipInfo.push({
+									name: infoRT.Node,
+									tooltipInfo: this.formatTimestampToDateTime(infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps)
+								});
+								
+								if(infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps>lastTimestamp){
+									lastTimestamp=infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps;
+								}
 							});
+							//Define ChartCategories
+							chartCategories=[this.getCategory(timeRange,updateRequest.initialTime)+" - "+this.getCategory(timeRange,lastTimestamp)]
+							
 						}
 					}
 	
@@ -1196,7 +1170,8 @@ class dashboardManager {
 					let chartData = {
 						chartID: config.chartID,
 						chartSeries: chartSeries,
-						chartCategories: chartCategories
+						chartCategories: chartCategories,
+						tooltipInfo: tooltipInfo
 					};
 	
 					// Add chartData to dashboardData
@@ -1259,6 +1234,7 @@ class dashboardManager {
 				baseInfo.ReduceInfo = rtProcessedInfo.ReduceInfo;
 				baseInfo.OEEInfo = rtProcessedInfo.OEEInfo;
 				baseInfo.HistInfo = rtProcessedInfo.HistInfo;
+				baseInfo.LastRelevantTimestamp = rtProcessedInfo.LastRelevantTimestamp;
 				
 				// Always update IntervalInfo (except start)
 				baseInfo.IntervalInfo = {
@@ -1291,21 +1267,38 @@ class dashboardManager {
 		}
 	}
 	
-	//Compress data
-	 compressData(data, keyMapping) {
-        if (Array.isArray(data)) {
-            return data.map(item => this.compressData(item, keyMapping));
-        } 
-        if (typeof data === 'object' && data !== null) {
-            return Object.entries(data).reduce((acc, [key, value]) => {
-                const newKey = keyMapping[key] || key;
-                acc[newKey] = (key === 'initialTime' || key === 'finalTime') 
-                    ? new Date(value).toISOString() 
-                    : this.compressData(value, keyMapping);
-                return acc;
-            }, {});
-        }
-        return data;
-    }
+	//Get Category String
+	getCategory(timeRange, num) {
+		if (timeRange <= ONE_DAY) {
+			return (new Date(num)).toTimeString().split(' ')[0];
+		} else if (timeRange <= 31 * ONE_DAY) {
+			return (new Date(num)).toDateString().split(' ').slice(1).join(' ');
+		} else if (timeRange <= 365 * ONE_DAY) {
+			let parts = (new Date(num)).toDateString().split(' ');
+			return `${parts[1]} ${parts[3]}`;
+		} else {
+			return (new Date(num)).getFullYear().toString();
+		}
+	}
+	
+	//Format Time
+	formatTimestampToDateTime(unixTimestamp) {
+		const date = new Date(unixTimestamp); // Convert Unix timestamp to Date object
+	
+		// Extract date components
+		const day = String(date.getDate()).padStart(2, '0'); // Pad single-digit days with 0
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, pad single-digit months
+		const year = date.getFullYear();
+	
+		// Extract time components
+		const hours = String(date.getHours()).padStart(2, '0'); // Pad single-digit hours
+		const minutes = String(date.getMinutes()).padStart(2, '0'); // Pad single-digit minutes
+		const seconds = String(date.getSeconds()).padStart(2, '0'); // Pad single-digit seconds
+	
+		// Return formatted string in the desired format
+		return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+	}	
+	
+	
 }]]></script>
 </svg>

@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.HISTORY.Historicos.partition_interval
+NodeClass: Variable
+BrowseName: 1:partition_interval
+DisplayName: en|partition_interval
+Description: en|partition_interval
+DataType: String
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
