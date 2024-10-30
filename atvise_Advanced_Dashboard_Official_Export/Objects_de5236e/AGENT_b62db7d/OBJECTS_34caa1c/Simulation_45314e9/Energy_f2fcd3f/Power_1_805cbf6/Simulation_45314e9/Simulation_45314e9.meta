@@ -1,9 +1,0 @@
-NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy.Power_1.Simulation
-NodeClass: Variable
-BrowseName: 1:Simulation
-DisplayName: en|Simulation
-Description: en|Simulation
-DataType: XmlElement
-ValueRank: -1
-AccessLevel: 103
-Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.ScriptCode

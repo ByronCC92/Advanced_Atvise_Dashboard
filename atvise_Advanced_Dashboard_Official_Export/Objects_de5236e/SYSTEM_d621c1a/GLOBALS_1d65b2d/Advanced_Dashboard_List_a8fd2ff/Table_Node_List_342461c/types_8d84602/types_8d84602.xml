@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<Value xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd">
-	<uax:ListOfString>
-		<uax:String>color</uax:String>
-		<uax:String>string</uax:String>
-		<uax:String>string</uax:String>
-		<uax:String>address</uax:String>
-	</uax:ListOfString>
-</Value>

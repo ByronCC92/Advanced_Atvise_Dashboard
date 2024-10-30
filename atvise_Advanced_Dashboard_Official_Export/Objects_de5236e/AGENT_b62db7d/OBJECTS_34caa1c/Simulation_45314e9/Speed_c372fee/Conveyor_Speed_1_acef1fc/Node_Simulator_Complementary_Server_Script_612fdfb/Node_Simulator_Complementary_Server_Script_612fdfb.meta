@@ -1,9 +1,0 @@
-NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Speed.Conveyor_Speed_1.Node_Simulator_Complementary_Server_Script
-NodeClass: Variable
-BrowseName: 1:Node_Simulator_Complementary_Server_Script
-DisplayName: en|Node_Simulator_Complementary_Server_Script
-Description: en|Node_Simulator_Complementary_Server_Script
-DataType: XmlElement
-ValueRank: -1
-AccessLevel: 103
-Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.ScriptCode
