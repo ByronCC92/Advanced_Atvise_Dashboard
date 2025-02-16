@@ -1,0 +1,10 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.Parameters.Downtime_Probability
+NodeClass: Variable
+BrowseName: 1:Downtime_Probability
+DisplayName: en|Downtime_Probability
+Description: en|Downtime_Probability
+DataType: Double
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition BaseVariableType

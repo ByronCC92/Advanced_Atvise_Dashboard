@@ -1,0 +1,10 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.Input_Variables.Production_Speed
+NodeClass: Variable
+BrowseName: 1:Production_Speed
+DisplayName: en|Production_Speed
+Description: en|Production_Speed
+DataType: Double
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition BaseVariableType

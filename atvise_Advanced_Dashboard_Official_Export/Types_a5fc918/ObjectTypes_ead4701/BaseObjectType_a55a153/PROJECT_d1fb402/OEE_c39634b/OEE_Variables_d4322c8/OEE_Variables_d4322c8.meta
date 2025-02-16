@@ -1,0 +1,8 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.OEE_Variables
+NodeClass: Object
+BrowseName: 1:OEE_Variables
+DisplayName: en|OEE_Variables
+Description: en|OEE_Variables
+EventNotifier: 0
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition FolderType

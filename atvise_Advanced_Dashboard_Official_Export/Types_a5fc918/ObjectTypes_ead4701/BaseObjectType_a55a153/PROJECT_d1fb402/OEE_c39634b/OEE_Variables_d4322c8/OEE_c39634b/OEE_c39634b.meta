@@ -1,0 +1,10 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.OEE_Variables.OEE
+NodeClass: Variable
+BrowseName: 1:OEE
+DisplayName: en|OEE
+Description: en|OEE
+DataType: Double
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition BaseVariableType

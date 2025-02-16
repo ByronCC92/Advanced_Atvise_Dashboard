@@ -1,0 +1,10 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.Parameters.Downtime_Automode
+NodeClass: Variable
+BrowseName: 1:Downtime_Automode
+DisplayName: en|Downtime_Automode
+Description: en|Downtime_Automode
+DataType: Boolean
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition BaseVariableType

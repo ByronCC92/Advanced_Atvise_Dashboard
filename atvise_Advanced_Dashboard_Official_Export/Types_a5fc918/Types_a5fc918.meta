@@ -1,0 +1,7 @@
+NodeId: i=86
+NodeClass: Object
+BrowseName: Types
+DisplayName: en|Types
+Description: en|Types
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

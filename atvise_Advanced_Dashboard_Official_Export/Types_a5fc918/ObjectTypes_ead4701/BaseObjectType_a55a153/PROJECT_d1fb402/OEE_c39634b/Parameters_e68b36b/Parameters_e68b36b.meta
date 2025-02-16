@@ -1,0 +1,8 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.Parameters
+NodeClass: Object
+BrowseName: 1:Parameters
+DisplayName: en|Parameters
+Description: en|Parameters
+EventNotifier: 0
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition FolderType

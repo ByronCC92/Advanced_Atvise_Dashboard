@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.HISTORY.Historicos.AggregateConfiguration.PercentDataBad
+NodeClass: Variable
+BrowseName: PercentDataBad
+DisplayName: en|PercentDataBad
+Description: en|PercentDataBad
+DataType: Byte
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition PropertyType

@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.HISTORY.datavalues.AggregateConfiguration.PercentDataGood
+NodeClass: Variable
+BrowseName: PercentDataGood
+DisplayName: en|PercentDataGood
+Description: en|PercentDataGood
+DataType: Byte
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition PropertyType

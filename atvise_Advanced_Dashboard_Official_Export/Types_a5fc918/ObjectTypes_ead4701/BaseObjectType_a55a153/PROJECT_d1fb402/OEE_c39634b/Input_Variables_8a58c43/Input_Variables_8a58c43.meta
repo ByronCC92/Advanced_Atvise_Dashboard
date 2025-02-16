@@ -1,0 +1,8 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.Input_Variables
+NodeClass: Object
+BrowseName: 1:Input_Variables
+DisplayName: en|Input_Variables
+Description: en|Input_Variables
+EventNotifier: 0
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition FolderType

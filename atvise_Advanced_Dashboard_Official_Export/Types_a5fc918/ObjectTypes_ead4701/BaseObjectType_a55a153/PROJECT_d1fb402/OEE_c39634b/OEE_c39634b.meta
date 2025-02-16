@@ -1,0 +1,6 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE
+NodeClass: ObjectType
+BrowseName: 1:OEE
+DisplayName: en|OEE
+Description: en|OEE
+IsAbstract: false

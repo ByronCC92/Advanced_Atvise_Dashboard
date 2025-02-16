@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Trigger" type="interval" trigger="true" relative="false" value="" offset="00:00:00" interval="00:00:01"/>
+  <code><![CDATA[//OEE Simulator Class
+
+class oeeDataSimulator {
+
+
+	constructor() {
+	
+		//////External Variables
+		
+		//Input Variables
+		this.Avaliability_CounterR=Ua.findNode((base)+".Input_Variables.Avaliability_Counter");
+		this.Downtime_CounterR=Ua.findNode((base)+".Input_Variables.Downtime_Counter");
+		this.Productivity_CounterR=Ua.findNode((base)+".Input_Variables.Productivity_Counter");
+		this.Quality_CounterR=Ua.findNode((base)+".Input_Variables.Quality_Counter");
+		this.Production_SpeedR=Ua.findNode((base)+".Input_Variables.Production_Speed");
+		this.Machine_StatusR = Ua.findNode((base)+".Input_Variables.Machine_Status");
+		this.Quality_StatusR = Ua.findNode((base)+".Input_Variables.Quality_Status");
+		
+		//Parameters
+		this.Downtime_AutomodeR=Ua.findNode((base)+".Parameters.Downtime_Automode");
+	
+		//////Internal Variables
+		
+		this.Avaliability_CounterV=this.Avaliability_CounterR.result.value;
+		this.Downtime_CounterV=this.Downtime_CounterR.result.value;
+		this.Downtime_AutomodeV=this.Downtime_AutomodeR.result.value; 
+		this.Productivity_CounterV=this.Productivity_CounterR.result.value;
+		this.Quality_CounterV=this.Quality_CounterR.result.value;
+		this.Production_SpeedV=this.Production_SpeedR.result.value;			
+		this.Machine_StatusV=this.checkMachineStatus();
+		this.Quality_StatusV=this.checkQualityStatus();	
+		
+		this.ProductionSpeedMax=6;
+		this.ProductionSpeedMin=4;
+		this.DowntimePercentage=30;
+		
+	}
+	
+	
+	//Executor
+	mainExecutor() {
+	
+		if(!this.Downtime_AutomodeV){
+			if(this.Machine_StatusV){
+			
+				//Production Speed
+				this.productionSpeedSimulator();
+				
+				//Availability
+				this.availabilitySimulator();
+				
+				//Productivity
+				this.productivitySimulator();
+				
+				//Quality
+				this.qualitySimulator();
+				
+				//Assing Values
+				this.assignValues();
+			}
+			
+			else if (!this.Machine_StatusV){
+				
+				//Downtime
+				this.downtimeSimulator();
+				
+				//Assing Values
+				this.assignValues();
+			}
+			
+		}
+		else if(this.Downtime_AutomodeV){
+			
+			//Downtime
+			this.downtimeSimulator();
+			
+			//Assing Values
+			this.assignValues();
+		}
+	}
+	
+	
+	//Simulate Availability
+	availabilitySimulator() {
+		
+		let Avaliability_CounterVI=this.Avaliability_CounterV;	
+		Avaliability_CounterVI=Avaliability_CounterVI+1000; //Add 1 second
+		this.Avaliability_CounterV=Avaliability_CounterVI;
+		
+	
+	}
+	
+	//Simulate Availability
+	downtimeSimulator() {
+		
+		let Downtime_CounterVI=this.Downtime_CounterV;	
+		Downtime_CounterVI=Downtime_CounterVI+1000; //Add 1 second
+		this.Downtime_CounterV=Downtime_CounterVI;
+		
+	
+	}
+	
+	//Simulate Productivity
+	productivitySimulator() {
+	
+		let Productivity_CounterVI=this.Productivity_CounterV;
+		Productivity_CounterVI=Productivity_CounterVI+this.Production_SpeedV; //Add 1 second
+		this.Productivity_CounterV=Productivity_CounterVI;
+	
+	}
+	
+	//Simulate Production Speed
+	productionSpeedSimulator(){
+		
+		let Production_SpeedVI=Math.ceil(this.ProductionSpeedMin + (Math.random()*(this.ProductionSpeedMax-this.ProductionSpeedMin)));
+		this.Production_SpeedV=Production_SpeedVI;
+		
+	}
+	//Simulate Production Speed
+	availabilitySimulator() {
+		
+		let Avaliability_CounterVI=this.Avaliability_CounterV;	
+		Avaliability_CounterVI=Avaliability_CounterVI+1000; //Add 1 second
+		this.Avaliability_CounterV=Avaliability_CounterVI;
+		
+	
+	}
+	
+	//Simulate Quality
+	qualitySimulator() {
+		let Quality_CounterVI=this.Quality_CounterV;		
+		//If it is True
+		if(this.Quality_StatusV){
+			Quality_CounterVI=Quality_CounterVI+this.Production_Speed; //Add 1 second
+			this.Quality_CounterV=Quality_CounterVI;
+		}
+	}
+	
+	//Checks for Machine Status
+	checkMachineStatus(){		
+		return (this.Machine_StatusR.result.value);
+	}
+	
+	//Checks for Quality Status
+	checkQualityStatus(){		
+		return (this.Quality_StatusR.result.value);
+	}
+	
+	//Assign Values
+	assignValues(){
+	
+		if(this.Machine_StatusV){		
+			this.Production_SpeedR.result.assign({value: this.Production_SpeedV}); 
+			this.Avaliability_CounterR.result.assign({value: this.Avaliability_CounterV});
+			this.Productivity_CounterR.result.assign({value: this.Productivity_CounterV});
+			this.Quality_CounterR.result.assign({value: this.Quality_CounterV});	
+		}
+		else{
+			this.Downtime_CounterR.result.assign({value: this.Downtime_CounterV});	
+		}			
+	}
+}
+
+/*
+// OEE Simulator Class
+class oeeDataSimulator {
+
+    constructor() {
+        //////External Variables
+        
+        // Input Variables
+        this.Avaliability_CounterR = Ua.findNode((base) + ".Input_Variables.Avaliability_Counter");
+        this.Downtime_CounterR = Ua.findNode((base) + ".Input_Variables.Downtime_Counter");
+        this.Productivity_CounterR = Ua.findNode((base) + ".Input_Variables.Productivity_Counter");
+        this.Quality_CounterR = Ua.findNode((base) + ".Input_Variables.Quality_Counter");
+        this.Production_SpeedR = Ua.findNode((base) + ".Input_Variables.Production_Speed");
+        this.Machine_StatusR = Ua.findNode((base) + ".Input_Variables.Machine_Status");
+        this.Quality_StatusR = Ua.findNode((base) + ".Input_Variables.Quality_Status");
+        
+        // Parameters
+        this.Downtime_AutomodeR = Ua.findNode((base) + ".Parameters.Downtime_Automode");
+		this.Downtime_ProbabilityR = Ua.findNode((base) + ".Parameters.Downtime_Probability");		
+	
+	
+        //////Internal Variables       
+         
+        //Values
+        this.Avaliability_CounterV = this.Avaliability_CounterR.result.value;
+        this.Downtime_CounterV = this.Downtime_CounterR.result.value;        
+        this.Productivity_CounterV = this.Productivity_CounterR.result.value;
+        this.Quality_CounterV = this.Quality_CounterR.result.value;
+        this.Production_SpeedV = this.Production_SpeedR.result.value;            
+        this.Machine_StatusV = this.checkMachineStatus();
+        this.Quality_StatusV = this.checkQualityStatus();    
+        
+        //////Parameters
+        
+        //Production Speed        
+        this.ProductionSpeedMax = 6;
+        this.ProductionSpeedMin = 4;
+
+        // Downtime Simulation
+        this.Downtime_AutomodeV = this.Downtime_AutomodeR.result.value; 
+        this.Downtime_ProbabilityV = this.Downtime_ProbabilityR.result.value; 
+        this.isDowntime = false;         
+        this.downtimeDuration = 0;
+        this.minDowntime = 10 * 60 * 1000; // 10 minutes in ms
+        this.maxDowntime = 4 * 60 * 60 * 1000; // 4 hours in ms
+    }
+    
+    // Executor
+    mainExecutor() {
+    
+    
+        if (false) { // Automatic Mode
+			
+			//Create cache Object			
+			this.cacheManager= new cacheManager();
+			
+			//Get Data From Cache
+			this.isDowntime=this.cacheManager.getCacheData("isDowntime")==undefined ? false : this.cacheManager.getCacheData("isDowntime");
+			this.downtimeDuration=this.cacheManager.getCacheData("downtimeDuration")==undefined ? 0 : this.cacheManager.getCacheData("downtimeDuration");
+			console.log("-------New Iteration---------")			
+			
+            if (this.isDowntime) {
+                this.downtimeSimulator();
+            } 
+            else {
+                // Randomly decide if downtime starts
+                if (Math.random() < this.Downtime_ProbabilityV) {
+                    this.startDowntime();
+                } 
+                else {
+                    this.simulateProduction();
+                }
+            }
+        } 
+        
+        else { // Manual Mode
+            if (this.Machine_StatusV) {
+                this.simulateProduction();
+            } 
+            else {
+                this.downtimeSimulator();
+            }
+        }
+
+        // Assign Values
+        this.assignValues();
+    }
+    
+    // Start Downtime
+    startDowntime() {
+		console.log("-----------Start Downtime----------")
+        this.isDowntime = true;
+        this.downtimeDuration = Math.floor(Math.random() * (this.maxDowntime - this.minDowntime)) + this.minDowntime;
+		
+		//Save in the cache        
+		this.cacheManager.storeCacheData("isDowntime",this.isDowntime);
+        this.cacheManager.storeCacheData("downtimeDuration",this.downtimeDuration);        
+        
+        this.Downtime_CounterV += 1000; // Start downtime counter
+    }
+
+    // Simulate Downtime
+    downtimeSimulator() {
+    
+		//this.downtimeDuration=this.cacheManager.getCacheData("downtimeDuration");
+		
+		console.log("this.downtimeDuration: "+this.downtimeDuration+" > 0")
+        if (this.downtimeDuration > 0) {
+            this.Downtime_CounterV += 1000; // Add 1 second to downtime
+            this.downtimeDuration -= 1000;
+            
+            //Store
+            //this.cacheManager.storeCacheData("downtimeDuration",this.downtimeDuration); 
+        } 
+        else {
+			console.log("Finish Downtime Simulator")
+            this.isDowntime = false; // End downtime
+            
+            //Store
+            //this.cacheManager.storeCacheData("isDowntime",this.isDowntime);
+        }
+    }
+
+    // Simulate Production
+    simulateProduction() {
+        this.productionSpeedSimulator();
+        this.availabilitySimulator();
+        this.productivitySimulator();
+        this.qualitySimulator();
+    }
+
+    // Simulate Production Speed
+    productionSpeedSimulator() {
+        this.Production_SpeedV = Math.ceil(this.ProductionSpeedMin + (Math.random() * (this.ProductionSpeedMax - this.ProductionSpeedMin)));
+    }
+
+    // Simulate Availability
+    availabilitySimulator() {
+        this.Avaliability_CounterV += 1000; // Add 1 second
+    }
+
+    // Simulate Productivity
+    productivitySimulator() {
+        this.Productivity_CounterV += this.Production_SpeedV; // Increase productivity based on speed
+    }
+
+    // Simulate Quality
+    qualitySimulator() {
+        if (this.Quality_StatusV) {
+            this.Quality_CounterV += this.Production_SpeedV; // Increase quality count based on speed
+        }
+    }
+
+    // Checks for Machine Status
+    checkMachineStatus() {
+        return (this.Machine_StatusR.result.value);
+    }
+
+    // Checks for Quality Status
+    checkQualityStatus() {
+        return (this.Quality_StatusR.result.value);
+    }
+
+    // Assign Values
+    assignValues() {
+        if (this.isDowntime) {
+            this.Downtime_CounterR.result.assign({ value: this.Downtime_CounterV });
+        } 
+        else {
+            this.Production_SpeedR.result.assign({ value: this.Production_SpeedV });
+            this.Avaliability_CounterR.result.assign({ value: this.Avaliability_CounterV });
+            this.Productivity_CounterR.result.assign({ value: this.Productivity_CounterV });
+            this.Quality_CounterR.result.assign({ value: this.Quality_CounterV });
+        }
+    }
+}
+
+//Cache Manager
+class cacheManager {
+
+	constructor(){
+		this.cacheRawData;
+		this.cacheKey;
+		this.cacheFetchData;
+	}
+	
+	//Get Cache Data
+	getCacheData(cacheKey) {
+		console.log("Fetching..........");		
+		this.cacheKey=cacheKey;
+		console.log("this.cacheKey: "+this.cacheKey);
+		
+		this.cacheFetchData = globals.get(this.cacheKey);
+		
+		return (this.cacheFetchData);
+	}
+	
+    // Store Data
+    storeCacheData(cacheKey,cacheRawData) {
+		console.log("Storing..........") 
+		this.cacheRawData=cacheRawData;  
+		this.cacheKey=cacheKey;
+		console.log("this.cacheRawData: "+this.cacheRawData);
+		console.log("this.cacheKey: "+this.cacheKey);
+		globals.set(this.cacheKey, this.cacheRawData);	
+    }
+}
+*/
+
+//Create OEESimulator
+const oeeDataSimulator1 = new oeeDataSimulator();
+
+//Excecute rutine
+oeeDataSimulator1.mainExecutor();]]></code>
+</script>

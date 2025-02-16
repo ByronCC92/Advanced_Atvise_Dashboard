@@ -1,0 +1,6 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT
+NodeClass: ObjectType
+BrowseName: 1:PROJECT
+DisplayName: en|PROJECT
+Description: en|PROJECT
+IsAbstract: true

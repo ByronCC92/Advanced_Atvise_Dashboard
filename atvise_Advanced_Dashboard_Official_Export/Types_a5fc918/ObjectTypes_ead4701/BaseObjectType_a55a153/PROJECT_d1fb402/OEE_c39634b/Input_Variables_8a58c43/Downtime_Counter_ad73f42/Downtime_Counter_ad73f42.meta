@@ -1,0 +1,11 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.Input_Variables.Downtime_Counter
+NodeClass: Variable
+BrowseName: 1:Downtime_Counter
+DisplayName: en|Downtime_Counter
+Description: en|Downtime_Counter
+DataType: Double
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.datavalues

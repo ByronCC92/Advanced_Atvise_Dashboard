@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.RESOURCES/Advanced_Dashboard_Data_Creator
+NodeClass: Variable
+BrowseName: 1:Advanced_Dashboard_Data_Creator
+DisplayName: en|Advanced_Dashboard_Data_Creator
+Description: en|Advanced_Dashboard_Data_Creator
+DataType: XmlElement
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.ScriptCode

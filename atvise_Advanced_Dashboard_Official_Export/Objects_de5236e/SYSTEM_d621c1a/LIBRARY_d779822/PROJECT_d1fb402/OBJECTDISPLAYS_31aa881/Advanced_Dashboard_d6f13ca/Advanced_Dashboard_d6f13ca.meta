@@ -1,0 +1,7 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard
+NodeClass: Object
+BrowseName: 1:Advanced_Dashboard
+DisplayName: en|Advanced_Dashboard
+Description: en|Advanced_Dashboard
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

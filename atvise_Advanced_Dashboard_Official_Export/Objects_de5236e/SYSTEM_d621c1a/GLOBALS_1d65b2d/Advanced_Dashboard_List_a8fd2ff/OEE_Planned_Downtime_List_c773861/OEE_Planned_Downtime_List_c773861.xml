@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Value xmlns="http://opcfoundation.org/UA/2011/03/UANodeSet.xsd" xmlns:uax="http://opcfoundation.org/UA/2008/02/Types.xsd">
+	<uax:ListOfString>
+		<uax:String>&quot;1&quot;:{&quot;1_Initial_Time&quot;:&quot;8:00&quot;,&quot;2_Final_Time&quot;:&quot;9:00&quot;,&quot;3_Description&quot;:&quot;Break&quot;}</uax:String>
+	</uax:ListOfString>
+</Value>

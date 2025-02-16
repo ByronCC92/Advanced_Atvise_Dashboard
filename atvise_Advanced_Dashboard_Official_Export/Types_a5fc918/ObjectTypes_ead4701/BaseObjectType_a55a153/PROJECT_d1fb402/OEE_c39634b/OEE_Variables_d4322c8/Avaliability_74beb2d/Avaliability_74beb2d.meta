@@ -1,0 +1,10 @@
+NodeId: ns=1;s=ObjectTypes.PROJECT.OEE.OEE_Variables.Avaliability
+NodeClass: Variable
+BrowseName: 1:Avaliability
+DisplayName: en|Avaliability
+Description: en|Avaliability
+DataType: Double
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasModellingRule New
+Reference: forward HasTypeDefinition BaseVariableType

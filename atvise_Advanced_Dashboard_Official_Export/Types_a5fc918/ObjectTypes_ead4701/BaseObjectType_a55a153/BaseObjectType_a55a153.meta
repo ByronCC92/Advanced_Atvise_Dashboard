@@ -1,0 +1,34 @@
+NodeId: i=58
+NodeClass: ObjectType
+BrowseName: BaseObjectType
+DisplayName: en|BaseObjectType
+Description: en|BaseObjectType
+IsAbstract: false
+Reference: forward HasSubtype i=11163
+Reference: forward HasSubtype i=11187
+Reference: forward HasSubtype i=11575
+Reference: forward HasSubtype i=11616
+Reference: forward HasSubtype i=11645
+Reference: forward HasSubtype i=15607
+Reference: forward HasSubtype i=15620
+Reference: forward HasSubtype i=17279
+Reference: forward HasSubtype i=17602
+Reference: forward HasSubtype i=2004
+Reference: forward HasSubtype i=2013
+Reference: forward HasSubtype i=2020
+Reference: forward HasSubtype i=2026
+Reference: forward HasSubtype i=2029
+Reference: forward HasSubtype i=2033
+Reference: forward HasSubtype i=2034
+Reference: forward HasSubtype i=2041
+Reference: forward HasSubtype i=2299
+Reference: forward HasSubtype i=2307
+Reference: forward HasSubtype i=2310
+Reference: forward HasSubtype i=2318
+Reference: forward HasSubtype i=2330
+Reference: forward HasSubtype i=2340
+Reference: forward HasSubtype FolderType
+Reference: forward HasSubtype i=75
+Reference: forward HasSubtype i=76
+Reference: forward HasSubtype i=77
+Reference: forward HasSubtype ns=1;s=ObjectTypes.ATVISE

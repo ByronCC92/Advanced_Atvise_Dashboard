@@ -1,0 +1,334 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg height="1000" version="1.2" width="1680" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs/>
+ <metadata>
+  <atv:gridconfig enabled="true" gridstyle="lines" height="20" width="20"/>
+  <atv:snapconfig enabled="true" height="10" width="10"/>
+ </metadata>
+ <g atv:insensitive="true" atv:refpx="0" atv:refpy="0" id="id_22">
+  <rect atv:refpx="840" atv:refpy="500" fill="#0a283e" fill-opacity="0.97254901960784312" height="1000.00" id="id_23" width="1680.00" x="0" y="0"/>
+ </g>
+ <script atv:desc="" atv:name="" type="text/ecmascript"/>
+ <svg atv:refpx="680.5" atv:refpy="30.375" height="48.75" id="id_0" width="1361" x="0" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Menu" y="6">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ColorActive" value="#30acff"/>
+  <atv:argument name="ColorInactive" value="#1b60a1"/>
+  <atv:argument name="FontSizeMenu" value="20"/>
+  <atv:argument name="FontSizeDatePickers" value="14"/>
+  <atv:argument name="InitialRange" value="8"/>
+  <atv:argument name="InitialRangeUnit" value="h"/>
+ </svg>
+ <svg atv:refpx="670.002" atv:refpy="830.004" height="304.8" id="id_1" transform="matrix(1.0533,0,0,0.9843,0,0)" width="607.6" x="332.281" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Chart_Element" y="690.88">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ChartType" value="Column"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="DataProcessingType" value="Interval-Difference"/>
+  <atv:argument name="CategoryType" value="Interval-Dynamic"/>
+  <atv:argument name="Series1Node" prefix="base" value=".Input_Variables.Avaliability_Counter"/>
+  <atv:argument name="Series1Label" value="Uptime"/>
+  <atv:argument name="Title" value="Disponibilidad"/>
+  <atv:argument name="Subtitle" value="Machine 1"/>
+  <atv:argument name="YName" value="Time"/>
+  <atv:argument name="XName" value="Time"/>
+  <atv:argument name="ColumnLabelType" value="Time"/>
+  <atv:argument name="ColorSeriesPalette" value="SYSTEM.GLOBALS.Global_Color_1"/>
+  <atv:argument name="ColorLimitPointMin" value="#aa0000"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Global_Color_2"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorLegend" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorxAxis" value="#ffffff"/>
+  <atv:argument name="ColoryAxis" value="#ffffff"/>
+  <atv:argument name="ColordataLabels" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DatalabelCustomTimeFormat" value="mm min : ss s"/>
+  <atv:argument name="DatalabelType" value="Time-Dynamic"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+ </svg>
+ <svg atv:refpx="670.002" atv:refpy="530.007" height="304.8" id="id_11" transform="matrix(1.0533,0,0,0.9843,0,0)" width="607.6" x="332.281" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Chart_Element" y="386.08">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ChartType" value="Column"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="DataProcessingType" value="Interval-Difference"/>
+  <atv:argument name="CategoryType" value="Interval-Dynamic"/>
+  <atv:argument name="Series1Node" prefix="base" value=".Input_Variables.Productivity_Counter"/>
+  <atv:argument name="Series1Label" value="Units Produced"/>
+  <atv:argument name="Title" value="Productivity and Quality"/>
+  <atv:argument name="Subtitle" value="Machine 1"/>
+  <atv:argument name="YName" value="Units"/>
+  <atv:argument name="XName" value="Time"/>
+  <atv:argument name="Series2Node" prefix="base" value=".Input_Variables.Quality_Counter"/>
+  <atv:argument name="Series2Label" value="Units Discarted"/>
+  <atv:argument name="ColorSeriesPalette" value="SYSTEM.GLOBALS.Global_Color_1"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Global_Color_2"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorLegend" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorxAxis" value="#ffffff"/>
+  <atv:argument name="ColoryAxis" value="#ffffff"/>
+  <atv:argument name="ColordataLabels" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+ </svg>
+ <svg atv:refpx="175.006" atv:refpy="830.006" height="304.8" id="id_13" transform="matrix(0.5102,0,0,0.9843,0,0)" width="607.6" x="39.2" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Chart_Element" y="690.88">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ChartType" value="Solidgauge"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="DataProcessingType" value="FullRange-Difference"/>
+  <atv:argument name="CategoryType" value="Single-Simple"/>
+  <atv:argument name="Series1Node" prefix="base" value=".Input_Variables.Downtime_Counter"/>
+  <atv:argument name="Series1Label" value="Speed"/>
+  <atv:argument name="Title" value="Total Downtime"/>
+  <atv:argument name="Subtitle" value="Machine 1"/>
+  <atv:argument name="ColumnLabelType" value="Time"/>
+  <atv:argument name="ColorSeriesPalette" value="SYSTEM.GLOBALS.Global_Color_1"/>
+  <atv:argument name="SolidGaugeMaxValue" value="100000"/>
+  <atv:argument name="GaugeMax" value="10"/>
+  <atv:argument name="GaugeBand3Max" value="10"/>
+  <atv:argument name="GaugeBand3Min" value="7.5"/>
+  <atv:argument name="GaugeUnit" value="U"/>
+  <atv:argument name="GaugeBand2Max" value="7.5"/>
+  <atv:argument name="GaugeBand2Min" value="5"/>
+  <atv:argument name="GaugeBand1Color" value="#1b60a1"/>
+  <atv:argument name="GaugeBand2Color" value="#2174c2"/>
+  <atv:argument name="GaugeBand3Color" value="#30acff"/>
+  <atv:argument name="GaugeBand1Max" value="5"/>
+  <atv:argument name="DataLimitEnabled" value="true"/>
+  <atv:argument name="DataMaxLimit" value="75000"/>
+  <atv:argument name="DataMinLimit" value="50000"/>
+  <atv:argument name="ColorLimitPointMax" value="#aa0000"/>
+  <atv:argument name="ColorLimitPointMin" value="#00aa00"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Global_Color_2"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorLegend" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorxAxis" value="#ffffff"/>
+  <atv:argument name="ColoryAxis" value="#ffffff"/>
+  <atv:argument name="ColordataLabels" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DatalabelType" value="Time-Custom"/>
+  <atv:argument name="DatalabelCustomTimeFormat" value="mm m : ss s"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+ </svg>
+ <svg atv:refpx="1495.001" atv:refpy="840.006" height="304.8" id="id_14" transform="matrix(0.5102,0,0,1.0499,0,0)" width="607.6" x="2626.4" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Chart_Element" y="647.7">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ChartType" value="Gauge"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="DataProcessingType" value="SinglePoint-LastValue"/>
+  <atv:argument name="CategoryType" value="Single-Simple"/>
+  <atv:argument name="Series1Node" prefix="base" value=".Input_Variables.Production_Speed"/>
+  <atv:argument name="Series1Label" value="Production Speed"/>
+  <atv:argument name="Title" value="Cadencia Actual (U/s)"/>
+  <atv:argument name="Subtitle" value="Machine 1"/>
+  <atv:argument name="ColumnLabelType" value="Time"/>
+  <atv:argument name="ColorSeriesPalette" value="SYSTEM.GLOBALS.Global_Color_1"/>
+  <atv:argument name="SolidGaugeMaxValue" value="10000"/>
+  <atv:argument name="GaugeBand3Max" value="10"/>
+  <atv:argument name="GaugeBand3Min" value="7.5"/>
+  <atv:argument name="GaugeBand2Max" value="7.5"/>
+  <atv:argument name="GaugeBand2Min" value="5"/>
+  <atv:argument name="GaugeBand1Max" value="5"/>
+  <atv:argument name="GaugeBand1Color" value="#aa0000"/>
+  <atv:argument name="GaugeBand2Color" value="#ffff00"/>
+  <atv:argument name="GaugeBand3Color" value="#00aa00"/>
+  <atv:argument name="GaugeMax" value="10"/>
+  <atv:argument name="GaugeUnit" value="U/s"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Global_Color_2"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorLegend" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorxAxis" value="#ffffff"/>
+  <atv:argument name="ColoryAxis" value="#ffffff"/>
+  <atv:argument name="ColordataLabels" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DatalabelUnit" value="U/s"/>
+  <atv:argument name="DatalabelNumberDecimals" value="1"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+ </svg>
+ <svg atv:refpx="1330.001" atv:refpy="530.002" height="304.8" id="id_15" transform="matrix(1.0533,0,0,0.9843,0,0)" width="607.6" x="958.869" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Chart_Element" y="386.08">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ChartType" value="Column"/>
+  <atv:argument name="DataProcessingType" value="Interval-Average"/>
+  <atv:argument name="CategoryType" value="Interval-Dynamic"/>
+  <atv:argument name="Series1Node" prefix="base" value=".Input_Variables.Production_Speed"/>
+  <atv:argument name="Title" value="Cadencia Promedio por hora"/>
+  <atv:argument name="Subtitle" value="Machine 1"/>
+  <atv:argument name="YName" value="Speed (U/s)"/>
+  <atv:argument name="XName" value="Time"/>
+  <atv:argument name="ColorSeriesPalette" value="SYSTEM.GLOBALS.Global_Color_1"/>
+  <atv:argument name="Series1Label" value="Production Speed"/>
+  <atv:argument name="DataMinLimit" value="5.5"/>
+  <atv:argument name="DataMaxLimit" value="10"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Global_Color_2"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorLegend" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorxAxis" value="#ffffff"/>
+  <atv:argument name="ColoryAxis" value="#ffffff"/>
+  <atv:argument name="ColordataLabels" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="DataLimitEnabled" value="true"/>
+  <atv:argument name="TextLimitLineMax" value="80%"/>
+  <atv:argument name="ColorLimitLineMax" value="#00ffff"/>
+  <atv:argument name="ColorLimitPointMin" value="#aa0000"/>
+  <atv:argument name="TextLimitLineMin" value="60%"/>
+  <atv:argument name="ColorLimitLineMin" value="#00ffff"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+ </svg>
+ <svg atv:refpx="1165.001" atv:refpy="830.006" height="304.8" id="id_16" transform="matrix(0.5102,0,0,0.9843,0,0)" width="607.6" x="1979.6" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Chart_Element" y="690.88">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ChartType" value="Pie"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="DataProcessingType" value="FullRange-Difference"/>
+  <atv:argument name="CategoryType" value="Single-Simple"/>
+  <atv:argument name="Series1Node" prefix="base" value=".Input_Variables.Downtime_Counter"/>
+  <atv:argument name="Series1Label" value="Downtime"/>
+  <atv:argument name="Title" value="Uptime vrs Downtime"/>
+  <atv:argument name="Subtitle" value="Machine 1"/>
+  <atv:argument name="ColumnLabelType" value="Time"/>
+  <atv:argument name="ColorSeriesPalette" value="SYSTEM.GLOBALS.Global_Color_1"/>
+  <atv:argument name="SolidGaugeMaxValue" value="10000"/>
+  <atv:argument name="GaugeMax" value="10"/>
+  <atv:argument name="GaugeBand3Max" value="10"/>
+  <atv:argument name="GaugeBand3Min" value="7.5"/>
+  <atv:argument name="GaugeUnit" value="U"/>
+  <atv:argument name="GaugeBand2Max" value="7.5"/>
+  <atv:argument name="GaugeBand2Min" value="5"/>
+  <atv:argument name="GaugeBand1Color" value="#1b60a1"/>
+  <atv:argument name="GaugeBand2Color" value="#2174c2"/>
+  <atv:argument name="GaugeBand3Color" value="#30acff"/>
+  <atv:argument name="GaugeBand1Max" value="5"/>
+  <atv:argument name="Series2Node" prefix="base" value=".Input_Variables.Avaliability_Counter"/>
+  <atv:argument name="Series2Label" value="Uptime"/>
+  <atv:argument name="DataMaxLimit" value="75000"/>
+  <atv:argument name="DataMinLimit" value="50000"/>
+  <atv:argument name="ColorLimitPointMin" value="#00aa00"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Global_Color_2"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorLegend" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorxAxis" value="#ffffff"/>
+  <atv:argument name="ColoryAxis" value="#ffffff"/>
+  <atv:argument name="ColordataLabels" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+ </svg>
+ <svg atv:refpx="140.001" atv:refpy="170.002" height="200" id="id_18" transform="matrix(1.2,0,0,0.9,0,0)" width="200" x="16.667" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Number_Element_2" y="88.889">
+  <atv:argument name="DashboardID" value="Number"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="Series1Node" value="AGENT.OBJECTS.Simulation.Temperature.Temperature_1"/>
+  <atv:argument name="Title" value="OEE"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Color_Global_2"/>
+  <atv:argument name="FontSizeTitle" value="24"/>
+  <atv:argument name="FontTitle" value="Verdana"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+  <atv:argument name="Subtitle" value="Linea Aceites"/>
+  <atv:argument name="FontSizeSubtitle" value="20"/>
+  <atv:argument name="SubtitleAlign" value="left"/>
+  <atv:argument name="SubtitleXMargin" value="10"/>
+  <atv:argument name="FontSubtitleStyle" value="italic"/>
+  <atv:argument name="TitleXMargin" value="10"/>
+  <atv:argument name="TitleYMargin" value="10"/>
+  <atv:argument name="ColorData" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DataYMargin" value="10"/>
+  <atv:argument name="FontSizeData" value="36"/>
+  <atv:argument name="DataUnit" value="ºC"/>
+  <atv:argument name="TitleAlign" value="left"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+ </svg>
+ <svg atv:refpx="364.801" atv:refpy="153.602" height="200" id="id_2" transform="matrix(0.848,0,0,0.636,0,0)" width="200" x="330.189" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Number_Element_2" y="141.509">
+  <atv:argument name="DashboardID" value="Number"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="Series1Node" value="AGENT.OBJECTS.Simulation.Temperature.Temperature_1"/>
+  <atv:argument name="Title" value="Rendimiento"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Color_Global_2"/>
+  <atv:argument name="FontSizeTitle" value="18"/>
+  <atv:argument name="FontTitle" value="Verdana"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+  <atv:argument name="Subtitle" value="Linea Aceites"/>
+  <atv:argument name="FontSizeSubtitle" value="16"/>
+  <atv:argument name="SubtitleAlign" value="left"/>
+  <atv:argument name="SubtitleXMargin" value="10"/>
+  <atv:argument name="FontSubtitleStyle" value="italic"/>
+  <atv:argument name="TitleXMargin" value="10"/>
+  <atv:argument name="TitleYMargin" value="10"/>
+  <atv:argument name="ColorData" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DataYMargin" value="10"/>
+  <atv:argument name="FontSizeData" value="22"/>
+  <atv:argument name="DataUnit" value="ºC"/>
+  <atv:argument name="TitleAlign" value="left"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+ </svg>
+ <svg atv:refpx="554.801" atv:refpy="153.602" height="200" id="id_19" transform="matrix(0.848,0,0,0.636,0,0)" width="200" x="554.245" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Number_Element_2" y="141.509">
+  <atv:argument name="DashboardID" value="Number"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="Series1Node" value="AGENT.OBJECTS.Simulation.Temperature.Temperature_1"/>
+  <atv:argument name="Title" value="Calidad"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Color_Global_2"/>
+  <atv:argument name="FontSizeTitle" value="18"/>
+  <atv:argument name="FontTitle" value="Verdana"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+  <atv:argument name="Subtitle" value="Linea Aceites"/>
+  <atv:argument name="FontSizeSubtitle" value="16"/>
+  <atv:argument name="SubtitleAlign" value="left"/>
+  <atv:argument name="SubtitleXMargin" value="10"/>
+  <atv:argument name="FontSubtitleStyle" value="italic"/>
+  <atv:argument name="TitleXMargin" value="10"/>
+  <atv:argument name="TitleYMargin" value="10"/>
+  <atv:argument name="ColorData" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DataYMargin" value="10"/>
+  <atv:argument name="FontSizeData" value="22"/>
+  <atv:argument name="DataUnit" value="ºC"/>
+  <atv:argument name="TitleAlign" value="left"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+ </svg>
+ <svg atv:refpx="744.801" atv:refpy="153.602" height="200" id="id_20" transform="matrix(0.848,0,0,0.636,0,0)" width="200" x="778.302" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Number_Element_2" y="141.509">
+  <atv:argument name="DashboardID" value="Number"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="Series1Node" value="AGENT.OBJECTS.Simulation.Temperature.Temperature_1"/>
+  <atv:argument name="Title" value="Disponibilidad"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Color_Global_2"/>
+  <atv:argument name="FontSizeTitle" value="18"/>
+  <atv:argument name="FontTitle" value="Verdana"/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+  <atv:argument name="Subtitle" value="Linea Aceites"/>
+  <atv:argument name="FontSizeSubtitle" value="16"/>
+  <atv:argument name="SubtitleAlign" value="left"/>
+  <atv:argument name="SubtitleXMargin" value="10"/>
+  <atv:argument name="FontSubtitleStyle" value="italic"/>
+  <atv:argument name="TitleXMargin" value="10"/>
+  <atv:argument name="TitleYMargin" value="10"/>
+  <atv:argument name="ColorData" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DataYMargin" value="10"/>
+  <atv:argument name="FontSizeData" value="22"/>
+  <atv:argument name="DataUnit" value="ºC"/>
+  <atv:argument name="TitleAlign" value="left"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+ </svg>
+ <svg atv:refpx="175.006" atv:refpy="530.006" height="304.8" id="id_24" transform="matrix(0.5102,0,0,0.9843,0,0)" width="607.6" x="39.2" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Chart_Element" y="386.08">
+  <atv:argument name="DashboardID" value="OEE"/>
+  <atv:argument name="ChartType" value="Solidgauge"/>
+  <atv:argument name="DataProcessingEnabled" value="true"/>
+  <atv:argument name="DataProcessingType" value="FullRange-Difference"/>
+  <atv:argument name="CategoryType" value="Single-Simple"/>
+  <atv:argument name="Series1Node" prefix="base" value=".Input_Variables.Productivity_Counter"/>
+  <atv:argument name="Series1Label" value="Speed"/>
+  <atv:argument name="Title" value="Produccion"/>
+  <atv:argument name="Subtitle" value="Linea Aceites"/>
+  <atv:argument name="ColumnLabelType" value="Time"/>
+  <atv:argument name="ColorSeriesPalette" value="SYSTEM.GLOBALS.Global_Color_1"/>
+  <atv:argument name="SolidGaugeMaxValue" value="100000"/>
+  <atv:argument name="GaugeMax" value="10"/>
+  <atv:argument name="GaugeBand3Max" value="10"/>
+  <atv:argument name="GaugeBand3Min" value="7.5"/>
+  <atv:argument name="GaugeUnit" value="U"/>
+  <atv:argument name="GaugeBand2Max" value="7.5"/>
+  <atv:argument name="GaugeBand2Min" value="5"/>
+  <atv:argument name="GaugeBand1Color" value="#1b60a1"/>
+  <atv:argument name="GaugeBand2Color" value="#2174c2"/>
+  <atv:argument name="GaugeBand3Color" value="#30acff"/>
+  <atv:argument name="GaugeBand1Max" value="5"/>
+  <atv:argument name="DataLimitEnabled" value="true"/>
+  <atv:argument name="DataMaxLimit" value="75000"/>
+  <atv:argument name="DataMinLimit" value="50000"/>
+  <atv:argument name="ColorLimitPointMax" value="#aa0000"/>
+  <atv:argument name="ColorLimitPointMin" value="#00aa00"/>
+  <atv:argument name="ColorTitle" value="SYSTEM.GLOBALS.Global_Color_2"/>
+  <atv:argument name="ColorSubTitle" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorLegend" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="ColorxAxis" value="#ffffff"/>
+  <atv:argument name="ColoryAxis" value="#ffffff"/>
+  <atv:argument name="ColordataLabels" value="SYSTEM.GLOBALS.atvFontColor2"/>
+  <atv:argument name="DatalabelCustomTimeFormat" value=""/>
+  <atv:argument name="ColorB" value="SYSTEM.GLOBALS.Color_Global_1"/>
+ </svg>
+</svg>

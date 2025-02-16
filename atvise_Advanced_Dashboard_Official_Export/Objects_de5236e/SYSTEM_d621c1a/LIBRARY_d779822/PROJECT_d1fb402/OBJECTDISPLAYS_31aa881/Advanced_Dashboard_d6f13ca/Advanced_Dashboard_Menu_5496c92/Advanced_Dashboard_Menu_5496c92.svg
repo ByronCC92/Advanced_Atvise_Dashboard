@@ -1,0 +1,1918 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg height="48.75" version="1.2" width="1361" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs/>
+ <metadata>
+  <atv:parameter behavior="optional" defaultvalue="" desc="DashboardID" group="General Configuration" name="DashboardID" valuetype="string"/>
+  <atv:parameter behavior="optional" config="CustomRange;CurrentHour;LastHour;Last_8Hours;FirstShift;SecondShift;ThirdShift;Today;Last_7Days;Yesterday;CurrentWeek;LastWeek;Last_2Weeks;CurrentMonth;LastMonth;Last_6Months;CurrentYear" defaultvalue="CustomRange" desc="Initial Range Method" group="General Configuration" name="InitialRangeMethod" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="2" desc="Initial Range" group="General Configuration" name="InitialRange" valuetype="number"/>
+  <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="min" desc="Initial Range Unit" group="General Configuration" name="InitialRangeUnit" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Real Time Enabled" group="General Configuration" name="RealTimeEnabled" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="1000" desc="RealTime Update Time (ms)" group="General Configuration" name="RealTimeUpdateTime" valuetype="number"/>
+  <atv:parameter behavior="optional" config="true;false" defaultvalue="true" desc="Cache Enabled" group="Cache Configuration" name="CacheEnabled" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="Cache Max Size" group="Cache Configuration" name="CacheMaxSize" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="Cache Interval Size" group="Cache Configuration" name="CacheIntervalSize" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="Custom Filter Active" group="Custom Filter" name="CustomFilterActive" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Node Reference" group="Custom Filter" name="NodeReference" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color Active" group="Appearance" name="ColorActive" substitute="$ColorActive$" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Color Inactive" group="Appearance" name="ColorInactive" substitute="$ColorInactive$" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="12" desc="Font Size Menu" group="Appearance" name="FontSizeMenu" substitute="$FontSizeMenu$" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="10" desc="Font Size Date Pickers" group="Appearance" name="FontSizeDatePickers" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="SYSTEM.GLOBALS.Color_Global_1" desc="Loading Background Color" group="Appearance" name="LBackgroundColor" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="false" desc="Debugging Enabled" group="Debugging Configuration" name="DebuggingEnabled" valuetype="bool"/>
+  <atv:parameter behavior="optional" config="All-Code;Server-Only;Client-Only" defaultvalue="All-Code" desc="Debugging Section" group="Debugging Configuration" name="DebuggingSection" valuetype="enum"/>
+  <atv:gridconfig enabled="true" gridstyle="lines" height="20" width="20"/>
+  <atv:snapconfig enabled="true" height="10" width="10"/>
+ </metadata>
+ <g atv:refpx="45" atv:refpy="20" id="Real_Time" transform="matrix(1,0,0,1,0,-12)">
+  <text atv:refpx="33.468" atv:refpy="32" fill="$ColorIactive$" font-family="Arial" font-size="$FontSizeMenu$" id="Text_Realtime" x="7.5" y="36.5">Real Time</text>
+  <rect atv:refpx="48.273" atv:refpy="32" fill="#68a361" fill-opacity="0" height="40" id="Click_area_Realtime" stroke="none" stroke-width="2" width="90" x="0" y="12"/>
+ </g>
+ <g atv:refpx="185" atv:refpy="20" id="id_12" transform="matrix(1,0,0,1,0,-12)">
+  <text atv:refpx="159.05" atv:refpy="32" fill="$ColorIactive$" font-family="Arial" font-size="$FontSizeMenu$" id="Text_Historic" x="140.5" y="36.5">Historic</text>
+  <rect atv:refpx="219" atv:refpy="32" fill="#68a361" fill-opacity="0" height="40" id="Click_area_Historic" stroke="none" stroke-width="2" width="110" x="130" y="12"/>
+ </g>
+ <line atv:refpx="685" atv:refpy="46.75" id="id_4" stroke="$ColorInactive$" stroke-width="2" x1="10" x2="1360" y1="46.75" y2="46.75"/>
+ <g atv:refpx="815.5" atv:refpy="20" id="Date_Element">
+  <g atv:refpx="414" atv:refpy="20" id="id_14" transform="matrix(1,0,0,1,309,0)">
+   <svg atv:refpx="449.888" atv:refpy="44.996" height="30" id="id_2" transform="matrix(1.25,0,0,1.1667,0,0)" width="160" x="271.2" xlink:href="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Advanced.picker_date" y="2.142">
+    <atv:argument name="fontSize" prefix="FontSizeDatePickers"/>
+    <atv:argument name="name" prefix="DashboardID" value="Initial_Date"/>
+    <atv:overwrite id="button_stroke" transform="matrix(0.8,0,0,0.8571,0,0)" x="175.5" y="7.5"/>
+    <atv:overwrite id="id_1" transform="matrix(0.72,0,0,0.7714,0,0)" x="196.111" y="9.445"/>
+    <atv:overwrite id="button_bg" transform="matrix(0.8,0,0,0.8571,0,0)" x="175.5" y="7.5"/>
+    <atv:overwrite id="datepicker_label" transform="matrix(0.969,0,0,0.8571,-14.1126,0)" x="150" y="22.75"/>
+    <atv:overwrite height="31.001" id="focus_frame" transform="matrix(0.8,0,0,0.8571,0,0)" width="196"/>
+    <atv:overwrite height="27.001" id="blinking_frame" transform="matrix(0.8,0,0,0.8571,0,0)" width="168"/>
+    <atv:overwrite height="27.001" id="input_bg" transform="matrix(0.8,0,0,0.8571,0,0)" width="168"/>
+    <atv:overwrite height="33.001" id="id_0" transform="matrix(0.8,0,0,0.8571,0,0)" width="198"/>
+    <atv:overwrite height="35.001" id="id_2" transform="matrix(0.8,0,0,0.8571,0,0)" width="200"/>
+   </svg>
+   <text atv:refpx="240.733" atv:refpy="20" fill="$ColorIactive$" font-family="Arial" font-size="$FontSizeMenu$" id="id_3" x="215.5" y="24.5">Intial Date</text>
+  </g>
+  <g atv:refpx="793" atv:refpy="20" id="id_10" transform="matrix(1,0,0,1,688,52.5)">
+   <svg atv:refpx="452.799" atv:refpy="-12.505" height="30" id="id_15" transform="matrix(1.25,0,0,1.1667,0,0)" width="160" x="271.2" xlink:href="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Advanced.picker_date" y="-42.857">
+    <atv:argument name="fontSize" prefix="FontSizeDatePickers"/>
+    <atv:argument name="name" prefix="DashboardID" value="Final_Date"/>
+    <atv:overwrite id="button_stroke" transform="matrix(0.8,0,0,0.8571,0,0)" x="175.5" y="7.5"/>
+    <atv:overwrite id="id_1" transform="matrix(0.72,0,0,0.7714,0,0)" x="196.111" y="9.445"/>
+    <atv:overwrite id="button_bg" transform="matrix(0.8,0,0,0.8571,0,0)" x="175.5" y="7.5"/>
+    <atv:overwrite id="datepicker_label" transform="matrix(0.969,0,0,0.8571,-14.1126,0)" x="150" y="22.75"/>
+    <atv:overwrite height="31" id="focus_frame" transform="matrix(0.8,0,0,0.8571,0,0)" width="196"/>
+    <atv:overwrite height="27" id="blinking_frame" transform="matrix(0.8,0,0,0.8571,0,0)" width="168"/>
+    <atv:overwrite height="27" id="input_bg" transform="matrix(0.8,0,0,0.8571,0,0)" width="168"/>
+    <atv:overwrite height="33" id="id_0" transform="matrix(0.8,0,0,0.8571,0,0)" width="198"/>
+    <atv:overwrite height="35" id="id_2" transform="matrix(0.8,0,0,0.8571,0,0)" width="200"/>
+   </svg>
+   <text atv:refpx="240.763" atv:refpy="-32.499" fill="$ColorIactive$" font-family="Arial" font-size="$FontSizeMenu$" id="id_16" x="215.5" y="-27.999">Final Date</text>
+  </g>
+  <g atv:refpx="1084" atv:refpy="20" id="id_13" transform="matrix(1,0,0,1,231,-10)">
+   <text atv:refpx="1043.972" atv:refpy="30" fill="$ColorIactive$" font-family="Arial" font-size="$FontSizeMenu$" id="Text_Confirm" x="1024.5" y="34.5">Confirm</text>
+   <rect atv:refpx="1109" atv:refpy="30" fill="#68a361" fill-opacity="0" height="40" id="Click_area_Confirm" stroke="none" stroke-width="2" width="110" x="1020" y="10"/>
+  </g>
+  <svg atv:refpx="350" atv:refpy="20" height="30" id="Initial_Range_Method" width="160" x="270" xlink:href="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Advanced.combobox" y="5">
+   <atv:argument name="text1" value="T{Test 1}"/>
+   <atv:argument name="text1value" value="0"/>
+   <atv:argument name="text2" value="T{Test 2}"/>
+   <atv:argument name="text2value" value="1"/>
+   <atv:argument name="text3" value="T{Test 3}"/>
+   <atv:argument name="text3value" value="2"/>
+  </svg>
+ </g>
+ <script atv:desc="" atv:name="" type="text/ecmascript"><![CDATA[//------Initialize Variables-----------//
+
+//------Parameters
+const dashboardMenuRawConfig = {
+    GeneralConfig: {
+        DashboardID: webMI.query["DashboardID"],
+        InitialRangeMethod: webMI.query["InitialRangeMethod"],
+        InitialRange: webMI.query["InitialRange"],  
+        InitialRangeUnit: webMI.query["InitialRangeUnit"],
+        RealTimeEnabled:webMI.query["RealTimeEnabled"],
+        RealTimeUpdateTime:webMI.query["RealTimeUpdateTime"]
+    },
+    CacheConfig:{
+        CacheEnabled: webMI.query["CacheEnabled"],
+        CacheMaxSize: webMI.query["CacheMaxSize"],
+        CacheIntervalSize: webMI.query["CacheIntervalSize"]
+    },    
+    CustomFilter: {
+        CustomFilterActive: webMI.query["CustomFilterActive"],  
+        NodeReference: webMI.query["NodeReference"] 
+    },
+    Appearance: {
+        ColorActive: webMI.query["ColorActive"],  
+        ColorInactive: webMI.query["ColorInactive"],  
+        FontSizeMenu: webMI.query["FontSizeMenu"],  
+        FontSizeDatePickers: webMI.query["FontSizeDatePickers"]  
+    },
+     DebuggingConfig:{
+        DebuggingEnabled: webMI.query["DebuggingEnabled"],
+		DebuggingSection: webMI.query["DebuggingSection"]
+    },    
+    
+    
+};
+
+//uI Parameters
+const uIElements= {
+    Click_Area: ["Click_area_Realtime","Click_area_Historic"],
+    Texts: ["Text_Realtime","Text_Historic"],
+    Combobox: "Initial_Range_Method",
+    Click_area_Confirm: "Click_area_Confirm",
+    Text_Confirm: "Text_Confirm"    
+};
+
+//Initial Range Methods
+const initialRangeMethods = [
+  { text: 'CustomRange', value: 0 },
+  { text: 'CurrentHour', value: 1 },
+  { text: 'LastHour', value: 2 },
+  { text: 'Last_8Hours', value: 3 },
+  { text: 'FirstShift', value: 4 },
+  { text: 'SecondShift', value: 5 },
+  { text: 'ThirdShift', value: 6 },
+  { text: 'Today', value: 7 },
+  { text: 'Last_7Days', value: 8 },
+  { text: 'Yesterday', value: 9 },
+  { text: 'CurrentWeek', value: 10 },
+  { text: 'LastWeek', value: 11 },
+  { text: 'Last_2Weeks', value: 12 },
+  { text: 'CurrentMonth', value: 13 },
+  { text: 'LastMonth', value: 14 },
+  { text: 'Last_6Months', value: 15 },
+  { text: 'CurrentYear', value: 16 }
+];
+
+
+//Time Constants
+const ONE_MINUTE = 60 * 1000;
+const HALF_HOUR = 30 * ONE_MINUTE;
+const ONE_HOUR = 60 * ONE_MINUTE;
+const ONE_DAY = 24 * ONE_HOUR;
+
+
+//------Initial Conditions-----------//
+webMI.addOnload(function() {
+
+	//Create dashboard Manager
+	const dashboardManager1= new dashboardManager();
+	
+	//Create UI Handler
+	const userInterfaceHandler1 = new userInterfaceHandler(dashboardMenuRawConfig,uIElements,initialRangeMethods);	
+	
+	//Initialize UI Handler
+	userInterfaceHandler1.initialize(dashboardManager1);
+    
+});
+
+
+//------------------------------------------//
+//------------UI Handler Class-------------//
+
+class userInterfaceHandler {
+
+    // Attributes
+	uIElements;
+    currentConfig; // To store the current configuration state
+    updateRequest; // To handle update requests
+
+    // Constructor
+    constructor(dashboardMenuRawConfig,uIElements,initialRangeMethods) {
+		this.dashboardMenuRawConfig=dashboardMenuRawConfig;
+		this.RealTime=dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? true: false;
+		this.FirstTime=true;
+		this.uIElements=uIElements;
+		this.InitialRangeMethods=initialRangeMethods;
+		this.InitialRangeMethod=dashboardMenuRawConfig.GeneralConfig.InitialRangeMethod;
+		this.InitialRangeMethodOriginal=this.InitialRangeMethod;
+		this.InitialRange=dashboardMenuRawConfig.GeneralConfig.InitialRange;
+		this.InitialRangeUnit=dashboardMenuRawConfig.GeneralConfig.InitialRangeUnit;
+		this.CacheConfig=dashboardMenuRawConfig.CacheConfig;
+		this.DebuggingConfig=dashboardMenuRawConfig.DebuggingConfig
+		this.DashboardID=dashboardMenuRawConfig.GeneralConfig.DashboardID;
+		this.IgnoreDateChanges=false;
+		this.InitialTime;
+		this.FinalTime;		
+        this.currentConfig;        
+        this.updateRequest; 
+        this.dashboardManager;
+    }
+    
+    // Initialize
+    async initialize(dashboardManager) {       
+       
+	   //Store 
+	   this.dashboardManager=dashboardManager;      
+       
+       //Calculate time
+       await this.calculateTime();
+       
+       //Update Date Picker
+       this.updateDatePicker();
+       
+	   //Initialize Triggers
+	   this.addListeners();       
+      
+       //Real Time Trigger
+	   this.changeMode(this.RealTime);
+       
+       //Set Active RT
+	   this.setactive(this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? 0: 1);   	   
+	   
+	   //Create First Update Request
+	   this.createUpdateRequest();	   
+	   
+	   //Init Dashboard Manager
+	   dashboardManager.initialize(this.updateRequest,false,this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled,this.dashboardMenuRawConfig.GeneralConfig.RealTimeUpdateTime);    
+       
+    }
+
+
+    // Add Listeners
+    async addListeners() {
+       
+       //Listener Real Time
+		webMI.addEvent(this.uIElements.Click_Area[0], "click", (e) => {
+			
+			if (this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true")				{
+				//Back to Original Initial Range
+				this.InitialRangeMethod=this.InitialRangeMethodOriginal;
+							
+				//Real Time Trigger
+				this.changeMode(true);
+				
+				//Change Colors
+				this.setactive(0);
+			}
+		});
+		
+		//Listener Historic
+		webMI.addEvent(this.uIElements.Click_Area[1], "click", (e) => {
+			
+			//Real Time Trigger
+			this.changeMode(false);
+			
+			//Calculate again time
+			this.calculateTime();  
+
+			//Update Date Picker
+			this.updateDatePicker();
+			
+			//Change colors
+			this.setactive(1);
+		});
+		
+		//Listener Confirm
+		webMI.addEvent(this.uIElements.Click_area_Confirm, "click", (e) => {
+			
+			//Toggle Color			
+			this.toggleColor(this.uIElements.Text_Confirm);			
+			
+			//Create Update Request				
+			this.createUpdateRequest();
+			
+			//Send Update Request
+			this.sendUpdateRequests();			
+			
+		});
+		
+		//Listener for combobox values	
+		webMI.trigger.connect("valuechanged", (e) => {
+			
+			//In Hist Mode			
+			if (this.RealTime==false){
+				
+				//Update InitialRangeMethod
+				this.InitialRangeMethod=(this.InitialRangeMethods.find(element => element.value === e.value)).text;
+				
+				//Calculate time
+			    this.calculateTime();			   
+			   
+			    //Update Date Picker
+			    this.IgnoreDateChanges=true;
+			    this.updateDatePicker();	
+			    this.IgnoreDateChanges=false;	
+			    		
+			}
+			
+		},this.uIElements.Combobox);
+		
+		
+		
+		//Listener for the Initial Time picker
+		webMI.trigger.connect("com.atvise.datepicker_"+this.DashboardID+"Initial_Date", (e) => {
+			
+			//In Hist Mode			
+			if (this.RealTime==false && !this.IgnoreDateChanges){
+				//Update Initial Time
+				this.InitialTime=(new Date(e.value));	
+						
+			}
+		});
+				
+		
+		//Listener for the Final Time picker
+		webMI.trigger.connect("com.atvise.datepicker_"+this.DashboardID+"Final_Date", (e) => {
+			
+			if (this.RealTime==false && !this.IgnoreDateChanges){
+				
+				//Update Initial Time
+				this.FinalTime=(new Date(e.value));
+			}
+		});       
+    }
+
+    // Method create Update Rquest
+    createUpdateRequest() {
+       this.updateRequest = {
+			OperationMode: "Hist",
+			DashboardID:this.DashboardID,            
+            initialTime: this.InitialTime,
+            finalTime: this.FinalTime,
+            customFilterType: "",
+            cacheConfig: this.CacheConfig,
+            DebuggingConfig:this.DebuggingConfig
+        };
+    }
+
+    // Method to send Update Rquest
+    sendUpdateRequests() {
+        
+        //Send Update Reguest Dashboard Manager
+	   this.dashboardManager.updateRequestHandler(this.updateRequest, this.RealTime);  
+	   
+    }
+    
+    //Setactive element
+    setactive(ID) {     
+		
+		//Set active only the current icon
+		for (var i=0; i<this.uIElements.Click_Area.length; i++){
+			if (i==ID){
+				webMI.gfx.setFill(this.uIElements.Texts[i], dashboardMenuRawConfig.Appearance.ColorActive);
+			}
+			else
+			{
+				webMI.gfx.setFill(this.uIElements.Texts[i],dashboardMenuRawConfig.Appearance.ColorInactive);
+			}
+		}
+
+    }
+    
+    //Toggle  Color
+    toggleColor(ID) { 
+    
+		//First Active Color		
+		webMI.gfx.setFill(ID, dashboardMenuRawConfig.Appearance.ColorActive);
+		
+		//Second Inactive Color
+		setTimeout(async (e) => {
+			webMI.gfx.setFill(ID,dashboardMenuRawConfig.Appearance.ColorInactive);
+		},1000);
+		
+    }
+    
+	//Setactive element
+    updateDatePicker() {
+
+		//Fire Picker Updater
+        webMI.trigger.fire("com.atvise.datepicker_"+this.DashboardID+"Initial_Date", new Date(this.InitialTime).getTime()); 
+		webMI.trigger.fire("com.atvise.datepicker_"+this.DashboardID+"Final_Date", new Date(this.FinalTime).getTime());
+    }
+    
+    //Fill Combobox
+    fillCombobox(comboxID, comboboxElements) {
+		
+		//Excecute
+        webMI.trigger.fire("setItems", comboboxElements, comboxID);
+        
+        //Set Default Item
+        webMI.trigger.fire("setSelectedItem", this.InitialRangeMethod , comboxID);
+        
+    }
+
+    // Method to log Request
+    requestLogger() {
+ 
+    }
+    
+    //General Calculation Initial Time Final Time    
+    calculateTime() {
+    
+		// Final Time		
+		let FinalTimeI= new Date();
+	
+		// Start
+		let InitialTimeI = new Date(FinalTimeI); // Clone Final_Time
+		
+		//Auxiliary
+		let dayOfWeek=FinalTimeI.getDay();
+			
+		
+		switch (this.InitialRangeMethod) {
+			case 'CustomRange':
+				//Update FinalTime
+				this.FinalTime = FinalTimeI;
+				//Calculate InitialTime
+				InitialTimeI=this.calculateTimeCustomRange()
+				break;
+			case 'CurrentHour':
+				InitialTimeI.setMinutes(0, 0, 0); // Set to the beginning of the current hour
+				break;
+			case 'LastHour':
+				//Update FinalTime
+				FinalTimeI.setMinutes(0, 0, 0);
+				InitialTimeI.setHours((new Date(FinalTimeI)).getHours() - 1);
+				InitialTimeI.setMinutes(0, 0, 0); // Set to the beginning of the last hour
+				break;
+			case 'Last_8Hours':
+				FinalTimeI.setMinutes(0, 0, 0);
+				InitialTimeI.setHours((new Date(FinalTimeI)).getHours() - 8);
+				InitialTimeI.setMinutes(0, 0, 0);
+				break;
+			case 'FirstShift': // Assuming 8-hour shifts, 00:00 - 08:00
+				FinalTimeI.setHours(8, 0, 0, 0);
+				InitialTimeI.setHours(0, 0, 0, 0); // Start of the day
+				break;
+			case 'SecondShift': // 08:00 - 16:00
+				FinalTimeI.setHours(16, 0, 0, 0);
+				InitialTimeI.setHours(8, 0, 0, 0);
+				break;
+			case 'ThirdShift': // 16:00 - 24:00
+				FinalTimeI.setHours(24, 0, 0, 0);
+				InitialTimeI.setHours(16, 0, 0, 0);
+				break;
+			case 'Today':
+				InitialTimeI.setHours(0, 0, 0, 0); // Start of today
+				break;
+			case 'Last_7Days':
+				InitialTimeI.setDate((new Date(FinalTimeI)).getDate() - 7);
+				break;
+			case 'Yesterday':
+				FinalTimeI.setHours(0, 0, 0, 0);
+				InitialTimeI.setDate((new Date(FinalTimeI)).getDate() - 1);
+				InitialTimeI.setHours(0, 0, 0, 0); // Start of yesterday
+				break;
+			case 'CurrentWeek':
+				InitialTimeI.setDate((new Date(FinalTimeI)).getDate() - (new Date(FinalTimeI)).getDay());
+				InitialTimeI.setHours(0, 0, 0, 0); // Start of the current week
+				break;
+			case 'LastWeek':			
+				
+				FinalTimeI.setDate(FinalTimeI.getDate() - dayOfWeek);				
+				FinalTimeI.setHours(23, 59, 59, 999);
+				
+				InitialTimeI.setDate((new Date(FinalTimeI)).getDate() - (new Date(FinalTimeI)).getDay() - 7);
+				InitialTimeI.setHours(0, 0, 0, 0); // Start of the last week
+				break;
+			case 'Last_2Weeks':
+				FinalTimeI.setDate(FinalTimeI.getDate() - dayOfWeek - 7); // Shift to the end of the previous complete week
+				FinalTimeI.setHours(23, 59, 59, 999);
+				
+				InitialTimeI = new Date(FinalTimeI); // Duplicate FinalTimeI to preserve time part
+				InitialTimeI.setDate(InitialTimeI.getDate() - 14); // Move back two weeks
+				InitialTimeI.setHours(0, 0, 0, 0); // Set to the start of the day
+			
+				break;			
+			case 'CurrentMonth':
+				InitialTimeI.setDate(1);
+				InitialTimeI.setHours(0, 0, 0, 0); // Start of the current month
+				FinalTimeI.setMonth(FinalTimeI.getMonth() + 1, 0); // Set to the last day of the current month
+				FinalTimeI.setHours(23, 59, 59, 999); // End of the last day of the month
+				break;
+			case 'LastMonth':
+				InitialTimeI.setMonth(FinalTimeI.getMonth() - 1, 1); // Set to the first day of the last month
+				InitialTimeI.setHours(0, 0, 0, 0);
+				FinalTimeI.setMonth(FinalTimeI.getMonth(), 0); // Set to the last day of the last month
+				FinalTimeI.setHours(23, 59, 59, 999); // End of the last day of the month
+				break;
+			case 'Last_6Months':
+				InitialTimeI.setMonth(FinalTimeI.getMonth() - 6, 1); // Six months ago from the first day of that month
+				InitialTimeI.setHours(0, 0, 0, 0);
+				// Optionally, set FinalTimeI to the end of the last full month
+				FinalTimeI.setDate(0); // Last day of the previous month
+				FinalTimeI.setHours(23, 59, 59, 999); // End of the last day of the month
+				break;
+			case 'CurrentYear':
+				InitialTimeI.setFullYear(FinalTimeI.getFullYear(), 0, 1); // Start of the current year
+				InitialTimeI.setHours(0, 0, 0, 0);
+				// Optionally, set FinalTimeI to the current time or end of the year
+				FinalTimeI.setFullYear(FinalTimeI.getFullYear(), 11, 31); // Last day of the year
+				FinalTimeI.setHours(23, 59, 59, 999);
+				break;
+			default:
+				console.error('Unsupported InitialRangeMethod:', this.InitialRangeMethod);
+				break;
+		}
+		
+		this.FinalTime = new Date(FinalTimeI);
+		this.InitialTime = new Date(InitialTimeI);
+	}
+    
+    //Calculate Initial and Final Time for Custom Range
+    calculateTimeCustomRange(){
+    
+		// Start
+		var InitialTimeI = new Date(this.FinalTime); // Clone Final_Time
+	
+		switch (this.InitialRangeUnit) {
+			case 's': // Seconds
+				InitialTimeI.setSeconds(this.FinalTime.getSeconds() - this.InitialRange);
+			break;
+			case 'min': // Minutes
+				InitialTimeI.setMinutes(this.FinalTime.getMinutes() - this.InitialRange);
+			break;
+			case 'h': // Hours
+				InitialTimeI.setHours(this.FinalTime.getHours() - this.InitialRange);
+			break;
+			case 'day': // Days
+				InitialTimeI.setDate(this.FinalTime.getDate() - this.InitialRange);
+			break;
+			case 'month': // Months
+				InitialTimeI.setMonth(this.FinalTime.getMonth() - this.InitialRange);
+			break;
+			default:
+				console.error('Unsupported InitialRangeUnit:', this.InitialRange);
+			break;
+		}
+		
+		return InitialTimeI;	
+    }
+    
+    // Method to change from realTime to Historic
+    changeMode(RTactive) {
+		
+		const RTactiveI=dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? RTactive:false;		
+		
+		//Set RT Active
+		this.RealTime=RTactiveI;    	
+    	this.dashboardManager.RealTime=RTactiveI; 
+
+		//Show/hide
+		webMI.gfx.setVisible("Date_Element", !RTactiveI);
+		
+		//Fill Combobox
+		if (!RTactiveI) {
+			this.fillCombobox(this.uIElements.Combobox, this.InitialRangeMethods);
+		}	
+		//Recalculate Real Time
+		else if(RTactiveI&&!this.FirstTime){
+			console.log("Updating to RT")
+			//Update Evaluation time
+			this.calculateTime();
+			
+			//Create Update Request				
+			this.createUpdateRequest();
+			
+			//Send Update Request
+			this.sendUpdateRequests();
+				
+		}
+		
+		//Send command
+        webMI.trigger.fire("RealTime_"+this.DashboardID, RTactiveI); 
+        
+        //No longer First time
+        if(this.FirstTime){
+			this.FirstTime=false;    
+        }   
+    }
+    
+    
+}
+
+//------------------------------------------//
+//------------Dashboard Manager Class-------------//
+
+class dashboardManager {
+    // Attributes
+    ElementsConfig;
+    DataRequest;
+    UpdateRequest;
+    DashboardData;
+
+    // Constructor
+    constructor() {
+		this.ElementsConfig=new Array();
+        this.DataRequest;
+        this.DataRequestBase;
+        this.DataRequestRT;
+        this.UniqueNodes;
+        this.UniqueNodesDB;
+        this.NodesRT=new Array();
+        this.UpdateRequest;
+        this.ChartTimeRange;
+        this.RealTimeEnabled;
+        this.RealTimeUpdateTime;
+        this.DashboardData;
+        this.DashboardDataProcessed;
+        this.DashboardDataDirect;
+        this.DashboardDataDirectEnabled=true;
+        this.DashboardDataRTProcessed;
+        this.DashboardDataRTDirect;
+        this.DashboardDataRTFinal;
+        this.DashboardDataBase;
+        this.RealTime;
+        this.DataRTDistributed=true;
+        this.replacementString="<_::_>"
+        this.LoadingDisplay="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Loading_Element";
+        this.LoadingDisplayR;
+    }
+    
+    // Initialize
+    async initialize(updateRequest,operationMode,RealTimeEnabled,RealTimeUpdateTime) {
+		
+		
+		//Open Loading Display
+		 this.loadingDisplayHandler("Open");
+				 
+		 //Define Operation Mode 
+		 this.RealTime=operationMode;
+		 
+		 //Determine if RT is enabled
+		 this.RealTimeEnabled=RealTimeEnabled;
+		 
+		 //Define RT Updatetime
+		 this.RealTimeUpdateTime=RealTimeUpdateTime;
+		 
+		 //Set First Update Request
+		 this.UpdateRequest=updateRequest;
+		 console.log("------------First Update Request---------");
+		 console.log(this.UpdateRequest);
+		 
+		 //Define chartTimeRange
+		 this.ChartTimeRange=(this.UpdateRequest.finalTime-this.UpdateRequest.initialTime);		 
+		 
+		 //Add Listeners
+		 this.addInitialListeners();    
+		 
+		 //Dashboard Ready
+		 webMI.trigger.fire("Dashboard_Ready_"+this.DashboardID, true);
+		 
+		 //Wait for Elements for register
+		 setTimeout(async (e) => {
+			
+			//Make sure there are Elements
+			 if (this.ElementsConfig.length>=1){
+			 
+				 //Create Data Request
+				 await this.createDataRequest();
+				 console.log("------------Data Request Ready---------");
+				 console.log(this.DataRequest);
+				 
+				 //Unique nodes in Request
+				 this.UniqueNodes= await this.rawDataRequestProcessor(this.DataRequest,"nodesRequest");
+				 console.log("------------Unique Nodes---------");
+				 console.log(this.UniqueNodes);
+				 
+				  //Unique nodes in Request
+				 this.UniqueNodesDB= await this.rawDataRequestProcessor(this.DataRequest,"nodesRequestDB");
+				 console.log("------------Unique Nodes DB---------");
+				 console.log(this.UniqueNodesDB);
+				
+				
+				 //Create Dashboard Data	
+				 this.DashboardData= await this.dashboardDataCreatorHandler();
+				 this.DashboardDataBase=this.DashboardData;
+				 console.log("-----------Dashboard Data--------------");
+				 console.log(this.DashboardData);	
+				  
+				 //Distribuite Dashboard Data
+				 await this.distributeDashboardData();
+				 
+				 
+				 //Open Loading Display
+				 this.loadingDisplayHandler("Close");
+				 
+				 //Initialize RT
+				 this.RealTime= this.RealTimeEnabled=="true" ? true:false;
+				 this.addRTListeners();
+				 
+			 }
+			 
+		 },500);
+    
+    }
+	
+	//------------------------------------------------//
+	//------------Data Preparing Functions------------//    
+    
+    // Add Listeners
+    addInitialListeners() {
+		
+		//Listener to recieve Element Config
+		webMI.trigger.connect("Element_Config_Receiver_"+this.DashboardID, (e) => {
+			this.registerElements(e.value);
+		},"Real_Time");			
+				
+    }
+    
+    // Method to register elements based on configuration
+    registerElements(ElementConfig) {
+    
+		console.log("--------------Registering-------------");
+		console.log(this.ElementsConfig);
+		
+		//Add to Elements Config
+		this.ElementsConfig.push(ElementConfig);				
+    }    
+        
+    //Organizes order and updates
+    elementConfigOrganizer() {
+		// Separate elements into two groups: those with and without "OEE" in dataProcessingType
+		const noOEE = [];
+		const oeeElements = [];
+		const oeeOrder = {
+			"FullRange-OEEAvailability": 1,
+			"FullRange-OEEProductivity": 2,
+			"FullRange-OEEQuality": 3,
+			"FullRange-OEE": 4
+		};
+		
+		// Map all OEEID-related configs for quick lookup
+		const oeeIdMap = new Map();
+	
+		// Group elements
+		this.ElementsConfig.forEach(config => {
+			if (config.chartsConfig.dataProcessingType.includes("OEE")) {
+				oeeElements.push(config);
+				
+				const oeeId = config.chartsConfig.specialParameters?.OEEID;
+				
+				if (oeeId) {
+					if (!oeeIdMap.has(oeeId)) {
+						oeeIdMap.set(oeeId, {});
+					}
+					
+					oeeIdMap.get(oeeId).OEEAvN = undefined;
+					oeeIdMap.get(oeeId).OEEPDownCN = undefined;
+					oeeIdMap.get(oeeId).OEEPrN = undefined;
+					oeeIdMap.get(oeeId).OEEProExUCN =undefined;
+					oeeIdMap.get(oeeId).OEEProdSpeedN = undefined;
+					oeeIdMap.get(oeeId).OEEProExUCN =undefined;		
+					oeeIdMap.get(oeeId).OEEQuN = undefined;
+				}	
+				
+				
+			} else {
+				noOEE.push(config);
+			}
+		});
+		
+		console.log("oeeIdMap");
+		console.log(oeeIdMap);
+	
+		// Proceed only if oeeElements are not empty
+		if (oeeElements.length > 0) {
+		
+			// Sort OEE elements by predefined order
+			oeeElements.sort((a, b) => {
+				const orderA = oeeOrder[a.chartsConfig.dataProcessingType] || Infinity;
+				const orderB = oeeOrder[b.chartsConfig.dataProcessingType] || Infinity;
+				return orderA - orderB;
+			});
+	
+			
+		
+			
+			//Get OEE Sets based on the OEEID
+			oeeElements.forEach(config => {
+				const oeeId = config.chartsConfig.specialParameters?.OEEID;
+				//If OEEID Valid
+				if (oeeId) {
+					if (!oeeIdMap.has(oeeId)) {
+						//Creates a new Set with oeeId as base
+						oeeIdMap.set(oeeId, {});
+					}
+					const category = config.chartsConfig.dataProcessingType;
+					if (category === "FullRange-OEEAvailability") {
+					
+						oeeIdMap.get(oeeId).OEEAvN = config.chartNodes[0];
+						oeeIdMap.get(oeeId).OEEPDownCN = config.chartsConfig.specialParameters.OEEPDownCN;			
+									
+					} else if (category === "FullRange-OEEProductivity") {
+					
+						oeeIdMap.get(oeeId).OEEPrN = config.chartNodes[0];
+						oeeIdMap.get(oeeId).OEEProExUCN = config.chartsConfig.specialParameters.OEEProExUCN;
+						oeeIdMap.get(oeeId).OEEProdSpeedN = config.chartsConfig.specialParameters.OEEProdSpeedN;
+						oeeIdMap.get(oeeId).OEEProExUCN = config.chartsConfig.specialParameters.OEEProExUCN;
+						
+					} else if (category === "FullRange-OEEQuality") {
+						oeeIdMap.get(oeeId).OEEQuN = config.chartNodes[0];
+					}
+				}
+			});
+			
+			// Update "FullRange-OEE" and "FullRange-OEEProductivity" configs
+			oeeElements.forEach(config => {
+				const { chartsConfig, chartNodes } = config;
+	
+				if (chartsConfig.dataProcessingType === "FullRange-OEE") {
+				
+					const oeeId = chartsConfig.specialParameters?.OEEID;
+					if (oeeId && oeeIdMap.has(oeeId)) {
+					
+						const relatedNodes = oeeIdMap.get(oeeId);		
+					
+						let parameters = Array.from(oeeIdMap.entries()).flatMap(([key, valueObj]) =>
+							Object.keys(valueObj) // Extract all keys directly
+						);
+						
+						console.log("parameters");		
+						console.log(parameters);
+						
+						// Add nodes to chartNodes if valid
+						parameters.forEach(param => {
+
+							const value = chartsConfig.specialParameters[param]!=undefined ? chartsConfig.specialParameters[param] : relatedNodes[param];
+							
+							if (value!=undefined && value && !chartNodes.includes(value)) {
+								chartNodes.push(value);
+								
+								//Update special Parameters
+								if(chartsConfig.specialParameters[param]==undefined){
+									chartsConfig.specialParameters[param]=relatedNodes[param];
+								}
+							}
+						});
+						
+						
+						
+					}
+				}	
+	
+				//If it is Productivity Chart
+				if (chartsConfig.dataProcessingType === "FullRange-OEEProductivity") {					
+					
+					//Add ProdSpeedNode
+					if(chartsConfig.specialParameters.OEEProSM=="VariableSpeed") {
+						const prodSpeedNode = chartsConfig.specialParameters?.OEEProdSpeedN;
+						
+						if (prodSpeedNode && !chartNodes.includes(prodSpeedNode)) {
+							chartNodes.push(prodSpeedNode);
+						}
+					}
+					
+					//Add ProdExpectedUnitsCounterN
+					else if(chartsConfig.specialParameters.OEEProSM=="ExpectedUnitsCounter") {
+					
+						const prodExpectedUnitsCounterN = chartsConfig.specialParameters?.OEEProExUCN;
+						
+						if (prodExpectedUnitsCounterN && !chartNodes.includes(prodExpectedUnitsCounterN)) {
+							chartNodes.push(prodExpectedUnitsCounterN);
+						}
+					}
+					
+					
+				}
+				
+				//If it is Quality Chart
+				if (chartsConfig.dataProcessingType === "FullRange-OEEQuality") {	
+					
+					//Add ProductivityNode		
+					const prodNode = chartsConfig.specialParameters?.OEEPrN;
+					
+					if (prodNode && !chartNodes.includes(prodNode)) {
+						chartNodes.push(prodNode);
+					}
+				}
+				
+				//If it is Availability Chart
+				if (chartsConfig.dataProcessingType === "FullRange-OEEAvailability") {			
+						
+					if(chartsConfig.specialParameters.OEEPDownM=="PlannedDowntimeCounter") {
+						const plannedDowntimeCounterN= chartsConfig.specialParameters?.OEEPDownCN;
+						if (plannedDowntimeCounterN && !chartNodes.includes(plannedDowntimeCounterN)) {
+							chartNodes.push(plannedDowntimeCounterN);
+						}
+					}				
+				}
+			});
+		}
+	
+		// Combine the arrays and update the original ElementsConfig
+		this.ElementsConfig = [...noOEE, ...oeeElements];
+	}
+	
+    // Method to create data requests
+    async createDataRequest() {
+		
+		console.log("elementConfig before Organizer");		
+		console.log(this.ElementsConfig);	
+		//Organize ElementConfig 
+		await this.elementConfigOrganizer();
+		
+		console.log("elementConfig after Organizer");		
+		console.log(this.ElementsConfig);
+
+        let chartsNodes = [];
+        let chartsConfig = [];
+        let updateRequest = [];        
+
+        // Process each element config to form the output structure
+        this.ElementsConfig.forEach(config => {
+            chartsNodes.push({
+                chartID: config.chartsConfig.chartID,
+                chartNodes: config.chartNodes
+            });
+
+            chartsConfig.push({
+                chartID: config.chartsConfig.chartID,
+                elementType: config.chartsConfig.elementType,
+                chartType: config.chartsConfig.chartType,
+                dataSource: config.chartsConfig.dataSource==undefined ? "Internal-Historian":config.chartsConfig.dataSource,
+                dataType: config.chartsConfig.dataType,
+                dataProcessingType: config.chartsConfig.dataProcessingType,
+                dataPrTUnit:config.chartsConfig.dataPrTUnit,
+                dataReductionEnable: config.chartsConfig.dataReductionEnable,
+                dataReductionMaxSize: config.chartsConfig.dataReductionMaxSize,
+                dataoutOfLimitEnable: config.chartsConfig.dataoutOfLimitEnable,
+                dataMaxLimit: config.chartsConfig.dataMaxLimit,
+                dataMinLimit: config.chartsConfig.dataMinLimit,
+                categoryType: config.chartsConfig.categoryType,
+                categoryRound: config.chartsConfig.categoryRound,
+                categorCustomValue: config.chartsConfig.categorCustomValue,
+                categoryCustomIntervalLength: config.chartsConfig.categoryCustomIntervalLength,
+                categoryCustomIntervalUnit: config.chartsConfig.categoryCustomIntervalUnit,
+                categoryTimeOffset: config.chartsConfig.categoryTimeOffset,
+                specialParameters: config.chartsConfig.specialParameters,
+                singleDataRequest: false
+            });
+			
+            updateRequest.push({         
+				dID:this.UpdateRequest.DashboardID+this.createDashboardID(),
+                chartID: config.chartsConfig.chartID,
+                OperationMode: this.UpdateRequest.OperationMode,
+                initialTime: this.UpdateRequest.initialTime,
+                finalTime: this.UpdateRequest.finalTime,
+                customFilterType: this.UpdateRequest.customFilterType,
+                cacheConfig: this.UpdateRequest.cacheConfig,
+                DbgE: (this.UpdateRequest.DebuggingConfig.DebuggingEnabled=="true" &&(this.UpdateRequest.DebuggingConfig.DebuggingSection=="All-Code" || this.UpdateRequest.DebuggingConfig.DebuggingSection=="Server-Only")? true : false)
+            });
+        });
+        
+        //Base DataRequest
+		this.DataRequestBase= {
+            chartsNodes,
+            chartsConfig,
+            updateRequest
+        };
+		
+        // Construct the final object to be returned
+        this.DataRequest = {
+            chartsNodes,
+            chartsConfig,
+            updateRequest
+        };
+    }
+    
+    //Process Request
+	rawDataRequestProcessor(dataRequest, infoRequired) {
+		switch (infoRequired) {
+			case "nodesRequest":
+				// Use a Set to store unique nodes
+				const uniqueNodes = new Set();
+				
+				// Ensure dataRequest has chartsNodes array
+				if (dataRequest.chartsNodes && Array.isArray(dataRequest.chartsNodes)) {
+					// Iterate over each chart object in the array
+					dataRequest.chartsNodes.forEach((chart,index) => {
+						// Add each node to the Set (duplicates will be ignored)
+						if (dataRequest.chartsConfig[index].elementType=="Chart"){
+							chart.chartNodes.forEach(node => uniqueNodes.add(node));
+						}
+					});
+				} else {
+					console.error("Invalid dataRequest structure: chartsNodes is missing or not an array.");
+				}
+	
+				// Convert the Set back to an array and return it
+				return Array.from(uniqueNodes);
+				
+				case "nodesRequestDB":
+				// Use a Set to store unique nodes
+				const uniqueNodesDB = new Set();
+				
+				// Ensure dataRequest has chartsNodes array
+				if (dataRequest.chartsNodes && Array.isArray(dataRequest.chartsNodes)) {
+					// Iterate over each chart object in the array
+					dataRequest.chartsNodes.forEach((chart,index) => {
+						// Add each node to the Set (duplicates will be ignored)
+						if (dataRequest.chartsConfig[index].elementType=="Table"){
+							chart.chartNodes.forEach(node => uniqueNodesDB.add(node));
+						}
+					});
+				} else {
+					console.error("Invalid dataRequest structure: chartsNodes is missing or not an array.");
+				}
+	
+				// Convert the Set back to an array and return it
+				return Array.from(uniqueNodesDB);
+			
+			default:
+				console.error("Unsupported infoRequired:", infoRequired);
+				return null;
+		}
+	}	
+   
+    // Handle New Request After Initialize
+    async updateRequestHandler(updateRequest,RealTime) {
+		
+		//Update Request Initially is always Hist
+		this.RealTime=false;	
+		
+		//Set Update Request
+		 this.UpdateRequest=updateRequest;
+		 
+		  //Open Loading Display
+		  this.loadingDisplayHandler("Open");
+		  
+		 console.log("------------New Update Request---------");
+		 console.log(this.UpdateRequest);
+		 
+		 //Create Data Request
+		 await this.createDataRequest();
+		 console.log("------------Data Request Ready---------");
+		 console.log(this.DataRequest);
+		
+		 //Create Dashboard Data
+		 this.DashboardData = await this.dashboardDataCreator();
+		 console.log("-----------Dashboard Data--------------");
+		 console.log(this.DashboardData);
+		 
+		 //Distribuite Dashboard Data
+		 await this.distributeDashboardData();
+		 
+		 //Open Loading Display
+		 this.loadingDisplayHandler("Close");
+		 
+		 //Update Real time		
+		 this.RealTime=RealTime;
+    }    
+    
+   //Switches between Direct and Processed data
+    async dashboardDataCreatorHandler(){
+		
+		//Initialize
+		let DashboardData;
+		
+		//If Data Direct is enabled 
+		if(this.DashboardDataDirectEnabled){
+				this.DashboardDataDirect	= await this.dashboardDataDirectCreator();
+				console.log("-----------Dashboard Data  Direct--------------");
+				console.log(JSON.stringify(this.DashboardDataDirect));
+		}
+		
+		 //Create Dashboard Data
+		 this.DashboardDataProcessed = await this.dashboardDataCreator();
+		 console.log("-----------Dashboard Data  Processed--------------");
+		 console.log(JSON.stringify(this.DashboardDataProcessed));
+		
+		if(this.DashboardDataDirectEnabled){
+			//Merge Data
+			DashboardData= this.dashboardRTDataMerger(this.DashboardDataDirect,this.DashboardDataProcessed);
+		}
+		else{
+			//Straigth Processed Data
+			DashboardData=this.DashboardDataProcessed;
+		}		
+		
+		//Recover Previous State
+		this.DataRequest=this.DataRequestBase;
+		
+		return DashboardData;
+		
+    }
+       
+     // Make the function asynchronous
+	async dashboardDataDirectCreator() {
+		// Initialize the preliminary dashboardData structure
+		let dashboardData = {
+			chartsData: [],
+			Errors: []
+		};
+		let filteredConfigs;
+	
+		try {
+			// Define criteria for filtering chartsConfig
+			const criteria = config => {
+				const categoryTypeMatch = (config.categoryType === "Single-Simple");
+				const dataProcessingTypeMatch = (config.dataProcessingType === "SinglePoint-LastValue" || config.dataProcessingType === "None");
+				const dataReductionEnableMatch = true;
+				const dataoutOfLimitEnableMatch = config.dataoutOfLimitEnable === false;
+	
+				return categoryTypeMatch && dataProcessingTypeMatch && dataReductionEnableMatch && dataoutOfLimitEnableMatch;
+			};
+	
+			// Filter chartsConfig based on the criteria
+			filteredConfigs = this.DataRequest.chartsConfig.filter(criteria);
+	
+			// Process each filtered config
+			for (const config of filteredConfigs) {
+				const chartID = config.chartID;
+				
+     			//Find Corresponding Update Request
+				let updateRequest = this.DataRequest.updateRequest.find(node => node.chartID === chartID);
+				
+				// Find the corresponding chartNodes for each chartID in filteredConfigs
+				let chartNodes = this.DataRequest.chartsNodes.find(node => node.chartID === chartID);
+				if (!chartNodes) {
+					console.error(`No chartNodes found for chartID ${chartID}`);
+					dashboardData.Errors.push(`No chartNodes found for chartID ${chartID}`);
+					continue; // Skip to the next iteration if no nodes are found
+				}
+	
+				// Extract node addresses from the chartNodes for data read
+				const nodeAddressArray = chartNodes.chartNodes;
+	
+				// Await reading node values using webMI.data.read
+				const e = await new Promise((resolve, reject) => {
+					webMI.data.read(nodeAddressArray, function(e) {
+						if (e) resolve(e);
+						else reject(new Error("Error reading data from nodes"));
+					});
+				});
+	
+				// Prepare result array for each node read
+				let resultArray = {
+					chartID: chartID,
+					Values: e.map(result => result.value),
+					Names: nodeAddressArray,
+					Timestamps: e.map(result => result.timestamp),
+					Status: e.map(result => result.status),
+				};
+	
+				// Generate chartSeries for the current chart
+				let chartSeries=[];
+				
+				if(config.chartType === "Pie" || config.chartType === "Pyramid"){
+				
+					let chartDataI = {};
+					let chartDataII=[];
+					chartDataI["name"]="Aggregate";
+					
+					// Process for Single-Simple category type
+					resultArray.Names.forEach((node, index) => {
+							chartDataII.push({									 
+								y:resultArray.Values[index],
+								name:node									
+							});						
+					});
+					chartDataI["data"]=chartDataII;
+					chartSeries.push(chartDataI);
+				}
+				else{
+					chartSeries = resultArray.Names.map((node, index) => ({
+						name: node,
+						data: [resultArray.Values[index]]
+					}));
+				}
+				
+				// Generate Tooltips
+				let tooltipInfo = resultArray.Names.map((node, index) => ({
+					name: node,
+					tooltipInfo: [this.formatTimestampToDateTime(resultArray.Timestamps[index])]
+				}));
+				
+				// Generate informationRT
+				let informationRT = resultArray.Names.map((node, index) => ({
+					Node: node,
+					LastDataPointRT: 0,
+					LastDataPointProcessed: [resultArray.Values[index]],
+					LastDataPointRaw:{
+												Value: [resultArray.Values[index]],
+												status: [resultArray.Status[index]],
+												timestamps: [resultArray.Timestamps[index]],
+												},
+					AllDataRequired: false,
+					IntervalInfo:{
+										start:updateRequest.initialTime,
+										end:updateRequest.finalTime,
+										newInterval:false,
+										intervalLength:updateRequest.initialTime-updateRequest.finalTime,
+					},
+					ReduceInfo: {
+						reductionStepSize:0,
+						reductioniterationsBeforeNextStepRT:0
+					},
+					OEEInfo:{},
+					HistInfo:{},
+					LastRelevantTimestamp:resultArray.Timestamps[index]
+				}));
+	
+				// Prepare the structure for chartData
+				let chartData = {
+					chartID: chartID,
+					informationRT: informationRT, // Placeholder for future use
+					tooltipInfo: tooltipInfo,    // Placeholder for tooltip info
+					chartSeries: chartSeries,
+					LimitDashboardData: [], // Placeholder for limit data
+					chartCategories: []      // Placeholder for category data
+				};
+				console.log("chartData");
+				console.log(chartData);
+	
+				// Push the chartData to the main dashboardData structure
+				dashboardData.chartsData.push(chartData);
+			}
+		} catch (error) {
+			console.error("Error creating dashboard data directly:", error);
+			dashboardData.Errors.push(error.message);
+		}
+	
+		
+		// Remove the used chartNodes, chartConfig, and updateRequest
+		this.DataRequest.chartsNodes = this.DataRequest.chartsNodes.filter(
+			node => !filteredConfigs.some(config => config.chartID === node.chartID)
+		);
+		this.DataRequest.chartsConfig = this.DataRequest.chartsConfig.filter(
+			config => !filteredConfigs.includes(config)
+		);
+		this.DataRequest.updateRequest = this.DataRequest.updateRequest.filter(
+			req => !filteredConfigs.some(config => config.chartID === req.chartID)
+		);
+		
+	
+		return dashboardData;
+	}
+	
+    // Method to create dashboard data	
+	async dashboardDataCreator() {
+		const MAX_CHARTS_PER_REQUEST_HIST = 6;
+		const MAX_CHARTS_PER_REQUEST_RT = 3;
+		let dataRequest = this.RealTime ? this.DataRequestRT : this.DataRequest;
+		
+		if (dataRequest.chartsNodes.length>0){
+			const maxChartsPerRequest = this.RealTime ? MAX_CHARTS_PER_REQUEST_RT : MAX_CHARTS_PER_REQUEST_HIST;
+		
+			// Only split if the number of charts exceeds the MAX_CHARTS_PER_REQUEST
+			if (dataRequest.chartsNodes.length > maxChartsPerRequest) {
+				const dataRequests = this.splitDataRequest(dataRequest, maxChartsPerRequest);
+				const responses = [];
+		
+				for (const request of dataRequests) {
+					const response = await this.sendDataRequest(request);
+					responses.push(response);
+				}
+		
+				const mergedData = this.mergeResponses(responses);
+				console.log("-----------Custom Request answer--------------");
+				return mergedData;
+			} else {
+				const response = await this.sendDataRequest(dataRequest);
+				console.log("-----------Custom Request answer--------------");
+				return response;
+			}
+		}
+		
+		else{
+			return {};
+		}
+	}
+	
+	// Split the data request into chunks of maximum size
+	splitDataRequest(dataRequest, maxChartsPerRequest) {
+		const { chartsNodes, chartsConfig, updateRequest } = dataRequest;
+		const requests = [];
+	
+		for (let i = 0; i < chartsNodes.length; i += maxChartsPerRequest) {
+			requests.push({
+				chartsNodes: chartsNodes.slice(i, i + maxChartsPerRequest),
+				chartsConfig: chartsConfig.slice(i, i + maxChartsPerRequest),
+				updateRequest: updateRequest.slice(i, i + maxChartsPerRequest)
+			});
+		}
+	
+		return requests;
+	}
+	
+	// Send the data request
+	sendDataRequest(dataRequest) {
+		return new Promise((resolve, reject) => {
+			const requestString = this.handleSpacesEncode (JSON.stringify(dataRequest));
+			const url = `Advanced_Dashboard_Data_Creator?DataRequest=${requestString}&format=binary`;
+			webMI.data.customRequest("GET", url, "responseType=string", (response) => {
+				try {
+					resolve(response);
+				} catch (error) {
+					reject(error);
+				}
+			});
+		});
+	}
+	
+	// Merge the responses into a final result
+	mergeResponses(responses) {
+		const mergedData = {
+			chartsData: [],
+			Errors: []
+		};
+	
+		responses.forEach(response => {
+			if (response.chartsData) {
+				mergedData.chartsData = mergedData.chartsData.concat(response.chartsData);
+			}
+			if (response.Errors) {
+				mergedData.Errors = mergedData.Errors.concat(response.Errors);
+			}
+		});
+	
+		return mergedData;
+	}
+	
+	// Distribute dashboard data 
+    distributeDashboardData() {
+		console.log("Distribuiting............")
+		var DashboardData;
+		//History Data
+		if (!this.RealTime){
+			DashboardData=this.DashboardData;				
+		}
+		//Real Time
+		else{
+			DashboardData=this.DashboardDataRTFinal;
+		}
+    
+        if (DashboardData && DashboardData.chartsData) {
+			
+            // Iterate over each chartsData element
+            DashboardData.chartsData.forEach((chartData, index) => {
+				
+				//Expected Structure
+				var chartDataI={
+								Errors:DashboardData.Errors,
+								chartData:chartData,	
+								RTInfo: {OperationMode:this.RealTime? "RealTime":"Hist",
+										 ChartRange: this.ChartTimeRange}	
+				};
+
+                // Fire Each Trigger
+                webMI.trigger.fire("Element_Data_" + chartData.chartID, chartDataI);
+                console.log("Data distributed for chart ID:", chartData.chartID);
+            });
+        } else {
+            console.log("No chartsData to distribute or DashboardData not set.");
+        }
+    }
+    
+    //------------------------------------------------//
+	//------------Real Time Functions----------------//
+    
+    // Add Listeners
+    addRTListeners() {
+		//Subcribe to Variable Changes			
+		
+		webMI.data.subscribe(this.UniqueNodes,(e) => {
+			if(this.RealTime){
+				//Push Node to RTNodes for next Update	
+				this.NodesRT.push({Node:e.address, Value: {Value:e.value,status:e.status,timestamps:e.timestamp}});
+			}
+		});	
+		
+		
+		//Excecute RTUpdate every updateRate
+		setInterval((e) => {		
+			
+			//Excecutes only in Real Time
+			if(this.RealTime && (this.NodesRT.length>0 || this.UniqueNodesDB.length>0) && this.DataRTDistributed==true){
+				
+				//Update state
+				this.DataRTDistributed=false;
+				
+				//Feed Nodes RTI For analisis and reset
+				this.updateRTHandler(this.NodesRT);	
+				
+				this.NodesRT=new Array();
+			}
+			
+		},this.RealTimeUpdateTime);   
+		
+    }
+        
+     //Handles RealTime Update
+    async updateRTHandler(NodesRT){  
+    
+		console.log("NodesRT");
+		console.log(JSON.stringify(NodesRT));
+		
+		//Create Data Request RT
+		this.DataRequestRT= await this.createRTDataRequest(NodesRT);		 
+		console.log("------------Data Request RT Ready---------");	
+		console.log(this.DataRequestRT);
+		
+		//Create Dashboard Data Direct (No processing required)
+		this.DashboardDataRTDirect=this.dashboardDataRTDirectCreator();
+		console.log("-----------Dashboard Data RT Direct--------------");
+		console.log(this.DashboardDataRTDirect);
+				
+		console.log("-----------DataRequestRT Required Processing--------------");
+		console.log(this.DataRequestRT);
+		
+		//Create Dashboard data which requires processing
+		this.DashboardDataRTProcessed= await this.dashboardDataCreator();
+
+		console.log("-----------DashboardRT Processed Data--------------");
+		console.log(this.DashboardDataRTProcessed);
+	
+		this.DashboardDataRTFinal=this.dashboardRTDataMerger(this.DashboardDataRTDirect,this.DashboardDataRTProcessed);
+		console.log("-----------DashboardRT Data Final--------------");
+		console.log(this.DashboardDataRTFinal);
+		
+		//Distribute Data
+		this.distributeDashboardData();
+		
+		//Ensure data has been Distributed
+		this.DataRTDistributed=true;
+		
+		//Reset Nodes RT
+		this.DataRequestRT=new Array();
+		
+	}   
+	
+	//Organize nodes
+	nodesRTOrganizer(NodesRT) {
+		const organizedNodesRT = [...NodesRT]; // To store the modified NodesRT with any additional nodes
+	
+		NodesRT.forEach((nodeRT) => {
+			// Find all matching chartNodes that include the current nodeRT.Node
+			const matchingChartNodes = this.DataRequest.chartsNodes.filter(chartNodesI =>
+				chartNodesI.chartNodes.includes(nodeRT.Node)
+			);
+			
+			// Iterate over all matching chartNodes
+			matchingChartNodes.forEach((matchingChartNode) => {
+				// Extract the chartID for the matched chartNodes
+				const chartID = matchingChartNode.chartID;
+	
+				// Find the corresponding chartsConfig and chartsData based on chartID
+				const chartsConfigI = this.DataRequest.chartsConfig.find(config => config.chartID === chartID);
+				const chartsDataI = this.DashboardDataBase.chartsData.find(data => data.chartID === chartID);
+	
+				if (chartsConfigI && chartsDataI && chartsConfigI.dataProcessingType === "FullRange-OEEQuality") {
+					// Check if node matches OEEPrN
+					if (nodeRT.Node === chartsConfigI.specialParameters.OEEPrN) {
+						// Find the other chartNode besides the current node
+						const newNode = matchingChartNode.chartNodes.find(node => node !== nodeRT.Node);
+	
+						// Ensure newNode is not already present in NodesRT
+						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
+							
+							// Create a new nodeRT structure							
+							const newNodeRT = {
+								Node: newNode,
+								//Value: chartsDataI.informationRT[0].LastDataPointRaw
+								Value: []
+							};
+	
+							// Add the new nodeRT to the output array
+							organizedNodesRT.push(newNodeRT);
+						}
+					}
+				}
+				else if (chartsConfigI && chartsDataI && chartsConfigI.dataProcessingType === "FullRange-OEEProductivity") {
+					
+					// Check if node matches OEEProExUCN
+					if (nodeRT.Node === chartsConfigI.specialParameters.OEEProExUCN) {
+						// Find the other chartNode besides the current node
+						const newNode = matchingChartNode.chartNodes.find(node => node !== nodeRT.Node);
+	
+						// Ensure newNode is not already present in NodesRT
+						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
+							// Create a new nodeRT structure
+							const newNodeRT = {
+								Node: newNode,
+								Value: chartsDataI.informationRT[0].LastDataPointRaw
+							};
+	
+							// Add the new nodeRT to the output array
+							organizedNodesRT.push(newNodeRT);
+						}
+					}
+				}
+			});
+		});
+		
+		//Handle NodesfromDB
+		if (this.UniqueNodesDB.length>0) {
+			this.UniqueNodesDB.forEach((NodeDB) => {
+				organizedNodesRT.push({Node:NodeDB, Value: {Value:0,status:0,timestamps:(new Date()).getTime()}});
+			});
+		}
+		
+		console.log("------------organizedNodesRT---------");	
+		console.log(organizedNodesRT);	
+		return organizedNodesRT;
+    }
+    
+	
+	async createRTDataRequest(NodesRT) {
+		try {
+			// Initialize the RT DataRequest object
+			let dataRequestRT = {
+				chartsNodes: [],
+				chartsConfig: [],
+				updateRequest: []
+			};
+			
+
+			let newNodesRT= this.nodesRTOrganizer(NodesRT);			
+
+			console.log("----------Creating RT Data Request Before----------");
+			console.log(this.DataRequest);		
+			
+			// Extract the nodes from NodesRT to filter chartsNodes
+			let currentNodes = new Set(newNodesRT.map(nodeObj => nodeObj.Node));
+			
+
+			//------------Create chartsNodes
+			// Find Charts IDs where node values have suffered changes
+			let chartNodesMap = new Map();
+			this.DataRequest.chartsNodes.forEach(chart => {
+				let filteredNodes = chart.chartNodes.filter(node => currentNodes.has(node));
+				
+				if (filteredNodes.length > 0) {
+					chartNodesMap.set(chart.chartID, filteredNodes);
+					dataRequestRT.chartsNodes.push({
+						chartID: chart.chartID,
+						chartNodes: filteredNodes
+					});
+				}
+			});
+
+			// Filter chartsConfig based on the filtered chartsNodes chartID
+			let validChartIDs = Array.from(chartNodesMap.keys());
+	
+			//------------Create chartsConfig
+			dataRequestRT.chartsConfig = this.DataRequest.chartsConfig.filter(config => validChartIDs.includes(config.chartID));
+						
+			//------------Create updateRequest
+			dataRequestRT.updateRequest = this.DataRequest.updateRequest
+				.filter(request => validChartIDs.includes(request.chartID))
+				.map(request => {
+				
+					try {
+						// Find the corresponding chartData in DashboardDataBase
+						let chartData = this.DashboardDataBase.chartsData.find(chart => chart.chartID === request.chartID);
+						let chartConfig = this.DataRequest.chartsConfig.find(chart => chart.chartID === request.chartID);
+
+				
+						if (chartConfig.dataSource=="Internal-Historian"){
+						// Update LastDataPointRT with the corresponding value from NodesRT
+							if (chartData && chartData.informationRT) {
+							chartData.informationRT.forEach(infoRT => {
+								let nodesRT = newNodesRT.filter(node => node.Node === infoRT.Node);
+								if (nodesRT.length > 0) {
+									infoRT.LastDataPointRT = nodesRT.map(nodeObj => ({
+										Value: nodeObj.Value.Value,
+										status: nodeObj.Value.status,
+										timestamps: nodeObj.Value.timestamps
+									}));
+								} else {
+									// If the node is not present in NodesRT, update the timestamp
+									// of LastDataPointRT to the timestamp of the node that actually changed
+									let changedNode = newNodesRT[0]; // Assuming at least one node has changed
+									if (infoRT.LastDataPointRT && infoRT.LastDataPointRT.length > 0) {
+										infoRT.LastDataPointRT.forEach(dataPoint => {
+											dataPoint.timestamps = changedNode.Value.timestamps;
+										});
+									}
+								}
+							});
+							}
+			
+							return {
+							...request,
+							OperationMode: "RealTime",
+							informationRT: chartData.informationRT,
+							};
+						}
+						else if (chartConfig.dataSource=="External-Database"){
+							
+											
+							//Information RT
+							let chartNodes =chartNodesMap.get(request.chartID);
+							let informationRTI=chartData.informationRT;
+
+							
+							if(Object.keys(informationRTI[0].LastDataPointRaw).length != 0){
+								//Update Request time
+								request.initialTime=new Date(request.finalTime);
+								request.finalTime=new Date();								
+							}							
+							else{
+								request.finalTime=new Date();
+							}
+							
+							//Updtate each Information RTI
+							for (var i=0; i<chartNodes.length; i++){
+								if(Object.keys(informationRTI[i].LastDataPointRaw).length != 0){
+									informationRTI[i].initialTime=new Date(informationRTI[i].finalTime)
+									informationRTI[i].finalTime=new Date();
+								}
+								else{
+									informationRTI[i].finalTime=new Date();
+								}
+							}
+						
+							return {
+							...request,
+							OperationMode: "RealTime",
+							informationRT:informationRTI,
+							};
+						}
+						
+					} catch (error) {
+						console.error(`Error processing update request for chartID ${request.chartID}:`, error);
+						console.log(error);
+						return request; // Return the original request in case of an error
+					}
+				});
+				
+	
+			// Return the new RT DataRequest object
+			return dataRequestRT;
+		} catch (error) {
+			console.error("Error creating RT Data Request:", error);
+			return null; // Return null or an empty object in case of an error
+		}
+	}
+	
+	//DashboardRTDataMerger
+	dashboardRTDataMerger(obj1, obj2) {
+        // If either of the input objects is empty, return the other one
+        if (Object.keys(obj1).length === 0) return obj2;
+        if (Object.keys(obj2).length === 0) return obj1;
+
+        // Merge chartsData and Errors
+        return {
+            chartsData: [...obj1.chartsData, ...obj2.chartsData],
+            Errors: [...obj1.Errors, ...obj2.Errors],
+        };
+    }
+   
+    //Method to create Dashboard data which is direct
+	dashboardDataRTDirectCreator() {
+		try {
+			// Initialize the preliminary dashboardData structure
+			let dashboardData = {
+				chartsData: [],
+				Errors: []
+			};
+	
+			// Define criteria for filtering chartsConfig
+			const criteria = config => {
+				const categoryTypeMatch = (config.categoryType === "AllData-DateTime" || config.categoryType === "Single-Simple");
+				const dataProcessingTypeMatch = (config.dataProcessingType === "Simple-None" || config.dataProcessingType === "SinglePoint-LastValue" || config.dataProcessingType === "None");
+				const dataReductionEnableMatch = true; //Always
+				const dataoutOfLimitEnableMatch = config.dataoutOfLimitEnable === false|| (config.dataoutOfLimitEnable === true &&config.dataProcessingType === "SinglePoint-LastValue");
+				const dataSourceType = config.dataSource !="External-Database";
+				const match = categoryTypeMatch && dataProcessingTypeMatch && dataReductionEnableMatch && dataoutOfLimitEnableMatch&&dataSourceType;
+				return match;
+			};
+	
+			// Filter chartsConfig based on the criteria
+			let filteredConfigs = this.DataRequestRT.chartsConfig.filter(criteria);
+			
+			// Iterate over each filteredConfig to create the required structure
+			filteredConfigs.forEach(config => {
+				try {
+					// Find the corresponding updateRequest
+					let updateRequest = this.DataRequestRT.updateRequest.find(req => req.chartID === config.chartID);
+					if (!updateRequest) {
+						throw new Error(`No updateRequest found for chartID ${config.chartID}`);
+					}
+	
+					// Create chartSeries and chartCategories based on the updateRequest and config
+					let chartSeries = [];
+					let chartCategories = [];
+					let tooltipInfo = [];
+
+					if (config.categoryType === "AllData-DateTime") {
+						// Process for AllData-DateTime category type
+						updateRequest.informationRT.forEach(infoRT => {
+							chartSeries.push({
+								name: infoRT.Node,
+								data: [infoRT.LastDataPointRT.map(nodeObj => (
+										[nodeObj.timestamps, nodeObj.Value]))]
+							});
+						});
+					} else if (config.categoryType === "Single-Simple") {
+						if (config.chartType === "Pyramid"||config.chartType === "Pie"){
+							let chartDataI = {};
+							let chartDataII=[];
+							chartDataI["name"]="Aggregate";
+							
+							// Process for Single-Simple category type
+							updateRequest.informationRT.forEach(infoRT => {
+								chartDataII.push({									 
+									y:infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].Value,
+									name:infoRT.Node										
+								});
+								
+								tooltipInfo.push({
+									name: infoRT.Node,
+									tooltipInfo: this.formatTimestampToDateTime(infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps)
+								});
+								
+							});
+							chartDataI["data"]=chartDataII;
+							chartSeries.push(chartDataI);
+						}
+						else{
+							
+							let timeRange=updateRequest.finalTime-updateRequest.initialTime;
+							let lastTimestamp=updateRequest.finalTime;
+							// Process for Single-Simple category type
+							updateRequest.informationRT.forEach(infoRT => {
+								chartSeries.push({
+									name: infoRT.Node,
+									data: [infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].Value]
+								});
+								
+								tooltipInfo.push({
+									name: infoRT.Node,
+									tooltipInfo: this.formatTimestampToDateTime(infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps)
+								});
+								
+								if(infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps>lastTimestamp){
+									lastTimestamp=infoRT.LastDataPointRT[infoRT.LastDataPointRT.length-1].timestamps;
+								}
+							});
+							//Define ChartCategories
+							chartCategories=[this.getCategory(timeRange,updateRequest.initialTime)+" - "+this.getCategory(timeRange,lastTimestamp)]
+							
+						}
+					}
+	
+					// Create chartData object
+					let chartData = {
+						chartID: config.chartID,
+						chartSeries: chartSeries,
+						LimitDashboardData: [],
+						chartCategories: chartCategories,
+						tooltipInfo: tooltipInfo
+					};
+	
+					// Add chartData to dashboardData
+					dashboardData.chartsData.push(chartData);
+				} catch (error) {
+					// Add error to Errors array
+					dashboardData.Errors.push(error.message);
+				}
+			});
+	
+			// Remove the used chartNodes, chartConfig, and updateRequest
+			this.DataRequestRT.chartsNodes = this.DataRequestRT.chartsNodes.filter(
+				node => !filteredConfigs.some(config => config.chartID === node.chartID)
+			);
+			this.DataRequestRT.chartsConfig = this.DataRequestRT.chartsConfig.filter(
+				config => !filteredConfigs.includes(config)
+			);
+			this.DataRequestRT.updateRequest = this.DataRequestRT.updateRequest.filter(
+				req => !filteredConfigs.some(config => config.chartID === req.chartID)
+			);
+	
+			// Return the preliminary dashboardData
+			return dashboardData;
+		} catch (error) {
+			console.error("Error creating dashboard data directly:", error);
+			return {
+				chartsData: [],
+				Errors: [error.message]
+			};
+		}
+	}
+	
+		// Method to update RT Info
+	updateRTInfo() {
+		// Check if both DashboardDataBase and DashboardDataRTProcessed are defined
+		if (!this.DashboardDataBase || !this.DashboardDataRTProcessed || !Array.isArray(this.DashboardDataRTProcessed.chartsData)) {
+			//console.error("Invalid DashboardDataBase or DashboardDataRTProcessed");
+			return;
+		}
+	
+		// Single pass: update intervals and process points
+		this.DashboardDataRTProcessed.chartsData.forEach(rtProcessedChart => {
+			const baseChart = this.DashboardDataBase.chartsData.find(baseChart => baseChart.chartID === rtProcessedChart.chartID);
+	
+			if (!baseChart || !Array.isArray(rtProcessedChart.informationRT)) return;
+	
+
+			//Update each informationRT based on the node
+			rtProcessedChart.informationRT.forEach(rtProcessedInfo => {
+				const baseInfo = baseChart.informationRT.find(baseInfo => baseInfo.Node === rtProcessedInfo.Node);
+				if (!baseInfo) return;
+	
+				// Always update LastDataPointProcessed, LastDataPointRaw, ReduceInfo and OEEinfo
+				baseInfo.LastDataPointRaw = rtProcessedInfo.LastDataPointRaw;	
+			});
+		});
+	
+	}
+		    
+
+	//------------------------------------------------//
+	//------------Loading Functions----------------//	
+	
+	loadingDisplayHandler(Action) {
+		//console.log("dashboardMenuRawConfig");
+		//console.log(dashboardMenuRawConfig);
+		console.log(JSON.stringify(webMI.query));
+		console.log(webMI.query["DashboardID"]);
+		
+		if (Action === "Open") {
+			// Open the loading display window
+			this.LoadingDisplayR=webMI.display.openWindow({
+				display: this.LoadingDisplay, 
+				extern: false,
+				height: 350,
+				menubar: false,
+				modal: false,
+				movable: true,
+				resizable: false,
+				scrollbars: false,
+				status: false,
+				title: "T{Dashboard Message}",
+				titlebar:false,
+				toolbar: false,
+				width: 600,
+				query:webMI.query // Passing query parameters
+			});
+		} else if (Action === "Close") {
+			this.LoadingDisplayR.close()
+		} else {
+			console.error("Unsupported Action:", Action);
+		}
+	}
+	
+	 //------------------------------------------------//
+	//------------Auxiliary Functions----------------//
+	async readCurrentValue(node) {
+		// Await reading node values using webMI.data.read
+		const e = await new Promise((resolve, reject) => {
+			webMI.data.read(node, function(e) {
+				if (e) resolve(e);
+				else reject(new Error("Error reading data from nodes"));
+			});
+		});
+		// Prepare result array for each node read
+		let resultArray = {
+			Value: e.value,
+			timestamps: e.timestamp,
+			status: e.status,
+		};
+		
+		return resultArray;
+	}
+	
+	
+	//Get Category String
+	getCategory(timeRange, num) {
+		if (timeRange <= ONE_DAY) {
+			return (new Date(num)).toTimeString().split(' ')[0];
+		} else if (timeRange <= 31 * ONE_DAY) {
+			return (new Date(num)).toDateString().split(' ').slice(1).join(' ');
+		} else if (timeRange <= 365 * ONE_DAY) {
+			let parts = (new Date(num)).toDateString().split(' ');
+			return `${parts[1]} ${parts[3]}`;
+		} else {
+			return (new Date(num)).getFullYear().toString();
+		}
+	}
+	
+	//Format Time
+	formatTimestampToDateTime(unixTimestamp) {
+		const date = new Date(unixTimestamp); // Convert Unix timestamp to Date object
+	
+		// Extract date components
+		const day = String(date.getDate()).padStart(2, '0'); // Pad single-digit days with 0
+		const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based, pad single-digit months
+		const year = date.getFullYear();
+	
+		// Extract time components
+		const hours = String(date.getHours()).padStart(2, '0'); // Pad single-digit hours
+		const minutes = String(date.getMinutes()).padStart(2, '0'); // Pad single-digit minutes
+		const seconds = String(date.getSeconds()).padStart(2, '0'); // Pad single-digit seconds
+	
+		// Return formatted string in the desired format
+		return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+	}	
+	
+	//Handle Spaces
+	handleSpacesEncode(string) {
+		if (this.replacementString === undefined) {
+			console.error("replacementString is not defined.");
+			return string; // Return original string if replacementString is not defined
+		}
+		return string.replaceAll(" ", this.replacementString);
+	}
+		
+	// Creates ChartID based position and size
+	createDashboardID() {
+ 		const thisElement = document.getElementById('Date_Element');
+		let index = thisElement.id.indexOf('_Date_Element');
+		return thisElement.id.substring(0, index);	
+	}
+	
+}]]></script>
+</svg>
