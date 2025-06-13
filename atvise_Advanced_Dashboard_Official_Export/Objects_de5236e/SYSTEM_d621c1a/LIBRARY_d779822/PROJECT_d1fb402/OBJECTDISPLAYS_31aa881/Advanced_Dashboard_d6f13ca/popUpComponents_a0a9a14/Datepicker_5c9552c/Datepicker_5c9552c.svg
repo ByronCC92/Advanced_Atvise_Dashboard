@@ -1,0 +1,631 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg height="306.5" version="1.2" width="500" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs/>
+ <desc>The Input for a "Picker Date".</desc>
+ <title>Date Input</title>
+ <metadata>
+  <atv:parameter behavior="optional" defaultvalue="datePickerPopup" name="popupId" substitute="" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="controlBackgroundColor" name="controlBackgroundColor" substitute="$controlBackgroundColor$" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#E3D700" name="controlTintColor" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="#FFFFFF" name="controlTextColor" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="#B3B3B3" name="controlLabelColor" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="ColorBackground2" name="ColorBackground2" substitute="$ColorBackground2$" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="ColorSelectionElements" name="ColorSelectionElements" valuetype="color"/>
+  <atv:gridconfig enabled="false" gridstyle="lines" height="20" width="20"/>
+  <atv:snapconfig enabled="true" height="10" width="10"/>
+ </metadata>
+ <rect atv:refpx="250" atv:refpy="153.25" fill="$ColorBackground2$" height="306.5" id="id_0" stroke="#0000ff" stroke-width="0" width="500" x="0" y="0"/>
+ <rect atv:refpx="175" atv:refpy="153.25" fill="$controlBackgroundColor$" height="306.5" id="id_1" stroke="#0000ff" stroke-width="0" width="350" x="0" y="0"/>
+ <!--<g id="id_4" atv:refpx="419.712" atv:refpy="158.954" transform="matrix(1,0,0,1,126.7117,133.9536)">
+  <text x="297.5" y="31" fill="#ffffff" font-family="Open Sans" text-anchor="end" id="monthLabel" atv:refpx="310.5" atv:refpy="26.5" font-size="16">Month</text>
+  <text x="304" y="31" fill="#ffffff" font-family="Open Sans" id="yearLabel" atv:refpx="344.89" atv:refpy="26.5" font-size="16">Year</text>
+ </g>-->
+ <svg atv:refpx="32.5" atv:refpy="63" height="31" id="field_00" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="54.838" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="59.615">
+  <atv:argument name="label" value="T{29}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="80" atv:refpy="63" height="31" id="field_01" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="208.064" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="59.615">
+  <atv:argument name="label" value="T{30}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="127.499" atv:refpy="63" height="31" id="field_02" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="361.29" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="59.615">
+  <atv:argument name="label" value="T{1}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="175" atv:refpy="63" height="31" id="field_03" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="514.516" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="59.615">
+  <atv:argument name="label" value="T{2}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="222.5" atv:refpy="63" height="31" id="field_04" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="667.742" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="59.615">
+  <atv:argument name="label" value="T{3}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="270" atv:refpy="63" height="31" id="field_05" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="820.967" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="59.615">
+  <atv:argument name="label" value="T{4}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="317.5" atv:refpy="63" height="31" id="field_06" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="974.193" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="59.615">
+  <atv:argument name="label" value="T{5}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="33.5" atv:refpy="105.5" height="31" id="field_10" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="58.064" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="110.29">
+  <atv:argument name="label" value="T{6}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="81" atv:refpy="105.5" height="31" id="field_11" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="211.29" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="110.29">
+  <atv:argument name="label" value="T{7}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="128.5" atv:refpy="105.5" height="31" id="field_12" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="364.516" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="110.29">
+  <atv:argument name="label" value="T{8}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="176" atv:refpy="105.5" height="31" id="field_13" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="517.741" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="110.29">
+  <atv:argument name="label" value="T{9}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="223.5" atv:refpy="105.5" height="31" id="field_14" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="670.967" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="110.29">
+  <atv:argument name="label" value="T{10}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="271" atv:refpy="105.5" height="31" id="field_15" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="824.193" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="110.29">
+  <atv:argument name="label" value="T{11}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="318.5" atv:refpy="105.5" height="31" id="field_16" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="977.419" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="110.29">
+  <atv:argument name="label" value="T{12}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="33.499" atv:refpy="148" height="31" id="field_20" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="58.064" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="160.963">
+  <atv:argument name="label" value="T{13}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="80.999" atv:refpy="148" height="31" id="field_21" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="211.29" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="160.963">
+  <atv:argument name="label" value="T{14}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="128.499" atv:refpy="148" height="31" id="field_22" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="364.516" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="160.963">
+  <atv:argument name="label" value="T{15}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="175.999" atv:refpy="148" height="31" id="field_23" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="517.741" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="160.963">
+  <atv:argument name="label" value="T{16}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="223.499" atv:refpy="148" height="31" id="field_24" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="670.967" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="160.963">
+  <atv:argument name="label" value="T{17}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="270.999" atv:refpy="148" height="31" id="field_25" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="824.193" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="160.963">
+  <atv:argument name="label" value="T{18}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="318.499" atv:refpy="148" height="31" id="field_26" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="977.419" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="160.963">
+  <atv:argument name="label" value="T{19}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="33.5" atv:refpy="190.5" height="31" id="field_30" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="58.064" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="211.637">
+  <atv:argument name="label" value="T{20}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="81" atv:refpy="190.5" height="31" id="field_31" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="211.29" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="211.637">
+  <atv:argument name="label" value="T{21}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="128.5" atv:refpy="190.5" height="31" id="field_32" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="364.516" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="211.637">
+  <atv:argument name="label" value="T{22}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="176" atv:refpy="190.5" height="31" id="field_33" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="517.741" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="211.637">
+  <atv:argument name="label" value="T{23}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="223.5" atv:refpy="190.5" height="31" id="field_34" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="670.967" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="211.637">
+  <atv:argument name="label" value="T{24}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="271" atv:refpy="190.5" height="31" id="field_35" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="824.193" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="211.637">
+  <atv:argument name="label" value="T{25}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="318.5" atv:refpy="190.5" height="31" id="field_36" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="977.419" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="211.637">
+  <atv:argument name="label" value="T{26}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="33.5" atv:refpy="233" height="31" id="field_40" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="58.064" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="262.311">
+  <atv:argument name="label" value="T{27}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="81" atv:refpy="233" height="31" id="field_41" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="211.29" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="262.311">
+  <atv:argument name="label" value="T{28}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="128.5" atv:refpy="233" height="31" id="field_42" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="364.516" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="262.311">
+  <atv:argument name="label" value="T{29}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="176" atv:refpy="233" height="31" id="field_43" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="517.741" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="262.311">
+  <atv:argument name="label" value="T{30}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="223.5" atv:refpy="233" height="31" id="field_44" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="670.967" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="262.311">
+  <atv:argument name="label" value="T{31}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="271" atv:refpy="233" height="31" id="field_45" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="824.193" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="262.311">
+  <atv:argument name="label" value="T{1}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="318.5" atv:refpy="233" height="31" id="field_46" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="977.419" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="262.311">
+  <atv:argument name="label" value="T{2}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="33.5" atv:refpy="275.5" height="31" id="field_50" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="58.064" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="312.984">
+  <atv:argument name="label" value="T{3}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="81" atv:refpy="275.5" height="31" id="field_51" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="211.29" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="312.984">
+  <atv:argument name="label" value="T{4}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="128.5" atv:refpy="275.5" height="31" id="field_52" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="364.516" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="312.984">
+  <atv:argument name="label" value="T{5}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="176" atv:refpy="275.5" height="31" id="field_53" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="517.741" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="312.984">
+  <atv:argument name="label" value="T{6}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="223.5" atv:refpy="275.5" height="31" id="field_54" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="670.967" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="312.984">
+  <atv:argument name="label" value="T{7}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="271" atv:refpy="275.5" height="31" id="field_55" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="824.193" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="312.984">
+  <atv:argument name="label" value="T{8}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <svg atv:refpx="318.5" atv:refpy="275.5" height="31" id="field_56" transform="matrix(0.31,0,0,0.8387,0,0)" width="100" x="977.419" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.ActionButton" y="312.984">
+  <atv:argument name="label" value="T{9}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite height="25" id="button_stroke" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite id="button_label" transform="matrix(3.2258,0,0,1.1923,0,0)" x="15" y="19"/>
+  <atv:overwrite id="button_symbol" transform="matrix(3.2258,0,0,1.1923,0,0)" x="8.25" y="5.75"/>
+  <atv:overwrite height="25" id="button_bg" transform="matrix(3.2258,0,0,1.1923,0,0)" width="30"/>
+  <atv:overwrite height="26" id="id_2" transform="matrix(3.2258,0,0,1.1923,0,0)" width="31"/>
+ </svg>
+ <text atv:refpx="419.154" atv:refpy="18.89" fill="#B3B3B3" font-family="Arial" font-size="14" id="yearLabelLeft" text-anchor="middle" x="423.487" y="23.39">Year</text>
+ <text atv:refpx="426.227" atv:refpy="45.5" fill="#ffffff" font-family="Arial" font-size="16" id="dayOfTheWeekLabel" text-anchor="middle" x="424.945" y="50">Day Of The Week</text>
+ <text atv:refpx="428.582" atv:refpy="69.054" fill="#ffffff" font-family="Arial" font-size="16" id="numericDateLabel" text-anchor="middle" x="423.44" y="75.054">Numeric Date</text>
+ <rect atv:refpx="171.5" atv:refpy="25" fill="#3f434a" fill-opacity="0" height="30" id="goBackClickarea" stroke="#0000ff" stroke-width="0" width="23" x="157" y="10"/>
+ <polyline atv:bindbr="1,1" atv:bindtl="1,1" atv:refpx="173.5" atv:refpy="6.999" fill="#ffffff" id="id_7" points="173,32 173,18 166,25 173,32" stroke="none" stroke-width="0"/>
+ <polyline atv:bindbr="1,1" atv:bindtl="1,1" atv:refpx="333.5" atv:refpy="27.001" fill="#ffffff" id="id_8" points="321,20 321,34 328,27 321,20" stroke="none" stroke-width="0"/>
+ <rect atv:refpx="331.5" atv:refpy="25" fill="#3f434a" fill-opacity="0" height="30" id="goForwardClickarea" stroke="#0000ff" stroke-width="0" width="23" x="313" y="11"/>
+ <svg atv:refpx="425" atv:refpy="245.5" height="31" id="nowButton" transform="matrix(1.3,0,0,1,0,0)" width="100" x="276.923" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.ActionButton" y="230">
+  <atv:argument name="label" value="T{Today}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite id="button_stroke" transform="matrix(0.7692,0,0,1,0,0)" width="129"/>
+  <atv:overwrite id="button_label" transform="matrix(0.7692,0,0,1,0,0)" x="65"/>
+  <atv:overwrite id="button_symbol" transform="matrix(0.7692,0,0,1,0,0)" x="55"/>
+  <atv:overwrite id="button_bg" transform="matrix(0.7692,0,0,1,0,0)" width="129"/>
+  <atv:overwrite id="id_2" transform="matrix(0.7692,0,0,1,0,0)" width="130"/>
+ </svg>
+ <svg atv:refpx="425" atv:refpy="285.5" height="31" id="id_3" transform="matrix(1.3,0,0,1,0,0)" width="100" x="276.923" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.ActionButton" y="268">
+  <atv:argument name="label" value="T{Ok}"/>
+  <atv:argument name="fillColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite id="button_stroke" transform="matrix(0.7692,0,0,1,0,0)" width="129"/>
+  <atv:overwrite id="button_label" transform="matrix(0.7692,0,0,1,0,0)" x="65"/>
+  <atv:overwrite id="button_symbol" transform="matrix(0.7692,0,0,1,0,0)" x="55"/>
+  <atv:overwrite id="button_bg" transform="matrix(0.7692,0,0,1,0,0)" width="129"/>
+  <atv:overwrite id="id_2" transform="matrix(0.7692,0,0,1,0,0)" width="130"/>
+ </svg>
+ <svg atv:refpx="253.5" atv:refpy="-24.5" height="31" id="yearInput" transform="matrix(1.5875,0,0,1,0,0)" width="80" x="115.906" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.EditableLabel" y="11">
+  <atv:argument name="fill" prefix="ColorSelectionElements" value=""/>
+  <atv:argument name="fillColorInactive" prefix="ColorSelectionElements" value=""/>
+  <atv:argument name="editingBackgroundColor" prefix="ColorSelectionElements" value=""/>
+  <atv:argument name="controlBackgroundColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite id="input_label" transform="matrix(0.6299,0,0,1,0,0)" x="63.5"/>
+  <atv:overwrite id="input_bg" transform="matrix(0.6299,0,0,1,0,0)" width="126"/>
+  <atv:overwrite id="blinking_frame" transform="matrix(0.6299,0,0,1,0,0)" width="199.326"/>
+ </svg>
+ <svg atv:refpx="95.5" atv:refpy="26.5" height="31" id="monthInput" transform="matrix(1.27,0,0,1,0,0)" width="100" x="15.748" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.Combobox" y="10">
+  <atv:argument name="symbolColor" value="#ffffff"/>
+  <atv:argument name="itemsCount" value="12"/>
+  <atv:argument name="mode" value="Script"/>
+  <atv:argument name="fill" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite id="id_0" points="125.767,13.463 121.53,13.463 123.648,20.463 125.767,13.463" transform="matrix(0.7874,0,0,1,0,0)"/>
+  <atv:overwrite id="combobox_label" transform="matrix(0.7874,0,0,1,0,0)"/>
+  <atv:overwrite id="combobox_stroke" transform="matrix(0.7874,0,0,1,0,0)" width="127"/>
+ </svg>
+ <script atv:desc="" atv:name="" type="text/ecmascript"><![CDATA[
+var popupId = webMI.query.popupId;
+var controlBackgroundColor = webMI.query.controlBackgroundColor;
+var controlTintColor = webMI.query.controlTintColor;
+var controlTextColor = webMI.query.controlTextColor;
+var controlLabelColor = webMI.query.controlLabelColor;
+
+
+var _value = {},
+    _monthNames = [
+		"T{January}",
+		"T{February}",
+		"T{March}",
+		"T{April}",
+		"T{May}",
+		"T{June}",
+		"T{July}",
+		"T{August}",
+		"T{September}",
+		"T{October}",
+		"T{November}",
+		"T{December}"
+	],
+    _dayOfTheWeekNames = [
+		"T{Sunday}",
+		"T{Monday}",
+		"T{Tuesday}",
+		"T{Wednesday}",
+		"T{Thursday}",
+		"T{Friday}",
+		"T{Saturday}"
+	],
+    _buttonValues = {};
+
+function updateButtons() {
+    var currentDate = new Date(_value.raw);
+    currentDate.setDate(0);
+    var dOW = currentDate.getDay();
+
+    while (dOW != 1) {
+        currentDate.setDate(currentDate.getDate() - 1);
+        dOW = currentDate.getDay();
+    }
+
+    var initialUpdate = _buttonValues['00'] === undefined;
+    for (var y = 0; y < 6; y++) {
+        for (var x = 0; x < 7; x++) {
+            var id = y + '' + x,
+                fieldId = 'field_' + id,
+                labelId = fieldId + '_button_label',
+                bgId = fieldId + '_button_bg';
+
+            webMI.gfx.setText(labelId, currentDate.getDate());
+
+
+            if (currentDate.getMonth() == _value.month && currentDate.getDate() == _value.day) {
+                webMI.gfx.setFill(labelId, controlBackgroundColor);
+                webMI.gfx.setFill(bgId, controlTintColor);
+            } else {
+                var now = new Date();
+                webMI.gfx.setFill(labelId,
+                    (currentDate.getMonth() == now.getMonth() && currentDate.getDate() == now.getDate() && currentDate.getFullYear() == now.getFullYear()) ? controlTintColor :
+                    (currentDate.getMonth() == _value.month) ? controlTextColor : controlLabelColor);
+                webMI.gfx.setFill(bgId, 'none');
+            }
+
+            if (initialUpdate)
+                (function() {
+                    var _id = id;
+
+                    webMI.trigger.connect('clicked', function(e) {
+                        if (_buttonValues[_id] != _value.raw) setValue(_buttonValues[_id])
+                    }, fieldId);
+                })();
+
+            _buttonValues[id] = currentDate.valueOf();
+
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+    }
+}
+
+function setValue(timestamp) {
+			
+    var millis = 0;
+    if (timestamp) {
+        millis = timestamp;
+        if (typeof millis != "number") {
+            millis = parseInt(timestamp, 10);
+            if (isNaN(millis)) {
+                millis = 0;
+            }
+        }
+    }
+
+    var newDate = new Date(millis);
+    _value.raw = millis;
+    _value.day = newDate.getDate();
+    _value.dayOfTheWeek = newDate.getDay();
+    _value.month = newDate.getMonth();
+    _value.year = newDate.getFullYear();
+    _value.hours = newDate.getHours();
+    _value.minutes = newDate.getMinutes();
+    _value.seconds = newDate.getSeconds();
+    _value.millis = newDate.getMilliseconds();
+
+    updateButtons();
+    updateLabels();
+}
+
+function updateLabels() {
+    webMI.gfx.setText('yearLabelLeft', _value.year);
+    webMI.gfx.setText('dayOfTheWeekLabel', _dayOfTheWeekNames[_value.dayOfTheWeek] + ',');
+    webMI.gfx.setText('numericDateLabel', new Date(_value.raw).toLocaleDateString());
+
+    webMI.trigger.fire('setSelectedItem', _monthNames[_value.month], 'monthInput');
+    webMI.trigger.fire('setValue', _value.year, 'yearInput');
+}
+
+
+webMI.addOnload(function() {
+    setValue(webMI.query.value);
+});
+
+webMI.trigger.connect('setValue', function(e) {
+	
+    setValue(e.value);
+});
+
+webMI.addEvent('goBackClickarea', ['mouseup', 'touchend'], function(e) {
+
+    var newValue = new Date(_value.raw);
+    newValue.setMonth(newValue.getMonth() - 1);
+    setValue(newValue.valueOf());
+});
+
+webMI.addEvent('goForwardClickarea', ['mouseup', 'touchend'], function(e) {
+    var newValue = new Date(_value.raw);
+    newValue.setMonth(newValue.getMonth() + 1);
+    setValue(newValue.valueOf());
+});
+
+
+webMI.trigger.fire('setItems', (function() {
+    var items = [];
+    for (var i in _monthNames) {
+        items.push({
+            text: _monthNames[i],
+            value: i
+        });
+    }
+
+    return items;
+})(), 'monthInput');
+
+webMI.trigger.connect('valuechanged', function(e) {
+	
+    if (e.value == _value.month) return;
+
+    var newDate = new Date(_value.raw);
+    newDate.setMonth(e.value);
+    setValue(newDate.valueOf());
+}, 'monthInput');
+
+webMI.trigger.connect('valuechanged', function(e) {
+    if (!_value.raw || e.value == _value.year || _value.year && e.value == '') return;
+
+    var newDate = new Date(_value.raw);
+    newDate.setFullYear(e.value);
+    setValue(newDate.valueOf());
+}, 'yearInput');
+
+webMI.trigger.connect("clicked", function() {
+    webMI.trigger.fire("com.atvise.datepicker_" + popupId, _value.raw);
+    webMI.display.closeWindow();
+}, "id_3");
+
+webMI.trigger.connect("clicked", function(e) {
+    setValue((new Date()).valueOf());
+}, "nowButton");
+
+
+
+document.getElementById("nowButton").style.cursor = "pointer";
+document.getElementById("id_3").style.cursor = "pointer";
+
+]]></script>
+</svg>

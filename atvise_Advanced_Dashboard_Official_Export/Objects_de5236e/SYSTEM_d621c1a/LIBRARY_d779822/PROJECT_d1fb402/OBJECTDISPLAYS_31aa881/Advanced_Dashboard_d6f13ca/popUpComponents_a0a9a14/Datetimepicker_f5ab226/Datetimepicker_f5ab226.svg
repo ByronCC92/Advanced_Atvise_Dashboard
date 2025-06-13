@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg height="306.5" version="1.2" width="500" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs/>
+ <svg atv:refpx="250" atv:refpy="153.25" height="306.5" id="_datepicker" width="500" x="0" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.Datepicker" y="0">
+  <atv:argument name="popupId" value="_datepicker"/>
+  <atv:argument name="base" prefix="base"/>
+  <atv:argument name="controlTextColor" value="#ffffff"/>
+  <atv:argument name="controlTintColor" value="#ffffff"/>
+  <atv:argument name="controlBackgroundColor" prefix="ColorInactive" value=""/>
+  <atv:argument name="ColorBackground2" prefix="ColorActive"/>
+  <atv:argument name="ColorSelectionElements" prefix="ColorSelectionElements"/>
+ </svg>
+ <desc>The Input for a "Picker Date Time"</desc>
+ <title>Date Time Input</title>
+ <metadata>
+  <atv:parameter behavior="optional" defaultvalue="" name="ColorActive" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" name="ColorInactive" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="ColorSelectionElements" name="ColorSelectionElements" valuetype="color"/>
+  <atv:gridconfig enabled="false" gridstyle="lines" height="20" width="20"/>
+  <atv:snapconfig enabled="false" height="10" width="10"/>
+ </metadata>
+ <text atv:refpx="425.365" atv:refpy="92" fill="#ffffff" font-family="Arial" font-size="16" id="timeLabel" text-anchor="middle" x="423.609" y="98">Time</text>
+ <svg atv:refpx="424.322" atv:refpy="171.263" height="31" id="timeInput" transform="matrix(1.625,0,0,1,0,0)" width="80" x="221.121" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.EditableLabel" y="155.763">
+  <atv:argument name="validation" value="Time"/>
+  <atv:argument name="base" prefix=""/>
+  <atv:argument name="fill" value="#000000"/>
+  <atv:argument name="fillColorInactive" value="#000000"/>
+  <atv:argument name="editingBackgroundColor" value="#000000"/>
+  <atv:argument name="controlBackgroundColor" prefix="ColorSelectionElements" value=""/>
+  <atv:overwrite id="input_label" transform="matrix(0.6154,0,0,1,0,0)" x="65"/>
+  <atv:overwrite id="input_bg" transform="matrix(0.6154,0,0,1,0,0)" width="129"/>
+  <atv:overwrite id="blinking_frame" transform="matrix(0.6154,0,0,1,0,0)" width="202.326"/>
+ </svg>
+ <g atv:refpx="484.391" atv:refpy="14.695" id="close" transform="matrix(1,0,0,1,-2,2)">
+  <rect atv:refpx="430" atv:refpy="19" fill="#171524" height="20" id="id_8" stroke="#ffffff" stroke-width="1" width="20" x="474.391" y="4.695"/>
+  <g atv:refpx="427" atv:refpy="19" id="id_13" transform="matrix(1,0,0,1,56.891,-3.8053)">
+   <line atv:refpx="427.5" atv:refpy="18.5" id="id_10" stroke="#f0f0f0" stroke-width="2" x1="420" x2="435" y1="11" y2="26"/>
+   <line atv:refpx="422.5" atv:refpy="-17.5" id="id_11" stroke="#f0f0f0" stroke-width="2" x1="420" x2="435" y1="26" y2="11"/>
+  </g>
+ </g>
+ <script atv:desc="" atv:name="" type="text/ecmascript"><![CDATA[
+
+var popupId = webMI.query.popupId;
+//webMI.display.closeWindow();
+
+function updateLabels() {
+	webMI.gfx.setText('timeLabel', new Date(_value.raw).toLocaleTimeString());
+	webMI.trigger.fire('setValue', webMI.sprintf("%02d:%02d:%02d", _value.hours, _value.minutes, _value.seconds/*, _value.millis*/), 'timeInput');
+}
+
+
+_value = {};
+
+function setValue(timestamp) {
+	var millis = 0;
+	
+	if (timestamp) {
+		millis = timestamp;
+		if (typeof millis != "number") {
+			millis = parseInt(timestamp, 10);
+			if (isNaN(millis)) {
+				millis = 0;
+			}
+		}
+	}
+
+	var newDate = new Date(millis);
+	_value.raw = millis;
+	_value.day = newDate.getDate();
+	_value.dayOfTheWeek = newDate.getDay();
+	_value.month = newDate.getMonth();
+	_value.year = newDate.getFullYear();
+	_value.hours = newDate.getHours();
+	_value.minutes = newDate.getMinutes();
+	_value.seconds = newDate.getSeconds();
+	_value.millis = newDate.getMilliseconds();
+
+	updateLabels();
+}
+
+webMI.addOnload(function() {
+	webMI.trigger.fire('setValue', webMI.query.value, '_datepicker');
+	setValue(webMI.query.value);
+});
+
+webMI.trigger.connect('com.atvise.datepicker__datepicker', function(e) {
+	var outDate = new Date(e.value);
+	outDate.setHours(_value.hours);
+	outDate.setMinutes(_value.minutes);
+	outDate.setSeconds(_value.seconds);
+	outDate.setMilliseconds(_value.millis);
+	webMI.trigger.fire("com.atvise.datepicker_" + popupId, outDate.valueOf());
+});
+
+webMI.trigger.connect('valuechanged', function(e) {
+	if (!_value.raw && _value.raw !== 0) return;
+	
+	var newDate = new Date(_value.raw),
+		time = new Date(e.value);
+
+	if (_value.hours == time.getHours() && _value.minutes == time.getMinutes() && _value.seconds == time.getSeconds() && _value.millis == time.getMilliseconds()) return;
+	
+	newDate.setHours(time.getHours());
+	newDate.setMinutes(time.getMinutes());
+	newDate.setSeconds(time.getSeconds());
+	newDate.setMilliseconds(time.getMilliseconds());	
+
+	setValue(newDate.valueOf());
+}, 'timeInput');
+webMI.addEvent("close", "click", function(e) {
+var id = "close";
+var value = true;
+webMI.display.closeWindow();
+});
+
+document.getElementById("close").style.cursor = "pointer";
+
+]]></script>
+</svg>

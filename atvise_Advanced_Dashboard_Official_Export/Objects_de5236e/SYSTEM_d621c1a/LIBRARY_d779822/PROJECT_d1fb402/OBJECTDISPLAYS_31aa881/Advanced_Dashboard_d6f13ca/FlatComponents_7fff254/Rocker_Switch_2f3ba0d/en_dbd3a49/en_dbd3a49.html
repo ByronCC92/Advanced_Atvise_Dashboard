@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>OD_help</title>
+  <style> #parameter{font-weight:bold;} </style>
+</head>
+<body>
+<h1>Description</h1>
+<p>This
+button increments or decrements the value of an address like the button
+increment/decrement.</p>
+<p>In addition the trigger "valuechanged" with the new value (=incremented or decremented value) will be fired.</p>
+<h1>Parameters</h1>
+<p>This control has&nbsp;the following generic parameters:</p>
+<ul>
+  <li><span id="parameter">base</span>: the value of this address will either be incremented or decremented</li>
+  <li><span id="parameter">step to increment</span>: value by which the value of "base" will be&nbsp;incremented (default: 1)</li>
+  <li><span id="parameter">step to decrement</span>: value by which the value of "base" will be decremented (default: 1)</li>
+  <li><span id="parameter">interval [ms] (0 = off)</span>: specifies how long (time span) the button must be pressed to automatically change the base's
+value (default: 150ms, which means that in case the button keeps
+pressed, every 150ms the value will be changed)<br>
+    </li>
+</ul>
+Font:<br>
+<ul>
+  <li><span id="parameter">family</span>:&nbsp;font family which will be applied to&nbsp;value. Defaults to FontFamily provided by the Theme QD.</li>
+  <li><span id="parameter">size</span>:&nbsp;font size which will be applied to the&nbsp;value. Defaults to 16.</li>
+  <li><span id="parameter">color</span>: color which will be applied to the&nbsp;value. Defaults to ControlTextColor provided by the Theme QD.</li> </ul>
+Appearance:<br>
+<ul>
+  <li><span id="parameter">fill color text</span>: background color of the text (value) (default: grey)</li>
+  <li><span id="parameter">fill color button</span>: fill color of the two buttons (not used)</li>
+  <li><span id="parameter">fill color arrow</span>: arrow's fill color. Defaults to ControlTintColor provided by the Theme QD.</li>
+  <li><span id="parameter">fill color when inactive</span>: button's fill color if not active&nbsp;(default: dark grey)</li>
+  <li><span id="parameter">stroke color button pressed</span>: the color of the stroke which will be set when one of the two buttons is pressed (default: white)</li>
+  <li><span id="parameter">focus stroke color</span>: the color of the stroke which will be set when the button is focused (default: white)</li></ul>
+Options:<br>
+<ul>
+  <li><span id="parameter">minimum</span>: specifies the lower limit for the value to be changed, i.e. if the current value equals to this
+minimum, the current value will not be further decremented
+&nbsp;(default: no minimum specified)</li>
+  <li><span id="parameter">maximum</span>: specifies the upper limit for the value to be changed, i.e. if the current value equals to this maximum, the
+current value will not be further incremented&nbsp;(default: no maximum specified)</li>
+  <li><span id="parameter">consistency group</span>: name of the consistency group<br>     </li>
+  <li><span id="parameter">tab index</span>:&nbsp;defines the order for changing between the object displays by using the tab key</li>
+  <li><span id="parameter">tooltip</span>:&nbsp;displays a tooltip box with the entered text (standard HTML-Elements can be entered)</li> </ul>
+Security:
+<ul>
+  <li><span id="parameter">necessary right</span>: the user must have this right to activate this button, i.e. to press one of the two buttons</li>
+  <li><span id="parameter">activation address</span>: if the value of this address equals to "activation value", then the control will be active, i.e. can be pressed</li>
+  <li><span id="parameter">activation value</span>: value which activiates the control</li> </ul>
+<div style="margin-left: 40px;">NOTE: The activation of the control can be configured only by the necessary right, or only by the&nbsp;activation
+address and value or by both. In case both settings are made, the user
+must have the necessary right and the value of the "activation address"
+must equal the "activation value"; otherwise the control will not be activated.<br>
+</div>
+</body>
+</html>

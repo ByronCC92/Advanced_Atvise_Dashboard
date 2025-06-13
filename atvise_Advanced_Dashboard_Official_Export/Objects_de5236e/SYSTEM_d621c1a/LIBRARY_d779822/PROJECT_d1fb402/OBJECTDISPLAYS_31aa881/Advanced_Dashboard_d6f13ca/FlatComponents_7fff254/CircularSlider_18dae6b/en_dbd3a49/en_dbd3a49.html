@@ -1,0 +1,139 @@
+<html>
+	<head>
+		<title>Circular Slider</title>
+		<style>
+			span.param { font-weight: bold; padding-right: 5px; }
+			li { padding-bottom: 5px; }
+		</style>
+	</head>
+	<body>
+		<h1>Circular Slider</h1>
+		<p>
+			Allows editing a numeric value by dragging or via keyboard.
+		</p>
+		<h2>Parameters</h2>
+		<ul>
+			<li>
+				<span class="param">label</span>[TRString]<br />
+				The label's text.
+			</li>
+			<li>
+				Value
+				<ul>
+					<li>
+						<span class="param">minimum</span>Number=0<br />
+						The minimum value.
+					</li>
+					<li>
+						<span class="param">maximum</span>Number=100<br />
+						The maximum value.
+					</li>
+					<li>
+						<span class="param">show value</span>Bool=true<br />
+						Sets if the value shall be displayed.
+					</li>
+					<li>
+						<span class="param">desired value</span>[Address]<br />
+						If set, the slider will scale depending this value, the knob will move depending on the base parameter.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Number Format
+				<ul>
+					<li>
+						<span class="param">displayed unit</span>String<br />
+						Unit to be displayed after the value.
+					</li>
+					<li>
+						<span class="param">show sign</span>Bool=false<br />
+						Whether to show the plus/minus sign in front of the value or not.
+					</li>
+					<li>
+						<span class="param">leading zeros</span>Number=0<br />
+						If the value consists of less digits than this value, it gets filled up with zeroes on the left side.
+					</li>
+					<li>
+						<span class="param">post decimal positions</span>Number=0<br />
+						Number of digits after the decimal mark.
+					</li>
+					<li>
+						<span class="param">force decimal fraction position</span>Number=0<br />
+						Amount, by which the decimal mark is offset.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Font
+				<ul>
+					<li>
+						<span class="param">family</span>&lt;FontFamily&gt;<br />
+						Font family. Defaults to FontFamily provided by the Theme QD.
+					</li>
+					<li>
+						<span class="param">size</span>&lt;FontSize&gt;=16<br />
+						Font size.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Colors
+				<ul>
+					<li>
+						<span class="param">color gauge</span>Color<br />
+						The gauge's fill color. Defaults to ControlTintColor provided by the Theme QD.
+					</li>
+					<li>
+						<span class="param">color background</span>Color<br />
+						Background color. Defaults to ControlBackgroundColor provided by the Theme QD.
+					</li>
+					<li>
+						<span class="param">color label</span>Color<br />
+						The label's font color. Defaults to ControlLabelColor provided by the Theme QD.
+					</li>
+					<li>
+						<span class="param">color gauge inactive</span>Color<br />
+						The gauge's fill color when inactive. Defaults to ControlInactiveBackgroundColor provided by the Theme QD.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Limit
+				<ul>
+					<li>
+						<span class="param">limit low low</span>String=off<br />
+						Limit low low (off = no limit)
+					</li>
+					<li>
+						<span class="param">limit low</span>String=off<br />
+						Limit low (off = no limit)
+					</li>
+					<li>
+						<span class="param">limit high</span>String=off<br />
+						Limit high (off = no limit)
+					</li>
+					<li>
+						<span class="param">limit high high</span>String=off<br />
+						Limit high high (off = no limit)
+					</li>
+					<li>
+						<span class="param">limit low low color</span>Color=red<br />
+						Limit low low color
+					</li>
+					<li>
+						<span class="param">limit low color</span>Color=yellow<br />
+						Limit low color
+					</li>
+					<li>
+						<span class="param">limit high color</span>Color=yellow<br />
+						Limit high color
+					</li>
+					<li>
+						<span class="param">limit high high color</span>Color=red<br />
+						Limit high high color
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</body>
+</html>

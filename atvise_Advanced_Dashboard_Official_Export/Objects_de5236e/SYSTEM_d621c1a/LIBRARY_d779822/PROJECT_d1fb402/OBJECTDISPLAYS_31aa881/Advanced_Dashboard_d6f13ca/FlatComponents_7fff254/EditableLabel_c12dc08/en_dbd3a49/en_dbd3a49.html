@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Editable Label</title>
+		<style>
+			span.param { font-weight: bold; padding-right: 5px; }
+			li { padding-bottom: 5px; }
+		</style>
+	</head>
+	<body>
+		<h1>Editable Label</h1>
+		<p>
+			Sets/displays a value to/from an address.
+		</p>
+		<h2>Parameters</h2>
+		<ul>
+			<li>
+				<span class="param">base</span>Address<br />
+				The value to be displayed/edited.
+			</li>
+			<li>
+				<span class="param">input mode</span>Number|Boolean|String|Password=Number<br />
+				The mode to validate the input against.
+			</li>
+			<li>
+				<span class="param">allow direct input</span>Yes|No=Yes<br />
+				Sets if the label should be editable with hardware keyboard or onscreen keyboard.
+			</li>
+			<li>
+				Number Format
+				<ul>
+					<li>
+						<span class="param">displayed unit</span>[String]<br />
+						The value's unit.
+					</li>
+					<li>
+						<span class="param">show sign</span>Boolean=false<br />
+						Whether to show the number sign for numbers greater than zero.
+					</li>
+					<li>
+						<span class="param">leading zeros</span>Number=0<br />
+						How many leading zeros to display.
+					</li>
+					<li>
+						<span class="param">post decimal positions</span>Number=0<br />
+						How many post decimal positions to display
+					</li>
+					<li>
+						<span class="param">force decimal fraction position</span>[Number]<br />
+						<strong>Missing description</strong>
+					</li>
+				</ul>
+			</li>
+			<li>
+				Enum List Mode
+				<ul>
+					<li>
+						<span class="param">enum list</span>[Global]<br />
+						An address pointing to an enum list in the global parameters.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Font
+				<ul>
+					<li>
+						<span class="param">family</span>&lt;FontFamily&gt;<br />
+						The control's font family.
+					</li>
+					<li>
+						<span class="param">size</span>&lt;FontSize&gt;=16<br />
+						The control's font size.
+					</li>
+					<li>
+						<span class="param">color</span>Color<br />
+						The control's font color.
+					</li>
+					<li>
+						<span class="param">editing font family</span>&lt;FontFamily&gt;<br />
+						The control's font color when editing.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Appearance
+				<ul>
+					<li>
+						<li>
+							<span class="param">fill color</span>Color<br />
+							The control's background color.
+						</li>
+						<li>
+							<span class="param">fill not editable</span>Color<br />
+							The control's background color if not editable.
+						</li>
+						<li>
+							<span class="param">fill color when inactive</span>Color<br />
+							The control's background color if inactive.
+						</li>
+						<li>
+							<span class="param">focus stroke color</span>Color<br />
+							The control's stroke color if focussed.
+						</li>
+						<li>
+							<span class="param">editing background color</span>Color<br />
+							The control's background color when editing.
+						</li>
+						<li>
+							<span class="param">editing border color</span>Color<br />
+							The control's stroke color when editing.
+						</li>
+					</li>
+				</ul>
+			</li>
+			<li>
+				Limits
+				<ul>
+					<li>
+						<span class="param">limit low low</span>String=off<br />
+						Limit low low (off = no limit).
+					</li>
+					<li>
+						<span class="param">limit low</span>String=off<br />
+						Limit low (off = no limit).
+					</li>
+					<li>
+						<span class="param">limit high</span>String=off<br />
+						Limit high (off = no limit).
+					</li>
+					<li>
+						<span class="param">limit high high</span>String=off<br />
+						Limit high high (off = no limit).
+					</li>
+					<li>
+						<span class="param">limit low low color</span>Color=red<br />
+						Limit low low color.
+					</li>
+					<li>
+						<span class="param">limit low color</span>Color=yellow<br />
+						Limit low color.
+					</li>
+					<li>
+						<span class="param">limit high color</span>Color=yellow<br />
+						Limit high color.
+					</li>
+					<li>
+						<span class="param">limit high high color</span>Color=red<br />
+						Limit high high color.
+					</li>
+					<li>
+						<span class="param">minimum</span>Number=off<br />
+						Limits minimum (off = no minimum).
+					</li>
+					<li>
+						<span class="param">maximum</span>Number=off<br />
+						Limits maximum (off = no maximum).
+					</li>
+					<li>
+						<span class="param">address for minimum</span>[Address]<br />
+						Address pointing to the minimum value.
+					</li>
+					<li>
+						<span class="param">address for maximum</span>[Address]<br />
+						Address pointing to the maximum value.
+					</li>
+					<li>
+						<span class="param">address for limit low low</span>[Address]<br />
+						Address pointing to the limit low low value.
+					</li>
+					<li>
+						<span class="param">address for limit low</span>[Address]<br />
+						Address pointing to the limit low value.
+					</li>
+					<li>
+						<span class="param">address for limit high</span>[Address]<br />
+						Address pointing to the limit high value.
+					</li>
+					<li>
+						<span class="param">address for limit high high</span>[Address]<br />
+						Address pointing to the limit high high value.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Security
+				<ul>
+					<li>
+						<span class="param">editable</span>Yes|No=Yes<br />
+						Sets if the input is editable.
+					</li>
+					<li>
+						<span class="param">necessary right</span>[Address]<br />
+						Points to the rights necessary to use this control.
+					</li>
+					<li>
+						<span class="param">activation address</span>[Address]<br />
+						Activation address.
+					</li>
+					<li>
+						<span class="param">activation value</span>String=off<br />
+						Activation value.
+					</li>
+				</ul>
+			</li>
+			<li>
+				Options
+				<ul>
+					<li>
+						<span class="param">password mode</span>Yes|No=No<br />
+						Sets if in password mode.
+					</li>
+					<li>
+						<span class="param">alternative output address</span>[Address]<br />
+						Sets an alternative output address.
+					</li>
+					<li>
+						<span class="param">consistency group</span>[String]<br />
+						Consistency group.
+					</li>
+					<li>
+						<span class="param">tab index</span>[Number]<br />
+						Tab index.
+					</li>
+					<li>
+						<span class="param">tooltip</span>[TRString]<br />
+						Localized Tooltip.
+					</li>
+					<li>
+						<span class="param">select text on focus</span>Boolean=false<br />
+						Set if the control selects its text on focus.
+					</li>
+					
+				</ul>
+			</li>
+		</ul>
+	</body>
+</html>

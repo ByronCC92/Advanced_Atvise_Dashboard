@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg width="100" version="1.2" xmlns="http://www.w3.org/2000/svg" height="31" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:atv="http://webmi.atvise.com/2007/svgext">
+ <defs>
+  <linearGradient id="linear_0" y1="0" x1="0" y2="1" gradientUnits="objectBoundingBox" x2="1">
+   <stop offset="0" stop-color="#000000"/>
+   <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+  </linearGradient>
+ </defs>
+ <desc>Same behaviour as "Button Set Address".</desc>
+ <title>Clickarea</title>
+ <metadata>
+  <atv:parameter desc="base" valuetype="address" behavior="mandatory" name="base"/>
+  <atv:parameter desc="value" valuetype="string" behavior="mandatory" name="value"/>
+  <atv:parameter desc="focus stroke color" valuetype="color" substitute="$FOCUSSTROKECOLOR$" group="Appearance" behavior="optional" name="focusStrokeColor" defaultvalue="#E3D700"/>
+  <atv:parameter desc="address to set at MouseDown" valuetype="address" group="Options" behavior="optional" name="onMouseDownNode"/>
+  <atv:parameter desc="value MouseDown" valuetype="string" group="Options" behavior="optional" name="onMouseDownValue"/>
+  <atv:parameter desc="address to set at MouseUp" valuetype="address" group="Options" behavior="optional" name="onMouseUpNode"/>
+  <atv:parameter desc="value MouseUp" valuetype="string" group="Options" behavior="optional" name="onMouseUpValue"/>
+  <atv:parameter desc="tab index" valuetype="number" group="Options" behavior="optional" name="tabIndex"/>
+  <atv:parameter desc="tooltip" valuetype="trstring" group="Options" behavior="optional" name="tooltip"/>
+  <atv:parameter config="SYSTEM.SECURITY.RIGHTS" desc="necessary right" valuetype="address" group="Security" behavior="optional" name="right"/>
+  <atv:parameter desc="activation address" valuetype="address" group="Security" behavior="optional" name="activeNode"/>
+  <atv:parameter desc="activation value" valuetype="address" group="Security" behavior="optional" name="activeValue"/>
+  <atv:gridconfig width="20" enabled="false" height="20" gridstyle="lines"/>
+  <atv:snapconfig width="10" enabled="true" height="10"/>
+ </metadata>
+ <g id="buttonGroup" atv:refpx="50" atv:refpy="15.5">
+  <rect width="99" x="0.5" y="0.5" atv:bindtl="0,0" fill="#ffffff" rx="3.5" height="30" ry="3.5" stroke="$FOCUSSTROKECOLOR$" fill-opacity="0" atv:bindbr="1,1" id="button_stroke_focus" atv:refpx="50" stroke-width="1" atv:refpy="15.5"/>
+  <rect width="99" x="0.5" y="0.5" atv:bindtl="0,0" fill="#ffffff" rx="3.5" height="30" ry="3.5" stroke="#000000" fill-opacity="0" atv:bindbr="1,1" id="button_clickarea" atv:refpx="50" stroke-width="1" atv:refpy="15.5"/>
+ </g>
+ <script type="text/ecmascript"><![CDATA[var base = (webMI.query["base"] == undefined) ? "" : webMI.query["base"];
+var newValue = webMI.query["value"];
+var tabHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tab Handler");
+var tabIndex = (webMI.query["tabIndex"] == undefined) ? "" : webMI.query["tabIndex"];
+var tooltip = (webMI.query["tooltip"] == undefined) ? "" : webMI.query["tooltip"];
+
+webMI.gfx.setStroke("button_clickarea", "");
+
+if (newValue == "true") {
+    newValue = true;
+} else if (newValue == "false") {
+    newValue = false;
+} else {
+    try {
+        var temp = parseFloat(newValue);
+        if (!isNaN(temp)) {
+            newValue = temp;
+        }
+    } catch (e) {}
+}
+
+var onMouseDownValue = webMI.query["onMouseDownValue"];
+var onMouseDownNode = (webMI.query["onMouseDownNode"] == undefined) ? "" : webMI.query["onMouseDownNode"];
+var onMouseUpValue = webMI.query["onMouseUpValue"];
+var onMouseUpNode = (webMI.query["onMouseUpNode"] == undefined) ? "" : webMI.query["onMouseUpNode"];
+var strokeNormal = "none";
+
+var right = (webMI.query["right"] == undefined) ? "" : webMI.query["right"];
+if (right.search(/SYSTEM\.SECURITY\.RIGHTS\./) != -1) {
+    right = right.substring(23, right.length); //remove "prefix" SYSTEM.SECURITY.RIGHTS.
+}
+
+var active = false;
+var hasRight = false;
+
+if (right != "") {
+    webMI.addEvent(webMI.data, "clientvariableschange", function(e) {
+        hasRight = false;
+        if (("username" in e) && (e.username != "")) {
+            hasRight = webMI.hasRight(right);
+        }
+        deActivate();
+    });
+}
+
+var activeValue = (webMI.query["activeValue"] == undefined) ? "" : webMI.query["activeValue"];
+var activeNode = (webMI.query["activeNode"] == undefined) ? "" : webMI.query["activeNode"];
+var nodeIsActive = false;
+
+if ((activeNode != "") && (String(activeValue) != "")) {
+    webMI.data.subscribe(activeNode, function(e) {
+        var nodeActiveValue = e.value;
+        if (typeof nodeActiveValue == "boolean") {
+            nodeIsActive = (String(nodeActiveValue) == activeValue);
+        } else if (typeof nodeActiveValue == "number") {
+            try {
+                var temp = parseFloat(activeValue);
+                nodeIsActive = (nodeActiveValue == temp);
+            } catch (e) {
+                nodeIsActive = false;
+            }
+        } else {
+            nodeIsActive = (nodeActiveValue == activeValue);
+        }
+        deActivate();
+    });
+} else {
+    deActivate();
+}
+
+function deActivate(forceDeActivate) {
+    if (typeof forceDeActivate !== "undefined" && forceDeActivate) {
+        active = false;
+    } else if (right != "") {
+        if ((String(activeValue) != "") && (activeNode != "")) {
+            active = (nodeIsActive && hasRight);
+        } else {
+            active = hasRight;
+        }
+    } else {
+        if ((String(activeValue) != "") && (activeNode != "")) {
+            active = nodeIsActive;
+        } else {
+            active = true;
+        }
+    }
+}
+
+function focusTH() {
+    if (active) {
+        webMI.gfx.setVisible("button_stroke_focus", null);
+    }
+}
+
+function blurTH() {
+    if (active) {
+        webMI.gfx.setVisible("button_stroke_focus", false);
+    }
+}
+
+function applyTH() {
+    if (active) {
+        if (base != "") {
+            webMI.data.write(base, newValue);
+        }
+        webMI.trigger.fire("valuechanged", newValue, "");
+    }
+}
+
+function backTH() {}
+
+function arrowTH(dir) {}
+
+function keyHandler(keyTH, param2) {
+    if (keyTH == "focus") {
+        focusTH();
+    } else if (keyTH == "blur") {
+        blurTH();
+    } else if (keyTH == "apply") {
+        applyTH();
+    } else if (keyTH == "back") {
+        backTH();
+    } else if (keyTH == "arrow") {
+        arrowTH(param2);
+    } else if (keyTH == "isActive") {
+        return active && param2(document.getElementById("button_clickarea").parentNode);
+    }
+}
+webMI.addEvent("button_clickarea", ["mousedown", "touchstart"], function(e) {
+    var id = "button_clickarea";
+    var value = true;
+    return function(value) {
+        if (active) {
+            if (onMouseDownNode != "") {
+                webMI.data.write(onMouseDownNode, onMouseDownValue);
+            }
+            webMI.trigger.fire("valuechangedMouseDown", onMouseDownValue, "");
+        }
+    }(value);
+});
+
+
+webMI.addEvent("button_clickarea", ["mouseup", "touchend"], function(e) {
+    var id = "button_clickarea";
+    var value = true;
+    return function(value) {
+        if (active) {
+            if (onMouseUpNode != "") {
+                webMI.data.write(onMouseUpNode, onMouseUpValue);
+            }
+            webMI.trigger.fire("valuechangedMouseUp", onMouseUpValue, "");
+        }
+    }(value);
+});
+
+webMI.addEvent("button_clickarea", ["click", "touchend"], function(e) {
+    if (active) {
+        tabHandler.setCurrentIndex(keyHandler);
+        if (base != "") {
+            webMI.data.write(base, newValue);
+        }
+        webMI.trigger.fire("valuechanged", newValue, "");
+    }
+});
+
+webMI.addEvent("button_clickarea", "dragstart", function(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+});
+webMI.addOnload(function() {
+    var doc = document.getElementById("button_clickarea").ownerDocument;
+    tabHandler.register(tabIndex, keyHandler, doc);
+});
+
+if (tooltip != "") {
+    webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {
+        "auto": "true",
+        "id": "button_clickarea",
+        "text": tooltip
+    });
+}
+
+webMI.gfx.setVisible('button_stroke_focus', false);
+
+webMI.callExtension("SYSTEM.LIBRARY.PROJECT.QUICKDYNAMICS.ResetScaling", {
+    callback: function(originalSize, renderedSize, scale, scaleInverse) {
+        webMI.gfx.setScaleX('buttonGroup', scaleInverse.x);
+        webMI.gfx.setWidth('buttonGroup', renderedSize.width);
+        webMI.gfx.setMoveX('buttonGroup', -(renderedSize.width - originalSize.width) / 2);
+        webMI.gfx.setWidth('button_stroke_focus', renderedSize.width - 1);
+        webMI.gfx.setWidth('button_clickarea', renderedSize.width - 1);
+    },
+    originalWidth: 100,
+    originalHeight: 31,
+    innerNode: document.getElementById('buttonGroup')
+});
+
+webMI.trigger.connect("com.atvise.setActive", function(e) {
+    if (e.value) {
+        deActivate();
+    } else {
+        deActivate(true);
+    }
+});]]></script>
+</svg>

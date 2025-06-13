@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.Picker Color
+NodeClass: Variable
+BrowseName: 1:Picker Color
+DisplayName: en|Picker Color
+Description: en|Picker Color
+DataType: XmlElement
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.Display

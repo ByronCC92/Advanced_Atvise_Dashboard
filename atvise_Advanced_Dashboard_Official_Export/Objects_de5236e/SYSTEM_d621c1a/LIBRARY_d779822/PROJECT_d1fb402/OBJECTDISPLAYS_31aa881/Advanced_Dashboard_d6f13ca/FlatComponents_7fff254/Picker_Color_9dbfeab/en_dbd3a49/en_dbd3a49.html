@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>OD_help</title>
+  <style> #parameter{font-weight:bold;} </style>
+</head>
+<body>
+<h1>Description</h1>
+<p>This
+control opens a dialog to pick or enter color code in HEX.</p>
+<p>In addition the trigger "valuechanged" will be fired.</p>
+<h1>Parameters</h1>
+<p>This control has&nbsp;the following generic parameters:</p>
+<ul>
+  <li><span id="parameter">base</span>:  the value of this address will be set to the selected color</li>
+  <li><span id="parameter">name</span>: if more than one picker_color is used on the same display, a unique identifier has to be specified here</li>
+  <li><span id="parameter">initial value</span>: initial value of the color</li>
+  </ul>
+Font:<br>
+<ul>
+  <li><span id="parameter">family</span>:&nbsp;font family which will be applied to&nbsp;value (default: Arial)</li>
+  <li><span id="parameter">size</span>:&nbsp;font size which will be applied to the&nbsp;value (default: 12)</li>
+  <li><span id="parameter">color</span>: color which will be applied to the&nbsp;value (default: black)</li>
+  </ul>
+Appearance:<br>
+<ul>
+  <li><span id="parameter">fill color</span>: background color of the text (value) (default: grey)</li>
+  <li><span id="parameter">fill color when inactive</span>: button's fill color if not active&nbsp;(default: dark grey)</li>
+  <li><span id="parameter">button fill color</span>: fill color of the two buttons (default: black)</li>
+  <li><span id="parameter">button stroke color pressed</span>: the color of the stroke which will be set when one of the two buttons is pressed (default: white)</li>
+  <li><span id="parameter">focus stroke color</span>: the color of the stroke which will be set when the button is focused (default: white)</li>
+  </ul>
+Security:
+<ul>
+  <li><span id="parameter">necessary right</span>: the user must have this right to activate this button, i.e. to press one of the two buttons</li>
+  <li><span id="parameter">activation address</span>: if the value of this address equals to "activation value", then the control will be active, i.e. can be pressed</li>
+  <li><span id="parameter">activation value</span>: value which activiates the control</li>
+ </ul>
+NOTE: The activation of the control can be configured only by the necessary right, or only by the&nbsp;activation
+address and value or by both. In case both settings are made, the user
+must have the necessary right and the value of the "activation address"
+must equal the "activation value"; otherwise the control will not be activated.
+<br><br>Options:
+<ul>
+  <li><span id="parameter">consistency group</span>: name of the consistency group</li>
+  <li><span id="parameter">tab index</span>:&nbsp;defines the order for changing between the object displays by using the tab key</li>
+  <li><span id="parameter">tooltip</span>:&nbsp;displays a tooltip box with the entered text (standard HTML-Elements can be entered)</li>
+</ul>
+</body>
+</html>

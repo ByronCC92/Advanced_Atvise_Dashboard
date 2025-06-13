@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<title>Picker Date Time</title>
+		<style>
+			span.param { font-weight: bold; padding-right: 5px; }
+			li { padding-bottom: 5px; }
+		</style>
+	</head>
+	<body>
+		<h1>Picker Date Time</h1>
+		<p>
+			Opens a dialog to pick a date and time.
+		</p>
+		<h2>Parameters</h2>
+		<ul>
+			<li>
+				<span class="param">name</span>String=pickerDate<br />
+				The control's name. Must be unique in every display if controlled via triggers.
+			</li>
+			<li>
+				Apprearance
+				<ul>
+					<li>
+						<span class="param">background color</span>Color<br />
+						Background color. Defaults to ControlBackgroundColor provided by the Theme QD.
+					</li>
+					<li>
+						<span class="param">fill color inactive</span>Color<br />
+						Background color when inactive. Defaults to ControlInactiveBackgroundColor provided by the Theme QD.
+					</li>
+					<li>
+						<span class="param">stroke color pressed</span>Color<br />
+						Stroke color when pressed. Defaults to ControlTintColor provided by the Theme QD.
+					</li>
+					<li>
+						<span class="param">focus stroke color</span>Color<br />
+						Stroke color when focussed. Defaults to ControlTintColor provided by the Theme QD.
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<h2>Events</h2>
+		<ul>
+			<li>
+				<code>valuechanged</code>: triggered after value change.
+			</li>
+		</ul>
+	</body>
+</html>

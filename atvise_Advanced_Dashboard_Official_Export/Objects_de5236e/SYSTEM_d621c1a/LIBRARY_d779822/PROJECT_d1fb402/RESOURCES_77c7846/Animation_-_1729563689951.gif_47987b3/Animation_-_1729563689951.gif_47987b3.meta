@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.RESOURCES/Animation - 1729563689951.gif
+NodeClass: Variable
+BrowseName: 1:Animation - 1729563689951.gif
+DisplayName: en|Animation - 1729563689951.gif
+Description: en|Animation - 1729563689951.gif
+DataType: ByteString
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.Resource.Gif

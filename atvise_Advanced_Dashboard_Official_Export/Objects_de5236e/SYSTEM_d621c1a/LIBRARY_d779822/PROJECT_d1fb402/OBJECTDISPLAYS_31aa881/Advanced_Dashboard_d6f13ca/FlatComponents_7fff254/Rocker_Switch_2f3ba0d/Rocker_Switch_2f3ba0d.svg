@@ -1,0 +1,500 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg width="100" version="1.2" xmlns="http://www.w3.org/2000/svg" height="80" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:atv="http://webmi.atvise.com/2007/svgext">
+ <defs>
+  <linearGradient id="linear_12" y1="-0.0183441" x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient id="linear_2" y1="1.00811" x1="0.0839607" y2="-0.0183441" gradientUnits="objectBoundingBox" x2="0.0839607">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient id="linear_4" y1="1.00811" x1="0.0839607" y2="-0.0183441" gradientUnits="objectBoundingBox" x2="0.0839607">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient id="linear_11" y1="1.00811" x1="0.0839607" y2="-0.0183441" gradientUnits="objectBoundingBox" x2="0.0839607">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient id="linear_13" y1="-0.0183441" x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1">
+   <stop offset="0" stop-color="#ffffff" stop-opacity="0.2745098039215687"/>
+   <stop offset="0.5515695067264574" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="linear_14" y1="-0.0183441" x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1">
+   <stop offset="0" stop-color="#ffffff" stop-opacity="0.2745098039215687"/>
+   <stop offset="0.5515695067264574" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="linear_15" y1="1" y2="-0.0183441" x1="1" x2="1" gradientUnits="objectBoundingBox">
+   <stop offset="0" stop-color="#ffffff" stop-opacity="0.2745098039215687"/>
+   <stop offset="0.5515695067264574" stop-color="#ffffff" stop-opacity="0"/>
+  </linearGradient>
+ </defs>
+ <desc>Increments/decrements value of an address.</desc>
+ <title>Rocker Switch</title>
+ <metadata>
+  <atv:parameter desc="base" valuetype="address" behavior="mandatory" name="base"/>
+  <atv:parameter desc="step to increment" valuetype="number" behavior="optional" name="stepInc" defaultvalue="1"/>
+  <atv:parameter desc="step to decrement" valuetype="number" behavior="optional" name="stepDec" defaultvalue="1"/>
+  <atv:parameter desc="interval [ms] (0 = off)" valuetype="number" behavior="optional" name="interval" defaultvalue="150"/>
+  <atv:parameter config="Times New Roman=Times New Roman,Bodoni,Garamond,Minion Web,ITC Stone Serif,MS Georgia,Bitstream Cyberbit,serif;Arial=MS Trebuchet,ITC Avant Garde Gothic,MS Arial,MS Verdana,Univers,Futura,ITC Stone Sans,Gill Sans,Akzidenz Grotesk,Helvetica,sans-serif;Courier=Courier,MS Courier New,Prestige,Everson Mono,monospace;Zapf-Chancery=Caflisch Script,Adobe Poetica,Sanvito,Ex Ponto,Snell Roundhand,Zapf-Chancery,cursive;Alpha Geometrique=Alpha Geometrique,Critter,Cottonwood,FB Reactor,Studz,fantasy" desc="family" valuetype="enum" substitute="$FONTFAMILY$" group="Font" behavior="optional" name="fontFamily" defaultvalue="Arial"/>
+  <atv:parameter config="6;7;8;9;10;11;12;14;16;18;20;22;24;26;28;36;48;72" desc="size" valuetype="enum" substitute="$FONTSIZE$" group="Font" behavior="optional" name="fontSize" defaultvalue="16"/>
+  <atv:parameter desc="color" valuetype="color" substitute="$FONTCOLOR$" group="Font" behavior="optional" name="fontColor" defaultvalue="#ffffff"/>
+  <atv:parameter desc="fill color text" valuetype="color" substitute="$FILL$" group="Appearance" behavior="optional" name="fill" defaultvalue="#d0d0d0"/>
+  <atv:parameter desc="fill color button" valuetype="color" substitute="$BUTTONFILL$" group="Appearance" behavior="optional" name="buttonFill" defaultvalue="#3f434a"/>
+  <atv:parameter desc="fill color arrow" valuetype="color" substitute="$ARROWFILL$" group="Appearance" behavior="optional" name="arrowFill" defaultvalue="#E3D700"/>
+  <atv:parameter desc="fill color when inactive" valuetype="color" group="Appearance" behavior="optional" name="fillColorInactive" defaultvalue="#8c8c8c"/>
+  <atv:parameter desc="stroke color button pressed" valuetype="color" group="Appearance" behavior="optional" name="buttonStrokePressed" defaultvalue="#ffffff"/>
+  <atv:parameter desc="focus stroke color" valuetype="color" substitute="$FOCUSSTROKECOLOR$" group="Appearance" behavior="optional" name="focusStrokeColor" defaultvalue="#FFFFFF"/>
+  <atv:parameter desc="minimum" valuetype="number" group="Options" behavior="optional" name="min"/>
+  <atv:parameter desc="maximum" valuetype="number" group="Options" behavior="optional" name="max"/>
+  <atv:parameter desc="consistency group" valuetype="string" group="Options" behavior="optional" name="consistencyGroup"/>
+  <atv:parameter desc="tab index" valuetype="number" group="Options" behavior="optional" name="tabIndex"/>
+  <atv:parameter desc="tooltip" valuetype="trstring" group="Options" behavior="optional" name="tooltip"/>
+  <atv:parameter config="SYSTEM.SECURITY.RIGHTS" desc="necessary right" valuetype="address" group="Security" behavior="optional" name="right"/>
+  <atv:parameter desc="activation address" valuetype="address" group="Security" behavior="optional" name="activeNode"/>
+  <atv:parameter desc="activation value" valuetype="string" group="Security" behavior="optional" name="activeValue"/>
+  <atv:gridconfig width="2" enabled="true" height="2" gridstyle="lines"/>
+  <atv:snapconfig width="1" enabled="true" height="1"/>
+ </metadata>
+ <polyline atv:bindtl="0.5,0.5" points="57,62 43,62 50,69 57,62" fill="$ARROWFILL$" stroke="none" atv:bindbr="0.5,0.5" id="clickarea_dec_icon" atv:refpx="50" stroke-width="0" atv:refpy="65.5"/>
+ <polyline atv:bindtl="0.5,0.5" points="43,18 57,18 50,11 43,18" fill="$ARROWFILL$" stroke="none" atv:bindbr="0.5,0.5" id="clickarea_inc_icon" atv:refpx="50" stroke-width="0" atv:refpy="14.5"/>
+ <text x="40" y="46" atv:bindtl="0.5,0.5" fill="$FONTCOLOR$" font-family="$FONTFAMILY$" text-anchor="middle" atv:bindbr="0.5,0.5" id="input_label" atv:refpx="40" atv:refpy="41.5" font-size="$FONTSIZE$">0</text>
+ <svg width="100" x="0" y="70.226" height="31" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.Clickarea" id="clickarea_dec" atv:refpx="50" atv:refpy="67.756" transform="matrix(1,0,0,0.7903,0,0)">
+  <atv:argument value="102" name="tabIndex"/>
+  <atv:overwrite height="23.499" id="button_clickarea" transform="matrix(1,0,0,1.2653,0,0)"/>
+  <atv:overwrite height="23.499" id="button_stroke_focus" transform="matrix(1,0,0,1.2653,0,0)"/>
+ </svg>
+ <svg width="80" x="0" y="24.5" atv:bindtl="0,0" height="31" atv:bindbr="1,1" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.EditableLabel" id="id_1" atv:refpx="50" atv:refpy="40" transform="matrix(1.25,0,0,1,0,0)">
+  <atv:argument prefix="base" name="base"/>
+  <atv:argument value="101" name="tabIndex"/>
+  <atv:argument prefix="fontFamily" name="fontFamily"/>
+  <atv:argument prefix="fontSize" name="fontSize"/>
+  <atv:argument prefix="fontColor" name="fontColor"/>
+  <atv:argument prefix="fill" name="fill"/>
+  <atv:argument prefix="right" name="right"/>
+  <atv:argument prefix="tooltip" name="tooltip"/>
+  <atv:argument prefix="activeNode" name="activeNode"/>
+  <atv:argument prefix="activeValue" value="" name="activeValue"/>
+  <atv:overwrite x="50" id="input_label" transform="matrix(0.8,0,0,1,0,0)"/>
+  <atv:overwrite width="99" id="input_bg" transform="matrix(0.8,0,0,1,0,0)"/>
+  <atv:overwrite width="172.326" id="blinking_frame" transform="matrix(0.8,0,0,1,0,0)"/>
+ </svg>
+ <svg width="100" x="0" y="0" height="31" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.Clickarea" id="clickarea_inc" atv:refpx="50" atv:refpy="12.25" transform="matrix(1,0,0,0.7903,0,0)">
+  <atv:argument value="100" name="tabIndex"/>
+  <atv:overwrite height="23.5" id="button_clickarea" transform="matrix(1,0,0,1.2653,0,0)"/>
+  <atv:overwrite height="23.5" id="button_stroke_focus" transform="matrix(1,0,0,1.2653,0,0)"/>
+ </svg>
+ <script type="text/ecmascript"><![CDATA[var isTouch = (navigator.userAgent.indexOf("Mobi") > -1);
+var useSVGKeyboard = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Configuration", {"action":"existsIndexParameter", "parameterName":"useSVGKeyboard"});
+if(useSVGKeyboard == "true")
+	isTouch = true;
+var base = (webMI.query["base"] == undefined) ? "" : webMI.query["base"];
+var stepInc = parseFloat(webMI.query["stepInc"]);
+var stepDec = parseFloat(webMI.query["stepDec"]);
+var min = (webMI.query["min"] == undefined) ? "" : parseFloat(webMI.query["min"]);
+var max = (webMI.query["max"] == undefined) ? "" : parseFloat(webMI.query["max"]);
+var interval = parseFloat(webMI.query["interval"]);
+var initialValue = webMI.query["initValue"];
+var tabHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tab Handler");
+var tabIndex = (webMI.query["tabIndex"] == undefined) ? "" : webMI.query["tabIndex"];
+var tooltip = (webMI.query["tooltip"] == undefined) ? "" : webMI.query["tooltip"];
+var curValue = 0;
+var CONST_NUMBER_FORMAT = "[^-0-9.]";
+var format = CONST_NUMBER_FORMAT;
+
+if (initialValue) {
+	curValue = parseFloat(initialValue);
+}
+
+webMI.gfx.setText("input_label", curValue);
+
+var fontColor = webMI.query["fontColor"];
+var fill = webMI.query["fill"];
+var fillColorInactive = webMI.query["fillColorInactive"];
+var focusStrokeColor = webMI.query["focusStrokeColor"];
+var buttonFill = webMI.query["buttonFill"];
+var buttonStrokePressed = webMI.query["buttonStrokePressed"];
+var arrowFill = webMI.query["arrowFill"];
+var consistencyGroup = webMI.query["consistencyGroup"];
+
+if (consistencyGroup)
+	var consistencyHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Consistency Handler");
+
+var right = (webMI.query["right"] == undefined) ? "" : webMI.query["right"];
+if (right.search(/SYSTEM\.SECURITY\.RIGHTS\./) != -1) {
+	right = right.substring(23,right.length); //remove "prefix" SYSTEM.SECURITY.RIGHTS.
+}
+
+var active = false;
+var hasRight = false;
+
+if (right != "") {
+	webMI.addEvent(webMI.data, "clientvariableschange", function(e) {
+		hasRight=false;
+		if (("username" in e) && (e.username != "")) {
+				hasRight = webMI.hasRight(right);
+		}
+		deActivate();
+	});
+}
+
+var activeValue = (webMI.query["activeValue"] == undefined) ? "" :webMI.query["activeValue"];
+var activeNode = (webMI.query["activeNode"] == undefined) ? "" : webMI.query["activeNode"];
+var nodeIsActive = false;
+
+if ((activeNode != "") && (String(activeValue) != "")) {
+	webMI.data.subscribe(activeNode, function(e) {
+		var nodeActiveValue = e.value;
+		if (typeof nodeActiveValue == "boolean") {
+			nodeIsActive = (String(nodeActiveValue) == activeValue);
+		} else if (typeof nodeActiveValue == "number") {
+			try {
+				var temp = parseFloat(activeValue);
+				nodeIsActive = (nodeActiveValue == temp);
+			} catch(e) {
+				nodeIsActive = false;
+			}
+		} else {
+			nodeIsActive = (nodeActiveValue == activeValue);
+		}
+		deActivate();
+	});
+} else {
+	deActivate();
+}
+
+function deActivate(forceDeActivate) {
+	if (typeof forceDeActivate !== "undefined" && forceDeActivate){
+		active = false;
+	} else if (right != "") {
+		if ((String(activeValue) != "") && (activeNode != "")) {
+			active=(nodeIsActive && hasRight);
+		} else {
+			active=hasRight;
+		}
+	} else {
+		if ((String(activeValue) != "") && (activeNode != "")) {
+			active=nodeIsActive;
+		} else {
+			active=true;
+		}
+	}
+	if (active) {
+		webMI.gfx.setFill("input_field_widget", fill);
+		webMI.gfx.setFill("inc_bg", buttonFill);
+		webMI.gfx.setFill("dec_bg", buttonFill);
+		webMI.gfx.setVisible("inc_stroke", null);
+		webMI.gfx.setVisible("dec_stroke", null);
+	} else {
+		isRunning = false;
+		webMI.gfx.setFill("input_field_widget", fillColorInactive);
+		webMI.gfx.setFill("inc_bg", fillColorInactive);
+		webMI.gfx.setFill("dec_bg", fillColorInactive);
+		webMI.gfx.setVisible("inc_stroke", false);
+		webMI.gfx.setVisible("dec_stroke", false);
+	}
+}
+
+function update(value) {
+	var newValue = value;
+
+	if ((String(max) != "") && (newValue > max)) newValue = max;
+	else if ((String(min) != "") && (newValue < min)) newValue = min;
+
+	if (base != "" && !consistencyGroup) {
+		webMI.data.write(base, newValue);
+	}else{
+		curValue = value;
+		webMI.gfx.setText("input_label", newValue);
+	}
+}
+
+if (base != "") {
+	if (consistencyGroup) {
+		consistencyHandler.register(consistencyGroup, base, update);
+	} else {
+		webMI.data.subscribe(base, function(e) {
+			curValue = parseFloat(e.value);
+
+			if(isNaN(curValue)) {
+				curValue = "-";
+			}
+			webMI.gfx.setText("input_label", curValue);
+		});
+	}
+}
+function focusTH(){
+	if (active) {
+		webMI.gfx.setStroke("input_field_widget", focusStrokeColor);
+	}
+}
+function blurTH(){
+	if (active) {
+		webMI.gfx.setStroke("input_field_widget", "none");
+	}
+}
+
+function getDisplayParameters(){
+	var communicationID = new Date().getTime().toString();
+	webMI.trigger.connect(communicationID, function(e) {
+		setCurrentValue(curValue = e.value);
+	});
+
+	var passObj = {};
+	for(var i in webMI.query)
+		passObj[i] = webMI.query[i];
+	passObj["minValue"] = passObj["min"];
+	passObj["maxValue"] = passObj["max"];
+	passObj["trigger"] = communicationID;
+	if(!consistencyGroup)
+		passObj["target"] = passObj["base"];
+	return passObj;
+}
+
+function applyTH(){
+	if (active) {
+		var tmp = null;
+
+		if (isTouch) {
+			var keyboard = "";
+			var size = (format != undefined && format == CONST_NUMBER_FORMAT) ? {w: 438, h: 378} : {w: 550, h: 250};
+			var keyboardParam = getDisplayParameters();
+			if (format != undefined && format == CONST_NUMBER_FORMAT) {
+				keyboard = "SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Standard.keyboard.number_keyboard";
+			} else {
+				keyboard = "SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Standard.keyboard.keyboard";
+			}
+			webMI.display.openWindow({display:keyboard,extern:false,height:size.h,menubar:false,modal:true,movable:true,resizable:false,scrollbars:false,status:false,title:"T{Keyboard}",toolbar:false,width:size.w,query:keyboardParam});
+		} else {
+			tmp = prompt("T{Input value:}", curValue);
+		}
+
+		if (tmp == null) {
+			return;
+		}
+		var tmpValue = parseFloat(tmp);
+		if (isNaN(tmpValue)) {
+			alert("T{Invalid format!}");
+		} else if ((String(max) != "") && (tmpValue > max)) {
+			alert("T{Value too high!}");
+		} else if ((String(min) != "") && (tmpValue < min)) {
+			alert("T{Value too low!}");
+		} else {
+			curValue = tmpValue;
+			setCurrentValue(curValue);
+		}
+	}
+}
+
+function backTH(){}
+
+function arrowTH(dir){
+	if (active && (dir == 38 || dir == 40)) {
+		var step = (dir == 40)?stepDec*(-1):stepInc;
+		var newValue = (curValue+step);
+		if (((String(max) == "") || (newValue <= max)) && ((String(min) == "") || (newValue >= min))) {
+			setCurrentValue(newValue);
+		}
+	}
+}
+
+function keyHandler(keyTH,param2){
+	if (keyTH == "focus"){
+		focusTH();
+	} else if (keyTH == "blur"){
+		blurTH();
+	} else if (keyTH == "apply"){
+		applyTH();
+	} else if (keyTH == "back"){
+		backTH();
+	} else if (keyTH == "arrow"){
+		(param2 == 38) && webMI.gfx.setFill("inc_stroke", "url(#linear_15)");
+		(param2 == 40) && webMI.gfx.setFill("dec_stroke", "url(#linear_15)");
+		arrowTH(param2);
+	} else if (keyTH == "releaseClick"){
+		webMI.gfx.setFill("inc_stroke", "url(#linear_14)");
+		webMI.gfx.setFill("dec_stroke", "url(#linear_14)");
+	} else if (keyTH == "isActive"){
+		return active && param2(document.getElementById("clickarea_inc").parentNode);
+	}
+}
+
+webMI.trigger.connect("setValue", function(e) {
+	update(e.value);
+});
+
+function setCurrentValue(newValue) {
+	if (base != "" && !consistencyGroup) {
+		webMI.data.write(base, newValue, function(e){
+			if (e && e.error) {
+				alert("T{Invalid format!}");
+
+				webMI.data.read(base, function(e){
+					curValue = e.value;
+				});
+			}
+		});
+	}else{
+		curValue = newValue;
+		webMI.gfx.setText("input_label", newValue);
+
+		if (consistencyGroup)
+			consistencyHandler.set(consistencyGroup, base, newValue);
+	}
+
+	webMI.trigger.fire("valuechanged", newValue, "");
+}
+
+var isPressed = false;
+var isRunning = false;
+var activeTimer;
+
+function buttonPressed(pressed, step) {
+	isPressed = pressed;
+
+	if (isPressed && step) {
+		var newValue = (curValue+step);
+
+		if (((String(max) == "") || (newValue <= max)) && ((String(min) == "") || (newValue >= min))) {
+			setCurrentValue(newValue);
+		}
+
+		if (interval > 0) {
+			isRunning = true;
+			var callFn = function() { doInDecrement(step); };
+			activeTimer = setTimeout(callFn, interval);
+		}
+	} else if(isRunning && activeTimer) {
+		isRunning = false;
+		clearTimeout(activeTimer);
+	}
+}
+
+function doInDecrement(step) {
+	if (isRunning && isPressed) {
+		var calcStep = ((step<0)?(-1)*step:step) -1;
+		var newValue = (curValue+step);
+
+		if (((String(max) == "") || (newValue <= max)) && ((String(min) == "") || (newValue >= min))) {
+			setCurrentValue(newValue);
+		}
+
+		var callFn = function() { doInDecrement(step); };
+		activeTimer = setTimeout(callFn, interval);
+	}
+}
+
+
+webMI.addEvent("clickarea_inc", ["mousedown", "touchstart"], function(e) {
+	var id = "clickarea_inc_icon";
+	var value = true;
+	return function(value) {
+		if (active) {
+			tabHandler.setCurrentIndex(keyHandler);
+			webMI.gfx.setFill("inc_stroke", "url(#linear_15)");
+			webMI.gfx.setStroke("inc_stroke", buttonStrokePressed);
+			buttonPressed(true, stepInc);
+		}
+	} (value);
+});
+
+webMI.addEvent("clickarea_inc", ["mouseup", "touchend"], function(e) {
+var id = "clickarea_inc_icon";
+var value = true;
+return function(value) {
+	releaseInc();
+} (value);
+});
+
+webMI.addEvent("clickarea_inc", "mouseout", function(e) {
+var id = "clickarea_inc_icon";
+var value = true;
+return function(value) {
+	releaseInc();
+} (value);
+});
+
+webMI.addEvent("clickarea_inc", "dragstart", function(e) {
+	if (e.preventDefault) {
+		e.preventDefault();
+	}
+});
+
+function releaseInc() {
+	if (active) {
+		webMI.gfx.setFill("inc_stroke", "url(#linear_14)");
+		webMI.gfx.setStroke("inc_stroke", "none");
+		buttonPressed(false, null);
+	}
+}
+
+webMI.addEvent("clickarea_dec", ["mousedown", "touchstart"], function(e) {
+var id = "clickarea_dec_icon";
+var value = true;
+return function(value) {
+	if (active) {
+		tabHandler.setCurrentIndex(keyHandler);
+		webMI.gfx.setFill("dec_stroke", "url(#linear_15)");
+		webMI.gfx.setStroke("dec_stroke", buttonStrokePressed);
+		buttonPressed(true, stepDec*(-1));
+	}
+} (value);
+});
+
+webMI.addEvent("clickarea_dec", ["mouseup", "touchend"], function(e) {
+var id = "clickarea_dec_icon";
+var value = true;
+return function(value) {
+	releaseDec();
+} (value);
+});
+
+webMI.addEvent("clickarea_dec", "mouseout", function(e) {
+var id = "clickarea_dec_icon";
+var value = true;
+return function(value) {
+	releaseDec();
+} (value);
+});
+
+webMI.addEvent("clickarea_dec", "dragstart", function(e) {
+	if (e.preventDefault) {
+		e.preventDefault();
+	}
+});
+
+function releaseDec() {
+	if (active) {
+		webMI.gfx.setFill("dec_stroke", "url(#linear_14)");
+		webMI.gfx.setStroke("dec_stroke", "none");
+		buttonPressed(false, null);
+	}
+}
+
+
+
+webMI.addOnload(function() {
+	var doc = document.getElementById("clickarea_inc").ownerDocument;
+	tabHandler.register(tabIndex,keyHandler,doc);
+});
+
+if (tooltip != ""){
+	webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {"auto":"true", "id":"clickarea_inc", "text":tooltip});
+	webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {"auto":"true", "id":"clickarea_dec", "text":tooltip});
+	webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {"auto":"true", "id":"id_1", "text":tooltip});
+}
+
+webMI.trigger.connect("com.atvise.setActive", function(e){
+	if (e.value){
+		deActivate();
+	}  else {
+		deActivate(true);
+	}
+	_active = e.value;
+
+	webMI.trigger.fire("com.atvise.setActive", e.value, 'clickarea_inc');
+	webMI.trigger.fire("com.atvise.setActive", e.value, 'clickarea_dec');
+	webMI.trigger.fire("com.atvise.setActive", e.value, 'id_1');
+});]]></script>
+</svg>

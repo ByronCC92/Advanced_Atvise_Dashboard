@@ -1,0 +1,9 @@
+NodeId: ns=1;s=SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.Combobox.en
+NodeClass: Variable
+BrowseName: 1:en
+DisplayName: en|en
+Description: en|en
+DataType: ByteString
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.HtmlHelp

@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>OD_help</title>
+  <style> #parameter{font-weight:bold;} </style>
+</head>
+<body>
+<h1>Description</h1>
+<p>This
+control is a simple button which just fires the trigger "clicked". This
+trigger can be used to add a Simple Dynamic to this button which reacts
+on the trigger "clicked" and fires a new trigger. This new trigger can
+then be
+used by other elements.</p>
+<h1>Parameters</h1>
+<p>This control has&nbsp;the
+following generic parameters:</p>
+<ul>
+  <li><span id="parameter">label</span>: label of the button if "visibility label" is set to visible</li>
+</ul>
+Font:<br>
+<ul>
+  <li><span id="parameter">family</span>:&nbsp;font family which will be applied to
+label (default: Arial)</li>
+  <li><span id="parameter">size</span>:&nbsp;font size which will be applied to the label (default: 16)</li>
+  <li><span id="parameter">color</span>: color which will be applied to the label (default: #ffffff)</li>
+</ul>
+Appearance:<br>
+<ul>
+  <li><span id="parameter">visibility label</span>: if set to visible, the text as specified by "label" will be
+displayed; if this is set to visible, "visibility symbol'" should be set
+to hidden. (default: visible)</li>
+  <li><span id="parameter">visibility symbol</span>:&nbsp;if
+set to visible, the symbol as specified by "symbol" will be displayed; if this is set to visible,
+"visibility label'" should be set to hidden.&nbsp;(default: hidden)</li>
+  <li><span id="parameter">symbol</span>: symbol
+to be used if "visibility symbol" is set to visible; further scales
+can be selected from "Object Displays (ATVISE)/Symbols/20x20 (default:
+check)</li>
+  <li><span id="parameter">symbol color</span>:&nbsp;color
+of the symbol to be used&nbsp; (default: #ffffff)</li>
+  <li><span id="parameter">fill color</span>: button's fill color&nbsp;(default: #3f434a)</li>
+  <li><span id="parameter">fill color when inactive</span>: button's fill color if not active&nbsp;(default: #8c8c8c)</li>
+  <li><span id="parameter">stroke color pressed</span>: the color of the stroke which will be set when the
+button is pressed (default:
+#E3D700)</li>
+  <li><span id="parameter">focus stroke color</span>: the color of the stroke which will be set when the button is focused (default: #E3D700)</li>
+</ul>
+Security:
+<ul>
+  <li><span id="parameter">necessary right</span>: the user must have this right to activate this button, i.e. to press the button</li>
+  <li><span id="parameter">activation address</span>: if the value of this address equals to "activation value", then the button will be active, i.e. can be pressed</li>
+  <li><span id="parameter">activation value</span>: value which activiates the button</li> </ul>
+<div style="margin-left: 40px;">NOTE: The activation of a
+button can be configured only by the necessary right, or only by
+the&nbsp;activation
+address and value or by both. In case both settings are made, the user
+must have the necessary right and the value of the "activation address"
+must equal the "activation value"; otherwise the button will not be
+activated.
+</div>
+<br>
+Consistency:<br>
+<ul>
+  <li><span id="parameter">group</span>: name of the consistency group</li>
+  <li><span id="parameter">function</span>: function to be executed on click when a consistency group is given (default: write) </li>
+</ul>
+Options:<br>
+<ul>
+  <li><span id="parameter">tab index</span>: defines the order for changing between the object displays by using the tab key</li>
+  <li><span id="parameter">tooltip</span>: displays a tooltip box with the entered text (standard HTML-Elements can be entered)</li> </ul>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>OD_help</title>
+  <style> #parameter{font-weight:bold;} </style>
+</head>
+<body>
+<h1>Description</h1>
+<p>The checkbox switches between two values (equal to the button switch) and&nbsp;can be used as input or output control only (see parameter "editable").</p>
+<p>It can be used in the following modes:</p>
+<ol>
+  <li>only "base" is specified: in this
+case additionally the "on value", "value On to be set" and "value Off
+to be set" have to be set (NOTE: &ldquo;on value&rdquo; must be equal
+to &ldquo;value On to be set&rdquo;)</li>
+</ol>
+<div style="margin-left: 40px;">With this configuration, on each
+click, the checkbox switches between 2 values for the address "base". It will be in&nbsp;On state if the value of the "base"&nbsp;equals the&nbsp;"value On"; otherwise it will be&nbsp;Off.</div>
+<ol start="2">
+  <li>"base" and "address to set" are specified:</li>
+</ol>
+<div style="margin-left: 40px;">With this configuration, on each
+click, the following happens:<br>
+<ul>
+  <li>The checkbox will be in&nbsp;On state if the value of the "base"&nbsp;equals the&nbsp;"value On"; otherwise it will be&nbsp;Off.</li>
+  <li>Depending whether the checkbox is On of
+Off,&nbsp; on click "address to set" will be set to "value Off to be set"
+or to "value On to be set".</li>
+  <li>The checkbox itself will change the state (ticked or not) only when the "base" is changed (feedback channel).<br>
+    </li>
+</ul>
+</div>
+<ol start="3">
+  <li>neither
+"base" nor &ldquo;address to set&rdquo; are specified:</li>
+</ol>
+<div style="margin-left: 40px;">In this case, the trigger "valuechanged" with the value from "value Off to be set" or "value On to be set" will be fired. These
+triggers can be used to add a Simple Dynamic to this checkbox which reacts
+on the triggers and fires a new trigger. This new trigger can then be
+used by other elements. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+<h1>Parameters</h1>
+<p>This control has&nbsp;the following generic parameters:</p>
+<ul>
+  <li><span id="parameter">base</span>: depending whether or not "address to set" is specified, the behavior&nbsp;is according to mode 1 and 2 above</li>
+  <li><span id="parameter">label</span>: label of the checkbox</li>   <li><span id="parameter">on value</span>: value which defines when the checkbox is ticked</li>
+  <li><span id="parameter">value on to be set</span>: depending on the configuration, "base" or "address to set" will be set to this value when switching from Off
+state to On state</li>
+  <li><span id="parameter">value off to be set</span>: depending on the configuration, "base" or "address to set" will be set to this value when switching from On state to Off state</li>
+</ul>
+Font:<br>
+<ul>
+  <li><span id="parameter">family</span>:&nbsp;font family which will be applied to&nbsp;value (default: Arial)</li>
+  <li><span id="parameter">size</span>:&nbsp;font size which will be applied to the&nbsp;value (default: 12)</li>
+  <li><span id="parameter">color</span>: color which will be applied to the&nbsp;value (default: grey)</li> </ul>
+Appearance:<br>
+<ul>
+  <li><span id="parameter">preselect this checkbox</span>: if set to "true", the checkbox will be ticked on load;
+otherwise not. This takes only effect if no "base" and no "address to set" are specified.<br>
+    </li>
+  <li><span id="parameter">fill color</span>:&nbsp;fill color of the checkbox (default: grey)</li>
+  <li><span id="parameter">fill color not editable</span>: fill color if checkbox is not editable (default: white)</li>
+  <li><span id="parameter">fill color when inactive</span>:&nbsp;fill color if not active&nbsp;(default: dark grey)</li>
+  <li><span id="parameter">stroke color pressed</span>: the color of the stroke which will be set when the checkbox is clicked (default: white)</li>
+  <li><span id="parameter">symbol</span>:&nbsp;symbol which is shown if checkbox is ticked; further symbols can be selected from "Object Displays (ATVISE)/Symbols/20x20 (default: x)</li>
+  <li><span id="parameter">symbol color</span>:&nbsp;color of the symbol to be used (default: black)</li>
+  <li><span id="parameter">focus stroke color</span>: the color of the stroke which will be set when the button is focused (default: white)</li>
+</ul>
+Options:<br>
+<ul>
+  <li><span id="parameter">address to set</span>:&nbsp;the behavior&nbsp;is according to mode 2 above</li>
+  <li><span id="parameter">editable</span>: If set to "Yes", the checkbox can also be used as input field, i.e. the checkbox can be ticked. If set to "No" it can
+only be used as output field.</li>
+  <li><span id="parameter">consistency group</span>: name of the consistency group</li>
+  <li><span id="parameter">tab index</span>:&nbsp;defines the order for changing between the object displays by using the tab key</li>
+  <li><span id="parameter">tooltip</span>:&nbsp;displays a tooltip box with the entered text (standard HTML-Elements can be entered)</li>
+ </ul>
+Security:
+<ul>
+  <li><span id="parameter">necessary right</span>: the user must have this right to activate the checkbox i.e. to tick the checkbox</li>
+  <li><span id="parameter">activation address</span>: if the value of this address equals to "activation value", then the checkbox will be active, i.e. can be pressed</li>
+  <li><span id="parameter">activation value</span>: value which activiates the checkbox</li>
+</ul>
+<div style="margin-left: 40px;">NOTE: The activation of the checkbox can be configured only by the necessary right, or only by the&nbsp;activation
+address and value or by both. In case both settings are made, the user
+must have the necessary right and the value of the "activation address"
+must equal the "activation value"; otherwise the checkbox will not be activated.<br>
+</div>
+<h1>Example</h1>
+For mode 2 as described above assume the following parameters:
+<ul>
+  <li>base: node_feedback</li>
+  <li>on value: 1</li>
+  <li>value On to be set: 1</li>
+  <li>value Off to be set: 0</li>
+  <li>address to set: node_set</li>
+</ul>
+Furthermore assume that the values of "base" and "address to set" are set to 0.<br>
+<ol>
+  <li>With these setting the checkbox will not be ticked.</li>
+  <li>On click, "node_set" will be set to 1 (= "value On to be set"); the checkbox is still not ticked (value of "base" is still
+different from "on value")</li>
+  <li>As soon as "base" is set to 1 (feedback channel from PLC), the checkbox will now be ticked (value of "base" is now equal
+to "on value")</li>
+  <li>On click, "node_set" will be set to 0 (= "value Off to be
+set"); the checkbox will still be ticked (value of "base" is
+still equal to "on value")</li>
+  <li>As soon as "base" is set to 0 (feedback channel from PLC), the checkbox will no longer be ticked (value of "base" is now
+different from "on value")</li>
+</ol>
+</body>
+</html>

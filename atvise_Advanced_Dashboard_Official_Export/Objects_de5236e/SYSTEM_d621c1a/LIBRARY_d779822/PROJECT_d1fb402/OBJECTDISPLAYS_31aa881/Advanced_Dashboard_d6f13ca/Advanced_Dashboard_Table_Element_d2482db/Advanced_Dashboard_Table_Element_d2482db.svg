@@ -536,16 +536,17 @@ class singleChartManager {
 							this.configConflicts["repeatedNode"]=true;
 						}
 					}
-					else if (this.elementRawConfig.GeneralConfig.DataSource== "External-Database")		{	
-						if (seriesItem.SeriesColumnName && !(this.chartNodes.includes(seriesItem.SeriesColumnName)&&this.columnTypes.includes(seriesItem.SeriesColumnType))) { // Check if SeriesNode is not undefined and not already included
+					else if (this.elementRawConfig.GeneralConfig.DataSource== "External-Database")		{
+						if (enumItem.ColumnName && !this.chartNodes.includes(enumItem.ColumnName)) { 
 							this.chartNodes.push(enumItem.ColumnName);
-							this.chartLabels.push(enumItem.ColumnName);
-							this.columnTypes.push(enumItem.ColumnType);
+							this.chartLabels.push(enumItem.ColumnName); 
+							this.columnTypes.push(enumItem.ColumnType); 
 						}
-						else if (this.chartNodes.includes(enumItem.ColumnName)){
-							this.configConflicts["repeatedNode"]=true;
+						// Check if ColumnName exists but is already included (conflict)
+						else if (enumItem.ColumnName && this.chartNodes.includes(enumItem.ColumnName)) { 
+							this.configConflicts["repeatedNode"] = true;
 						}
-					}	
+					}
 					
 				}
 			}

@@ -1,0 +1,392 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg xmlns="http://www.w3.org/2000/svg" height="31" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2" xmlns:atv="http://webmi.atvise.com/2007/svgext" width="110">
+ <defs>
+  <linearGradient x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1" y1="-0.0183441" id="linear_12">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1" y1="-0.0183441" id="linear_0">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1" y1="-0.0183441" id="linear_1">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1" y1="-0.0183441" id="linear_4">
+   <stop stop-opacity="0.2745098039215687" offset="0" stop-color="#ffffff"/>
+   <stop stop-opacity="0" offset="0.5515695067264574" stop-color="#ffffff"/>
+   <stop stop-opacity="0" offset="0.7174887892376681" stop-color="#000000"/>
+   <stop stop-opacity="0.4705882352941176" offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1" y1="-0.0183441" id="linear_2">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient x1="1" y2="1" gradientUnits="objectBoundingBox" x2="1" y1="-0.0183441" id="linear_3">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient x1="0.208743" y2="0.133161" gradientUnits="objectBoundingBox" x2="0.208743" y1="1.00044" id="linear_5">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+ </defs>
+ <desc>Allows the selection/deselection of a node's value.</desc>
+ <title>Checkbox</title>
+ <metadata>
+  <atv:parameter name="base" desc="base" valuetype="address" behavior="mandatory"/>
+  <atv:parameter substitute="$LABEL$" name="label" defaultvalue="T{Checkbox}" desc="label" valuetype="trstring" behavior="optional"/>
+  <atv:parameter name="valueOn" desc="on value" valuetype="string" behavior="mandatory"/>
+  <atv:parameter name="outputValueOn" desc="value on to be set" valuetype="string" behavior="optional"/>
+  <atv:parameter name="outputValueOff" desc="value off to be set" valuetype="string" behavior="optional"/>
+  <atv:parameter config="Arial;Courier;Verdana" substitute="$FONTFAMILY$" group="Font" name="fontFamily" defaultvalue="Arial" desc="family" valuetype="enum" behavior="optional"/>
+  <atv:parameter config="6;7;8;9;10;11;12;14;16;18;20;22;24;26;28;36;48;72" substitute="$FONTSIZE$" group="Font" name="fontSize" defaultvalue="16" desc="size" valuetype="enum" behavior="optional"/>
+  <atv:parameter substitute="$FONTCOLOR$" group="Font" name="fontColor" defaultvalue="#ffffff" desc="color" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="preselected" defaultvalue="false" desc="preselect this checkbox" valuetype="bool" behavior="optional"/>
+  <atv:parameter substitute="$FILL$" group="Appearance" name="fill" defaultvalue="#3f434a" desc="fill color" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="fillNotEditable" defaultvalue="#ffffff" desc="fill color not editable" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="fillColorInactive" defaultvalue="#8c8c8c" desc="fill color when inactive" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="strokePressed" defaultvalue="#ffffff" desc="stroke color pressed" valuetype="color" behavior="optional"/>
+  <atv:parameter config="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Symbols.20x20" substitute="$SYMBOL$" group="Appearance" name="symbol" defaultvalue="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Symbols.Check" desc="symbol" valuetype="display" behavior="optional"/>
+  <atv:parameter group="Appearance" name="symbolColor" defaultvalue="#E3D700" desc="symbol color" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="focusStrokeColor" defaultvalue="#FFFFFF" desc="focus stroke color" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Options" name="outputNode" desc="address to set" valuetype="address" behavior="optional"/>
+  <atv:parameter config="Yes;No" group="Options" name="editable" defaultvalue="Yes" desc="editable" valuetype="enum" behavior="optional"/>
+  <atv:parameter group="Options" name="consistencyGroup" desc="consistency group" valuetype="string" behavior="optional"/>
+  <atv:parameter group="Options" name="tabIndex" desc="tab index" valuetype="number" behavior="optional"/>
+  <atv:parameter group="Options" name="tooltip" desc="tooltip" valuetype="trstring" behavior="optional"/>
+  <atv:parameter config="SYSTEM.SECURITY.RIGHTS" group="Security" name="right" desc="necessary right" valuetype="address" behavior="optional"/>
+  <atv:parameter group="Security" name="activeNode" desc="activation address" valuetype="address" behavior="optional"/>
+  <atv:parameter group="Security" name="activeValue" desc="activation value" valuetype="string" behavior="optional"/>
+  <atv:parameter substitute="" name="group" defaultvalue="" desc="radio group" valuetype="string" behavior="optional"/>
+  <atv:gridconfig height="2" gridstyle="lines" width="2" enabled="true"/>
+  <atv:snapconfig height="2" width="2" enabled="true"/>
+ </metadata>
+ <g atv:refpy="15.5" id="checkbox_clickarea" atv:refpx="78.25">
+  <rect y="0" rx="4.4" atv:refpy="16.288" height="31" fill="$FILL$" atv:bindtl="0,0" x="0" stroke-width="2" width="110" id="id_0" atv:refpx="55.173" stroke-alignment="inside" ry="4" atv:bindbr="1,1"/>
+  <text y="21" text-anchor="start" atv:refpy="19.75" fill="$FONTCOLOR$" atv:bindtl="0.5,0.5" x="29" font-family="$FONTFAMILY$" id="checkbox_item" atv:refpx="400.102" atv:bindbr="0.5,0.5" font-size="$FONTSIZE$" pointer-events="none">$LABEL$</text>
+  <svg y="5" atv:refpy="20" height="20" xlink:href="$SYMBOL$" atv:bindtl="0,0.5" x="4.75" width="20" id="checkbox_symbol" atv:refpx="14.75" atv:bindbr="0,0.5" pointer-events="none">
+   <atv:argument name="symbolColor" prefix="symbolColor"/>
+  </svg>
+ </g>
+ <script type="text/ecmascript"><![CDATA[var base = (webMI.query["base"] == undefined) ? "" : webMI.query["base"];
+var valueOn = (webMI.query["valueOn"] == undefined) ? "" : webMI.query["valueOn"];
+var outputNode = (webMI.query["outputNode"] == undefined) ? "" : webMI.query["outputNode"];
+var outputValueOn = webMI.query["outputValueOn"];
+var outputValueOff = webMI.query["outputValueOff"];
+var fontColor = webMI.query["fontColor"];
+var strokePressed = webMI.query["strokePressed"];
+var focusStrokeColor = webMI.query["focusStrokeColor"];
+var preselected = webMI.query["preselected"];
+var editable = (webMI.query["editable"] == "Yes") ? true : false;
+var fill = webMI.query["fill"];
+var fillNotEditable = webMI.query["fillNotEditable"];
+var fillColorInactive = webMI.query["fillColorInactive"];
+var consistencyGroup = webMI.query["consistencyGroup"];
+var tabHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tab Handler");
+var tabIndex = (webMI.query["tabIndex"] == undefined) ? "" : webMI.query["tabIndex"];
+var tooltip = (webMI.query["tooltip"] == undefined) ? "" : webMI.query["tooltip"];
+
+if (consistencyGroup)
+	var consistencyHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Consistency Handler");
+
+var right = (webMI.query["right"] == undefined) ? "" : webMI.query["right"];
+if (right.search(/SYSTEM\.SECURITY\.RIGHTS\./) != -1) {
+	right = right.substring(23,right.length); //remove "prefix" SYSTEM.SECURITY.RIGHTS.
+}
+
+var active = false;
+var hasRight = false;
+
+if (right != "") {
+	webMI.addEvent(webMI.data, "clientvariableschange", function(e) {
+		hasRight=false;
+		if (("username" in e) && (e.username != "")) {
+				hasRight = webMI.hasRight(right);
+		}
+		deActivate();
+	});
+}
+
+var activeValue = (webMI.query["activeValue"] == undefined) ? "" :webMI.query["activeValue"];
+var activeNode = (webMI.query["activeNode"] == undefined) ? "" : webMI.query["activeNode"];
+var nodeIsActive = false;
+
+if ((activeNode != "") && (String(activeValue) != "")) {
+	webMI.data.subscribe(activeNode, function(e) {
+		var nodeActiveValue = e.value;
+		if (typeof nodeActiveValue == "boolean") {
+			nodeIsActive = (String(nodeActiveValue) == activeValue);
+		} else if (typeof nodeActiveValue == "number") {
+			try {
+				var temp = parseFloat(activeValue);
+				nodeIsActive = (nodeActiveValue == temp);
+			} catch(e) {
+				nodeIsActive = false;
+			}
+		} else {
+			nodeIsActive = (nodeActiveValue == activeValue);
+		}
+		deActivate();
+	});
+} else {
+	deActivate();
+}
+
+function deActivate(force) {
+	if (force) {
+		active = false;
+	}
+	else if (right != "") {
+		if ((String(activeValue) != "") && (activeNode != "")) {
+			active=(nodeIsActive && hasRight);
+		} else {
+			active=hasRight;
+		}
+	} else {
+		if ((String(activeValue) != "") && (activeNode != "")) {
+			active=nodeIsActive;
+		} else {
+			active=true;
+		}
+	}
+	if (active) {
+		webMI.gfx.setFill('id_0', (editable) ? fill : fillNotEditable);
+		if (compareValue(currentValue, valueOn)) {
+			webMI.gfx.setVisible("checkbox_symbol",null);
+		} else {
+			webMI.gfx.setVisible("checkbox_symbol",false);
+		}
+	} else {
+		webMI.gfx.setFill('id_0', fillColorInactive);
+	}
+}
+
+function compareValue(value1, value2) {
+var equal = false;
+	switch (typeof value1) {
+		case "boolean" :
+			if (value1 == true) {
+				if ((value2 == "true") || (value2 == "1")) {
+					equal=true;
+				} else {
+					equal=false;
+				}
+			}
+			if (value1 == false) {
+				if ((value2 == "false") || (value2 == "0")) {
+					equal=true;
+				} else {
+					equal=false;
+				}
+			}
+		break;
+		case "number" :
+			try {
+				var temp = parseFloat(value2);
+				equal = (value1 == temp);
+			} catch(e) {
+				equal = false;
+			}
+		break;
+		default: equal = (value1 == value2); break;
+	}
+	return equal;
+}
+
+var currentValue = outputValueOff;
+
+function update(value) {
+	currentValue = !value;
+
+	if (compareValue(currentValue, valueOn)) {
+		valueChanged(outputValueOff);
+		webMI.gfx.setVisible("checkbox_symbol",false);
+
+		currentValue=outputValueOff;
+	} else {
+		valueChanged(outputValueOn);
+		webMI.gfx.setVisible("checkbox_symbol",null);
+
+		currentValue=valueOn;
+	}
+}
+
+if (base != "") {
+	if (consistencyGroup) {
+		consistencyHandler.register(consistencyGroup, base, update);
+	} else {
+		webMI.data.subscribe(base, function(e) {
+			var value = e.value;
+			return function(value) {
+				currentValue = value;
+				if (compareValue(currentValue, valueOn)) {
+					webMI.gfx.setVisible("checkbox_symbol",null);
+				} else {
+					webMI.gfx.setVisible("checkbox_symbol",false);
+				}
+			} (value);
+		});
+	}
+}
+function focusTH(){
+	if (active && editable) {
+		webMI.gfx.setStroke('id_0', focusStrokeColor);
+	}
+}
+function applyTH(){
+	clickFunction();
+}
+function backTH(){}
+function arrowTH(dir){}
+function keyHandler(keyTH,param2){
+	if (keyTH == "focus"){
+		focusTH();
+	} else if (keyTH == "blur"){
+		release();
+	} else if (keyTH == "apply"){
+		applyTH();
+	} else if (keyTH == "space"){
+		applyTH();
+	} else if (keyTH == "back"){
+		backTH();
+	} else if (keyTH == "arrow"){
+		arrowTH(param2);
+	} else if (keyTH == "isActive"){
+		return (active && editable && param2(document.getElementById("checkbox_clickarea").parentNode));
+	}
+}
+
+webMI.addEvent("checkbox_clickarea", ['touchend','click'], function(e) {
+	var id = "checkbox_clickarea";
+	tabHandler.setCurrentIndex(keyHandler);
+	clickFunction();
+});
+
+function clickFunction() {
+	if (active && editable && (String(currentValue) != "")) {
+		if (compareValue(currentValue, valueOn)) {
+			valueChanged(outputValueOff);
+			if (outputNode != "") {
+				webMI.data.write(outputNode , outputValueOff);
+			} else {
+				if (base != "" && !consistencyGroup) webMI.data.write(base, outputValueOff);
+			}
+			if (base == "" || consistencyGroup) {
+				currentValue=outputValueOff;
+				webMI.gfx.setVisible("checkbox_symbol",false);
+
+				if (consistencyGroup)
+					consistencyHandler.set(consistencyGroup, base, outputValueOff);
+			}
+		} else {
+			valueChanged(outputValueOn);
+			if (outputNode != "") {
+				webMI.data.write(outputNode , outputValueOn);
+			} else {
+				if (base != "" && !consistencyGroup) webMI.data.write(base, outputValueOn);
+			}
+			if (base == "" || consistencyGroup) {
+				currentValue=valueOn;
+				webMI.gfx.setVisible("checkbox_symbol",null);
+
+				if (consistencyGroup)
+					consistencyHandler.set(consistencyGroup, base, outputValueOn);
+			}
+		}
+	}
+}
+
+webMI.trigger.connect("setChecked", function(e) {
+	currentValue = e.value != true;
+	clickFunction();
+}, "");
+
+webMI.addEvent("checkbox_clickarea", ["mousedown", "touchstart"], function(e) {
+var id = "checkbox_clickarea";
+var value = true;
+return function(value) {
+		if (active && editable) {
+			webMI.gfx.setStroke("id_0", strokePressed);
+		}
+} (value);
+});
+
+function release() {
+	if (active && editable) {
+		webMI.gfx.setStroke("id_0", "none");
+	}
+}
+
+webMI.addEvent("checkbox_clickarea", ["mouseup","mouseout", "touchend", "touchcancel"], function(e) {
+var id = "checkbox_clickarea";
+var value = true;
+return function(value) {
+	release();
+} (value);
+});
+
+webMI.addEvent("checkbox_clickarea", "dragstart", function(e) {
+	if (e.preventDefault) {
+		e.preventDefault();
+	}
+});
+
+if (preselected == "true" && base == "") {
+	if (active) {
+		if (compareValue(currentValue, valueOn)) {
+			currentValue=outputValueOff;
+			webMI.gfx.setVisible("checkbox_symbol", false);
+			valueChanged(outputValueOff);
+		} else {
+			currentValue=valueOn;
+			webMI.gfx.setVisible("checkbox_symbol", null);
+			valueChanged(valueOn);
+		}
+	}
+}
+webMI.addOnload(function() {
+	valueChanged(preselected == "true");
+	var doc = document.getElementById("checkbox_clickarea").ownerDocument;
+	tabHandler.register(tabIndex,keyHandler,doc);
+});
+
+if (tooltip != ""){
+	webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {"auto":"true", "id":"checkbox_clickarea", "text":tooltip});
+}
+
+webMI.trigger.connect('com.atvise.setActive', function(e) {
+	deActivate(!e.value);
+});
+
+var group = webMI.query.group || false,
+	id = document.getElementById('checkbox_clickarea').id.split('_checkbox_clickarea')[0];
+
+function valueChanged(newValue) {
+	webMI.trigger.fire("valuechanged", newValue, "");
+	
+	if (group && newValue == outputValueOn) webMI.trigger.fire('radiogroup_' + group, { id: id });
+}
+
+if (group) {
+	webMI.trigger.connect('radiogroup_' + group, function(e) {
+		if (e.value == id) return;
+		
+		if (outputNode != "") {
+			webMI.data.write(outputNode , outputValueOff);
+		}
+		else {
+			if (base != "" && !consistencyGroup) webMI.data.write(base, outputValueOff);
+		}
+
+		if (base == "" || consistencyGroup) {
+			currentValue=outputValueOff;
+			webMI.gfx.setVisible("checkbox_symbol",false);
+
+			if (consistencyGroup)
+				consistencyHandler.set(consistencyGroup, base, outputValueOff);
+		}
+	});
+}]]></script>
+</svg>

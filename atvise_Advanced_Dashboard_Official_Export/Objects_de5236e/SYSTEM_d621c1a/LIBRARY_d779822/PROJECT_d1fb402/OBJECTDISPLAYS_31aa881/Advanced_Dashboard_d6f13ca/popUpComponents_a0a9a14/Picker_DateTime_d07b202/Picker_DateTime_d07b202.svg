@@ -1,0 +1,330 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg height="31" version="1.2" width="160" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs/>
+ <desc>Opens a dialog to pick a date and time.</desc>
+ <title>Picker Date Time</title>
+ <metadata>
+  <atv:parameter behavior="optional" desc="base" name="base" valuetype="address"/>
+  <atv:parameter behavior="mandatory" defaultvalue="" name="name" substitute="" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="T{Datetime}" desc="label" name="label" substitute="$LABEL$" valuetype="trstring"/>
+  <atv:parameter behavior="optional" config="Times New Roman=Times New Roman,Bodoni,Garamond,Minion Web,ITC Stone Serif,MS Georgia,Bitstream Cyberbit,serif;Arial=MS Trebuchet,ITC Avant Garde Gothic,MS Arial,MS Verdana,Univers,Futura,ITC Stone Sans,Gill Sans,Akzidenz Grotesk,Helvetica,sans-serif;Courier=Courier,MS Courier New,Prestige,Everson Mono,monospace;Zapf-Chancery=Caflisch Script,Adobe Poetica,Sanvito,Ex Ponto,Snell Roundhand,Zapf-Chancery,cursive;Alpha Geometrique=Alpha Geometrique,Critter,Cottonwood,FB Reactor,Studz,fantasy" defaultvalue="Arial" desc="family" group="Font" name="fontFamily" substitute="$FONTFAMILY$" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="6;7;8;9;10;11;12;14;15;18;20;22;24;26;28;36;48;72" defaultvalue="15" desc="size" group="Font" name="fontSize" substitute="$FONTSIZE$" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="#ffffff" desc="color" group="Font" name="fontColor" substitute="$FONTCOLOR$" valuetype="color"/>
+  <atv:parameter behavior="optional" config="visible=inherit;hidden=hidden" defaultvalue="inherit" desc="visibility label" group="Appearance" name="visibilityLabel" substitute="$VISIBILITYLABEL$" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="visible=inherit;hidden=hidden" defaultvalue="hidden" desc="visibility symbol" group="Appearance" name="visibilitySymbol" substitute="$VISIBILITYSYMBOL$" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Symbols.20x20.check" desc="symbol" group="Appearance" name="symbol" substitute="$SYMBOL$" valuetype="display"/>
+  <atv:parameter behavior="optional" defaultvalue="#ffffff" desc="symbol color" group="Appearance" name="symbolColor" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#3f434a" desc="fill color" group="Appearance" name="fillColor" substitute="$FILLCOLOR$" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#8c8c8c" desc="fill color when inactive" group="Appearance" name="fillColorInactive" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#E3D700" desc="stroke color pressed" group="Appearance" name="strokePressed" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="#E3D700" desc="focus stroke color" group="Appearance" name="focusStrokeColor" valuetype="color"/>
+  <atv:parameter behavior="optional" config="SYSTEM.SECURITY.RIGHTS" desc="necessary right" group="Security" name="right" valuetype="address"/>
+  <atv:parameter behavior="optional" desc="activation address" group="Security" name="activeNode" valuetype="address"/>
+  <atv:parameter behavior="optional" desc="activation value" group="Security" name="activeValue" valuetype="string"/>
+  <atv:parameter behavior="optional" desc="tab index" group="Options" name="tabIndex" valuetype="number"/>
+  <atv:parameter behavior="optional" desc="tooltip" group="Options" name="tooltip" valuetype="trstring"/>
+  <atv:parameter behavior="optional" defaultvalue="#3f434a" desc="background color" group="Appearance" name="backgroundColor" scope="" substitute="" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" name="ColorActive" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" name="ColorInactive" valuetype="color"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="ColorSelectionElements" name="ColorSelectionElements" valuetype="color"/>
+  <atv:gridconfig enabled="true" gridstyle="lines" height="2" width="2"/>
+  <atv:snapconfig enabled="false" height="2" width="2"/>
+ </metadata>
+ <g atv:refpx="80" atv:refpy="15.501" id="containerGroup">
+  <g atv:bindbr="1,1" atv:bindtl="0,0" atv:refpx="80" atv:refpy="15.5" id="button_clickarea" transform="matrix(1.6,0,0,1,0,0)">
+   <rect atv:bindbr="1,1" atv:bindtl="0,0" atv:refpx="50" atv:refpy="15.501" fill="$FILLCOLOR$" height="31.001" id="id_2" rx="4" ry="4" stroke="none" stroke-width="0.5" width="100" x="0" y="0"/>
+   <rect atv:bindbr="1,1" atv:bindtl="0,0" atv:refpx="50" atv:refpy="15.5" fill="none" height="30" id="button_bg" rx="3.5" ry="3.5" stroke="none" stroke-width="1" width="99" x="0.5" y="0.5"/>
+   <svg atv:bindbr="0.5,0.5" atv:bindtl="0.5,0.5" atv:refpx="10" atv:refpy="10" height="20" id="button_symbol" visibility="$VISIBILITYSYMBOL$" width="20" x="70" xlink:href="$SYMBOL$" y="5.5">
+    <atv:argument name="symbolColor" prefix="symbolColor"/>
+   </svg>
+   <text atv:bindbr="0.5,0.5" atv:bindtl="0.5,0.5" atv:refpx="305.536" atv:refpy="15.251" fill="$FONTCOLOR$" font-family="$FONTFAMILY$" font-size="$FONTSIZE$" id="button_label" text-anchor="middle" transform="matrix(0.6002,0,0,1,9.477,0)" visibility="$VISIBILITYLABEL$" x="69.205" y="21.351">$LABEL$</text>
+   <rect atv:bindbr="1,1" atv:bindtl="0,0" atv:refpx="50" atv:refpy="15.5" fill="none" height="30" id="button_stroke" rx="3.5" ry="3.5" stroke="none" stroke-width="1" width="99" x="0.5" y="0.5"/>
+  </g>
+ </g>
+ <script atv:desc="" atv:name="" type="text/ecmascript"><![CDATA[var strokeNormal = "none";
+var strokePressed = webMI.query["strokePressed"];
+var focusStrokeColor = webMI.query["focusStrokeColor"];
+var fillColor = webMI.query["fillColor"];
+var fillColorInactive = webMI.query["fillColorInactive"];
+var display = webMI.query["display"];
+var name = webMI.query.name;
+var _value = 0;
+
+
+webMI.trigger.connect("clicked", function(e) {
+	console.log("ColorInactive when clicked: "+webMI.query["ColorInactive"])
+    webMI.display.openWindow({
+        display: "SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.popUpComponents.Datetimepicker",
+        extern: false,
+        height: 306.5,
+        menubar: false,
+        titlebar: false,
+        modal: true,
+        movable: false,
+        resizable: false,
+        scrollbars: false,
+        status: false,
+        title: '',
+        toolbar: false,
+        width: 500,
+        query: {
+            value: _value,
+            popupId: name,
+            ColorInactive: webMI.query["ColorInactive"],
+            ColorActive: webMI.query["ColorActive"],
+            ColorSelectionElements:webMI.query["ColorSelectionElements"]
+        }
+    });
+});
+
+var tabHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tab Handler");
+var tabIndex = (webMI.query["tabIndex"] == undefined) ? "" : webMI.query["tabIndex"];
+var tooltip = (webMI.query["tooltip"] == undefined) ? "" : webMI.query["tooltip"];
+
+var right = (webMI.query["right"] == undefined) ? "" : webMI.query["right"];
+if (right.search(/SYSTEM\.SECURITY\.RIGHTS\./) != -1) {
+    right = right.substring(23, right.length); //remove "prefix" SYSTEM.SECURITY.RIGHTS.
+}
+
+var active = false;
+var hasRight = false;
+
+if (right != "") {
+    webMI.addEvent(webMI.data, "clientvariableschange", function(e) {
+        hasRight = false;
+        if (("username" in e) && (e.username != "")) {
+            hasRight = webMI.hasRight(right);
+        }
+        deActivate();
+    });
+}
+
+var activeValue = (webMI.query["activeValue"] == undefined) ? "" : webMI.query["activeValue"];
+var activeNode = (webMI.query["activeNode"] == undefined) ? "" : webMI.query["activeNode"];
+var nodeIsActive = false;
+
+if ((activeNode != "") && (String(activeValue) != "")) {
+    webMI.data.subscribe(activeNode, function(e) {
+        var nodeActiveValue = e.value;
+        if (typeof nodeActiveValue == "boolean") {
+            nodeIsActive = (String(nodeActiveValue) == activeValue);
+        } else if (typeof nodeActiveValue == "number") {
+            try {
+                var temp = parseFloat(activeValue);
+                nodeIsActive = (nodeActiveValue == temp);
+            } catch (e) {
+                nodeIsActive = false;
+            }
+        } else {
+            nodeIsActive = (nodeActiveValue == activeValue);
+        }
+        deActivate();
+    });
+} else {
+    deActivate();
+}
+
+function deActivate(forceDeActivate) {
+    if (typeof forceDeActivate !== "undefined" && forceDeActivate) {
+        active = false;
+    } else if (right != "") {
+        if ((String(activeValue) != "") && (activeNode != "")) {
+            active = (nodeIsActive && hasRight);
+        } else {
+            active = hasRight;
+        }
+    } else {
+        if ((String(activeValue) != "") && (activeNode != "")) {
+            active = nodeIsActive;
+        } else {
+            active = true;
+        }
+    }
+    if (active) {
+        webMI.gfx.setFill("id_2", fillColor);
+    } else {
+        webMI.gfx.setFill("id_2", fillColorInactive);
+    }
+}
+
+function release() {
+    if (active) {
+        webMI.gfx.setFill("button_stroke", "none");
+        webMI.gfx.setStroke("button_stroke", strokeNormal);
+    }
+}
+
+function focusTH() {
+    if (active) {
+        webMI.gfx.setStroke("button_stroke", focusStrokeColor);
+    }
+}
+
+function applyTH() {
+    if (active) {
+        webMI.trigger.fire("clicked", true, "");
+    }
+}
+
+function backTH() {}
+
+function arrowTH(dir) {}
+
+function keyHandler(keyTH, param2) {
+    if (keyTH == "focus") {
+        focusTH();
+    } else if (keyTH == "blur") {
+        release();
+    } else if (keyTH == "apply") {
+        applyTH();
+    } else if (keyTH == "releaseClick") {
+
+    } else if (keyTH == "back") {
+        backTH();
+    } else if (keyTH == "arrow") {
+        arrowTH(param2);
+    } else if (keyTH == "isActive") {
+        return active && param2(document.getElementById("button_clickarea").parentNode);
+    }
+}
+
+function updateDisplay(write) {
+    var date = new Date(_value);
+    dateString = date.toLocaleString();
+
+    webMI.gfx.setText('button_label', dateString);
+    webMI.trigger.fire("valuechanged", _value, "");
+
+    if (write && webMI.query.base && webMI.query.base != '') webMI.data.write([webMI.query.base], [_value]);
+}
+
+webMI.addEvent("button_clickarea", ["mousedown", "touchstart"], function(e) {
+    var id = "button_clickarea";
+    var value = true;
+    return function(value) {
+        if (active) {
+            webMI.gfx.setFill("button_stroke", "none");
+            webMI.gfx.setStroke("button_stroke", strokePressed);
+        }
+    }(value);
+});
+
+webMI.addEvent("button_clickarea", ["mouseup", "touchend", "touchcancel"], function(e) {
+    var id = "button_clickarea";
+    var value = true;
+    return function(value) {
+        release();
+    }(value);
+});
+
+webMI.addEvent("button_clickarea", ["mouseout", "touchleave"], function(e) {
+    var id = "button_clickarea";
+    var value = true;
+    return function(value) {
+        release();
+    }(value);
+});
+
+webMI.addEvent("button_clickarea", ['touchend','click'], function(e) {
+    if (active) {
+        tabHandler.setCurrentIndex(keyHandler, function() {
+            webMI.trigger.fire("clicked", true, "")
+        });
+    }
+});
+
+webMI.addEvent("button_clickarea", ["touchend"], function(e) {
+    var pX = event.pageX,
+        pY = event.pageY;
+    e.preventDefault();
+});
+
+webMI.addEvent("button_clickarea", ["touchleave"], function() {
+    alert('leaving');
+})
+
+webMI.addEvent("button_clickarea", "dragstart", function(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+});
+webMI.addOnload(function() {
+    var doc = document.getElementById("button_clickarea").ownerDocument;
+    tabHandler.register(tabIndex, keyHandler, doc);
+    if (!webMI.query.base || webMI.query.base == '') updateDisplay(true);
+    else {
+        webMI.data.read(webMI.query.base, function(e) {
+            _value = e.value;
+            updateDisplay();
+        });
+        webMI.data.subscribe(webMI.query.base, function(e) {
+            _value = e.value;
+            updateDisplay();
+        });
+    }
+});
+ 
+webMI.trigger.connect("com.atvise.setActive", function(e) {
+    if (e.value) {
+        deActivate();
+    } else {
+        deActivate(true);
+    }
+});
+
+if (tooltip != "") {
+    webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {
+        "auto": "true",
+        "id": "button_clickarea",
+        "text": tooltip
+    });
+}
+
+webMI.trigger.connect('com.atvise.datepicker_' + name, function(e) {
+	console.log("Updating: "+name);
+    _value = e.value;
+
+    updateDisplay(true);
+});
+
+/*
+webMI.callExtension("SYSTEM.LIBRARY.PROJECT.QUICKDYNAMICS.ResetScaling", {
+    callback: function(originalSize, renderedSize, scale, scaleInverse) {
+        debugger;
+        webMI.gfx.setScaleX('button_label', scaleInverse.x);
+
+        webMI.gfx.setScaleX('button_stroke', scaleInverse.x);
+        webMI.gfx.setWidth('button_stroke', (originalSize.width * scale.x) - 1);
+        webMI.gfx.setMoveX('button_stroke', -(renderedSize.width - originalSize.width) / 2);
+    },
+    originalWidth: 160,
+    originalHeight: 31,
+    innerNode: document.getElementById('containerGroup')
+});
+*/
+
+var _active = true;
+
+function setActive(value) {
+    webMI.trigger.fire('com.atvise.setActive', value || _active, 'button');
+}
+
+webMI.trigger.connect('com.atvise.setActive', function(e) {
+    setActive(_active = e.value);
+});
+
+webMI.gfx.setStroke('button_stroke', 'none');
+
+function adjustButtonLabelPosition() {
+    var button_label = document.getElementById("button_label");
+    var fontsize = Number(button_label.getAttribute("font-size"));
+    var yPosition = button_label.getAttribute("y");
+
+    if (fontsize !== 16) {
+        var adjustment = ((16 / 2) - (fontsize / 2)) * 0.857; // The assumed ratio between font size and line height is 12/14 == 0.875...
+        button_label.setAttribute("y", (yPosition - adjustment));
+    }
+}
+
+adjustButtonLabelPosition();]]></script>
+</svg>

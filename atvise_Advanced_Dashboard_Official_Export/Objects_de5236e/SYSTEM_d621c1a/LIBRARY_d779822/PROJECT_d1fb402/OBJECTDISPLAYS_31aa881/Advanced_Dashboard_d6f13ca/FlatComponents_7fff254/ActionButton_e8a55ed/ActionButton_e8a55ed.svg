@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg xmlns="http://www.w3.org/2000/svg" height="31" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.2" xmlns:atv="http://webmi.atvise.com/2007/svgext" width="100">
+ <defs/>
+ <title>Button</title>
+ <desc>Fires trigger "clicked".</desc>
+ <metadata>
+  <atv:parameter name="base" desc="base" valuetype="address" behavior="hidden"/>
+  <atv:parameter substitute="$LABEL$" name="label" defaultvalue="T{Basic}" desc="label" valuetype="trstring" behavior="optional"/>
+  <atv:parameter config="Times New Roman=Times New Roman,Bodoni,Garamond,Minion Web,ITC Stone Serif,MS Georgia,Bitstream Cyberbit,serif;Arial=MS Trebuchet,ITC Avant Garde Gothic,MS Arial,MS Verdana,Univers,Futura,ITC Stone Sans,Gill Sans,Akzidenz Grotesk,Helvetica,sans-serif;Courier=Courier,MS Courier New,Prestige,Everson Mono,monospace;Zapf-Chancery=Caflisch Script,Adobe Poetica,Sanvito,Ex Ponto,Snell Roundhand,Zapf-Chancery,cursive;Alpha Geometrique=Alpha Geometrique,Critter,Cottonwood,FB Reactor,Studz,fantasy" substitute="$FONTFAMILY$" group="Font" name="fontFamily" defaultvalue="Arial" desc="family" valuetype="enum" behavior="optional"/>
+  <atv:parameter config="6;7;8;9;10;11;12;14;16;18;20;22;24;26;28;36;48;72" substitute="$FONTSIZE$" group="Font" name="fontSize" defaultvalue="16" desc="size" valuetype="enum" behavior="optional"/>
+  <atv:parameter substitute="$FONTCOLOR$" group="Font" name="fontColor" defaultvalue="#ffffff" desc="color" valuetype="color" behavior="optional"/>
+  <atv:parameter config="visible=inherit;hidden=hidden" substitute="$VISIBILITYLABEL$" group="Appearance" name="visibilityLabel" defaultvalue="inherit" desc="visibility label" valuetype="enum" behavior="optional"/>
+  <atv:parameter config="visible=inherit;hidden=hidden" substitute="$VISIBILITYSYMBOL$" group="Appearance" name="visibilitySymbol" defaultvalue="hidden" desc="visibility symbol" valuetype="enum" behavior="optional"/>
+  <atv:parameter substitute="$SYMBOL$" group="Appearance" name="symbol" defaultvalue="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Symbols.20x20.check" desc="symbol" valuetype="display" behavior="optional"/>
+  <atv:parameter group="Appearance" name="symbolColor" defaultvalue="#ffffff" desc="symbol color" valuetype="color" behavior="optional"/>
+  <atv:parameter substitute="$FILLCOLOR$" group="Appearance" name="fillColor" defaultvalue="#3f434a" desc="fill color" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="fillColorInactive" defaultvalue="#8c8c8c" desc="fill color when inactive" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="strokePressed" defaultvalue="#E3D700" desc="stroke color pressed" valuetype="color" behavior="optional"/>
+  <atv:parameter group="Appearance" name="focusStrokeColor" defaultvalue="#E3D700" desc="focus stroke color" valuetype="color" behavior="optional"/>
+  <atv:parameter config="SYSTEM.SECURITY.RIGHTS" group="Security" name="right" desc="necessary right" valuetype="address" behavior="optional"/>
+  <atv:parameter group="Security" name="activeNode" desc="activation address" valuetype="address" behavior="optional"/>
+  <atv:parameter group="Security" name="activeValue" desc="activation value" valuetype="string" behavior="optional"/>
+  <atv:parameter group="Consistency" name="consistencyGroup" desc="group" valuetype="string" behavior="optional"/>
+  <atv:parameter config="write;read" group="Consistency" name="consistencyFunction" defaultvalue="write" desc="function" valuetype="enum" behavior="optional"/>
+  <atv:parameter group="Options" name="tabIndex" desc="tab index" valuetype="number" behavior="optional"/>
+  <atv:parameter group="Options" name="tooltip" desc="tooltip" valuetype="trstring" behavior="optional"/>
+  <atv:gridconfig height="2" gridstyle="lines" width="2" enabled="true"/>
+  <atv:snapconfig height="2" width="2" enabled="false"/>
+ </metadata>
+ <g atv:refpy="15.401" atv:bindtl="0,0" transform="matrix(1,0,0,1,0,-0.0994)" id="button_clickarea" atv:refpx="50" atv:bindbr="1,1">
+  <rect y="0" rx="4" atv:refpy="15.501" height="31.001" fill="$FILLCOLOR$" atv:bindtl="0,0" stroke="none" x="0" stroke-width="0.5" width="100" id="id_2" atv:refpx="50" ry="4" atv:bindbr="1,1"/>
+  <rect y="0.5" rx="3.5" atv:refpy="15.5" height="30" fill="none" atv:bindtl="0,0" stroke="none" x="0.5" stroke-width="1" width="99" id="button_bg" atv:refpx="50" ry="3.5" atv:bindbr="1,1"/>
+  <svg y="5.5" atv:refpy="5.5" height="20" xlink:href="$SYMBOL$" atv:bindtl="0.5,0.5" x="40" visibility="$VISIBILITYSYMBOL$" width="20" id="button_symbol" atv:refpx="40" atv:bindbr="0.5,0.5">
+   <atv:argument name="symbolColor" prefix="symbolColor"/>
+  </svg>
+  <text y="21.25" text-anchor="middle" atv:refpy="15.5" fill="$FONTCOLOR$" atv:bindtl="0.5,0.5" x="50" visibility="$VISIBILITYLABEL$" font-family="$FONTFAMILY$" cursor="default" id="button_label" atv:refpx="50" atv:bindbr="0.5,0.5" font-size="$FONTSIZE$">$LABEL$</text>
+  <rect y="0.5" rx="3.5" atv:refpy="15.5" height="30" fill="none" atv:bindtl="0,0" stroke="none" x="0.5" stroke-width="1" width="99" id="button_stroke" atv:refpx="50" ry="3.5" atv:bindbr="1,1"/>
+ </g>
+ <script type="text/ecmascript"><![CDATA[var strokeNormal = "none";
+var strokePressed = webMI.query["strokePressed"];
+var focusStrokeColor = webMI.query["focusStrokeColor"];
+var fillColor = webMI.query["fillColor"];
+var fillColorInactive = webMI.query["fillColorInactive"];
+var display = webMI.query["display"];
+var consistencyGroup = webMI.query["consistencyGroup"];
+var consistencyFunction = webMI.query["consistencyFunction"];
+
+if (consistencyGroup)
+	var consistencyHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Consistency Handler");
+
+var tabHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tab Handler");
+var tabIndex = (webMI.query["tabIndex"] == undefined) ? "" : webMI.query["tabIndex"];
+var tooltip = (webMI.query["tooltip"] == undefined) ? "" : webMI.query["tooltip"];
+
+var right = (webMI.query["right"] == undefined) ? "" : webMI.query["right"];
+if (right.search(/SYSTEM\.SECURITY\.RIGHTS\./) != -1) {
+	right = right.substring(23,right.length); //remove "prefix" SYSTEM.SECURITY.RIGHTS.
+}
+
+var active = false;
+var hasRight = false;
+
+if (right != "") {
+	webMI.addEvent(webMI.data, "clientvariableschange", function(e) {
+		hasRight=false;
+		if (("username" in e) && (e.username != "")) {
+				hasRight = webMI.hasRight(right);
+		}
+		deActivate();
+	});
+}
+
+var activeValue = (webMI.query["activeValue"] == undefined) ? "" :webMI.query["activeValue"];
+var activeNode = (webMI.query["activeNode"] == undefined) ? "" : webMI.query["activeNode"];
+var nodeIsActive = false;
+
+if ((activeNode != "") && (String(activeValue) != "")) {
+	webMI.data.subscribe(activeNode, function(e) {
+		var nodeActiveValue = e.value;
+		if (typeof nodeActiveValue == "boolean") {
+			nodeIsActive = (String(nodeActiveValue) == activeValue);
+		} else if (typeof nodeActiveValue == "number") {
+			try {
+				var temp = parseFloat(activeValue);
+				nodeIsActive = (nodeActiveValue == temp);
+			} catch(e) {
+				nodeIsActive = false;
+			}
+		} else {
+			nodeIsActive = (nodeActiveValue == activeValue);
+		}
+		deActivate();
+	});
+} else {
+	deActivate();
+}
+
+function deActivate(forceDeActivate) {
+	if (typeof forceDeActivate !== "undefined" && forceDeActivate){
+		active = false;
+	} else if (right != "") {
+		if ((String(activeValue) != "") && (activeNode != "")) {
+			active=(nodeIsActive && hasRight);
+		} else {
+			active=hasRight;
+		}
+	} else {
+		if ((String(activeValue) != "") && (activeNode != "")) {
+			active=nodeIsActive;
+		} else {
+			active=true;
+		}
+	}
+	if (active) {
+		webMI.gfx.setFill("id_2", fillColor);
+	} else {
+		webMI.gfx.setFill("id_2", fillColorInactive);
+	}
+}
+
+function release() {
+	if (active) {
+		webMI.gfx.setFill("button_stroke", "none");
+		webMI.gfx.setStroke("button_stroke", strokeNormal);
+	}
+}
+
+function focusTH(){
+	if (active) {
+		webMI.gfx.setStroke("button_stroke", focusStrokeColor);
+	}
+}
+function applyTH(){
+	if (active){
+		webMI.trigger.fire("clicked", true, "");
+	}
+	if (consistencyGroup)
+		consistencyFunction == "write" ? consistencyHandler.write(consistencyGroup) : consistencyHandler.read(consistencyGroup);
+}
+function backTH(){}
+function arrowTH(dir){}
+function keyHandler(keyTH,param2){
+	if (keyTH == "focus"){
+		focusTH();
+	} else if (keyTH == "blur"){
+		release();
+	} else if (keyTH == "apply"){
+		applyTH();
+	} else if (keyTH == "releaseClick"){
+
+	} else if (keyTH == "back"){
+		backTH();
+	} else if (keyTH == "arrow"){
+		arrowTH(param2);
+	} else if (keyTH == "isActive"){
+		return active && param2(document.getElementById("button_clickarea").parentNode);
+	}
+}
+
+webMI.addEvent("button_clickarea", ["mousedown", "touchstart"], function(e) {
+	var id = "button_clickarea";
+	var value = true;
+	return function(value) {
+		if (active) {
+			webMI.gfx.setFill("button_stroke", "none"); // "url(#linear_2)"
+
+			webMI.gfx.setStroke("button_stroke", strokePressed);
+		}
+	} (value);
+});
+
+webMI.addEvent("button_clickarea", ["mouseup", "touchend", "touchcancel"], function(e) {
+	var id = "button_clickarea";
+	var value = true;
+	return function(value) {
+		release();
+	} (value);
+});
+
+webMI.addEvent("button_clickarea", ["mouseleave", "touchleave"], function(e) {
+	var id = "button_clickarea";
+	var value = true;
+	return function(value) {
+		release();
+	} (value);
+});
+
+webMI.addEvent("button_clickarea", ('touchend', 'click'), function(e) {
+	if (active){
+		tabHandler.setCurrentIndex(keyHandler, function(){
+			webMI.trigger.fire("clicked", true, "")
+		});
+	}
+	if (consistencyGroup)
+		consistencyFunction == "write" ? consistencyHandler.write(consistencyGroup) : consistencyHandler.read(consistencyGroup);
+});
+
+webMI.addEvent("button_clickarea", ["touchend"], function(e) {
+	var pX = event.pageX,
+		pY = event.pageY;
+	e.preventDefault();
+});
+
+webMI.addEvent("button_clickarea", ["touchleave"], function() {
+	alert('leaving');
+})
+
+webMI.addEvent("button_clickarea", "dragstart", function(e) {
+	if (e.preventDefault) {
+		e.preventDefault();
+	}
+});
+webMI.addOnload(function() {
+	var doc = document.getElementById("button_clickarea").ownerDocument;
+	tabHandler.register(tabIndex,keyHandler,doc);
+});
+
+webMI.trigger.connect("com.atvise.setActive", function(e){
+	if (e.value){
+		deActivate();
+	}  else {
+		deActivate(true);
+	}
+});
+
+if (tooltip != ""){
+	webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {"auto":"true", "id":"button_clickarea", "text":tooltip});
+}
+
+webMI.gfx.setStroke('button_stroke', 'none');
+
+function adjustButtonLabelPosition() {
+	var button_label = document.getElementById("button_label");
+	var fontsize = Number(button_label.getAttribute("font-size"));
+	var yPosition = button_label.getAttribute("y");
+
+	if (fontsize !== 16) {
+		var adjustment = ((16 / 2) - (fontsize / 2)) * 0.857; // The assumed ratio between font size and line height is 12/14 == 0.875...
+		button_label.setAttribute("y", (yPosition - adjustment));
+	}
+}
+
+adjustButtonLabelPosition();]]></script>
+</svg>

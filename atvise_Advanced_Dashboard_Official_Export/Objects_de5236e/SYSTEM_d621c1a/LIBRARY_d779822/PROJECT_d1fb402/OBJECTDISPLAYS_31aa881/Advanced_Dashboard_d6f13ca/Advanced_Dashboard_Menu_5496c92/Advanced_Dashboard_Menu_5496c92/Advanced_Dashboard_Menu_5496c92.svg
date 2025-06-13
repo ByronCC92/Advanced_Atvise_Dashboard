@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<svg height="42" version="1.2" width="370" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg height="42" version="1.2" width="302" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs/>
  <metadata>
   <atv:parameter behavior="optional" defaultvalue="" desc="DashboardID" group="General Configuration" name="DashboardID" valuetype="string"/>
@@ -8,17 +8,11 @@
   <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="min" desc="Initial Range Unit" group="General Configuration" name="InitialRangeUnit" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="true" desc="Real Time Enabled" group="General Configuration" name="RealTimeEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="1000" desc="RealTime Update Time (ms)" group="General Configuration" name="RealTimeUpdateTime" valuetype="number"/>
-  <atv:parameter behavior="optional" config="true;false" defaultvalue="false" desc="Cache Enabled" group="Cache Configuration" name="CacheEnabled" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="true;false" defaultvalue="true" desc="Cache Enabled" group="Cache Configuration" name="CacheEnabled" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="0" desc="Cache Max Size" group="Cache Configuration" name="CacheMaxSize" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="0" desc="Cache Interval Size" group="Cache Configuration" name="CacheIntervalSize" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Custom Filter Active" group="Custom Filter" name="CustomFilterActive" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Node Reference" group="Custom Filter" name="NodeReference" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="00:00" desc="First Shift Start" group="Shift Config" name="FirstShiftStart" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="08:00" desc="First Shift End" group="Shift Config" name="FirstShiftEnd" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="08:00" desc="Second Shift Start" group="Shift Config" name="SecondShiftStart" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="16:00" desc="Second Shift End" group="Shift Config" name="SecondShiftEnd" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="16:00" desc="Third Shift Start" group="Shift Config" name="ThirdShiftStart" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="00:00" desc="Third Shift End" group="Shift Config" name="ThirdShiftEnd" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Color Active" group="Appearance" name="ColorActive" substitute="$ColorActive$" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Color Inactive" group="Appearance" name="ColorInactive" substitute="$ColorInactive$" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="#4c4c4c" desc="Color Selection Elements" group="Appearance" name="ColorSelectionElements" valuetype="color"/>
@@ -65,14 +59,6 @@ const dashboardMenuRawConfig = {
     CustomFilter: {
         CustomFilterActive: webMI.query["CustomFilterActive"],
         NodeReference: webMI.query["NodeReference"]
-    },
-    ShiftConfig: {
-        FirstShiftStart: webMI.query["FirstShiftStart"],
-        FirstShiftEnd: webMI.query["FirstShiftEnd"],
-        SecondShiftStart: webMI.query["SecondShiftStart"],
-        SecondShiftEnd: webMI.query["SecondShiftEnd"],
-        ThirdShiftStart: webMI.query["ThirdShiftStart"],
-        ThirdShiftEnd: webMI.query["ThirdShiftEnd"]
     },
     Appearance: {
         ColorActive: webMI.query["ColorActive"],
@@ -159,7 +145,6 @@ class userInterfaceHandler {
 		this.RealTime=dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? true: false;
 		this.PreviousMode=this.RealTime==true ? "RealTime": "Hist";
 		this.InitialRangeMethod=this.dashboardMenuRawConfig.GeneralConfig.InitialRangeMethod;
-		this.OutofShift;
 		this.FirstTime=true;
 		this.uIElements=uIElements;
 		this.InitialRangeMethods=initialRangeMethods;
@@ -168,8 +153,7 @@ class userInterfaceHandler {
 		this.InitialRange=dashboardMenuRawConfig.GeneralConfig.InitialRange;
 		this.InitialRangeUnit=dashboardMenuRawConfig.GeneralConfig.InitialRangeUnit;
 		this.CacheConfig=dashboardMenuRawConfig.CacheConfig;
-		this.DebuggingConfig=dashboardMenuRawConfig.DebuggingConfig;
-		this.ShiftConfig=dashboardMenuRawConfig.ShiftConfig;
+		this.DebuggingConfig=dashboardMenuRawConfig.DebuggingConfig
 		this.DashboardID=dashboardMenuRawConfig.GeneralConfig.DashboardID;
 		this.IgnoreDateChanges=false;
 		this.InitialTime;
@@ -202,9 +186,10 @@ class userInterfaceHandler {
 
 	   //Create First Update Request
 	   this.createUpdateRequest();
-		
+
+
 	   //Init Dashboard Manager
-	   dashboardManager.initialize(this.updateRequest,false,this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled,this.dashboardMenuRawConfig.GeneralConfig.RealTimeUpdateTime,this.dashboardMenuRawConfig,this.OutofShift);
+	   dashboardManager.initialize(this.updateRequest,false,this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled,this.dashboardMenuRawConfig.GeneralConfig.RealTimeUpdateTime);
 
     }
 
@@ -218,11 +203,6 @@ class userInterfaceHandler {
 			if (this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true")				{
 				//Back to Original Initial Range
 				this.InitialRangeMethod=this.InitialRangeMethodOriginal;
-				
-				//Update Final Time
-				if(!this.InitialRangeMethod.includes("Shift")){
-					this.FinalTime =new Date().getTime();
-				}			
 
 				//Real Time Trigger
 				this.changeMode(true);
@@ -300,7 +280,6 @@ class userInterfaceHandler {
             initialTime: this.InitialTime,
             finalTime: this.FinalTime,
             customFilterType: "",
-            initialRangeMethod:this.InitialRangeMethod,
             cacheConfig: this.CacheConfig,
             DebuggingConfig:this.DebuggingConfig
         };
@@ -401,74 +380,17 @@ class userInterfaceHandler {
 				InitialTimeI.setHours((new Date(FinalTimeI)).getHours() - 8);
 				InitialTimeI.setMinutes(0, 0, 0);
 				break;
-			case 'FirstShift':
-				// Parse shift times from configuration
-				const firstShiftEnd = this.parseTimeString(this.ShiftConfig.FirstShiftEnd);
-				const firstShiftStart = this.parseTimeString(this.ShiftConfig.FirstShiftStart);
-				
-				// Set final time to shift end
-				FinalTimeI.setHours(firstShiftEnd.hours, firstShiftEnd.minutes, 0, 0);
-
-				// Set initial time to shift start
-				InitialTimeI.setHours(firstShiftStart.hours, firstShiftStart.minutes, 0, 0);
-
-				// Handle case where shift crosses midnight
-				if (firstShiftEnd.hours < firstShiftStart.hours ||
-					(firstShiftEnd.hours === firstShiftStart.hours && firstShiftEnd.minutes < firstShiftStart.minutes)) {
-					// If current time is before shift end, the shift started yesterday
-					if (new Date().getHours() < firstShiftEnd.hours) {
-						InitialTimeI.setDate(InitialTimeI.getDate() - 1);
-					} else {
-						// Otherwise, the shift ends tomorrow
-						FinalTimeI.setDate(FinalTimeI.getDate() + 1);
-					}
-				}
+			case 'FirstShift': // Assuming 8-hour shifts, 00:00 - 08:00
+				FinalTimeI.setHours(8, 0, 0, 0);
+				InitialTimeI.setHours(0, 0, 0, 0); // Start of the day
 				break;
-			case 'SecondShift':
-				// Parse shift times from configuration
-				const secondShiftEnd = this.parseTimeString(this.ShiftConfig.SecondShiftEnd);
-				const secondShiftStart = this.parseTimeString(this.ShiftConfig.SecondShiftStart);
-
-				// Set final time to shift end
-				FinalTimeI.setHours(secondShiftEnd.hours, secondShiftEnd.minutes, 0, 0);
-
-				// Set initial time to shift start
-				InitialTimeI.setHours(secondShiftStart.hours, secondShiftStart.minutes, 0, 0);
-
-				// Handle case where shift crosses midnight
-				if (secondShiftEnd.hours < secondShiftStart.hours ||
-					(secondShiftEnd.hours === secondShiftStart.hours && secondShiftEnd.minutes < secondShiftStart.minutes)) {
-					// If current time is before shift end, the shift started yesterday
-					if (new Date().getHours() < secondShiftEnd.hours) {
-						InitialTimeI.setDate(InitialTimeI.getDate() - 1);
-					} else {
-						// Otherwise, the shift ends tomorrow
-						FinalTimeI.setDate(FinalTimeI.getDate() + 1);
-					}
-				}
+			case 'SecondShift': // 08:00 - 16:00
+				FinalTimeI.setHours(16, 0, 0, 0);
+				InitialTimeI.setHours(8, 0, 0, 0);
 				break;
-			case 'ThirdShift':
-				// Parse shift times from configuration
-				const thirdShiftEnd = this.parseTimeString(this.ShiftConfig.ThirdShiftEnd);
-				const thirdShiftStart = this.parseTimeString(this.ShiftConfig.ThirdShiftStart);
-
-				// Set final time to shift end
-				FinalTimeI.setHours(thirdShiftEnd.hours, thirdShiftEnd.minutes, 0, 0);
-
-				// Set initial time to shift start
-				InitialTimeI.setHours(thirdShiftStart.hours, thirdShiftStart.minutes, 0, 0);
-
-				// Handle case where shift crosses midnight
-				if (thirdShiftEnd.hours < thirdShiftStart.hours ||
-					(thirdShiftEnd.hours === thirdShiftStart.hours && thirdShiftEnd.minutes < thirdShiftStart.minutes)) {
-					// If current time is before shift end, the shift started yesterday
-					if (new Date().getHours() < thirdShiftEnd.hours) {
-						InitialTimeI.setDate(InitialTimeI.getDate() - 1);
-					} else {
-						// Otherwise, the shift ends tomorrow
-						FinalTimeI.setDate(FinalTimeI.getDate() + 1);
-					}
-				}
+			case 'ThirdShift': // 16:00 - 24:00
+				FinalTimeI.setHours(24, 0, 0, 0);
+				InitialTimeI.setHours(16, 0, 0, 0);
 				break;
 			case 'Today':
 				InitialTimeI.setHours(0, 0, 0, 0); // Start of today
@@ -569,20 +491,9 @@ class userInterfaceHandler {
 
     // Method to change from realTime to Historic
     changeMode(RTactive) {
-		
-		const currentTime=new Date().getTime();
-	    this.OutofShift = this.FinalTime < currentTime-2000;
-	    
-	    
-	    console.log("************************FinalTime: ");
-		console.log(this.FinalTime);
-	    console.log("************************OutofShift: ");
-		console.log( this.OutofShift);
-		
-		const RTactiveI=(this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true"&&  ! this.OutofShift) ? RTactive:false;
-		
-		console.log("************************RTactiveI in change mode: ");
-		console.log(RTactiveI);
+
+		const RTactiveI=this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? RTactive:false;
+
 		//Save Previous mode before changing
 		this.PreviousMode=this.RealTime==true? "RealTime" : "Hist";
 
@@ -658,47 +569,6 @@ class userInterfaceHandler {
 		}
     }
 
-    // Parse time string in 24h format (HH:MM) to hours and minutes
-    parseTimeString(timeString) {
-        // Default values in case of parsing failure
-        let hours = 0;
-        let minutes = 0;
-
-        try {
-            // Check if the timeString is valid
-            if (timeString && typeof timeString === 'string') {
-                // Split the time string by colon
-                const timeParts = timeString.split(':');
-
-                // Parse hours and minutes
-                if (timeParts.length >= 2) {
-                    hours = parseInt(timeParts[0], 10);
-                    minutes = parseInt(timeParts[1], 10);
-
-                    // Validate hours and minutes
-                    if (isNaN(hours) || hours < 0 || hours > 24) {
-                        console.error('Invalid hours in time string:', timeString);
-                        hours = 0;
-                    }
-
-                    if (isNaN(minutes) || minutes < 0 || minutes > 59) {
-                        console.error('Invalid minutes in time string:', timeString);
-                        minutes = 0;
-                    }
-
-                    // Special case for 24:00
-                    if (hours === 24) {
-                        minutes = 0;
-                    }
-                }
-            }
-        } catch (error) {
-            console.error('Error parsing time string:', timeString, error);
-        }
-
-        return { hours, minutes };
-    }
-
 }
 
 //------------------------------------------//
@@ -714,8 +584,6 @@ class dashboardManager {
     // Constructor
     constructor() {
 		this.ElementsConfig=new Array();
-		this.InitialRangeMethod;
-		this.ShiftConfig;
         this.DataRequest;
         this.DataRequestBase;
         this.DataRequestRT;
@@ -741,9 +609,8 @@ class dashboardManager {
         this.LoadingDisplayR;
     }
 
-    
     // Initialize
-    async initialize(updateRequest,operationMode,RealTimeEnabled,RealTimeUpdateTime,DashboardMenuRawConfig,OutofShift) {
+    async initialize(updateRequest,operationMode,RealTimeEnabled,RealTimeUpdateTime) {
 
 
 		//Open Loading Display
@@ -757,12 +624,6 @@ class dashboardManager {
 
 		 //Define RT Updatetime
 		 this.RealTimeUpdateTime=RealTimeUpdateTime;
-		 
-		 //Determine InitialRangeMethod		 
-		 this.InitialRangeMethod=DashboardMenuRawConfig.GeneralConfig.InitialRangeMethod;
-		 
-		 //ShiftConfig
-		 this.ShiftConfig=DashboardMenuRawConfig.ShiftConfig;
 
 		 //Set First Update Request
 		 this.UpdateRequest=updateRequest;
@@ -814,7 +675,7 @@ class dashboardManager {
 				 this.loadingDisplayHandler("Close");
 
 				 //Initialize RT
-				 this.RealTime= (this.RealTimeEnabled=="true" && !OutofShift) ? true:false;
+				 this.RealTime= this.RealTimeEnabled=="true" ? true:false;
 				 this.addRTListeners();
 
 			 }
@@ -1088,7 +949,6 @@ class dashboardManager {
 				dID:this.UpdateRequest.DashboardID+this.createDashboardID(),
                 chartID: config.chartsConfig.chartID,
                 OperationMode: this.UpdateRequest.OperationMode,
-                iniRMe:this.UpdateRequest.initialRangeMethod,
                 initialTime: this.UpdateRequest.initialTime,
                 finalTime: this.UpdateRequest.finalTime,
                 customFilterType: this.UpdateRequest.customFilterType,
@@ -1489,8 +1349,7 @@ class dashboardManager {
 								Errors:DashboardData.Errors,
 								chartData:chartData,
 								RTInfo: {OperationMode:this.RealTime? "RealTime":"Hist",
-										 ChartRange: this.ChartTimeRange,
-										 InitialRangeMethod:  this.InitialRangeMethod}
+										 ChartRange: this.ChartTimeRange}
 				};
 
                 // Fire Each Trigger
@@ -1510,11 +1369,9 @@ class dashboardManager {
 		//Subcribe to Variable Changes
 
 		webMI.data.subscribe(this.UniqueNodes,(e) => {
-			if(this.RealTime){																
-			     
+			if(this.RealTime){
 				//Push Node to RTNodes for next Update
 				this.NodesRT.push({Node:e.address, Value: {Value:e.value,status:e.status,timestamps:e.timestamp}});
-			
 			}
 		});
 
@@ -1580,8 +1437,6 @@ class dashboardManager {
 
 	//Organize nodes
 	nodesRTOrganizer(NodesRT) {
-		//This functions was created to add nodes when correlated nodes in the chart change so that they are also added to the Realtime processing pipeline.
-		//For example in the Quality processing if the Units discarted does not change but the units produced does, we want the chart to be updated anyways
 		const organizedNodesRT = [...NodesRT]; // To store the modified NodesRT with any additional nodes
 
 		NodesRT.forEach((nodeRT) => {
@@ -1599,25 +1454,14 @@ class dashboardManager {
 				const chartsConfigI = this.DataRequest.chartsConfig.find(config => config.chartID === chartID);
 				const chartsDataI = this.DashboardDataBase.chartsData.find(data => data.chartID === chartID);
 
-
 				if (chartsConfigI && chartsDataI && chartsConfigI.dataProcessingType === "FullRange-OEEQuality") {
-
-
-
 					// Check if node matches OEEPrN
 					if (nodeRT.Node === chartsConfigI.specialParameters.OEEPrN) {
 						// Find the other chartNode besides the current node
 						const newNode = matchingChartNode.chartNodes.find(node => node !== nodeRT.Node);
-						console.log("NodesRT in QA");
-						console.log(JSON.stringify(NodesRT));
-
-						console.log("newNode in QA");
-						console.log(JSON.stringify(newNode));
-						console.log("NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode");
-						console.log(NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode));
 
 						// Ensure newNode is not already present in NodesRT
-						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)&& !organizedNodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
+						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
 
 							// Create a new nodeRT structure
 							const newNodeRT = {
@@ -1631,7 +1475,6 @@ class dashboardManager {
 						}
 					}
 				}
-
 				else if (chartsConfigI && chartsDataI && chartsConfigI.dataProcessingType === "FullRange-OEEProductivity") {
 
 					// Check if node matches OEEProExUCN
@@ -1640,7 +1483,7 @@ class dashboardManager {
 						const newNode = matchingChartNode.chartNodes.find(node => node !== nodeRT.Node);
 
 						// Ensure newNode is not already present in NodesRT
-						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)&& !organizedNodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
+						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
 							// Create a new nodeRT structure
 							const newNodeRT = {
 								Node: newNode,

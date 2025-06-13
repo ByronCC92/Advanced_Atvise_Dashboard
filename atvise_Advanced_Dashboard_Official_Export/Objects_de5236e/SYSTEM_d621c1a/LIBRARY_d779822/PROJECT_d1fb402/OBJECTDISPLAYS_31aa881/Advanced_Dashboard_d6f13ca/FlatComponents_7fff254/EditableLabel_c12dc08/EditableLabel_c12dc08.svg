@@ -1,0 +1,550 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="80" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns="http://www.w3.org/2000/svg" height="31" version="1.2" xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/">
+ <defs>
+  <linearGradient x1="1" x2="1" id="linear_12" gradientUnits="objectBoundingBox" y2="1" y1="-0.0183441">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+  <linearGradient x1="0.146915" x2="0.146915" id="linear_0" gradientUnits="objectBoundingBox" y2="0.104475" y1="1.01745">
+   <stop offset="0" stop-color="#494949"/>
+   <stop offset="1" stop-color="#000000"/>
+  </linearGradient>
+ </defs>
+ <desc>Sets/displays a value to/from an address.</desc>
+ <title>Editable Label</title>
+ <metadata>
+  <atv:parameter name="base" desc="base" defaultvalue="" valuetype="address" behavior="mandatory"/>
+  <atv:parameter name="validation" desc="input mode" defaultvalue="Number" valuetype="enum" config="Number;Boolean;String;Password;Time" behavior="optional"/>
+  <atv:parameter name="allowDirectInput" desc="allow direct input" defaultvalue="Yes" valuetype="enum" config="Yes;No" behavior="optional"/>
+  <atv:parameter name="unit" desc="displayed unit" valuetype="trstring" group="Number Format" behavior="optional"/>
+  <atv:parameter name="sign" desc="show sign" defaultvalue="false" valuetype="bool" group="Number Format" behavior="optional"/>
+  <atv:parameter name="leadingZeros" desc="leading zeros" defaultvalue="0" valuetype="number" group="Number Format" behavior="mandatory"/>
+  <atv:parameter name="postDecimal" desc="post decimal positions" defaultvalue="0" valuetype="number" group="Number Format" behavior="mandatory"/>
+  <atv:parameter name="decimalFraction" desc="force decimal fraction position" defaultvalue="" valuetype="number" group="Number Format" behavior="optional"/>
+  <atv:parameter name="enumList" desc="enum list" defaultvalue="" valuetype="global" group="Enum List Mode" behavior="optional"/>
+  <atv:parameter name="fontFamily" desc="family" defaultvalue="Arial" valuetype="enum" config="Times New Roman=Times New Roman,Bodoni,Garamond,Minion Web,ITC Stone Serif,MS Georgia,Bitstream Cyberbit,serif;Arial=MS Trebuchet,ITC Avant Garde Gothic,MS Arial,MS Verdana,Univers,Futura,ITC Stone Sans,Gill Sans,Akzidenz Grotesk,Helvetica,sans-serif;Courier=Courier,MS Courier New,Prestige,Everson Mono,monospace;Zapf-Chancery=Caflisch Script,Adobe Poetica,Sanvito,Ex Ponto,Snell Roundhand,Zapf-Chancery,cursive;Alpha Geometrique=Alpha Geometrique,Critter,Cottonwood,FB Reactor,Studz,fantasy;OpenSans-Regular;OpenSans-ExtraBold;OpenSans-BoldItalic;OpenSans-Bold" substitute="$FONTFAMILY$" group="Font" behavior="optional"/>
+  <atv:parameter name="fontSize" desc="size" defaultvalue="16" valuetype="enum" config="6;7;8;9;10;11;12;14;16;18;20;22;24;26;28;36;48;72" substitute="$FONTSIZE$" group="Font" behavior="optional"/>
+  <atv:parameter name="fontColor" desc="color" defaultvalue="#ffffff" valuetype="color" substitute="$FONTCOLOR$" group="Font" behavior="optional"/>
+  <atv:parameter name="fill" desc="fill color" defaultvalue="#3f434a" valuetype="color" substitute="$FILL$" group="Appearance" behavior="optional"/>
+  <atv:parameter name="fillNotEditable" desc="fill color not editable" defaultvalue="#ffffff" valuetype="color" group="Appearance" behavior="optional"/>
+  <atv:parameter name="fillColorInactive" desc="fill color when inactive" defaultvalue="#8c8c8c" valuetype="color" group="Appearance" behavior="optional"/>
+  <atv:parameter name="limitLowLow" desc="limit low low (off=no limit)" defaultvalue="off" valuetype="string" group="Limits" behavior="optional"/>
+  <atv:parameter name="limitLow" desc="limit low (off=no limit)" defaultvalue="off" valuetype="string" group="Limits" behavior="optional"/>
+  <atv:parameter name="limitHigh" desc="limit high (off=no limit)" defaultvalue="off" valuetype="string" group="Limits" behavior="optional"/>
+  <atv:parameter name="limitHighHigh" desc="limit high high (off=no limit)" defaultvalue="off" valuetype="string" group="Limits" behavior="optional"/>
+  <atv:parameter name="limitLowLowFill" desc="limit low low color" defaultvalue="#ff0000" valuetype="color" group="Limits" behavior="optional"/>
+  <atv:parameter name="limitLowFill" desc="limit low color" defaultvalue="#ffff00" valuetype="color" group="Limits" behavior="optional"/>
+  <atv:parameter name="limitHighFill" desc="limit high color" defaultvalue="#ffff00" valuetype="color" group="Limits" behavior="optional"/>
+  <atv:parameter name="limitHighHighFill" desc="limit high high color" defaultvalue="#ff0000" valuetype="color" group="Limits" behavior="mandatory"/>
+  <atv:parameter name="focusStrokeColor" desc="focus stroke color" defaultvalue="#3e4249" valuetype="color" group="Appearance" behavior="mandatory"/>
+  <atv:parameter name="editable" desc="editable" defaultvalue="Yes" valuetype="enum" config="Yes;No" group="Security" behavior="optional"/>
+  <atv:parameter name="password" desc="password mode" defaultvalue="No" valuetype="enum" config="Yes;No" group="Options" behavior="hidden"/>
+  <atv:parameter name="outputNode" desc="alternative output address" defaultvalue="" valuetype="address" group="Options" behavior="optional"/>
+  <atv:parameter name="min" desc="minimum" defaultvalue="off" valuetype="number" group="Limits" behavior="optional"/>
+  <atv:parameter name="max" desc="maximum" defaultvalue="off" valuetype="number" group="Limits" behavior="optional"/>
+  <atv:parameter name="nodeMin" desc="address for minimum" defaultvalue="" valuetype="address" group="Limits" behavior="optional"/>
+  <atv:parameter name="nodeMax" desc="address for maximum" defaultvalue="" valuetype="address" group="Limits" behavior="optional"/>
+  <atv:parameter name="nodeLowLow" desc="address for limit low low" defaultvalue="" valuetype="display" group="Limits" behavior="optional"/>
+  <atv:parameter name="nodeLow" desc="address for limit low" defaultvalue="" valuetype="address" group="Limits" behavior="mandatory"/>
+  <atv:parameter name="nodeHigh" desc="address for limit high" defaultvalue="" valuetype="address" group="Limits" behavior="optional"/>
+  <atv:parameter name="nodeHighHigh" desc="address for limit high high" defaultvalue="" valuetype="address" group="Limits" behavior="optional"/>
+  <atv:parameter name="consistencyGroup" desc="consistency group" defaultvalue="" valuetype="string" group="Options" behavior="optional"/>
+  <atv:parameter name="tabIndex" desc="tab index" defaultvalue="" valuetype="number" group="Options" behavior="optional"/>
+  <atv:parameter name="tooltip" desc="tooltip" valuetype="trstring" group="Options" behavior="optional"/>
+  <atv:parameter name="right" desc="necessary right" defaultvalue="" valuetype="address" config="SYSTEM.SECURITY.RIGHTS" group="Security" behavior="optional"/>
+  <atv:parameter name="activeNode" desc="activation address" defaultvalue="" valuetype="address" group="Security" behavior="optional"/>
+  <atv:parameter name="activeValue" desc="activation value" defaultvalue="off" valuetype="string" group="Security" behavior="optional"/>
+  <atv:parameter name="selectTextOnFocus" desc="select text on focus" defaultvalue="false" valuetype="bool" group="Options" behavior="optional"/>
+  <atv:parameter name="editingBackgroundColor" desc="editing background color" defaultvalue="#3f434a" valuetype="color" substitute="" group="Appearance" behavior="optional"/>
+  <atv:parameter name="editingFontFamily" desc="editing font family" defaultvalue="Arial" valuetype="enum" config="Times New Roman=Times New Roman,Bodoni,Garamond,Minion Web,ITC Stone Serif,MS Georgia,Bitstream Cyberbit,serif;Arial=MS Trebuchet,ITC Avant Garde Gothic,MS Arial,MS Verdana,Univers,Futura,ITC Stone Sans,Gill Sans,Akzidenz Grotesk,Helvetica,sans-serif;Courier=Courier,MS Courier New,Prestige,Everson Mono,monospace;Zapf-Chancery=Caflisch Script,Adobe Poetica,Sanvito,Ex Ponto,Snell Roundhand,Zapf-Chancery,cursive;Alpha Geometrique=Alpha Geometrique,Critter,Cottonwood,FB Reactor,Studz,fantasy;OpenSans-Regular;OpenSans-ExtraBold;OpenSans-BoldItalic;OpenSans-Bold" group="Font" behavior="optional"/>
+  <atv:parameter name="editingBorderColor" desc="editing border color" defaultvalue="#E3D700" valuetype="color" substitute="" group="Appearance" behavior="optional"/>
+  <atv:parameter name="controlTextColor" desc="control text color" defaultvalue="#FFFFFF" valuetype="color" behavior="optional"/>
+  <atv:parameter name="controlEditingBackgroundColor" desc="control editing background color" defaultvalue="#000000" valuetype="color" behavior="optional"/>
+  <atv:parameter name="controlTintColor" desc="control tint color" defaultvalue="#E3D700" valuetype="color" behavior="optional"/>
+  <atv:parameter name="controlActiveBackgroundColor" desc="control active background color" defaultvalue="#000000" valuetype="color" behavior="optional"/>
+  <atv:parameter name="controlBackgroundColor" desc="control background color" defaultvalue="#3f434a" valuetype="color" behavior="optional"/>
+  <atv:gridconfig width="2" gridstyle="lines" enabled="true" height="2"/>
+  <atv:snapconfig width="1" enabled="true" height="1"/>
+ </metadata>
+ <g id="input_element" atv:refpy="0" atv:refpx="0"/>
+ <g id="svg_input" atv:refpy="29.177" atv:refpx="57.25">
+  <rect width="152.326" ry="6" atv:bindbr="1,1" rx="6" stroke="none" y="7.75" stroke-width="3" id="blinking_frame" height="46.5" fill="none" atv:refpy="31" atv:refpx="80.4297" x="4.267" atv:bindtl="0,0"/>
+  <rect width="79" ry="3.871" atv:bindbr="1,1" rx="3.95" stroke="#3f434a" y="0.5" stroke-width="1" id="input_bg" height="30" fill="$FILL$" atv:refpy="15.5" atv:refpx="40" x="0.5" atv:bindtl="0,0"/>
+  <text ry="4" atv:bindbr="0.5,0.5" rx="4" y="21.5" id="input_label" font-size="$FONTSIZE$" text-anchor="middle" fill="$FONTCOLOR$" atv:refpy="7" font-family="$FONTFAMILY$" atv:refpx="40" x="40" atv:bindtl="0.5,0.5">T{value}</text>
+ </g>
+ <foreignObject width="80" y="0" id="clickareaFO" height="31" x="0">
+  <div xmlns="http://www.w3.org/1999/xhtml" id="div_clickarea" style="width:100%;height:100%;opacity:0;filter:alpha(opacity=0);background-color:red"/>
+ </foreignObject>
+ <style type="text/css"><![CDATA[	
+@font-face {
+	font-family: 'OpenSans-Regular';
+	src: url("../../Font/OpenSans-Regular.ttf") format("truetype")
+}
+@font-face {
+	font-family: 'OpenSans-ExtraBold';
+	src: url("../../Font/OpenSans-ExtraBold.ttf") format("truetype")
+}
+@font-face {
+	font-family: 'OpenSans-BoldItalic';
+	src: url("../../Font/OpenSans-BoldItalic.ttf") format("truetype")
+}
+@font-face {
+	font-family: 'OpenSans-Bold';
+	src: url("../../Font/OpenSans-Bold.ttf") format("truetype")
+}
+]]></style>
+ <script type="text/ecmascript"><![CDATA[var fontFamily = webMI.query["fontFamily"];
+var controlTextColor = webMI.query["controlTextColor"];
+var controlEditingBackgroundColor = webMI.query["controlEditingBackgroundColor"];
+var controlTintColor = webMI.query["controlTintColor"];
+var controlActiveBackgroundColor = webMI.query["controlActiveBackgroundColor"];
+var controlBackgroundColor = webMI.query["controlBackgroundColor"];
+
+var inputMode = webMI.query["validation"];
+var inputFO = webMI.dom.createElement("http://www.w3.org/1999/xhtml", "input");
+var isPasswordMode = (inputMode == "Password" || webMI.query["password"] == "Yes");
+inputFO.type = isPasswordMode ? "password" : "text";
+inputFO.id = "html_input";
+inputFO.style.width = "100%";
+inputFO.style.height = "100%";
+inputFO.style.border = "1px solid yellow";
+inputFO.style.outline = 'none';
+inputFO.style.borderRadius = '4px';
+inputFO.style.padding = "0px";
+inputFO.style.boxSizing = 'border-box';
+inputFO.style.textAlign = "center";
+inputFO.style.color = controlTextColor;
+inputFO.style.fontFamily = fontFamily;
+inputFO.style.fontWeight = 'bold';
+inputFO.style.fontSize = parseFloat(webMI.query["fontSize"])*0.0820625+"em";
+inputFO.style.backgroundColor = controlEditingBackgroundColor;
+inputFO.style.fontFamily = fontFamily;
+var foreignObject = null;
+var createdForeignObject = false;
+var data = {};
+var security = {};
+var initialized = false;
+var value = null;
+var nodeToSubscribe = (webMI.query["outputNode"] != "") ? webMI.query["outputNode"] : webMI.query["base"];
+var decimalFraction = parseInt(webMI.query["decimalFraction"], 10);
+var tabHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tab Handler");
+var consistencyHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Consistency Handler");
+var consistencyGroup = webMI.query["consistencyGroup"];
+var preventFirstConsistencyRead = true;
+var storedEvent = {"keyCode": null, "shiftKey": false};
+var backgroundColor = webMI.query["fill"];
+
+webMI.addOnload(function(e) {
+	var remaining = 8;
+	data = {
+		"min":			{"value":null, "address": webMI.query["nodeMin"], "paramValue": webMI.query["min"]},
+		"max":			{"value":null, "address": webMI.query["nodeMax"], "paramValue": webMI.query["max"]},
+		"limitLowLow":	{"value":null, "address": webMI.query["nodeLowLow"], "paramValue": webMI.query["limitLowLow"]},
+		"limitLow":		{"value":null, "address": webMI.query["nodeLow"], "paramValue": webMI.query["limitLow"]},
+		"limitHigh":	{"value":null, "address": webMI.query["nodeHigh"], "paramValue": webMI.query["limitHigh"]},
+		"limitHighHigh":{"value":null, "address": webMI.query["nodeHighHigh"], "paramValue": webMI.query["limitHighHigh"]},
+		"activeNode":	{"value":null, "address": webMI.query["activeNode"], "paramValue": ""},
+		"activeValue":	{"value":null, "address": "", "paramValue": webMI.query["activeValue"]},
+		"base":			{"value":null, "address": webMI.query["base"], "paramValue": ""}
+	};
+
+	function initVariables(value, address, id) {
+		if(id == "base" && consistencyGroup != "" && address != "") {
+			webMI.data.read(address, function(e) {
+				data[id]["value"] = e.value;
+			});
+			consistencyHandler.register(consistencyGroup, address, handleInput);
+			reduceRemaining();
+		} else if (address != "") {
+			webMI.data.subscribe(address, function(e) {
+				data[id]["value"] = e.value;
+				reduceRemaining();
+			});
+		} else if (!isNaN(parseFloat(value))) {
+			data[id]["value"] = parseFloat(value);
+			reduceRemaining();
+		} else if (typeof value == "string" && value != "off") {
+			data[id]["value"] = value;
+			reduceRemaining();
+		} else
+			reduceRemaining();
+
+		function reduceRemaining() {
+			if(!initialized)
+				initialized = (--remaining == 0);
+			else
+				handleInput();
+		}
+	}
+
+	for(var i in data)
+		initVariables(data[i]["paramValue"], data[i]["address"], i);
+
+	var doc = document.getElementById("svg_input").ownerDocument;
+	tabHandler.register(webMI.query["tabIndex"],keyHandler,doc);
+
+	if (webMI.query["tooltip"] != undefined)
+		webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {"auto":"true", "id":"clickareaFO", "text":webMI.query["tooltip"]});
+});
+
+function setColorization() {
+	function setBackground(color) {
+		webMI.gfx.setFill("input_bg", color);
+		webMI.gfx.setStroke("input_bg", color);
+		inputFO.style.color = controlTextColor;
+		inputFO.style.backgroundColor = controlActiveBackgroundColor;
+		inputFO.style.borderColor = controlTintColor;
+		webMI.gfx.setFill("input_label", controlTextColor);
+	}
+
+	if(data["limitLowLow"]["value"] != null && value <= data["limitLowLow"]["value"])
+		setBackground(webMI.query["limitLowLowFill"]);
+	else if(data["limitLow"]["value"] != null && value <= data["limitLow"]["value"])
+		setBackground(webMI.query["limitLowFill"]);
+	else if(data["limitHighHigh"]["value"] != null && value >= data["limitHighHigh"]["value"])
+		setBackground(webMI.query["limitHighHighFill"]);
+	else if(data["limitHigh"]["value"] != null && value >= data["limitHigh"]["value"])
+		setBackground(webMI.query["limitHighFill"]);
+	else if(!security["hasRight"] || !security["activateInput"] || !security["activated"])
+		setBackground(webMI.query["fillColorInactive"]);
+	else if(security["outputModeOnly"])
+		setBackground(webMI.query["fillNotEditable"]);
+	else
+		setBackground(controlBackgroundColor);
+}
+
+function handleInput(consistencyValue){
+	if(consistencyGroup != "" && preventFirstConsistencyRead) {
+		preventFirstConsistencyRead = false;
+		return;
+	}
+
+	if(consistencyValue && consistencyGroup != "")
+		consistencyHandler.set(consistencyGroup, data["base"]["address"], consistencyValue);
+	
+	value = (data["base"] && consistencyValue == undefined) ? data["base"]["value"] : consistencyValue;
+
+	var formattedOutput = null;
+	var enumList = webMI.query["enumList"];
+
+	if (isPasswordMode)
+		formattedOutput = "*** T{Password} ***";
+	else if(enumList != "") {
+		formattedOutput = (enumList[value] != undefined) ? enumList[value].value : value + " not in enum list";
+		value = (enumList[value] != undefined) ? enumList[value].value : value;
+	} else if(inputMode == "Number") {
+		var leadingZeros = parseInt(webMI.query["leadingZeros"], 10);
+		var postDecimal = parseInt(webMI.query["postDecimal"], 10);
+		var sign = webMI.query["sign"] == "true";
+		var unit = webMI.query["unit"];
+		var fieldWidth = 0;
+		formattedOutput = (value != null) ? value : "";
+
+		if(!isNaN(decimalFraction) && decimalFraction > 0)
+			formattedOutput = formattedOutput / Math.pow(10, decimalFraction);
+
+		if(!isNaN(leadingZeros) && leadingZeros > 0)
+			fieldWidth += leadingZeros;
+
+		if(!isNaN(postDecimal) && postDecimal > 0) {
+			if(postDecimal > 9)
+				postDecimal = 9;
+			fieldWidth += (postDecimal + 1);
+		}
+
+		if(!isNaN(leadingZeros) && !isNaN(postDecimal)) {
+			var formatString = ((sign) ? "%+" : "%") + "0" + fieldWidth + "." + postDecimal + "f";
+			formattedOutput = webMI.sprintf(formatString, formattedOutput);
+		}
+
+		value = formattedOutput;
+
+		if(unit != undefined)
+			formattedOutput = formattedOutput + " " + unit;
+	}
+	else if (inputMode == 'Time') {
+		var b = webMI.query.base || new Date();
+
+		if (consistencyValue) {
+			for (var type in consistencyValue) {
+				b['set' + type](consistencyValue[type]);
+			}
+		}
+		value = b.valueOf();
+
+		function format(number, places) {
+			places = places || 2;
+			return webMI.sprintf("%0" + places + "d", number);
+		}
+
+		formattedOutput = b.getHours() + ':' + format(b.getMinutes());
+		if (b.getSeconds() !== 0 || b.getMilliseconds() !== 0) formattedOutput += ':' + format(b.getSeconds());
+		if (b.getMilliseconds() !== 0) formattedOutput += '.' + format(b.getMilliseconds(), 3);
+	}
+
+	webMI.trigger.fire("valuechanged", (value == null) ? "" : value, "");
+	webMI.gfx.setText("input_label", (formattedOutput != null) ? formattedOutput : value);
+
+	security = {
+		"outputModeOnly": (webMI.query["editable"] == "No"),
+		"activateInput": (data["activeValue"]["value"] == null || data["activeNode"]["value"] == null) || data["activeValue"]["value"] == String(data["activeNode"]["value"]),
+		"hasRight": true,
+		"activated": (typeof security["activated"] === "boolean") ? security["activated"] : true
+	};
+
+	var requiredRight = webMI.query["right"];
+
+	if (requiredRight != "") {
+		if (requiredRight.search(/SYSTEM\.SECURITY\.RIGHTS\./) != -1)
+			requiredRight = requiredRight.substring(23,requiredRight.length); //remove "prefix" SYSTEM.SECURITY.RIGHTS.
+
+		webMI.addEvent(webMI.data, "clientvariableschange", function(e) {
+			security["hasRight"] = webMI.hasRight(requiredRight);
+			if(!security["hasRight"])
+				switchToOutputMode();
+			setColorization();
+		});
+	}
+
+	if(!security["activateInput"])
+		switchToOutputMode();
+
+	if(security["outputModeOnly"])
+		webMI.gfx.setVisible("clickareaFO", false);
+
+	if(inputMode == "Number")
+		value = parseFloat(value);
+
+	setColorization();
+}
+
+var isInInputMode = false;
+function switchToOutputMode() {
+	webMI.gfx.setVisible("svg_input", null);
+	webMI.gfx.setVisible(foreignObject, false);
+	isInInputMode = true;
+}
+
+function switchToInputMode(){
+	if(security["hasRight"] && !security["outputModeOnly"] && security["activateInput"] && security["activated"]) {
+
+		var directKeyboardMode = webMI.query["allowDirectInput"] == "Yes";
+		var useSVGKeyboard = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Configuration", {"action":"existsIndexParameter", "parameterName":"useSVGKeyboard"});
+		if(useSVGKeyboard == "true")
+			directKeyboardMode = false;
+
+		function setFocus() {
+			inputFO.focus();
+			if(webMI.query["selectTextOnFocus"] == "true")
+				inputFO.select();
+		}
+
+		if(directKeyboardMode) {
+			tabHandler.setAcceptKeys(false);
+			inputFO.value = inputMode == 'Time' ? webMI.gfx.getText('input_label') : value;
+			webMI.gfx.setVisible("svg_input", false);
+			if(!createdForeignObject) {
+				var textboxGroup = document.getElementById("input_element");
+				foreignObject = webMI.gfx.addForeignObject({x:0, y:0, width:80, height:31, id:"input_fo", childNodes: [inputFO]}, textboxGroup);
+				createdForeignObject = true;
+				setFocus();
+			 } else {
+				webMI.gfx.setVisible(foreignObject, null);
+				setFocus();
+			}
+		} else {
+			function getDisplayParameters(){
+				var communicationID = new Date().getTime().toString();
+				webMI.trigger.connect(communicationID, function(e) {
+					checkInput(e.value);
+				});
+
+				var passObj = {};
+				for (var i in webMI.query)
+					passObj[i] = webMI.query[i];
+				passObj["minValue"] = data["min"]["value"];
+				passObj["maxValue"] = data["max"]["value"];
+				if (nodeToSubscribe != "" && consistencyGroup == "")
+					passObj["target"] = nodeToSubscribe;
+				if (nodeToSubscribe == "" || consistencyGroup != "")
+					passObj["trigger"] = communicationID;
+				if (isPasswordMode)
+					passObj["password"] = "Yes";
+				return passObj;
+			}
+
+			var keyboard = null;
+			var size = (inputMode != undefined && inputMode == "Number") ? {w: 438, h: 378} : {w: 550, h: 250};
+
+			if (inputMode != undefined && inputMode == "Number")
+				keyboard = "SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Standard.keyboard.number_keyboard";
+			else
+				keyboard = "SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Standard.keyboard.keyboard";
+
+			var keyboardParam = getDisplayParameters();
+			webMI.display.openWindow({display:keyboard,extern:false,height:size.h,menubar:false,modal:true,movable:true,resizable:false,scrollbars:false,status:false,title:"T{Keyboard}",toolbar:false,width:size.w,query:keyboardParam});
+		}
+
+		isInInputMode = true;
+	}
+}
+
+function keyHandler(keyTH,param2){
+	if (keyTH == "focus")
+		webMI.gfx.setStroke("input_bg", controlTintColor);
+	else if (keyTH == "blur")
+		webMI.gfx.setStroke("input_bg", controlBackgroundColor);
+	else if (keyTH == "apply")
+		switchToInputMode();
+	else if (keyTH == "isActive")
+		return (security["hasRight"] && !security["outputModeOnly"] && security["activateInput"] && security["activated"] && param2(document.getElementById("svg_input").parentNode));
+}
+
+webMI.addEvent(('ontouchend' in window) ? this : 'clickareaFO', ('ontouchend' in window) ? 'touchend' : 'click', function(e) {
+	if (!e.changedTouches || e.changedTouches[0].target.parentNode == document.getElementById('svg_input')) {
+		tabHandler.setCurrentIndex(keyHandler);
+		switchToInputMode();
+	}
+});
+
+webMI.addEvent('clickareaFO', 'click', function(e) {
+	if (!e.changedTouches || e.changedTouches.length == 0 || e.changedTouches[0].target.parentNode == document.getElementById('svg_input')) {
+		tabHandler.setCurrentIndex(keyHandler);
+		switchToInputMode();
+	}
+});
+
+function stopPropagation(event) {
+	if (event.altKey){
+		if (event.stopPropagation)
+			event.stopPropagation();
+		else
+			event.cancelBubble = true;
+	}
+}
+
+webMI.addEvent(inputFO, "keyup", stopPropagation);
+webMI.addEvent(inputFO, "keydown", function(e) {
+	var keyCode = e.keyCode;
+	if (/MSIE/.test(navigator.userAgent)){
+		storedEvent["keyCode"] = e.keyCode;
+		storedEvent["shiftKey"] = e.shiftKey;
+	}
+	if(keyCode == "13" || keyCode == "9") {
+		inputFO.blur();
+		if (keyCode == "13") tabHandler.setAcceptKeysPrevent(true);
+	} else if(keyCode == "27"){
+		storedEvent["keyCode"] = "27";
+		tabHandler.setAcceptKeysPrevent(true);
+		inputFO.blur();
+	}
+
+	stopPropagation(e);
+});
+
+inputFO.onblur = function() {
+	switchToOutputMode();
+	tabHandler.setAcceptKeys(true);
+
+	if (storedEvent["keyCode"] != null){
+		if (storedEvent["shiftKey"] && storedEvent["keyCode"] == "9")
+			tabHandler.prevTab();
+		else if (storedEvent["keyCode"] == "9")
+			tabHandler.nextTab();
+	}
+
+	if (storedEvent["keyCode"] != "27"){
+		setTimeout(function(){
+			checkInput(inputFO.value);
+		},0);
+	}
+
+	storedEvent["keyCode"] = null;
+};
+
+function checkInput(tempValue) {
+	var tempValue = String(tempValue);
+	var regexps = {
+		"Boolean":"(true|false|0|1)",
+		"Number":"[+-]*[0-9]+(\.[0-9]+)?",
+		"String":".*",
+		"Password":".*",
+		"Time":"[0-9]+\:[0-9]{2}(\:[0-9]{2}(\.[0-9]{1,3})?)?"
+	};
+	if(new RegExp("^" + regexps[inputMode] + "$", "i").test(tempValue)) {
+		if(inputMode == "Boolean")
+			tempValue = (tempValue.toLowerCase() == "true" || tempValue == "1") ? true : false;
+		else if(inputMode == "Number")
+			tempValue = tempValue = parseFloat(tempValue.replace(",","."));
+	} else {
+		console.warn("Please enter a valid format according to the selected input mode.");
+		return;
+	}
+
+	if(inputMode == "Number") {
+		if(data["min"] && data["min"]["value"] != null && tempValue < data["min"]["value"]) {
+			alert("T{Value too low}");
+			return;
+		} else if(data["max"] && data["max"]["value"] != null && tempValue > data["max"]["value"]) {
+			alert("T{Value too high}");
+			return;
+		}
+
+		if(!isNaN(decimalFraction) && decimalFraction > 0)
+			tempValue = tempValue * Math.pow(10, decimalFraction);
+
+		writeValue(tempValue);
+	} else if(inputMode == "String" || inputMode == "Boolean" || inputMode == "Password")
+		writeValue(tempValue);
+	else if (inputMode == 'Time') {
+		var parts = tempValue.replace('.', ':').split(':'),
+			values = { Hours: 0, Minutes: 0, Seconds: 0, Milliseconds: 0 };
+
+		if (parts.length < 2) { console.warn('Got invalid input "' + value + '"'); }
+		else {
+			var i = 0;
+			for (var type in values) {
+				values[type] = parseInt(parts[i] || 0);
+				i++;
+			}
+
+			writeValue(values);
+		}
+	}
+
+	function writeValue(tempValue) {
+		if(consistencyGroup == "" && nodeToSubscribe != ""){
+			webMI.data.write(nodeToSubscribe, tempValue);
+			webMI.trigger.fire("com.atvise.outputvaluechanged", tempValue, "");
+		}
+		else handleInput(tempValue);
+
+	}
+}
+
+webMI.trigger.connect("setValue", function(e) {
+	checkInput(e.value);
+});
+
+webMI.trigger.connect("com.atvise.setActive",function(e){
+	security["activated"] = e.value;
+
+	setColorization();
+	if (!isInInputMode) switchToOutputMode();
+});
+
+webMI.trigger.connect("com.atvise.setBlinking", function(e){
+	if (e.value == "none"){
+		webMI.gfx.setStroke("blinking_frame", e.value);
+		webMI.gfx.setVisible("blinking_frame", null);
+	} else {
+		webMI.gfx.setStroke("blinking_frame", e.value);
+		webMI.gfx.setVisible("blinking_frame",{0:true,2:false,4:true,6:false,8:true,10:false});
+	}
+});
+
+webMI.trigger.connect("com.atvise.setBackground", function(e){
+	backgroundColor = (e.value == "") ? webMI.query["editingBackgroundColor"] : e.value;
+	setColorization();
+});]]></script>
+</svg>

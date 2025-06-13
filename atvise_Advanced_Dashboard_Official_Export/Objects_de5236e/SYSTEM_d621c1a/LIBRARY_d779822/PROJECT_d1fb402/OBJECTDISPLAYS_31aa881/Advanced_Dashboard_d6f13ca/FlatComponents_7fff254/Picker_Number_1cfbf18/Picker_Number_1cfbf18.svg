@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg width="117" xmlns="http://www.w3.org/2000/svg" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:atv="http://webmi.atvise.com/2007/svgext" height="121">
+ <defs/>
+ <desc>Pick a numeric value by moving the slider.</desc>
+ <title>Picker Number</title>
+ <metadata>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="min value" substitute="$MIN$" valuetype="number" name="minimum"/>
+  <atv:parameter behavior="optional" defaultvalue="100" desc="max value" substitute="$MAX$" valuetype="number" name="maximum"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="decimal positions" substitute="" valuetype="number" name="decimalPositions"/>
+  <atv:parameter behavior="optional" defaultvalue="#E3D700" desc="tint color" substitute="$TINTCOLOR$" valuetype="color" name="tintColor" group="Colors"/>
+  <atv:parameter behavior="optional" defaultvalue="#3f434a" desc="background color" substitute="$BACKGROUNDCOLOR$" valuetype="color" name="backgroundColor" group="Colors"/>
+  <atv:parameter behavior="optional" config="Times New Roman=Times New Roman,Bodoni,Garamond,Minion Web,ITC Stone Serif,MS Georgia,Bitstream Cyberbit,serif;Arial=MS Trebuchet,ITC Avant Garde Gothic,MS Arial,MS Verdana,Univers,Futura,ITC Stone Sans,Gill Sans,Akzidenz Grotesk,Helvetica,sans-serif;Courier=Courier,MS Courier New,Prestige,Everson Mono,monospace;Zapf-Chancery=Caflisch Script,Adobe Poetica,Sanvito,Ex Ponto,Snell Roundhand,Zapf-Chancery,cursive;Alpha Geometrique=Alpha Geometrique,Critter,Cottonwood,FB Reactor,Studz,fantasy;OpenSans-Regular;OpenSans-ExtraBold;OpenSans-BoldItalic;OpenSans-Bold" defaultvalue="Arial" desc="font family" substitute="$FONTFAMILY$" valuetype="enum" name="fontFamily" group="Font"/>
+  <atv:parameter behavior="optional" defaultvalue="#ffffff" desc="text color" substitute="$TEXTCOLOR$" valuetype="color" name="textColor" group="Colors"/>
+  <atv:parameter behavior="optional" defaultvalue="#000000" desc="picker background color" substitute="$PICKERBACKGROUNDCOLOR$" valuetype="color" name="pickerBackgroundColor" group="Colors"/>
+  <atv:parameter behavior="optional" defaultvalue="T{Basic}" desc="label" substitute="$LABEL$" valuetype="string" name="label"/>
+  <atv:parameter behavior="optional" defaultvalue="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Symbols.language" desc="label icon" substitute="$LABELICON$" valuetype="display" name="labelIcon"/>
+  <atv:parameter behavior="optional" defaultvalue="#B3B3B3" desc="label color" substitute="$LABELCOLOR$" valuetype="color" name="labelColor" group="Colors"/>
+  <atv:parameter behavior="optional" defaultvalue="#8c8c8c" desc="background color inactive" substitute="" valuetype="color" name="backgroundColorInactive" group="Colors"/>
+  <atv:gridconfig width="5" enabled="true" gridstyle="lines" height="5"/>
+  <atv:snapconfig width="10" enabled="false" height="10"/>
+ </metadata>
+ <rect width="99" atv:refpy="60.5" rx="4" stroke-width="1" id="background" stroke="$BACKGROUNDCOLOR$" ry="4" y="45.5" height="30" atv:refpx="50" fill="$BACKGROUNDCOLOR$" x="0.5"/>
+ <polyline atv:refpy="60.5" stroke-width="0" id="id_0" points="84.5,53.5 84.5,67.5 91.5,60.5 84.5,53.5" stroke="none" atv:refpx="88" fill="$TINTCOLOR$"/>
+ <text atv:refpy="62" id="valueDisplay" font-family="$FONTFAMILY$" font-size="16" y="66.5" atv:refpx="21.5" fill="$TEXTCOLOR$" x="6.5">13.15</text>
+ <text atv:refpy="44.494" id="id_2" font-family="$FONTFAMILY$" font-size="8" y="38.726" atv:refpx="20.611" fill="$LABELCOLOR$" x="25.131">$LABEL$</text>
+ <rect width="100" fill-opacity="0" atv:refpy="60.5" stroke-width="0" id="clickarea" stroke="none" stroke-linecap="butt" y="45" height="31" atv:refpx="50" fill="#ffffff" x="0"/>
+ <svg width="20" atv:refpy="35.843" id="id_7" transform="matrix(0.8,0,0,0.8,0,0)" y="35.864" height="20" atv:refpx="12.771" x="5.186" xlink:href="$LABELICON$">
+  <atv:argument prefix="labelColor" name="symbolColor" value=""/>
+ </svg>
+ <g atv:refpy="60.757" id="sliderPicker" transform="matrix(1,0,0,1,0,0.257)" atv:refpx="93">
+  <g atv:refpy="50" id="id_4" transform="matrix(1,0,0,1,0,10.5)" atv:refpx="93">
+   <rect width="40" atv:refpy="50" rx="4" stroke-width="1.889" id="id_8" render-order="1" stroke="none" ry="4" y="-10.5" height="121" atv:refpx="94.5" fill="$PICKERBACKGROUNDCOLOR$" x="77"/>
+   <polyline atv:refpy="50" stroke-width="1.889" id="id_9" render-order="1" points="77,41 69,50 77,59 77,41" stroke="none" atv:refpx="69" fill="$PICKERBACKGROUNDCOLOR$"/>
+  </g>
+  <svg width="40" atv:refpy="60.5" id="id_6" y="-0.257" height="121" atv:refpx="98" x="77" xlink:href="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.FlatComponents.Slider">
+   <atv:argument prefix="base" name="base"/>
+   <atv:argument prefix="minimum" name="minimum"/>
+   <atv:argument prefix="maximum" name="maximum"/>
+   <atv:argument prefix="tintColor" name="tintColor"/>
+   <atv:argument prefix="decimalPositions" name="decimalPositions"/>
+   <atv:argument prefix="textColor" name="backgroundColor" value=""/>
+  </svg>
+ </g>
+ <script type="text/ecmascript"><![CDATA[var decimalPositions = webMI.query["decimalPositions"];
+var	kBackgroundColor = webMI.query["backgoundColor"];
+var	kBackgroundId = "background";
+var	kClickareaId = "clickarea";
+var	kPickerId = "sliderPicker";
+var	kElementIdPrefix = document.getElementById(kBackgroundId).id.split(kBackgroundId)[0];
+
+var _pickerShown = false;
+var	_pickerClicked = false;
+var	_active = true;
+
+function orderFront() {
+	var g = document.getElementById(kBackgroundId).parentNode.parentNode,
+		gParent = g.parentNode,
+		gs = gParent.childNodes,
+		i = 0;
+
+	for (; i < gs.length; i++) {
+		if (gs[i] == g) break;
+	}
+
+	gParent.removeChild(gs[i]);
+	gParent.appendChild(g);
+}
+
+function setPickerShown(shown) {
+	_pickerShown = shown;
+	updateDisplay();
+	document.getElementById('valueDisplay').setAttribute('font-weight', shown ? 'bold' : 'normal');
+
+	if (_pickerShown) {
+		orderFront();
+		webMI.gfx.setVisible(kPickerId, true);
+	}
+	else {
+		webMI.gfx.setVisible(kPickerId, false);
+	}
+}
+
+function togglePickerShown(e) {
+	_pickerClicked = true;
+	setPickerShown(!_pickerShown);
+}
+
+webMI.addEvent(kClickareaId, ['touchend', 'click'], function(e) {
+	if (_active) togglePickerShown();
+});
+
+webMI.addEvent(this, 'click', function(e) {
+	if (_pickerClicked) return _pickerClicked = false;
+
+	if (_pickerShown) {
+		var elm = e.target;
+		
+		while (elm.parentNode) {
+			if (elm.id === kElementIdPrefix + kPickerId) return;
+
+			elm = elm.parentNode;
+		}
+		setPickerShown(false);
+	}
+});
+
+webMI.gfx.setVisible(kPickerId, false);
+webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Set Text", {"decimalPlaces":decimalPositions, "id":"valueDisplay", "nodeId":webMI.query["base"] + ""});
+
+function updateLabelIcon() {
+	var children = document.getElementById('id_7').childNodes,
+		value = webMI.query['labelColor'];
+
+	for (var i = 0; i < children.length; i++) {
+		if (children[i].id) {
+			var parts = children[i].id.split('id_7_'),
+			id = parts[parts.length - 1];
+
+			webMI.gfx.setFill('id_7_' + id, value);
+		}
+	}
+}
+
+function updateDisplay() {	
+	webMI.gfx.setStroke(kBackgroundId, _pickerShown ? webMI.query['tintColor'] : _active ? webMI.query['backgroundColor'] : webMI.query['backgroundColorInactive']);
+	webMI.gfx.setFill(kBackgroundId, _active ? webMI.query['backgroundColor'] : webMI.query['backgroundColorInactive']);
+}
+
+webMI.trigger.connect('com.atvise.setActive', function(e) {
+	_active = e.value;
+	setPickerShown(false);
+	updateDisplay();
+
+	webMI.trigger.fire('com.atvise.setActive', e.value, 'id_6');
+});]]></script>
+</svg>

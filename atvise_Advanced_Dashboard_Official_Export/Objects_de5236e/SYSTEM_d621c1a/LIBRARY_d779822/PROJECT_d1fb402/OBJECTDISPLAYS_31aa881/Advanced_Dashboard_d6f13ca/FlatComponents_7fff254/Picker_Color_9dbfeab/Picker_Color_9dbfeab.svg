@@ -1,0 +1,340 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<svg width="100" xmlns="http://www.w3.org/2000/svg" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:atv="http://webmi.atvise.com/2007/svgext" height="31">
+ <defs>
+  <linearGradient id="linear_12" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_0" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_1" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_4" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-opacity="0.2745098039215687" stop-color="#ffffff" offset="0"/>
+   <stop stop-opacity="0" stop-color="#ffffff" offset="0.5515695067264574"/>
+   <stop stop-opacity="0" stop-color="#000000" offset="0.7174887892376681"/>
+   <stop stop-opacity="0.4705882352941176" stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_3" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_21" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_5" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-opacity="0.2745098039215687" stop-color="#ffffff" offset="0"/>
+   <stop stop-opacity="0" stop-color="#ffffff" offset="0.5515695067264574"/>
+   <stop stop-opacity="0" stop-color="#000000" offset="0.7174887892376681"/>
+   <stop stop-opacity="0.4705882352941176" stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_1" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-opacity="0.2745098039215687" stop-color="#ffffff" offset="0"/>
+   <stop stop-opacity="0" stop-color="#ffffff" offset="0.5515695067264574"/>
+   <stop stop-opacity="0" stop-color="#000000" offset="0.7174887892376681"/>
+   <stop stop-opacity="0.4705882352941176" stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_8" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_9" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_10" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-opacity="0.2745098039215687" stop-color="#ffffff" offset="0"/>
+   <stop stop-opacity="0" stop-color="#ffffff" offset="0.5515695067264574"/>
+   <stop stop-opacity="0" stop-color="#000000" offset="0.7174887892376681"/>
+   <stop stop-opacity="0.4705882352941176" stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_11" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_6" gradientUnits="objectBoundingBox" x1="0.342441" y2="0.102578" x2="0.342441" y1="1.01533">
+   <stop stop-color="#494949" offset="0"/>
+   <stop stop-color="#000000" offset="1"/>
+  </linearGradient>
+  <linearGradient id="linear_14" gradientUnits="objectBoundingBox" x1="1" y2="1" x2="1" y1="-0.0183441">
+   <stop stop-opacity="0.2745098039215687" stop-color="#ffffff" offset="0"/>
+   <stop stop-opacity="0" stop-color="#ffffff" offset="0.5515695067264574"/>
+  </linearGradient>
+  <linearGradient id="linear_2" gradientUnits="objectBoundingBox" x1="1" y2="-0.0183441" x2="1" y1="1">
+   <stop stop-opacity="0.2745098039215687" stop-color="#ffffff" offset="0"/>
+   <stop stop-opacity="0" stop-color="#ffffff" offset="0.5515695067264574"/>
+  </linearGradient>
+ </defs>
+ <desc>Opens a dialog to choose a color.</desc>
+ <title>Picker Color</title>
+ <metadata>
+  <atv:parameter behavior="mandatory" desc="base" valuetype="address" name="base"/>
+  <atv:parameter behavior="mandatory" defaultvalue="colorPicker" desc="name" valuetype="string" name="name"/>
+  <atv:parameter behavior="optional" defaultvalue="#ffffff" desc="initial value" valuetype="color" name="initValue"/>
+  <atv:parameter behavior="optional" config="Times New Roman=Times New Roman,Bodoni,Garamond,Minion Web,ITC Stone Serif,MS Georgia,Bitstream Cyberbit,serif;Arial=MS Trebuchet,ITC Avant Garde Gothic,MS Arial,MS Verdana,Univers,Futura,ITC Stone Sans,Gill Sans,Akzidenz Grotesk,Helvetica,sans-serif;Courier=Courier,MS Courier New,Prestige,Everson Mono,monospace;Zapf-Chancery=Caflisch Script,Adobe Poetica,Sanvito,Ex Ponto,Snell Roundhand,Zapf-Chancery,cursive;Alpha Geometrique=Alpha Geometrique,Critter,Cottonwood,FB Reactor,Studz,fantasy" defaultvalue="Arial" desc="family" substitute="$FONTFAMILY$" valuetype="enum" name="fontFamily" group="Font"/>
+  <atv:parameter behavior="optional" config="6;7;8;9;10;11;12;14;16;18;20;22;24;26;28;36;48;72" defaultvalue="16" desc="size" substitute="$FONTSIZE$" valuetype="enum" name="fontSize" group="Font"/>
+  <atv:parameter behavior="optional" defaultvalue="#ffffff" desc="color" substitute="$FONTCOLOR$" valuetype="color" name="fontColor" group="Font"/>
+  <atv:parameter behavior="optional" defaultvalue="#3f434a" desc="fill color" substitute="$FILL$" valuetype="color" name="fill" group="Appearance"/>
+  <atv:parameter behavior="optional" defaultvalue="#8c8c8c" desc="fill color when inactive" valuetype="color" name="fillColorInactive" group="Appearance"/>
+  <atv:parameter behavior="optional" defaultvalue="#E3D700" desc="button stroke color pressed" valuetype="color" name="buttonStrokePressed" group="Appearance"/>
+  <atv:parameter behavior="optional" defaultvalue="#FFFFFF" desc="focus stroke color" valuetype="color" name="focusStrokeColor" group="Appearance"/>
+  <atv:parameter behavior="optional" config="SYSTEM.SECURITY.RIGHTS" desc="necessary right" valuetype="address" name="right" group="Security"/>
+  <atv:parameter behavior="optional" desc="activation address" valuetype="address" name="activeNode" group="Security"/>
+  <atv:parameter behavior="optional" desc="activation value" valuetype="string" name="activeValue" group="Security"/>
+  <atv:parameter behavior="optional" desc="consistency group" valuetype="string" name="consistencyGroup" group="Options"/>
+  <atv:parameter behavior="optional" desc="tab index" valuetype="number" name="tabIndex" group="Options"/>
+  <atv:parameter behavior="optional" desc="tooltip" valuetype="trstring" name="tooltip" group="Options"/>
+  <atv:gridconfig width="2" enabled="true" gridstyle="lines" height="2"/>
+  <atv:snapconfig width="2" enabled="true" height="2"/>
+ </metadata>
+ <g atv:refpy="29" id="colorpicker_clickarea" atv:dynamic="true" atv:refpx="78.5">
+  <rect width="99" atv:refpy="30.5" rx="4" stroke-width="1" id="input_bg" atv:bindtl="0,0" stroke="$FILL$" stroke-linecap="butt" ry="4" atv:bindbr="1,1" y="0.5" height="30" atv:refpx="120.715" fill="$FILL$" x="0.5"/>
+  <text atv:refpy="15.5" text-anchor="start" id="input_label" atv:bindtl="0,1" font-family="$FONTFAMILY$" font-size="$FONTSIZE$" atv:bindbr="0,1" y="21.5" atv:refpx="38" fill="$FONTCOLOR$" x="9">#FFFFFF</text>
+  <rect width="17" atv:refpy="15.5" rx="8.5" stroke-width="0.5" id="indicator" atv:bindtl="1,1" stroke="none" ry="8.5" atv:bindbr="1,1" y="7" height="17" atv:refpx="84.5" fill="#000000" x="78"/>
+ </g>
+ <script type="text/ecmascript"><![CDATA[var base = (webMI.query["base"] == undefined) ? "" : webMI.query["base"];
+var initValue = webMI.query["initValue"];
+var fill = webMI.query["fill"];
+var fillColorInactive = webMI.query["fillColorInactive"];
+var buttonStrokePressed = webMI.query["buttonStrokePressed"];
+var focusStrokeColor = webMI.query["focusStrokeColor"];
+var arrowFill = webMI.query["arrowFill"];
+var consistencyGroup = webMI.query["consistencyGroup"];
+
+var consistencyHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Consistency Handler");
+
+var tabHandler = webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tab Handler");
+var tabIndex = (webMI.query["tabIndex"] == undefined) ? "" : webMI.query["tabIndex"];
+var tooltip = (webMI.query["tooltip"] == undefined) ? "" : webMI.query["tooltip"];
+
+var right = (webMI.query["right"] == undefined) ? "" : webMI.query["right"];
+if (right.search(/SYSTEM\.SECURITY\.RIGHTS\./) != -1) {
+    right = right.substring(23, right.length); //remove "prefix" SYSTEM.SECURITY.RIGHTS.
+}
+
+var active = false;
+var hasRight = false;
+
+if (right != "") {
+    webMI.addEvent(webMI.data, "clientvariableschange", function(e) {
+        hasRight = false;
+        if (("username" in e) && (e.username != "")) {
+            hasRight = webMI.hasRight(right);
+        }
+        deActivate();
+    });
+}
+
+var activeValue = (webMI.query["activeValue"] == undefined) ? "" : webMI.query["activeValue"];
+var activeNode = (webMI.query["activeNode"] == undefined) ? "" : webMI.query["activeNode"];
+var nodeIsActive = false;
+
+if ((activeNode != "") && (String(activeValue) != "")) {
+    webMI.data.subscribe(activeNode, function(e) {
+        var nodeActiveValue = e.value;
+        if (typeof nodeActiveValue == "boolean") {
+            nodeIsActive = (String(nodeActiveValue) == activeValue);
+        } else if (typeof nodeActiveValue == "number") {
+            try {
+                var temp = parseFloat(activeValue);
+                nodeIsActive = (nodeActiveValue == temp);
+            } catch (e) {
+                nodeIsActive = false;
+            }
+        } else {
+            nodeIsActive = (nodeActiveValue == activeValue);
+        }
+        deActivate();
+    });
+} else {
+    deActivate();
+}
+
+function deActivate(force) {
+    if (right != "") {
+        if ((String(activeValue) != "") && (activeNode != "")) {
+            active = (nodeIsActive && hasRight);
+        } else {
+            active = hasRight;
+        }
+    } else {
+        if ((String(activeValue) != "") && (activeNode != "")) {
+            active = nodeIsActive;
+        } else {
+            active = true;
+        }
+    }
+    if (active) {
+        webMI.gfx.setFill("input_bg", fill);
+    } else {
+        webMI.gfx.setFill("input_bg", fillColorInactive);
+
+    }
+}
+
+function focusTH() {
+    if (active) {
+        webMI.gfx.setStroke("input_bg", focusStrokeColor);
+    }
+}
+
+function blurTH() {
+    if (active) {
+        webMI.gfx.setStroke("input_bg", "none");
+    }
+}
+
+function applyTH() {
+    if (active) {
+        webMI.display.openWindow({
+            display: "SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Standard.dialogs.picker_color_dialog",
+            extern: false,
+            height: 370,
+            menubar: false,
+            modal: true,
+            movable: true,
+            resizable: false,
+            scrollbars: false,
+            status: false,
+            title: "",
+            toolbar: false,
+            width: 220,
+            query: webMI.query
+        })
+    }
+}
+
+function backTH() {}
+
+function arrowTH(dir) {}
+
+function keyHandler(keyTH, param2) {
+    if (keyTH == "focus") {
+        focusTH();
+    } else if (keyTH == "blur") {
+        blurTH();
+    } else if (keyTH == "apply") {
+        applyTH();
+    } else if (keyTH == "space") {
+        applyTH();
+    } else if (keyTH == "back") {
+        backTH();
+    } else if (keyTH == "arrow") {
+        arrowTH(param2);
+    } else if (keyTH == "isActive") {
+        return active && param2(document.getElementById("colorpicker_clickarea").parentNode);
+    }
+}
+
+webMI.addOnload(function() {
+    if (initValue.indexOf("#") != 0)
+        initValue = "#" + initValue;
+    webMI.gfx.setText("input_label", initValue.toUpperCase());
+    webMI.query["color"] = initValue.toUpperCase();
+    webMI.gfx.setFill("indicator", webMI.query["color"]);
+    var doc = document.getElementById("colorpicker_clickarea").ownerDocument;
+    tabHandler.register(tabIndex, keyHandler, doc);
+
+    if (base) {
+        if (consistencyGroup) {
+            consistencyHandler.register(consistencyGroup, base, update);
+        } else {
+            webMI.data.subscribe(base, function(e) {
+                update(e.value);
+            });
+        }
+    }
+});
+
+webMI.addEvent("colorpicker_clickarea", ["mousedown", "touchstart"], function(e) {
+    var id = "colorpicker_clickarea";
+    var value = true;
+    return function(value) {
+        if (active) {
+            webMI.gfx.setStroke("input_bg", buttonStrokePressed);
+        }
+    }(value);
+});
+
+webMI.addEvent("colorpicker_clickarea", ["mouseup", "mouseout", "touchend", "touchcancel"], function(e) {
+    var id = "colorpicker_clickarea";
+    var value = true;
+    return function(value) {
+        if (active) {
+            webMI.gfx.setStroke("input_bg", "none");
+        }
+    }(value);
+});
+
+webMI.addEvent("colorpicker_clickarea", "dragstart", function(e) {
+    if (e.preventDefault) {
+        e.preventDefault();
+    }
+});
+
+webMI.addEvent("colorpicker_clickarea", [ 'touchstart', "click"], function(e) {
+    var id = "colorpicker_clickarea";
+    var value = true;
+    return function(value) {
+        if (active) {
+            tabHandler.setCurrentIndex(keyHandler);
+            webMI.display.openWindow({
+                display: "SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Standard.dialogs.picker_color_dialog",
+                extern: false,
+                height: 370,
+                menubar: false,
+                modal: true,
+                movable: true,
+                resizable: false,
+                scrollbars: false,
+                status: false,
+                title: "",
+                toolbar: false,
+                width: 220,
+                query: webMI.query
+            })
+        }
+    }(value);
+});
+
+webMI.trigger.connect("valuechanged_" + webMI.query.name, function(e) {
+    var value = e.value;
+
+    if (base) {
+        updateNodeValue(value.hex);
+    } else {
+        update(value.hex);
+    }
+
+    if (consistencyGroup) {
+        consistencyHandler.set(consistencyGroup, base, value.hex);
+    }
+});
+
+function updateNodeValue(value) {
+    if (consistencyGroup) {
+        consistencyHandler.set(consistencyGroup, base, value);
+        update(value);
+    } else {
+        webMI.data.write(base, value);
+    }
+}
+
+function update(value) {
+    webMI.gfx.setText("input_label", webMI.query["color"] = value);
+    webMI.gfx.setFill("indicator", value);
+    webMI.trigger.fire("valuechanged", value, "");
+}
+if (tooltip != "") {
+    webMI.callExtension("SYSTEM.LIBRARY.ATVISE.QUICKDYNAMICS.Tooltip", {
+        "auto": "true",
+        "id": "colorpicker_clickarea",
+        "text": tooltip
+    });
+}]]></script>
+</svg>

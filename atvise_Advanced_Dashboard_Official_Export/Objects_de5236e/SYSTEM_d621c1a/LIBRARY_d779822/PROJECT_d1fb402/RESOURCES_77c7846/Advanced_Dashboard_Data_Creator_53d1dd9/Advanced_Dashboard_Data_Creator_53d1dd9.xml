@@ -104,6 +104,8 @@ class dashboardDataProcessor {
 		this.uniqueCategoriesConfig=[]; // Initialize unique Config
 		this.uniqueCategoriesConfigRT=[];
 		this.uniqueCategories=[]; // Initialize unique Categories complete
+		this.LimitInfo = [];
+		this.LimitInfoRT = [];
 		this.uniqueCategoriesRT=[];
 		this.DCNotfier;
 		
@@ -173,6 +175,11 @@ class dashboardDataProcessor {
 			this.uniqueCategories=this.uniqueCategoriesCreator();
 			this.DCNotfier.dgConsole("----------Unique Categories Created----------");
 			this.DCNotfier.dgConsole(this.uniqueCategories);
+			
+			//Create all unique Limit info if valid
+			this.LimitInfo =this.uniqueLimitDataCreator();
+			this.DCNotfier.dgConsole("----------LimitInfo Created----------");
+			this.DCNotfier.dgConsole(this.LimitInfo);
 		}
 		else if (this.OperationMode==="RealTime"){
 			
@@ -193,6 +200,11 @@ class dashboardDataProcessor {
 			//Update Cache for new Intervals
 			this.DCNotfier.dgConsole("----------Updating Cross Series Updates---------");
 			this.dataInfoRTCacheCrossSeriesUpdater("newInterval");
+			
+			//Create all unique Limit info if valid
+			this.LimitInfoRT =this.uniqueLimitDataCreator();
+			this.DCNotfier.dgConsole("----------LimitInfoRT Created----------");
+			this.DCNotfier.dgConsole(this.LimitInfoRT);
 			
 		}
 		
@@ -246,7 +258,7 @@ class dashboardDataProcessor {
 					this.DCNotfier.dgConsole(this.processedDataII);
 					
 					//Limits
-					this.LimitDashboardDataI=this.limitCalculator().filteredData;
+					this.LimitDashboardDataI=this.limitCalculator();
 					this.DCNotfier.dgConsole("------------Limits Found------------");
 					this.DCNotfier.dgConsole(this.LimitDashboardDataI);	
 					
@@ -260,7 +272,7 @@ class dashboardDataProcessor {
 					this.DataInfoRTIClient=this.dataInfoRTCreator().informationRTIWeb;
 					this.DCNotfier.dgConsole("------------Data for RT------------");
 					this.DCNotfier.dgConsole(this.DataInfoRTIClient);				
-					this.DCNotfier.dgConsole("------------Data for RTTesting------------");
+					this.DCNotfier.dgConsole("------------Data for DataInfoRTIServer------------");
 					this.DCNotfier.dgConsole(this.DataInfoRTIServer);	
 				    this.dataInfoRTCacheStore();
 					
@@ -297,7 +309,7 @@ class dashboardDataProcessor {
 					this.DCNotfier.dgConsole(this.processedDataII);	
 					
 					//Limits					
-					this.LimitDashboardDataI=this.limitCalculator().filteredData;
+					this.LimitDashboardDataI=this.limitCalculator();
 					this.DCNotfier.dgConsole("------------Limits RT Found------------");
 					this.DCNotfier.dgConsole(this.LimitDashboardDataI);	
 					
@@ -311,7 +323,7 @@ class dashboardDataProcessor {
 					this.DataInfoRTIServer=this.dataInfoRTCreator().informationRTIServer;
 					this.DCNotfier.dgConsole("------------Data for RT in RT------------");
 					this.DCNotfier.dgConsole(this.DataInfoRTIClient);	
-					this.DCNotfier.dgConsole("------------Data for RTTesting------------");
+					this.DCNotfier.dgConsole("------------Data for RTServer------------");
 					this.DCNotfier.dgConsole(this.DataInfoRTIServer);	
 				    this.dataInfoRTCacheStore();			
 					
@@ -367,6 +379,21 @@ class dashboardDataProcessor {
 	
 		// Check for FullRange-OEEProductivity case using nodesIndex
 		const chartConfig = this.dataRequest.chartsConfig[nodesIndex];
+		
+		// Remove limit nodes if limit analysis is enabled
+		if (chartConfig.dataoutOfLimitEnable) {
+			// Remove max limit node if it exists
+			if (chartConfig.specialParameters?.MaxLimitNode) {
+				const maxLimitNode = chartConfig.specialParameters.MaxLimitNode;
+				chartNodesI = chartNodesI.filter(node => node !== maxLimitNode);
+			}
+			
+			// Remove min limit node if it exists
+			if (chartConfig.specialParameters?.MinLimitNode) {
+				const minLimitNode = chartConfig.specialParameters.MinLimitNode;
+				chartNodesI = chartNodesI.filter(node => node !== minLimitNode);
+			}
+		}
 		
 		if (chartConfig.dataProcessingType === "FullRange-OEEProductivity") {		
 			if (chartConfig.specialParameters.OEEProSM=="VariableSpeed"&&chartConfig.specialParameters.OEEProdSpeedN !== "") {
@@ -717,19 +744,321 @@ class dashboardDataProcessor {
     //----------Limit Functions---------------------//
 	//--------------------------------------------------//
 	
+	//Calculate Unique Limit info
+	uniqueLimitDataCreator() {
+        this.DCNotfier.dgConsole("----------Initialize Limit Info Creator----------");
+        let limitInfo=new Array();
+		
+        if (this.OperationMode == "Hist") {
+			
+			if (!this.rawData || this.rawData.length === 0) {
+				this.DCNotfier.dgConsole("Raw data is missing or empty. Cannot create Limit Info.");
+				return;
+			}
+	
+			// Get the overall start and end times for clipping trends
+			// Use the request's time range as the global context
+			const globalStartTime = new Date(this.dataRequest.updateRequest[0].initialTime).getTime();
+			const globalEndTime = new Date(this.dataRequest.updateRequest[0].finalTime).getTime();
+			
+			this.uniqueCategoriesConfig.forEach(config => {
+				try {
+					this.DCNotfier.dgConsole("Iterating in ");
+					this.DCNotfier.dgConsole(config);
+					const categoryConfig = config.categoryConfig;
+					const params = categoryConfig.specialParameters;
+					const chartIDs = config.chartIDs;
+	
+					// --- Check Eligibility ---
+					const useMaxNodeLimit = categoryConfig.dataoutOfLimitEnable === true &&
+											params?.dataMaxType === "Node" &&
+											params?.MaxLimitNode;
+					const useMinNodeLimit = categoryConfig.dataoutOfLimitEnable === true &&
+											params?.dataMinType === "Node" &&
+											params?.MinLimitNode;
+	
+					if (!useMaxNodeLimit && !useMinNodeLimit) {
+						// This configuration doesn't use node-based limits, skip.
+						return; // Continue to next config
+					}
+	
+					this.DCNotfier.dgConsole(`Processing Limit Info for Chart IDs: ${chartIDs.join(', ')}`);
+	
+					// --- Initialize ---
+					let rawMaxLimitData = null;
+					let rawMinLimitData = null;
+					let plotLimitData = {
+						MaxLimitTrendData: { Values: [], timestamps: [] },
+						MinLimitTrendData: { Values: [], timestamps: [] }
+					};
+	
+					// --- Process Max Limit ---
+					if (useMaxNodeLimit) {
+						rawMaxLimitData = this.rawData.find(d => d.Nodeaddress === params.MaxLimitNode);
+						if (!rawMaxLimitData || !rawMaxLimitData.Values || !rawMaxLimitData.timestamps || rawMaxLimitData.Values.length === 0) {
+							this.DCNotfier.dgConsole(`WARN: Max limit node data (${params.MaxLimitNode}) not found, incomplete, or empty.`);
+							rawMaxLimitData = null; // Ensure it's null if invalid
+						} else {
+							this.DCNotfier.dgConsole(`Found Raw Max Limit Data for ${params.MaxLimitNode}`);
+							// --- Generate MaxLimitTrendData (Clipped to global time range) ---
+							const startValueMax = this.findClosestValueByTimestamp(globalStartTime, rawMaxLimitData);
+							const endValueMax = this.findClosestValueByTimestamp(globalEndTime, rawMaxLimitData);
+	
+							if (startValueMax !== null && endValueMax !== null) {
+								let combinedPoints = [];
+								// 1. Filter original points within the global time range
+								for (let j = 0; j < rawMaxLimitData.timestamps.length; j++) {
+									const ts = rawMaxLimitData.timestamps[j];
+									if (ts >= globalStartTime && ts <= globalEndTime) {
+										combinedPoints.push({ timestamp: ts, value: rawMaxLimitData.Values[j] });
+									}
+								}
+								// 2. Add/Update Start Point
+								const startIndex = combinedPoints.findIndex(p => p.timestamp === globalStartTime);
+								if (startIndex !== -1) {
+									combinedPoints[startIndex].value = startValueMax;
+								} else {
+									combinedPoints.push({ timestamp: globalStartTime, value: startValueMax });
+								}
+								// 3. Add/Update End Point
+								const endIndex = combinedPoints.findIndex(p => p.timestamp === globalEndTime);
+								if (endIndex !== -1) {
+									combinedPoints[endIndex].value = endValueMax;
+								} else {
+									combinedPoints.push({ timestamp: globalEndTime, value: endValueMax });
+								}
+								// 4. Sort
+								combinedPoints.sort((a, b) => a.timestamp - b.timestamp);
+								// 5. Populate
+								plotLimitData.MaxLimitTrendData.timestamps = combinedPoints.map(p => p.timestamp);
+								plotLimitData.MaxLimitTrendData.Values = combinedPoints.map(p => p.value);
+								this.DCNotfier.dgConsole(`Generated MaxLimitTrendData with ${plotLimitData.MaxLimitTrendData.Values.length} points.`);
+							} else {
+								 this.DCNotfier.dgConsole(`WARN: Could not determine start/end values for MaxLimitTrendData.`);
+							}
+						}
+					}
+	
+					// --- Process Min Limit ---
+					if (useMinNodeLimit) {
+						rawMinLimitData = this.rawData.find(d => d.Nodeaddress === params.MinLimitNode);
+						if (!rawMinLimitData || !rawMinLimitData.Values || !rawMinLimitData.timestamps || rawMinLimitData.Values.length === 0) {
+							 this.DCNotfier.dgConsole(`WARN: Min limit node data (${params.MinLimitNode}) not found, incomplete, or empty.`);
+							rawMinLimitData = null; // Ensure it's null if invalid
+						} else {
+							 this.DCNotfier.dgConsole(`Found Raw Min Limit Data for ${params.MinLimitNode}`);
+							// --- Generate MinLimitTrendData (Clipped to global time range) ---
+							const startValueMin = this.findClosestValueByTimestamp(globalStartTime, rawMinLimitData);
+							const endValueMin = this.findClosestValueByTimestamp(globalEndTime, rawMinLimitData);
+	
+							if (startValueMin !== null && endValueMin !== null) {
+								let combinedPoints = [];
+								// 1. Filter
+								for (let j = 0; j < rawMinLimitData.timestamps.length; j++) {
+									const ts = rawMinLimitData.timestamps[j];
+									if (ts >= globalStartTime && ts <= globalEndTime) {
+										combinedPoints.push({ timestamp: ts, value: rawMinLimitData.Values[j] });
+									}
+								}
+								// 2. Add/Update Start
+								 const startIndex = combinedPoints.findIndex(p => p.timestamp === globalStartTime);
+								 if (startIndex !== -1) {
+									 combinedPoints[startIndex].value = startValueMin;
+								 } else {
+									 combinedPoints.push({ timestamp: globalStartTime, value: startValueMin });
+								 }
+								 // 3. Add/Update End
+								 const endIndex = combinedPoints.findIndex(p => p.timestamp === globalEndTime);
+								 if (endIndex !== -1) {
+									 combinedPoints[endIndex].value = endValueMin;
+								 } else {
+									 combinedPoints.push({ timestamp: globalEndTime, value: endValueMin });
+								 }
+								// 4. Sort
+								combinedPoints.sort((a, b) => a.timestamp - b.timestamp);
+								// 5. Populate
+								plotLimitData.MinLimitTrendData.timestamps = combinedPoints.map(p => p.timestamp);
+								plotLimitData.MinLimitTrendData.Values = combinedPoints.map(p => p.value);
+								this.DCNotfier.dgConsole(`Generated MinLimitTrendData with ${plotLimitData.MinLimitTrendData.Values.length} points.`);
+							} else {
+								 this.DCNotfier.dgConsole(`WARN: Could not determine start/end values for MinLimitTrendData.`);
+							}
+						}
+					}
+	
+					// --- Store Result ---				
+					limitInfo.push({
+						chartIDs: chartIDs,
+						LimitInfo: {
+							rawLimitData: [rawMaxLimitData, rawMinLimitData], // Store raw data found
+							plotLimitData: plotLimitData                      // Store processed plot data
+						}
+					});		
+					
+				} catch (error) {
+					console.error(`Error processing limit info for config with chartIDs ${config.chartIDs.join(', ')}: `, error);
+					 this.DCNotfier.dgConsole(`Error details: ${error.message}`);
+				}
+			});
+	
+			return limitInfo;
+			
+			this.DCNotfier.dgConsole("----------Finished Limit Info Creator----------");
+			this.DCNotfier.dgConsole("Generated LimitInfo:", JSON.parse(JSON.stringify(this.LimitInfo))); // Deep copy for logging complex objects
+        }
+        
+        else if (this.OperationMode === "RealTime") {
+            // --- REALTIME MODE LOGIC ---
+            this.DCNotfier.dgConsole("Processing Limit Info for RealTime Mode");
+
+            if (!this.uniqueCategoriesConfigRT || this.uniqueCategoriesConfigRT.length === 0) {
+                 this.DCNotfier.dgConsole("No uniqueCategoriesConfigRT found for RealTime. Skipping Limit Info creation.");
+                 this.LimitInfo = [];
+                 return this.LimitInfo;
+            }
+
+            this.uniqueCategoriesConfigRT.forEach(config => {
+                try {
+                    const categoryConfig = config.categoryConfig;
+                    const params = categoryConfig.specialParameters;
+                    const chartIDs = config.chartIDs;
+
+                    // --- Check Eligibility (RT) ---
+                    const useMaxNodeLimit = categoryConfig.dataoutOfLimitEnable === true &&
+                                            params?.dataMaxType === "Node" &&
+                                            params?.MaxLimitNode;
+                    const useMinNodeLimit = categoryConfig.dataoutOfLimitEnable === true &&
+                                            params?.dataMinType === "Node" &&
+                                            params?.MinLimitNode;
+
+                    if (!useMaxNodeLimit && !useMinNodeLimit) {
+                        return; // Continue to next config
+                    }
+
+                    this.DCNotfier.dgConsole(`Processing RT Limit Info for Chart IDs: ${chartIDs.join(', ')}`);
+
+                    // --- Initialize RT ---
+                    let rawMaxLimitDataRT = null;
+                    let rawMinLimitDataRT = null;
+                    let plotLimitDataRT = {
+                        MaxLimitTrendData: { Values: [], timestamps: [] },
+                        MinLimitTrendData: { Values: [], timestamps: [] }
+                    };
+
+                   
+                    // --- Process Max Limit (RT) using readCurrentValue ---
+                    if (useMaxNodeLimit) {
+                        rawMaxLimitDataRT = this.readCurrentValue(params.MaxLimitNode);
+                        if (rawMaxLimitDataRT && rawMaxLimitDataRT.Value !== null && typeof rawMaxLimitDataRT.Value === 'number' && !isNaN(rawMaxLimitDataRT.Value)) {
+                            this.DCNotfier.dgConsole(`Read Max Limit Value (RT) for ${params.MaxLimitNode}: ${rawMaxLimitDataRT.Value}`);
+                            // Use the read value for the plot, spanning the interval
+                            plotLimitDataRT.MaxLimitTrendData.Values = [rawMaxLimitDataRT.Value];
+                            plotLimitDataRT.MaxLimitTrendData.timestamps =  [rawMaxLimitDataRT.timestamps];
+                        } else {
+                            this.DCNotfier.dgConsole(`WARN: Failed to read or invalid Max Limit Value (RT) for ${params.MaxLimitNode}. Read result:`, rawMaxLimitDataRT);
+                            rawMaxLimitDataRT = null;
+                        }
+                    }
+         
+
+                    // --- Process Min Limit (RT) using readCurrentValue ---
+                    if (useMinNodeLimit) {
+                        rawMinLimitDataRT = this.readCurrentValue(params.MinLimitNode);
+                         if (rawMinLimitDataRT && rawMinLimitDataRT.Value !== null && typeof rawMinLimitDataRT.Value === 'number' && !isNaN(rawMinLimitDataRT.Value)) {
+                            this.DCNotfier.dgConsole(`Read Min Limit Value (RT) for ${params.MinLimitNode}: ${rawMinLimitDataRT.Value}`);
+                             // Use the read value for the plot, spanning the interval
+                            plotLimitDataRT.MinLimitTrendData.Values = [rawMinLimitDataRT.Value];
+                            plotLimitDataRT.MinLimitTrendData.timestamps = [rawMinLimitDataRT.timestamps];
+                        } else {
+                            this.DCNotfier.dgConsole(`WARN: Failed to read or invalid Min Limit Value (RT) for ${params.MinLimitNode}. Read result:`, rawMinLimitDataRT);
+                            rawMinLimitDataRT = null;
+                        }
+                    }
+
+                    // --- Store Result (RT) ---
+                    limitInfo.push({
+                        chartIDs: chartIDs,
+                        LimitInfo: {
+                            rawLimitData: [rawMaxLimitDataRT, rawMinLimitDataRT],
+                            plotLimitData: plotLimitDataRT
+                        }
+                    });
+
+                } catch (error) {
+                     console.error(`Error processing RT limit info for config with chartIDs ${config.chartIDs.join(', ')}: `, error);
+                     this.DCNotfier.dgConsole(`Error details: ${error.message}`);
+                }
+            });
+
+           
+            this.DCNotfier.dgConsole("----------Finished RealTime Limit Info Creator----------");
+		    return limitInfo;
+            // --- END REALTIME MODE LOGIC ---
+        }
+    }	
+    
+    //Find precalculated Limit Info    
+    findPrecalculatedLimitInfo(chartID) {
+		if (this.OperationMode === "Hist") {
+			const entry = this.LimitInfo.find(info => info.chartIDs.includes(chartID));
+			return entry ? entry.LimitInfo : null;
+          }
+		else if (this.OperationMode === "RealTime") {
+			const entry = this.LimitInfoRT.find(info => info.chartIDs.includes(chartID));
+			return entry ? entry.LimitInfo : null;
+          }
+	
+    }
+	
 	//Limit Calculator Handling
 	limitCalculator(){
-	
-		 //Determine If Analysis is Enabled
-		this.limitAnalysisEnabledI = this.chartConfigI.dataoutOfLimitEnable==true && (this.chartConfigI.dataMaxLimit.length >0 || this.chartConfigI.dataMinLimit.length >0) ;
 		
+		this.DCNotfier.dgConsole("------------Calculating limits------------");
+		this.DCNotfier.dgConsole(this.chartConfigI);
+		this.DCNotfier.dgConsole("------------This raw data------------");
+		this.DCNotfier.dgConsole(this.rawData);
+					
+		// Determine if Analysis is Enabled based on limits and limit types
+
+		// Extract limit values and types
+		const minLimit = this.chartConfigI?.specialParameters?.dataMinLimit || "";
+		const maxLimit = this.chartConfigI?.specialParameters?.dataMaxLimit || "";
+		const minLimitType = this.chartConfigI?.specialParameters?.dataMinType || "";
+		const maxLimitType = this.chartConfigI?.specialParameters?.dataMaxType || "";
+		const minLimitNode = this.chartConfigI?.specialParameters?.MinLimitNode || null;
+		const maxLimitNode = this.chartConfigI?.specialParameters?.MaxLimitNode || null;
+		
+		// Update limit parameters
+		this.chartConfigI.specialParameters.dataMinLimit = minLimit;
+		this.chartConfigI.specialParameters.dataMaxLimit = maxLimit;
+		
+		// Validate fixed limits
+		const minLimitValid = minLimit.length > 0;
+		const maxLimitValid = maxLimit.length > 0;
+		
+		// Validate node-based limits
+		const minLimitNodeValid = minLimitType === "Node" && minLimitNode !== null;
+		const maxLimitNodeValid = maxLimitType === "Node" && maxLimitNode !== null;
+		
+		// Determine if limit analysis should be enabled
+		this.limitAnalysisEnabledI = this.chartConfigI?.dataoutOfLimitEnable === true &&
+			(minLimitValid || maxLimitValid || minLimitNodeValid || maxLimitNodeValid);
+		
+		this.DCNotfier.dgConsole("------------limitAnalysisEnabledI------------");
+		this.DCNotfier.dgConsole(this.limitAnalysisEnabledI);	
+			
+			
 		let filteredData;
+		let plotLimitData;
+		
 		
 		if (this.limitAnalysisEnabledI ){
 		
 			//For Data processing Simple-None
 			if(this.chartConfigI.dataProcessingType.includes("Simple")){
-				filteredData=this.limitCalculatorAllData().filteredData;
+				let limitResult=this.limitCalculatorAllData();
+				filteredData=limitResult.filteredData;
+				plotLimitData =limitResult.plotLimitData;
 			}
 			else if(this.chartConfigI.dataProcessingType.includes("Interval")){
 				filteredData=this.limitCalculatorInterval().filteredData;
@@ -741,56 +1070,283 @@ class dashboardDataProcessor {
 		else{
 			let filteredData = {"Enabled":this.limitAnalysisEnabledI};
 		} 
-		 return {filteredData};		
+		 return {filteredData:filteredData,plotLimitData:plotLimitData};		
 	}
-    
-    //Limit Calculator for All Data
-    limitCalculatorAllData(){       
+   
+	//Limit Calculator All data
+	limitCalculatorAllData() {
+		this.DCNotfier.dgConsole("-----------Executing limitCalculatorAllData--------");
 
-		 let filteredData = { Values: [], status: [], timestamps: [] };
+		// Initialize outputs
+		let filteredData = { Values: [], status: [], timestamps: [], Enabled: false, DataSize: 0 };
+        // Initialize plotLimitData with empty structure, will be replaced if found
+        let plotLimitData = {
+			MaxLimitTrendData: { Values: [], timestamps: [] },
+			MinLimitTrendData: { Values: [], timestamps: [] }
+		};
 
-		 if (this.OperationMode === "Hist") {
-			
-				// Filter data by MaxValue and MinValue
-				for (let i = 0; i < this.rawDataI.Values.length; i++) {
-					if ((this.chartConfigI.dataMaxLimit.length >0 && this.rawDataI.Values[i] > this.chartConfigI.dataMaxLimit) || (this.chartConfigI.dataMinLimit.length >0 && this.rawDataI.Values[i] < this.chartConfigI.dataMinLimit)) {
-														
-						filteredData.Values.push(this.rawDataI.Values[i]);
-						filteredData.status.push(this.rawDataI.status[i]);
-						filteredData.timestamps.push(this.rawDataI.timestamps[i]);
-					}
-				}
-				filteredData.Enabled = this.limitAnalysisEnabledI;
-				filteredData.DataSize = filteredData.Values.length;
+		const params = this.chartConfigI.specialParameters;
+        filteredData.Enabled = this.limitAnalysisEnabledI; // Set enabled status based on earlier check in limitCalculator
+
+        // Only proceed if limit analysis is actually enabled for this chart
+        if (!filteredData.Enabled) {
+             this.DCNotfier.dgConsole("Limit analysis not enabled for this chart config. Skipping limit checks.");
+            return { filteredData, plotLimitData }; // Return empty/default structures
+        }
+
+		if (this.OperationMode === "Hist") {
+			if (!this.rawDataI || !this.rawDataI.Values || this.rawDataI.Values.length === 0) { // Check length explicitly
+				this.DCNotfier.dgConsole("WARN: Historical rawDataI for the current node is missing or empty.");
+				return { filteredData, plotLimitData }; // Return empty structures
 			}
+
+			const mainTimestamps = this.rawDataI.timestamps;
+			const mainValues = this.rawDataI.Values;
+			const mainStatus = this.rawDataI.status;
+
+            // --- Retrieve Pre-calculated Limit Info ---
+            const precalculatedInfo = this.findPrecalculatedLimitInfo(this.chartConfigI.chartID);
+            let rawMaxLimitData = null;
+            let rawMinLimitData = null;
+
+            if (precalculatedInfo) {
+                rawMaxLimitData = precalculatedInfo.rawLimitData[0]; // Can be null
+                rawMinLimitData = precalculatedInfo.rawLimitData[1]; // Can be null
+                // Directly use the pre-calculated plot data
+                plotLimitData = precalculatedInfo.plotLimitData;
+            } else {
+                 this.DCNotfier.dgConsole("No pre-calculated LimitInfo found for this chartID. Limit checks involving nodes might fail.");
+            }
+
+
+			// --- Filtering Logic (using rawDataI and potentially rawLimitData) ---
+			const fixedMaxLimitValue = (params.dataMaxType === "Fixed" && params.dataMaxLimit && typeof params.dataMaxLimit === 'string' && params.dataMaxLimit.length > 0)
+				? parseFloat(params.dataMaxLimit) : NaN;
+			const fixedMinLimitValue = (params.dataMinType === "Fixed" && params.dataMinLimit && typeof params.dataMinLimit === 'string' && params.dataMinLimit.length > 0)
+				? parseFloat(params.dataMinLimit) : NaN;
+
+            if (mainTimestamps && mainValues) { // Ensure main data arrays exist
+                for (let i = 0; i < mainTimestamps.length; i++) {
+                    const currentTimestamp = mainTimestamps[i];
+                    const currentValue = mainValues[i];
+                    let isAboveMax = false;
+                    let isBelowMin = false;
+
+                    // Max Check
+                    if (params.dataMaxType === "Fixed") {
+                        if (!isNaN(fixedMaxLimitValue) && currentValue > fixedMaxLimitValue) isAboveMax = true;
+                    } else if (params.dataMaxType === "Node" && rawMaxLimitData) { // Check if rawMaxLimitData was found
+                        const maxLimitValue = this.findClosestValueByTimestamp(currentTimestamp, rawMaxLimitData);
+                        // Check if maxLimitValue is a valid number before comparison
+                        if (maxLimitValue !== null && typeof maxLimitValue === 'number' && !isNaN(maxLimitValue) && currentValue > maxLimitValue) isAboveMax = true;
+                    }
+
+                    // Min Check
+                    if (params.dataMinType === "Fixed") {
+                        if (!isNaN(fixedMinLimitValue) && currentValue < fixedMinLimitValue) isBelowMin = true;
+                    } else if (params.dataMinType === "Node" && rawMinLimitData) { // Check if rawMinLimitData was found
+                        const minLimitValue = this.findClosestValueByTimestamp(currentTimestamp, rawMinLimitData);
+                         // Check if minLimitValue is a valid number before comparison
+                        if (minLimitValue !== null && typeof minLimitValue === 'number' && !isNaN(minLimitValue) && currentValue < minLimitValue) isBelowMin = true;
+                    }
+
+                    // Add to filteredData if out of limits
+                    if (isAboveMax || isBelowMin) {
+                        filteredData.Values.push(currentValue);
+                        // Ensure status exists before pushing
+                        filteredData.status.push(mainStatus && mainStatus[i] !== undefined ? mainStatus[i] : null);
+                        filteredData.timestamps.push(currentTimestamp);
+                    }
+                }
+                 filteredData.DataSize = filteredData.Values.length;
+            } else {
+                 this.DCNotfier.dgConsole("WARN: mainTimestamps or mainValues missing for filtering.");
+            }
+
+
+		} 
+		else if (this.OperationMode === "RealTime1") {
+
+			 if (!this.informationRTI || !this.informationRTI.LastDataPointRT) {
+				this.DCNotfier.dgConsole("WARN: RealTime informationRTI missing or LastDataPointRT undefined.");
+				return { filteredData, plotLimitData }; // Return empty structures
+			}
+            if(Array.isArray(this.informationRTI.LastDataPointRT)){ // Check if it's an array
+                this.informationRTI.LastDataPointRT.forEach((dataPoint) => {
+                    if (dataPoint && dataPoint.hasOwnProperty('Value')) {
+                        const pointValue = dataPoint.Value;
+                        
+                        // Use parseFloat for comparison if limits are strings
+                        const maxFixedLimitRT = (params.dataMaxType === "Fixed" && params.dataMaxLimit && typeof params.dataMaxLimit === 'string' && params.dataMaxLimit.length > 0)
+                            ? parseFloat(params.dataMaxLimit) : NaN;
+                        const minFixedLimitRT = (params.dataMinType === "Fixed" && params.dataMinLimit && typeof params.dataMinLimit === 'string' && params.dataMinLimit.length > 0)
+                            ? parseFloat(params.dataMinLimit) : NaN;
+                            
+                       console.log("maxFixedLimitRT")
+                       console.log(maxFixedLimitRT)
+                       
+
+                        const maxFixedConditionRT = !isNaN(maxFixedLimitRT) && pointValue > maxFixedLimitRT;
+                        const minFixedConditionRT = !isNaN(minFixedLimitRT) && pointValue < minFixedLimitRT;
+                        
+                         console.log("maxFixedConditionRT")
+                       console.log(maxFixedConditionRT)
+                   
+                        if (maxFixedConditionRT || minFixedConditionRT) {
+                            filteredData.Values.push(pointValue);
+                            filteredData.status.push(dataPoint.hasOwnProperty('status') ? dataPoint.status : null);
+                            filteredData.timestamps.push(dataPoint.hasOwnProperty('timestamps') ? dataPoint.timestamps : null);
+                        }
+                        
+                        console.log("filteredData");
+                        console.log(filteredData);
+                    } else {
+                         this.DCNotfier.dgConsole("WARN: Skipping invalid dataPoint in RealTime processing:", dataPoint);
+                    }
+                });
+                filteredData.DataSize = filteredData.Values.length;
+            } else {
+                this.DCNotfier.dgConsole("WARN: LastDataPointRT is not an array.");
+            }
+		}
 		
-		else if (this.OperationMode === "RealTime") {       
+		 else if (this.OperationMode === "RealTime") {
+            // --- REALTIME MODE LOGIC (Modified) ---
+			 if (!this.informationRTI || !this.informationRTI.LastDataPointRT) {
+				this.DCNotfier.dgConsole("WARN: RealTime informationRTI missing or LastDataPointRT undefined.");
+				return { filteredData, plotLimitData };
+			}
 
-			this.informationRTI.LastDataPointRT.forEach((dataPoint,i) => {
-				if ((this.chartConfigI.dataMaxLimit.length >0 && dataPoint.Value> this.chartConfigI.dataMaxLimit) || (this.chartConfigI.dataMinLimit.length >0 &&  dataPoint.Value < this.chartConfigI.dataMinLimit)) {
-					filteredData.Values.push(dataPoint.Value);
-					filteredData.status.push(dataPoint.status);
-					filteredData.timestamps.push(dataPoint.timestamps);
+            // --- Retrieve Pre-calculated Limit Info (RT) ---
+            const precalculatedInfoRT = this.findPrecalculatedLimitInfo(this.chartConfigI.chartID);
+            let rawMaxLimitDataRT = null;
+            let rawMinLimitDataRT = null;
+
+             if (precalculatedInfoRT) {
+                 // These contain the *current* limit value object: {Value, status, timestamps}
+                 rawMaxLimitDataRT = precalculatedInfoRT.rawLimitData[0];
+                 rawMinLimitDataRT = precalculatedInfoRT.rawLimitData[1];
+                 plotLimitData = precalculatedInfoRT.plotLimitData;
+                 this.DCNotfier.dgConsole("Using pre-calculated LimitInfo (RT):", precalculatedInfoRT);
+             } else {
+                  this.DCNotfier.dgConsole("No pre-calculated LimitInfo found for this chartID (RT). Limit checks involving nodes might fail.");
+                  // Initialize plotLimitData to prevent errors if precalculatedInfoRT is null
+                  plotLimitData = { MaxLimitTrendData: { Values: [], timestamps: [] }, MinLimitTrendData: { Values: [], timestamps: [] } };
+             }
+
+            // --- Filtering Logic (RT) ---
+            const fixedMaxLimitValueRT = (params.dataMaxType === "Fixed" && params.dataMaxLimit && typeof params.dataMaxLimit === 'string' && params.dataMaxLimit.length > 0)
+                ? parseFloat(params.dataMaxLimit) : NaN;
+            const fixedMinLimitValueRT = (params.dataMinType === "Fixed" && params.dataMinLimit && typeof params.dataMinLimit === 'string' && params.dataMinLimit.length > 0)
+                ? parseFloat(params.dataMinLimit) : NaN;
+
+            // Current Node Limit Values from precalculated info (New logic)
+            const currentMaxLimitValueRT = (rawMaxLimitDataRT && rawMaxLimitDataRT.Value !== null && typeof rawMaxLimitDataRT.Value === 'number' && !isNaN(rawMaxLimitDataRT.Value))
+                ? rawMaxLimitDataRT.Value
+                : NaN;
+            const currentMinLimitValueRT = (rawMinLimitDataRT && rawMinLimitDataRT.Value !== null && typeof rawMinLimitDataRT.Value === 'number' && !isNaN(rawMinLimitDataRT.Value))
+                ? rawMinLimitDataRT.Value
+                : NaN;
+		 
+		  console.log("precalculatedInfoRT")
+		console.log(precalculatedInfoRT)
+		 console.log("rawMaxLimitDataRT")
+		console.log(rawMaxLimitDataRT)
+
+            if(Array.isArray(this.informationRTI.LastDataPointRT)){
+                this.informationRTI.LastDataPointRT.forEach((dataPoint) => {
+                    if (dataPoint && dataPoint.hasOwnProperty('Value')) {
+                        const pointValue = dataPoint.Value;
+                        let isAboveMaxRT = false;
+                        let isBelowMinRT = false;
+
+                        // Max Check (RT - Fixed and Node)
+                        if (params.dataMaxType === "Fixed") {
+                            // Existing Fixed Check
+                            if (!isNaN(fixedMaxLimitValueRT) && pointValue > fixedMaxLimitValueRT) {
+                                isAboveMaxRT = true;
+                            }
+                        } else if (params.dataMaxType === "Node") {
+							console.log("pointValue")
+							console.log(pointValue)
+							
+							console.log("currentMaxLimitValueRT")
+							console.log(currentMaxLimitValueRT)
+                            // New Node Check using current limit value
+                            if (!isNaN(currentMaxLimitValueRT) && pointValue > currentMaxLimitValueRT) {
+                                isAboveMaxRT = true;
+                                this.DCNotfier.dgConsole(`RT Node Max Limit Check: ${pointValue} > ${currentMaxLimitValueRT}`);
+                            }
+                        }
+
+                        // Min Check (RT - Fixed and Node)
+                        if (params.dataMinType === "Fixed") {
+                            // Existing Fixed Check
+                           if (!isNaN(fixedMinLimitValueRT) && pointValue < fixedMinLimitValueRT) {
+                                isBelowMinRT = true;
+                           }
+                        } else if (params.dataMinType === "Node") {
+                             // New Node Check using current limit value
+                             if (!isNaN(currentMinLimitValueRT) && pointValue < currentMinLimitValueRT) {
+                                 isBelowMinRT = true;
+                                 this.DCNotfier.dgConsole(`RT Node Min Limit Check: ${pointValue} < ${currentMinLimitValueRT}`);
+                             }
+                        }
+
+                        // Add to filteredData if out of limits
+                        if (isAboveMaxRT || isBelowMinRT) {
+                            filteredData.Values.push(pointValue);
+                            filteredData.status.push(dataPoint.hasOwnProperty('status') ? dataPoint.status : null);
+                            filteredData.timestamps.push(dataPoint.hasOwnProperty('timestamps') ? dataPoint.timestamps : null);
+                        }
+
+                    } else {
+                         this.DCNotfier.dgConsole("WARN: Skipping invalid dataPoint in RealTime processing:", dataPoint);
+                    }
+                });
+                filteredData.DataSize = filteredData.Values.length;
+            } else {
+                this.DCNotfier.dgConsole("WARN: LastDataPointRT is not an array.");
+            }
+            // --- END REALTIME MODE LOGIC (Modified) ---
+		}
+		return { filteredData, plotLimitData }; // Return both filtered data and potentially pre-calculated plot data
+	}
+		   
+	// Limit Calculator for Intervals
+	limitCalculatorInterval() {
+		let filteredData = { Values: [] };
+		
+		// Iterate through processedDataII.ProcessedData and check limits
+		this.processedDataII.ProcessedData.forEach((value, i) => {
+			if (value !== null) {
+				if ((this.chartConfigI.specialParameters.dataMaxLimit.length > 0 && value >= this.chartConfigI.specialParameters.dataMaxLimit) || 
+					(this.chartConfigI.specialParameters.dataMinLimit.length > 0 && value <= this.chartConfigI.specialParameters.dataMinLimit)) {
+					filteredData.Values.push(1);
+				} else {
+					filteredData.Values.push(0);
 				}
-			});
+			} else {
+				filteredData.Values.push(null);
+			}
+		});
+
+		// Add additional attributes
+		filteredData.Enabled = this.limitAnalysisEnabledI;
+		filteredData.DataSize = filteredData.Values.length;
 			
-			filteredData.DataSize = filteredData.Values.length;			
-			filteredData.Enabled = this.limitAnalysisEnabledI;	 	
-		}			
+		return { filteredData };
+	}
 	
-
-		 return {filteredData};
-    }
-    
-    // Limit Calculator for Intervals
-    limitCalculatorInterval() {
-        let filteredData = { Values: [] };
-        
+	// Limit Calculator for Intervals
+	limitCalculatorSingleElement() {
+		let filteredData = { Values: [] };
+		
 		// Iterate through processedDataII.ProcessedData and check limits
 		this.processedDataII.ProcessedData.forEach((value, i) => {
 			if (value !== null) {
-				if ((this.chartConfigI.dataMaxLimit.length > 0 && value >= this.chartConfigI.dataMaxLimit) || 
-					(this.chartConfigI.dataMinLimit.length > 0 && value <= this.chartConfigI.dataMinLimit)) {
+				if ((this.chartConfigI.specialParameters.dataMaxLimit.length > 0 && value >= this.chartConfigI.specialParameters.dataMaxLimit) || 
+					(this.chartConfigI.specialParameters.dataMinLimit.length > 0 && value <= this.chartConfigI.specialParameters.dataMinLimit)) {
 					filteredData.Values.push(1);
 				} else {
 					filteredData.Values.push(0);
@@ -804,33 +1360,8 @@ class dashboardDataProcessor {
 		filteredData.Enabled = this.limitAnalysisEnabledI;
 		filteredData.DataSize = filteredData.Values.length;
 			
-        return { filteredData };
-    }
-    
-    // Limit Calculator for Intervals
-    limitCalculatorSingleElement() {
-        let filteredData = { Values: [] };
-        
-		// Iterate through processedDataII.ProcessedData and check limits
-		this.processedDataII.ProcessedData.forEach((value, i) => {
-			if (value !== null) {
-				if ((this.chartConfigI.dataMaxLimit.length > 0 && value >= this.chartConfigI.dataMaxLimit) || 
-					(this.chartConfigI.dataMinLimit.length > 0 && value <= this.chartConfigI.dataMinLimit)) {
-					filteredData.Values.push(1);
-				} else {
-					filteredData.Values.push(0);
-				}
-			} else {
-				filteredData.Values.push(null);
-			}
-		});
-
-		// Add additional attributes
-		filteredData.Enabled = this.limitAnalysisEnabledI;
-		filteredData.DataSize = filteredData.Values.length;
-			
-        return { filteredData };
-    }
+		return { filteredData };
+	}
 
 	//----------Interval/Category Functions--------------//
 	//--------------------------------------------------//
@@ -850,6 +1381,7 @@ class dashboardDataProcessor {
                 categorCustomValue,
                 dataReductionEnable,
                 dataReductionMaxSize,
+                dataoutOfLimitEnable,
                 categoryCustomIntervalLength,
                 categoryCustomIntervalUnit,
                 categoryTimeOffset,
@@ -900,6 +1432,7 @@ class dashboardDataProcessor {
                 categorCustomValue,
                 dataReductionEnable,
                 dataReductionMaxSize,
+                dataoutOfLimitEnable,
                 categoryCustomIntervalLength,
                 categoryCustomIntervalUnit,
                 categoryTimeOffset,
@@ -920,6 +1453,7 @@ class dashboardDataProcessor {
                         categorCustomValue,
                         dataReductionEnable,
 						dataReductionMaxSize,
+						dataoutOfLimitEnable,
                         categoryCustomIntervalLength,
                         categoryCustomIntervalUnit,
                         categoryTimeOffset,
@@ -953,6 +1487,7 @@ class dashboardDataProcessor {
 			
 			let chartCategory;
 			var intervalInfo;
+			var currentIntervalndex;
 			
 			switch (config.categoryConfig.categoryType) {
 				case "AllData-DateTime":  // DateTime
@@ -967,13 +1502,15 @@ class dashboardDataProcessor {
 					break;
 				case "Interval-Dynamic": //Dynamic					
 					chartCategory = this.intervalCategoryCreator();
-					var intervalInfoI=chartCategory.intervals[chartCategory.intervals.length-1];
-					intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};
+					currentIntervalndex=chartCategory.intervals.findLastIndex(({ start }) => start <= Date.now());
+					var intervalInfoI=chartCategory.intervals[currentIntervalndex];
+					intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI, intervals:chartCategory.intervals ,currentIndex:currentIntervalndex};
 					break;
 				case "Interval-CustomInterval": //Custom Interval
 					chartCategory = this.intervalCategoryCreator();
-					var intervalInfoI=chartCategory.intervals[chartCategory.intervals.length-1];
-					intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};				
+					currentIntervalndex=chartCategory.intervals.findLastIndex(({ start }) => start <= Date.now());
+					var intervalInfoI=chartCategory.intervals[currentIntervalndex];
+					intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI, intervals:chartCategory.intervals , currentIndex:currentIntervalndex};				
 					break;
 				case "Interval-CustomText": //Custom 
 					chartCategory = {categories:config.categoryConfig.categorCustomValue};
@@ -1298,7 +1835,8 @@ class dashboardDataProcessor {
 		if (categories.length > 0) {
 			categories[categories.length - 1] = this.getCategory(this.timeRange, Final_Time);
 		}
-		return { intervals, categories };
+		
+	   return { intervals, categories };
 	}      
 		
 	//Ceates Histogram Category
@@ -1444,6 +1982,7 @@ class dashboardDataProcessor {
 
             let chartCategory;
             let intervalInfo = config.categoryConfig.informationRT[0].IntervalInfo;
+            var currentIntervalndex;
             
             // Create Specific Interval
             this.intervalLengthI =intervalInfo.intervalLength;
@@ -1462,15 +2001,17 @@ class dashboardDataProcessor {
 						intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime, newInterval:this.newIntervalI};
 					}	
                     break;
-                case "Interval-Dynamic": // Dynamic
+                case "Interval-Dynamic": // Dynamic						
                     chartCategory = this.intervalCategoryCreatorRT();
+                    currentIntervalndex=chartCategory.intervalsHist.findLastIndex(({ start }) => start +1000<= Date.now());
                     var intervalInfoI=chartCategory.intervals[0];
-                    intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};
+                    intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI,intervals:chartCategory.intervalsHist,currentIntervalndex:currentIntervalndex,};
                     break;
                 case "Interval-CustomInterval": // Custom Interval
                     chartCategory = this.intervalCategoryCreatorRT();
+                    currentIntervalndex=chartCategory.intervalsHist.findLastIndex(({ start }) => start  +1000<= Date.now());
                     var intervalInfoI=chartCategory.intervals[0];
-                    intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI};
+                    intervalInfo={start:intervalInfoI.start,end:intervalInfoI.end, newInterval:this.newIntervalI,intervals:chartCategory.intervalsHist,currentIntervalndex:currentIntervalndex,};
                     break;
                 case "Interval-CustomText": // Custom
                     chartCategory = { categories: config.categoryConfig.categorCustomValue.split(',') };
@@ -1527,13 +2068,10 @@ class dashboardDataProcessor {
     
     //Creates Categories for allDataTypes
     allDataCategoryCreatorRT() {
-		console.log("this.uniqueCategoriesConfigI.categoryConfig");
-		console.log(this.uniqueCategoriesConfigI.categoryConfig);
+
         const { chartNodes, informationRT } = this.uniqueCategoriesConfigI.categoryConfig;
         const categoriesData = [];
 		
-		console.log("chartNodes");
-		console.log(chartNodes);
         chartNodes.forEach(node => {
             const infoRTNode = informationRT.find(info => info.Node === node);
 
@@ -1599,8 +2137,13 @@ class dashboardDataProcessor {
         if (!correspondingIntervalInfo) {
             throw new Error('No valid IntervalInfo found in informationRT');
         }
+        
+       let  intervalsHist=correspondingIntervalInfo.intervals;
 
         let newIntervalI = false;
+        
+        console.log("correspondingIntervalInfo==================")
+          console.log(correspondingIntervalInfo)
         const { start, intervalLength } = correspondingIntervalInfo;
         const calculatedStart = highestTimestamp - intervalLength;
 
@@ -1620,7 +2163,7 @@ class dashboardDataProcessor {
 
         const categories = [this.getCategory(this.timeRange, highestTimestamp)];
 
-        return { intervals, categories };
+        return { intervals, categories, intervalsHist };
     }
     
     //Create Interval Category RT
@@ -1715,9 +2258,7 @@ class dashboardDataProcessor {
 			
 			//Defined LastDataPointRaw based on Operation Mode
 			var LastDataPointRaw;
-			this.DCNotfier.dgConsole("this.rawDataI");
-			this.DCNotfier.dgConsole(this.rawDataI);
-			
+
 			//Hist Mode
 			if (this.updateRequestI.OperationMode==="Hist"){
 				if (this.rawDataI!=undefined){
@@ -1741,7 +2282,8 @@ class dashboardDataProcessor {
 					LastDataPointRaw={};
 				}
 			}
-
+			
+		
 			return {
 				  informationRTIServer:{
 					  chartID:this.chartConfigI.chartID,
@@ -1749,7 +2291,7 @@ class dashboardDataProcessor {
 					  Info: [{
 							Node: this.nodeI,
 							LastDataPointRT: 0,
-							LastDataPointProcessed: (this.processedDataII.ProcessedData.length > 0) ? this.processedDataII.ProcessedData[this.processedDataII.ProcessedData.length - 1]: 0,
+							LastDataPointProcessed: (this.processedDataII.ProcessedData.length > 0) ? this.getLastNonNullElement(this.processedDataII.ProcessedData).element : 0,							
 							LastDataPointRaw:LastDataPointRaw,
 							AllDataRequired: allDataRequired,
 							IntervalInfo: this.chartCategoriesI.intervalInfo,
@@ -1895,7 +2437,6 @@ class dashboardDataProcessor {
         }
         //If it is empty then use the previos existing value
         else {
-			console.log("------------No valid LastDataPointRT from server found in Processing----------");
 			dataInfoRTServer.LastDataPointRT=[dataInfoRTServer.LastDataPointRaw];
 			this.updateRequestI.informationRT[index].LastDataPointRT=[dataInfoRTServer.LastDataPointRaw];
 
@@ -2237,8 +2778,10 @@ class dashboardDataProcessor {
 		}
 	}
 	
-	//Full Range Integration
-    FullRange_IntegrationNoFilter(rawData,informationRTI,Tunit, NoValidranges) {
+	//Full Range Integration No Filter
+    FullRange_Integration(rawData,informationRTI,Tunit, NoValidranges) {
+		this.DCNotfier.dgConsole("-------------FullRange_Integration--------------");
+
 		try {
 			// Get the unit conversion factor to convert U/{unit} to U/ms
 			const unitConversionFactor = (() => {
@@ -2268,8 +2811,7 @@ class dashboardDataProcessor {
 						const currentValue = rawData.Values[i];
 						let currentTimestamp = rawData.timestamps[i];
 						let nextTimestamp;
-						let previousTimestamp=initialTime;
-
+						let previousTimestamp=initialTime;						
 		
 						var timeDifference;
 						
@@ -2287,13 +2829,24 @@ class dashboardDataProcessor {
 							nextTimestamp = rawData.timestamps[i + 1];
 							timeDifference = nextTimestamp - currentTimestamp;
 						}
+						
+						this.DCNotfier.dgConsole("--------------currentTimestamp--------------");
+						this.DCNotfier.dgConsole(new Date (currentTimestamp).toLocaleString());
+						this.DCNotfier.dgConsole("--------------nextTimestamp--------------");
+						this.DCNotfier.dgConsole(new Date (nextTimestamp).toLocaleString());
+						
+						this.DCNotfier.dgConsole("--------------Time Difference--------------");
+						this.DCNotfier.dgConsole(timeDifference);
+						this.DCNotfier.dgConsole("--------------currentValue--------------");
+						this.DCNotfier.dgConsole(currentValue);
+	
 		
 						// Multiply the current value (converted to U/ms) by the time difference (in ms)
 						integratedValue += currentValue * unitConversionFactor * timeDifference;					
 						
-						this.DCNotfier.dgConsole("--------------Time Difference--------------");
-						this.DCNotfier.dgConsole(timeDifference);
-					}					
+						this.DCNotfier.dgConsole("--------------integratedValue--------------");
+						this.DCNotfier.dgConsole(integratedValue);
+					}			
 				}
 				else if(rawData.Values.length<=1){
 						
@@ -2368,13 +2921,13 @@ class dashboardDataProcessor {
 				throw new Error(`Unsupported OperationMode: ${this.OperationMode}`);
 			}
 		} catch (error) {
-			console.error("Error in FullRange_Integration: ", error.message);
+			console.error("Error in FullRange_Integration_Filtered: ", error.message);
 			return { ProcessedData: [] }; // Return empty array on error
 		}
 	}	
 	
-	//
-	FullRange_Integration(rawData, informationRTI, Tunit, NoValidranges) {
+	//Full Range Integration
+	FullRange_Integration_Filtered(rawData, informationRTI, Tunit, NoValidranges) {
 		try {
 			// Check if NoValidranges is empty
 			const hasValidRanges = Array.isArray(NoValidranges) && NoValidranges.length > 0;
@@ -2435,6 +2988,7 @@ class dashboardDataProcessor {
 						// Handle NoValidranges logic only if there are valid ranges						
 						
 						if (hasValidRanges) {
+							this.DCNotfier.dgConsole("Has valid ranges");
 							//Case 1: Range within NoValid Range	
 							if (isWithinRange(currentTimestamp, NoValidranges) && isWithinRange(nextTimestamp, NoValidranges)) {
 								timeDifference = 0;
@@ -2473,7 +3027,8 @@ class dashboardDataProcessor {
 								timeDifference=nextTimestamp-currentTimestamp;
 							}
 						}
-	
+						
+					
 						integratedValue += currentValue * unitConversionFactor * timeDifference;
 					}
 					
@@ -2615,7 +3170,7 @@ class dashboardDataProcessor {
 				throw new Error(`Unsupported OperationMode: ${this.OperationMode}`);
 			}
 		} catch (error) {
-			console.error("Error in FullRange_Integration: ", error.message);
+			console.error("Error in FullRange_Integration_Filtered: ", error.message);
 			return { ProcessedData: [] }; // Return empty array on error
 		}
 	}	
@@ -2747,7 +3302,7 @@ class dashboardDataProcessor {
 					const Tunit = this.chartConfigI.specialParameters.OEEPSpU.split('/')[1];
 		
 					// Calculate integration of production speed
-					const { ProcessedData: integratedProductionArray } = this.FullRange_Integration(rawDataSpeed, {}, Tunit,this.chartConfigI.specialParameters.OEEPDownE);
+					const { ProcessedData: integratedProductionArray } = this.FullRange_Integration_Filtered(rawDataSpeed, {}, Tunit,this.chartConfigI.specialParameters.OEEPDownE);
 					expectedUnitsProduced = integratedProductionArray[0] ?? 0; 
 					expectedUnitsProduced =(expectedUnitsProduced==0?unitsProduced:expectedUnitsProduced)
 					
@@ -2795,8 +3350,8 @@ class dashboardDataProcessor {
 				
 				//Update for next Iteration
 				this.OEEinfoRTI["LunitsProd"]=unitsProduced;
-				this.OEEinfoRTI["LEunitsProd"]=expectedUnitsProduced;
-				this.OEEinfoRTI["Ftime"]=finalTime;
+				this.OEEinfoRTI["LEunitsProd"]=expectedUnitsProduced;			
+				this.OEEinfoRTI["Ftime"]=((this.dataRequest.updateRequest[0].iniRMe).includes("Shift")) ? new Date(rawData.timestamps[rawData.timestamps.length-1]).getTime() : finalTime;
 				
 				// Calculate Productivity
 				const OEEProductivityValue = (unitsProduced / expectedUnitsProduced) * 100;
@@ -2872,7 +3427,7 @@ class dashboardDataProcessor {
 					const Tunit = this.chartConfigI.specialParameters.OEEPSpU.split('/')[1];
 		
 					// Calculate integration of production speed
-					const { ProcessedData: integratedProductionArray } = this.FullRange_Integration([], informationRTI, Tunit,this.chartConfigI.specialParameters.OEEPDownE);
+					const { ProcessedData: integratedProductionArray } = this.FullRange_Integration_Filtered([], informationRTI, Tunit,this.chartConfigI.specialParameters.OEEPDownE);
 					expectedUnitsProduced = integratedProductionArray[0] ?? 0;
 					
 					//Update for next iteration
@@ -2988,7 +3543,7 @@ class dashboardDataProcessor {
 				//Update for next iteration
 				this.OEEinfoRTI["LuptimeValue"]=uptimeArray[0];
 				this.OEEinfoRTI["LexRuTime"]=expectedRunningTime;
-				this.OEEinfoRTI["FtimeA"]=finalTime;
+				this.OEEinfoRTI["FtimeA"]=((this.dataRequest.updateRequest[0].iniRMe).includes("Shift")) ? new Date(rawData.timestamps[rawData.timestamps.length-1]).getTime() : finalTime;
 				
 	
 				return { ProcessedData: [OEEAvailabilityValue] };
@@ -3538,38 +4093,114 @@ class dashboardDataProcessor {
 	
 		return { ProcessedData: timeOnArray };
 	}
+		
 	
 	// Method to integrate data within Intervals
 	Interval_Integration(rawData, intervals) {
 		let integratedDataArray = [];
+		let Tunit=this.chartConfigI.dataPrTUnit;
+		
+		
+		//Function for unit conversion
+		const unitConversionFactor = (() => {
+				switch (Tunit) {
+					case 's': return 1 / 1000; // U/s to U/ms
+					case 'min': return 1 / (60 * 1000); // U/min to U/ms
+					case 'h': return 1 / (3600 * 1000); // U/h to U/ms
+					case 'day': return 1 / (24 * 3600 * 1000); // U/day to U/ms
+					case 'month': return 1 / (30 * 24 * 3600 * 1000); // U/month to U/ms
+					default:
+						throw new Error(`Unsupported dataPrTUnit: ${Tunit}`);
+				}
+			})();
+	
 	
 		if (this.OperationMode === "Hist") {
-			intervals.forEach(interval => {
+		
+			let startIndex; 
+			let endIndex;
+			let endIndexPrevious;
+			
+			
+			// Get the final time from the update request
+			const initialTime = new Date(this.updateRequestI.initialTime).getTime();
+			const finalTime = new Date(this.updateRequestI.finalTime).getTime();
+			
+			intervals.forEach((interval, intervalIndex) => {
 				// Variables to store the previous value for trapezoidal calculation
 				let previousValue = null;
 				let previousTime = null;
-				let area = 0;
-	
-				rawData.timestamps.forEach((timestamp, index) => {
-					if (timestamp >= interval.start && timestamp <= interval.end && rawData.status[index] === 0) {
-						// Convert timestamp from milliseconds to seconds for the x-axis
-						let currentTime = timestamp / 1000;
-						let currentValue = rawData.Values[index];
-	
-						// Calculate the area using the trapezoidal rule if it's not the first data point
-						if (previousValue !== null) {
-							let base = currentTime - previousTime; // The difference in time (in seconds)
-							area += (currentValue + previousValue) / 2 * base; // Trapezoidal area calculation
+				let area = 0;		
+				let integratedValue=0;	
+				
+				// Find startIndex: First index where timestamp >= interval.start and < interval.end
+				startIndex = rawData.timestamps.findIndex(time => time >= interval.start && time < interval.end);
+					
+				// Find endIndex: First index where timestamp > interval.end
+				endIndex = rawData.timestamps.findIndex(time => time > interval.end);
+				
+				// For all iterations
+				if (intervalIndex > 0 && endIndexPrevious!=-1) {
+					// Use the previous endIndex as the startIndex for the current interval
+					startIndex = endIndexPrevious;
+				}
+								
+				// Calculate the endIndex for the current interval
+				if (endIndex !== -1) {
+					endIndex -= 1; // Move back one index to get the closest value less than or equal to interval.end
+				} else {
+					endIndex = rawData.Values.length - 1; // If no index found, set to last element
+				}
+				
+				// Store the current endIndex for the next iteration
+				endIndexPrevious = endIndex;
+
+		
+				// Check validity of startIndex and endIndex
+				if (startIndex === -1 || startIndex > endIndex || endIndex < 0) {
+					return null; // No valid data in this interval
+				}			
+				
+				
+				if (rawData.Values.length>1){ //More than one dataPoint
+				
+					// Iterate through the timestamps and calculate the integration
+					for (let i = startIndex; i < endIndex; i++) {
+					
+						const currentValue = rawData.Values[i];
+						let currentTimestamp = rawData.timestamps[i];
+						let nextTimestamp;
+						let previousTimestamp=initialTime;						
+		
+						var timeDifference;
+						
+						// Use the finalTime for the last iteration
+						if (i === rawData.timestamps.length - 1) {
+							nextTimestamp = finalTime;
+							timeDifference = nextTimestamp - currentTimestamp;
+						}//First iteration
+						else if (i === 0){
+							nextTimestamp = rawData.timestamps[i + 1];
+							currentTimestamp=previousTimestamp;
+							timeDifference = nextTimestamp - currentTimestamp;
 						}
-	
-						// Update the previous values for the next iteration
-						previousValue = currentValue;
-						previousTime = currentTime;
-					}
-				});
-	
+						 else {
+							nextTimestamp = rawData.timestamps[i + 1];
+							timeDifference = nextTimestamp - currentTimestamp;
+						}
+					
+		
+						// Multiply the current value (converted to U/ms) by the time difference (in ms)
+						integratedValue += currentValue * unitConversionFactor * timeDifference;					
+						
+						
+					}		
+				}	
+				
+				this.DCNotfier.dgConsole("--------------integratedValue--------------");
+				this.DCNotfier.dgConsole(integratedValue);
 				// Add the calculated area for the current interval to the array
-				integratedDataArray.push(area);
+				integratedDataArray.push(integratedValue);
 			});
 	
 			return { ProcessedData: integratedDataArray };
@@ -3580,7 +4211,10 @@ class dashboardDataProcessor {
 				 this.informationRTI.LastDataPointProcessed=0;
 			}
 			
+			
+			
 			let area = this.informationRTI.LastDataPointProcessed;
+			let iterationAggregation=0;
 			let previousValue = null;
 			let previousTime = this.informationRTI.LastDataPointRaw.timestamps / 1000;
 	
@@ -3597,14 +4231,19 @@ class dashboardDataProcessor {
 					if (previousValue !== null) {
 						let base = currentTime - previousTime; // The difference in time (in seconds)
 						area += (currentValue + previousValue) / 2 * base; // Trapezoidal area calculation
+						iterationAggregation= (currentValue + previousValue) / 2 * base;
 					}
 	
 					// Update the previous values for the next iteration
 					previousValue = currentValue;
 					previousTime = currentTime;
 				}
-			});
-	
+			});	
+			
+			
+			this.DCNotfier.dgConsole("iterationAggregation:");
+			this.DCNotfier.dgConsole(iterationAggregation);
+			
 			return { ProcessedData: [area] };
 		}
 	}
@@ -3612,18 +4251,21 @@ class dashboardDataProcessor {
 	// Interval Difference
     Interval_Difference(rawData, intervals) {
         let differenceArray = [];
-        this.DCNotfier.dgConsole("rawData");
-        this.DCNotfier.dgConsole(rawData);
-        this.DCNotfier.dgConsole("intervals");
-        this.DCNotfier.dgConsole(intervals);
 
 		if (this.OperationMode === "Hist") {
 			try {
 			
 				let endIndexPrevious;
+				console.log("intervals")
+				console.log(intervals)
 				
 				differenceArray = intervals.map((interval, intervalIndex) => {
-				
+					/*
+					console.log("interval start");
+					console.log(interval.start);
+					console.log("interval end");
+					console.log(interval.end);
+					*/
 					
 					// Find startIndex: First index where timestamp >= interval.start and < interval.end
 					let startIndex = rawData.timestamps.findIndex(time => time >= interval.start && time < interval.end);
@@ -3834,7 +4476,7 @@ class dashboardDataProcessor {
 	SimpleNoneTableProcessing() {
 		
 		
-		const processedDataI = [];
+		var processedDataI = [];
 		const timestampsCategories = this.chartCategoriesI.chartCategory.categories[0].categories;
 		const replacementText = this.chartConfigI.specialParameters.TableConfig.ReplacementText; // Variable for replacement text
 		const fillingMethod=this.chartConfigI.specialParameters.TableConfig.FillingMethod;
@@ -3848,11 +4490,6 @@ class dashboardDataProcessor {
 			
 			const rawDataTimestamps = this.partialDashboardDataI.timestamps;
 			const rawDataValues = this.partialDashboardDataI.Values;
-			
-		
-			// Find the index of this.nodeI in this.chartNodesI to match the DataColumnTypes
-			const dataColumnType = this.chartConfigI.specialParameters.TableConfig.DataColumnTypes[this.indexNodeI];
-			this.DCNotfier.dgConsole("------------dataColumnType: "+dataColumnType);
 		
 			// Helper functions to find closest values based on timestamp comparison
 			const findClosestBelow = (targetTimestamp) => {
@@ -3892,83 +4529,90 @@ class dashboardDataProcessor {
 				// Average of two closest values
 				return (rawDataValues[belowIndex] + rawDataValues[aboveIndex]) / 2;
 			};
-		
-			// Main logic based on fillingMethod and DataColumnTypes
-			for (let timestamp of timestampsCategories) {
-				let processedValue;
+			
+			
+			
+			if (dataColumnType=="Time"){
+				processedDataI=rawDataTimestamps	;				
+			}
+			else{
+				// Main logic based on fillingMethod and DataColumnTypes
+				for (let timestamp of timestampsCategories) {
+					let processedValue;
+							
+					if (fillingMethod === "Fill-NoValue") {
+						// Check for an exact match in timestamps
+						const index = rawDataTimestamps.indexOf(timestamp);
+						const threshold=100;
 						
-				if (fillingMethod === "Fill-NoValue") {
-					// Check for an exact match in timestamps
-					const index = rawDataTimestamps.indexOf(timestamp);
-					const threshold=100;
-					
-					if (index !== -1) {
-						// Exact match found
-						processedValue = dataColumnType === "Value" ? rawDataValues[index] : rawDataTimestamps[index];
-					} else {
-						// Find the closest value below the timestamp
-						const closestBelowIndex = findClosestBelow(timestamp);
-						const closestBelowDiff = closestBelowIndex !== -1 ? Math.abs(timestamp - rawDataTimestamps[closestBelowIndex]) : Infinity;
-				
-						// Check if it's within the threshold
-						if (closestBelowDiff <= threshold) {
-							processedValue = dataColumnType === "Value" ? rawDataValues[closestBelowIndex] : rawDataTimestamps[closestBelowIndex];
+						if (index !== -1) {
+							// Exact match found
+							processedValue = dataColumnType === "Value" ? rawDataValues[index] : rawDataTimestamps[index];
 						} else {
-							// Find the closest value above the timestamp
-							const closestAboveIndex = findClosestAbove(timestamp);
-							const closestAboveDiff = closestAboveIndex !== -1 ? Math.abs(rawDataTimestamps[closestAboveIndex] - timestamp) : Infinity;
-				
+							// Find the closest value below the timestamp
+							const closestBelowIndex = findClosestBelow(timestamp);
+							const closestBelowDiff = closestBelowIndex !== -1 ? Math.abs(timestamp - rawDataTimestamps[closestBelowIndex]) : Infinity;
+					
 							// Check if it's within the threshold
-							if (closestAboveDiff <= threshold) {
-								processedValue = dataColumnType === "Value" ? rawDataValues[closestAboveIndex] : rawDataTimestamps[closestAboveIndex];
+							if (closestBelowDiff <= threshold) {
+								processedValue = dataColumnType === "Value" ? rawDataValues[closestBelowIndex] : rawDataTimestamps[closestBelowIndex];
 							} else {
-								// No suitable match, use replacementText
+								// Find the closest value above the timestamp
+								const closestAboveIndex = findClosestAbove(timestamp);
+								const closestAboveDiff = closestAboveIndex !== -1 ? Math.abs(rawDataTimestamps[closestAboveIndex] - timestamp) : Infinity;
+					
+								// Check if it's within the threshold
+								if (closestAboveDiff <= threshold) {
+									processedValue = dataColumnType === "Value" ? rawDataValues[closestAboveIndex] : rawDataTimestamps[closestAboveIndex];
+								} else {
+									// No suitable match, use replacementText
+									processedValue = replacementText;
+								}
+							}
+						}
+					}			
+					else if (fillingMethod === "Fill-ClosestValueBelow") {
+						// Find the closest timestamp below
+						const closestIndex = findClosestBelow(timestamp);
+						if (closestIndex !== -1) {
+							processedValue = dataColumnType === "Value" ? rawDataValues[closestIndex] : rawDataTimestamps[closestIndex];
+						} else if (rawDataTimestamps.length > 0) {
+							processedValue = dataColumnType === "Value" ? rawDataValues[0] : rawDataTimestamps[0];
+						} else {
+							processedValue = replacementText;
+						}
+					} else if (fillingMethod === "Fill-ClosestValueAbove") {
+						// Find the closest timestamp above
+						const closestIndex = findClosestAbove(timestamp);
+						if (closestIndex !== -1) {
+							processedValue = dataColumnType === "Value" ? rawDataValues[closestIndex] : rawDataTimestamps[closestIndex];
+						} else if (rawDataTimestamps.length > 0) {
+							processedValue = dataColumnType === "Value" ? rawDataValues[rawDataValues.length - 1] : rawDataTimestamps[rawDataTimestamps.length - 1];
+						} else {
+							processedValue = replacementText;
+						}
+					} else if (fillingMethod === "Fill-Average") {
+						// Find the average of the two closest timestamps
+						if (dataColumnType === "Value") {
+							processedValue = findAverageBetweenTwo(timestamp);
+						} else {
+							const belowIndex = findClosestBelow(timestamp);
+							const aboveIndex = findClosestAbove(timestamp);
+							if (belowIndex !== -1 && aboveIndex !== -1) {
+								processedValue = (rawDataTimestamps[belowIndex] + rawDataTimestamps[aboveIndex]) / 2;
+							} else if (belowIndex !== -1) {
+								processedValue = rawDataTimestamps[belowIndex];
+							} else if (aboveIndex !== -1) {
+								processedValue = rawDataTimestamps[aboveIndex];
+							} else {
 								processedValue = replacementText;
 							}
 						}
 					}
-				}			
-				else if (fillingMethod === "Fill-ClosestValueBelow") {
-					// Find the closest timestamp below
-					const closestIndex = findClosestBelow(timestamp);
-					if (closestIndex !== -1) {
-						processedValue = dataColumnType === "Value" ? rawDataValues[closestIndex] : rawDataTimestamps[closestIndex];
-					} else if (rawDataTimestamps.length > 0) {
-						processedValue = dataColumnType === "Value" ? rawDataValues[0] : rawDataTimestamps[0];
-					} else {
-						processedValue = replacementText;
-					}
-				} else if (fillingMethod === "Fill-ClosestValueAbove") {
-					// Find the closest timestamp above
-					const closestIndex = findClosestAbove(timestamp);
-					if (closestIndex !== -1) {
-						processedValue = dataColumnType === "Value" ? rawDataValues[closestIndex] : rawDataTimestamps[closestIndex];
-					} else if (rawDataTimestamps.length > 0) {
-						processedValue = dataColumnType === "Value" ? rawDataValues[rawDataValues.length - 1] : rawDataTimestamps[rawDataTimestamps.length - 1];
-					} else {
-						processedValue = replacementText;
-					}
-				} else if (fillingMethod === "Fill-Average") {
-					// Find the average of the two closest timestamps
-					if (dataColumnType === "Value") {
-						processedValue = findAverageBetweenTwo(timestamp);
-					} else {
-						const belowIndex = findClosestBelow(timestamp);
-						const aboveIndex = findClosestAbove(timestamp);
-						if (belowIndex !== -1 && aboveIndex !== -1) {
-							processedValue = (rawDataTimestamps[belowIndex] + rawDataTimestamps[aboveIndex]) / 2;
-						} else if (belowIndex !== -1) {
-							processedValue = rawDataTimestamps[belowIndex];
-						} else if (aboveIndex !== -1) {
-							processedValue = rawDataTimestamps[aboveIndex];
-						} else {
-							processedValue = replacementText;
-						}
-					}
+			
+					// Push the processed value or timestamp depending on the DataColumnTypes
+					processedDataI.push(processedValue);
 				}
-		
-				// Push the processed value or timestamp depending on the DataColumnTypes
-				processedDataI.push(processedValue);
 			}
 			
 		
@@ -4269,7 +4913,73 @@ class dashboardDataProcessor {
 		return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 	}
 	
-	//---------------Negative difference Handling-----------------//	
+	//Find Closest Value By Timestamp		
+	findClosestValueByTimestamp(targetTimestamp, limitData) {
+
+		
+        if (!limitData || !limitData.timestamps || !limitData.Values || limitData.timestamps.length === 0) {
+            // console.warn("Limit data is invalid or empty for timestamp search.");
+            return null; // No data to search
+        }
+
+        const timestamps = limitData.timestamps;
+        const values = limitData.Values;
+        const n = timestamps.length;
+
+        // Handle edge cases: target is before the first or after the last timestamp
+        if (targetTimestamp <= timestamps[0]) {
+            return values[0];
+        }
+        if (targetTimestamp >= timestamps[n - 1]) {
+            return values[n - 1];
+        }
+
+        // Binary search to find the insertion point
+        let low = 0, high = n - 1;
+        let insertPos = 0;
+
+        while (low <= high) {
+            const mid = Math.floor((low + high) / 2);
+            if (timestamps[mid] === targetTimestamp) {
+                return values[mid]; // Exact match found
+            } else if (timestamps[mid] < targetTimestamp) {
+                insertPos = mid + 1; // Potential insertion point is after mid
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        // insertPos is now the index where targetTimestamp would be inserted
+        // The closest timestamp is either at insertPos or insertPos - 1
+        const tsBefore = timestamps[insertPos - 1];
+        const tsAfter = timestamps[insertPos]; // This index might be out of bounds if target > last element, but handled by edge case above
+
+        const diffBefore = targetTimestamp - tsBefore;
+        const diffAfter = tsAfter - targetTimestamp;
+
+        // Return the value corresponding to the timestamp with the smaller difference
+        if (diffBefore <= diffAfter) {
+            return values[insertPos - 1];
+        } else {
+            return values[insertPos];
+        }
+    }
+
+	//Find closest interval to current time
+    findPrevStart(intervals) {
+	  return intervals.reduce(
+		(best, curr, i) => {
+		  const now = Date.now();
+		  if (curr.start <= now && curr.start > best.start) {
+			return { start: curr.start, index: i };
+		  }
+		  return best;
+		},
+		{ start: 0, index: -1 }
+	  );
+	}
+		//---------------Negative difference Handling-----------------//	
 	//-----------------------------------------------------------------//
 	
 	//Negative Handler
@@ -4392,6 +5102,18 @@ class dashboardDataProcessor {
 		let variance = values.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / n;
 		let stdDev = Math.sqrt(variance);
 		return { mean, stdDev };
+	}
+	
+	//Get last element Different than null, used in dataInfoRTCreator
+	getLastNonNullElement(array) {
+
+		for (let i = array.length - 1; i >= 0; i--) {
+
+			if (array[i] !== null   && array[i] !==undefined ) {
+				return { element: array[i], index: i };
+			}
+		}
+		return { element: null, index: -1 };
 	}
 }
 
@@ -5676,8 +6398,11 @@ class DashboardDataCreator {
 			this.DCNotfier.dgConsole("partialDatabaseData");
 			this.DCNotfier.dgConsole(partialDatabaseData);
 	
+			this.DCNotfier.dgConsole("databaseRequest");
+			this.DCNotfier.dgConsole(databaseRequest);
 			// Destructure the relevant data from partialDatabaseData
 			const { queryAnswer, readingColumns } = partialDatabaseData;
+			const columnTypes = databaseRequest.databaseConnectionParameters.readingParameters.columnTypes;
 			const timeColumn = databaseRequest.databaseConnectionParameters.timeParameters.timeColumn;
 			const finalTime = databaseRequest.databaseConnectionParameters.timeParameters.finalTime;
 			const initialTime = databaseRequest.databaseConnectionParameters.timeParameters.initialTime;
@@ -5693,13 +6418,18 @@ class DashboardDataCreator {
 			this.DCNotfier.dgConsole("readingColumns");
 			this.DCNotfier.dgConsole(readingColumns);
 			
+			this.DCNotfier.dgConsole("columnTypes");
+			this.DCNotfier.dgConsole(columnTypes);
+			
 			// Initialize the result structure
 			const formattedData = readingColumns.map((columnName, columnIndex) => {
 				// Extract values for this column across all rows in queryAnswer
+				const readingColumnType = columnTypes[columnIndex];
+				const timestampIndex = readingColumnType == "Time" ? columnIndex : 0;
 				const values = queryAnswer.map(row => parseFloat(row[columnIndex]));
 				const dataSize = values.length;
 				const timestamps = timeFilterSuccess
-					? queryAnswer.map(row => this.parseTimestamp(row[0], timeFormat))
+					? queryAnswer.map(row => this.parseTimestamp(row[timestampIndex], timeFormat))
 					: Array(dataSize).fill(0);
 	
 				// Return the structured data for each column
@@ -5721,200 +6451,345 @@ class DashboardDataCreator {
 		}
 	}
 	
+	
 	//-----------------------------------------------//
 	//------Data Sending Functions-----//	
-	
-	//Gives final format to data
+		
+	// Gives final format to data
 	dashboardDataFormater(processedData) {
 		let chartsData = [];
 		let errors = [];
 	
 		try {
-			processedData.forEach(chart => {
-			
-				//Pack InformationRT
-				let informationRT=chart.processedDataStruct.map((dataStruct) => {
-					return dataStruct.informationRT;
-				});
-				
-				//Pack Tooltip Info
-				let tooltipInfo=chart.processedDataStruct.map((dataStruct) => {
-					return dataStruct.tooltipInfo;
-				});
-				
-			
-				let chartData = {
-					chartID: chart.chartID,
-					informationRT: informationRT,
-					tooltipInfo:tooltipInfo,
-					chartSeries: [],
-					LimitDashboardData: [],
-					chartCategories: chart.processedDataStruct[0]?.chartCategories || []
+			// First, validate that processedData is an array
+			if (!Array.isArray(processedData)) {
+				errors.push("processedData is not an array or is undefined.");
+				// Early return if there's nothing to process
+				return {
+					chartsData: [],
+					Errors: errors
 				};
-				
-				if(chart.elementType=="Chart")	{
-					//For Chart elements
-					switch (chart.chartType) {
-						case "Line":
-						case "Spline":
-						case "Area":
-						case "Column":
-						case "Bar":
-							// For these types, each processedDataStruct item becomes a series
-							chart.processedDataStruct.forEach((dataStruct, k) => {
-								const seriesName = dataStruct.processedNode; // Using processedNode for series name
-								
-								//For ValueType Series
-								let series = {
-									name: seriesName,
-									data: dataStruct.processedDataI.map((dataPoint, i) => {
-										if (chart.categoryType === "AllData-DateTime") {
-											const category = chartData.chartCategories.find(c => c.chartNode === dataStruct.processedNode);
-											return category ? [category.categories[i], dataPoint] : dataPoint;
-										} else {
-											return dataPoint;
-										}
-									})
-								};
-								
-								
-								//For LimitType Series
-								let seriesLimint;			
-								
-								//If there is LimitDashboardData add it
-								let limitAnalysisEnabledI=dataStruct.LimitDashboardData==undefined?false:dataStruct.LimitDashboardData.Enabled;
+			}
 	
-								if (limitAnalysisEnabledI) {
-									if (chart.categoryType === "AllData-DateTime") {
-										seriesLimint = {
-											name: seriesName+"_Limit",
-											data: dataStruct.LimitDashboardData.Values.map((dataPoint, i) => {
-													const category = dataStruct.LimitDashboardData.timestamps[i];
-													return  [category, dataPoint];
-											})
-										}
-									}
-									else if (chart.categoryType.includes("Interval")) {
-										seriesLimint= {
-											name: seriesName+"_Limit",
-											data:dataStruct.LimitDashboardData.Values,
-										}
-									}
-								}							
-								else	{
-									seriesLimint={};
-									
-								}				
-								chartData.chartSeries.push(series);
-								chartData.LimitDashboardData.push(seriesLimint);
-							});
-							break;
-						case "Pie":
-						case "Pyramid":
-							// For Pie/Pyramid, use processedDataI directly as the series data
-							let seriesData = chart.processedDataStruct.map(dataStruct => ({
-								name: dataStruct.processedNode,
-								y: dataStruct.processedDataI[0],
-							}));
-							chartData.chartSeries.push({name: "Aggregate", data: seriesData});
-							break;
-						case "Gauge":
-						case "Solidgauge":
-							// Use the last value of processedDataI
-							if (chart.processedDataStruct.length > 0) {
-								let lastDataStruct = chart.processedDataStruct[chart.processedDataStruct.length - 1];
-								let gaugeData = {
-									name: lastDataStruct.processedNode,
-									data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]  // Assuming the last value in the array
-								};
-								chartData.chartSeries.push(gaugeData);
-								
-								//For LimitType Series
-								let seriesLimint;			
-								
+			processedData.forEach(chart => {
+				// Wrap each chart's processing in a separate try-catch to isolate failures
+				try {
+	
+					// Basic validation
+					if (!chart.chartID) {
+						errors.push("Chart is missing chartID. Skipping this chart.");
+						return; // Skip this chart; move to next
+					}
+					if (!chart.elementType) {
+						errors.push(`Chart with ID ${chart.chartID} is missing elementType. Skipping this chart.`);
+						return;
+					}
+					if (!chart.processedDataStruct || !Array.isArray(chart.processedDataStruct) || chart.processedDataStruct.length === 0) {
+						errors.push(`Chart with ID ${chart.chartID} has no valid processedDataStruct. Skipping this chart.`);
+						return;
+					}
+	
+					// Pack InformationRT and Tooltip Info
+					let informationRT = chart.processedDataStruct.map((dataStruct) => {
+						if (!dataStruct.informationRT) {
+							errors.push(`Chart with ID ${chart.chartID} missing dataStruct.informationRT field.`);
+							// Instead of returning null or skipping, we still return an empty string or some fallback
+							return "";
 						}
-						break;
-						case "Histogram":
-							const seriesName = chart.processedDataStruct[0].processedNode;
-							const scatterData = chart.processedDataStruct[0].processedDataI.map(dataPoint => dataPoint);
-							chartData.chartSeries.push({
-								name: seriesName,
-								type: 'scatter',
-								data: scatterData,
-							});										
-						break;
-						default:
-							errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);
-					}				
-				}
-				//For Table elements
-				else if(chart.elementType == "Table") {
-					let tableSeriesData = [];
-					let seriesNames = [];
-				
-					// Go through each processedDataStruct and extract processedDataI
-					chart.processedDataStruct.forEach((dataStruct) => {
-						// Collect the name of the node for series
-						seriesNames.push(dataStruct.processedNode);
-				
-						// Iterate through each value in processedDataI and organize by index
-						dataStruct.processedDataI.forEach((dataPoint, index) => {
-							if (!tableSeriesData[index]) {
-								tableSeriesData[index] = []; // Initialize the array for this index
-							}
-							tableSeriesData[index].push(dataPoint); // Add the value to the corresponding row
-						});
+						return dataStruct.informationRT;
 					});
-				
-					// Create the series for the table
-					var tableSeries = {
-						name: seriesNames.join(", "), // Join the series names together for the chart series
-						data: tableSeriesData // Array of arrays, where each sub-array represents a row (timestamp)
+	
+					let tooltipInfo = chart.processedDataStruct.map((dataStruct) => {
+						if (!dataStruct.tooltipInfo) {
+							errors.push(`Chart with ID ${chart.chartID} missing dataStruct.tooltipInfo field.`);
+							return "";
+						}
+						return dataStruct.tooltipInfo;
+					});
+	
+					let chartData = {
+						chartID: chart.chartID,
+						informationRT: informationRT,
+						tooltipInfo: tooltipInfo,
+						chartSeries: [],
+						LimitDashboardData: [],
+						chartCategories: chart.processedDataStruct[0]?.chartCategories || []
 					};
-					
-					const fields = tableSeries.name.split(",").map(f => f.trim());
-					const expectedCount = fields.length;
-
-					tableSeries.data = tableSeries.data.filter(item => item.length === expectedCount);
-				
-					// Push the constructed series into chartSeries
-					chartData.chartSeries=(tableSeries);
-				}
-				//For Number Elements
-				else if(chart.elementType == "Number") {
-					// Use the last value of processedDataI
+	
+					// Check if elementType is "Chart"
+					if (chart.elementType === "Chart") {
+						// Validate chartType
+						if (!chart.chartType) {
+							errors.push(`chartType is missing for chartID ${chart.chartID}. Skipping this chart.`);
+							return;
+						}
+						
+						switch (chart.chartType) {
+							case "Line":
+							case "Spline":
+							case "Area":
+							case "Column":
+							case "Bar":
+								// For these types, each processedDataStruct item becomes a series
+								chart.processedDataStruct.forEach((dataStruct, k) => {
+									try {
+										const seriesName = dataStruct.processedNode || `Unnamed_Series_${k}`;
+										const chartID = chart.chartID;
+	
+										// Validate processedDataI
+										if (!dataStruct.processedDataI || !Array.isArray(dataStruct.processedDataI)) {
+											errors.push(`Chart with ID ${chart.chartID} and seriesName ${seriesName} has invalid processedDataI.`);
+											return;
+										}
+	
+										// Build the main series
+										let series = {
+											name: seriesName,
+											data: dataStruct.processedDataI.map((dataPoint, i) => {
+												if (chart.categoryType === "AllData-DateTime") {
+													const category = chartData.chartCategories.find(c => c.chartNode === dataStruct.processedNode);
+													// If the category is missing, note an error
+													if (!category) {
+														errors.push(`Missing chartNode category for seriesName "${seriesName}" in chartID ${chart.chartID}.`);
+														return dataPoint;
+													} else {
+														return [category.categories[i], dataPoint];
+													}
+												} else {
+													return dataPoint;
+												}
+											})
+										};
+	
+										// Build the limit series if enabled
+										let limitAnalysisEnabledI = dataStruct.LimitDashboardData?.filteredData?.Enabled === true;
+										let seriesLimint = {};
+										if (limitAnalysisEnabledI) {
+											if (chart.categoryType === "AllData-DateTime") {
+												if (!dataStruct.LimitDashboardData.filteredData?.Values || 
+													!dataStruct.LimitDashboardData.filteredData?.timestamps) {
+													errors.push(`LimitDashboardData is missing Values or timestamps for chartID ${chart.chartID}, seriesName ${seriesName}.`);
+												} else {
+													seriesLimint = {
+														name: seriesName + "_Limit",
+														data: dataStruct.LimitDashboardData.filteredData.Values.map((dataPoint, i) => {
+															const category = dataStruct.LimitDashboardData.filteredData.timestamps[i];
+															return [category, dataPoint];
+														})
+													};
+												}
+	
+												// Conditional Max/Min Limit Plot Creation
+												const maxPlotExists = chartData.LimitDashboardData.some(
+													s => s && s.name && s.name.endsWith("_MaxLimPlot")
+												);
+												if (!maxPlotExists && dataStruct.LimitDashboardData?.plotLimitData?.MaxLimitTrendData?.Values?.length > 0) {
+													let maxTrendTimestamps = dataStruct.LimitDashboardData.plotLimitData.MaxLimitTrendData.timestamps;
+													if (!maxTrendTimestamps) {
+														errors.push(`MaxLimitTrendData is missing timestamps in chartID ${chart.chartID}.`);
+													} else {
+														let seriesMaxLimitPlot = {
+															name: chartID + "_MaxLimPlot",
+															data: dataStruct.LimitDashboardData.plotLimitData.MaxLimitTrendData.Values.map((val, i) => {
+																const category = maxTrendTimestamps[i];
+																return [category, val];
+															})
+														};
+														chartData.LimitDashboardData.push(seriesMaxLimitPlot);
+													}
+												}
+	
+												const minPlotExists = chartData.LimitDashboardData.some(
+													s => s && s.name && s.name.endsWith("_MinLimPlot")
+												);
+												if (!minPlotExists && dataStruct.LimitDashboardData?.plotLimitData?.MinLimitTrendData?.Values?.length > 0) {
+													let minTrendTimestamps = dataStruct.LimitDashboardData.plotLimitData.MinLimitTrendData.timestamps;
+													if (!minTrendTimestamps) {
+														errors.push(`MinLimitTrendData is missing timestamps in chartID ${chart.chartID}.`);
+													} else {
+														let seriesMinLimitPlot = {
+															name: chartID + "_MinLimPlot",
+															data: dataStruct.LimitDashboardData.plotLimitData.MinLimitTrendData.Values.map((val, i) => {
+																const category = minTrendTimestamps[i];
+																return [category, val];
+															})
+														};
+														chartData.LimitDashboardData.push(seriesMinLimitPlot);
+													}
+												}
+	
+											} else if (chart.categoryType.includes("Interval")) {
+												if (!Array.isArray(dataStruct.LimitDashboardData.filteredData.Values)) {
+													errors.push(`LimitDashboardData.filteredData.Values is invalid for chartID ${chart.chartID}, seriesName ${seriesName}.`);
+												} else {
+													seriesLimint = {
+														name: seriesName + "_Limit",
+														data: dataStruct.LimitDashboardData.filteredData.Values
+													};
+												}
+											}
+										}
+	
+										chartData.chartSeries.push(series);
+										chartData.LimitDashboardData.push(seriesLimint);
+									} catch (seriesError) {
+										errors.push(`Error processing series for chartID ${chart.chartID}: ${seriesError.message}`);
+									}
+								});
+								break;
+	
+							case "Pie":
+							case "Pyramid":
+								// For Pie/Pyramid, use processedDataI directly as the series data
+								try {
+									let seriesData = chart.processedDataStruct.map((dataStruct, idx) => {
+										if (!dataStruct.processedDataI || !Array.isArray(dataStruct.processedDataI)) {
+											errors.push(`ChartID ${chart.chartID} (Pie/Pyramid) has invalid processedDataI on item index ${idx}.`);
+											return { name: dataStruct.processedNode || `Unnamed_Series_${idx}`, y: 0 };
+										}
+										return {
+											name: dataStruct.processedNode || `Unnamed_Series_${idx}`,
+											y: dataStruct.processedDataI[0] || 0
+										};
+									});
+									chartData.chartSeries.push({ name: "Aggregate", data: seriesData });
+								} catch (pieError) {
+									errors.push(`Error processing Pie/Pyramid chart for chartID ${chart.chartID}: ${pieError.message}`);
+								}
+								break;
+	
+							case "Gauge":
+							case "Solidgauge":
+								// Use the last value of processedDataI
+								try {
+									if (chart.processedDataStruct.length > 0) {
+										let lastDataStruct = chart.processedDataStruct[chart.processedDataStruct.length - 1];
+										if (!lastDataStruct.processedDataI || !Array.isArray(lastDataStruct.processedDataI)) {
+											errors.push(`ChartID ${chart.chartID} (Gauge) has invalid processedDataI on lastDataStruct.`);
+										} else {
+											let gaugeData = {
+												name: lastDataStruct.processedNode || "Unnamed_Gauge",
+												data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]
+											};
+											chartData.chartSeries.push(gaugeData);
+										}
+									}
+								} catch (gaugeError) {
+									errors.push(`Error processing Gauge for chartID ${chart.chartID}: ${gaugeError.message}`);
+								}
+								break;
+	
+							case "Histogram":
+								try {
+									if (chart.processedDataStruct[0]) {
+										const seriesName = chart.processedDataStruct[0].processedNode || "Histogram_Series";
+										if (!chart.processedDataStruct[0].processedDataI ||
+											!Array.isArray(chart.processedDataStruct[0].processedDataI)) {
+											errors.push(`ChartID ${chart.chartID} has invalid processedDataI for Histogram.`);
+										} else {
+											const scatterData = chart.processedDataStruct[0].processedDataI.map(dataPoint => dataPoint);
+											chartData.chartSeries.push({
+												name: seriesName,
+												type: 'scatter',
+												data: scatterData,
+											});
+										}
+									}
+								} catch (histError) {
+									errors.push(`Error processing Histogram for chartID ${chart.chartID}: ${histError.message}`);
+								}
+								break;
+	
+							default:
+								errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);
+						} // end switch
+	
+					} else if (chart.elementType === "Table") {
+						// For Table elements
+						try {
+							let tableSeriesData = [];
+							let seriesNames = [];
+	
+							chart.processedDataStruct.forEach((dataStruct) => {
+								seriesNames.push(dataStruct.processedNode || "Unnamed_Table_Node");
+								if (!dataStruct.processedDataI || !Array.isArray(dataStruct.processedDataI)) {
+									errors.push(`ChartID ${chart.chartID} (Table) has invalid processedDataI.`);
+								} else {
+									dataStruct.processedDataI.forEach((dataPoint, index) => {
+										if (!tableSeriesData[index]) {
+											tableSeriesData[index] = [];
+										}
+										tableSeriesData[index].push(dataPoint);
+									});
+								}
+							});
+	
+							var tableSeries = {
+								name: seriesNames.join(", "),
+								data: tableSeriesData
+							};
+	
+							// Make sure rows are consistent in length
+							const fields = tableSeries.name.split(",").map(f => f.trim());
+							const expectedCount = fields.length;
+	
+							tableSeries.data = tableSeries.data.filter(item => item.length === expectedCount);
+	
+							chartData.chartSeries = (tableSeries);
+						} catch (tableError) {
+							errors.push(`Error processing Table for chartID ${chart.chartID}: ${tableError.message}`);
+						}
+	
+					} else if (chart.elementType === "Number") {
+						// For Number elements
+						try {
 							if (chart.processedDataStruct.length > 0) {
 								let lastDataStruct = chart.processedDataStruct[chart.processedDataStruct.length - 1];
-								let gaugeData = {
-									name: lastDataStruct.processedNode,
-									data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]  // Assuming the last value in the array
-								};
-								chartData.chartSeries.push(gaugeData);
-								
-								//For LimitType Series
-								let seriesLimint;			
-								
-								//If there is LimitDashboardData add it
-								let limitAnalysisEnabledI=lastDataStruct.LimitDashboardData==undefined?false:lastDataStruct.LimitDashboardData.Enabled;
-								if (limitAnalysisEnabledI) {
-									if (chart.categoryType.includes("Single")) {
-											seriesLimint= {
-												name: lastDataStruct.processedNode+"_Limit",
-												data:lastDataStruct.LimitDashboardData.Values,
+								if (!lastDataStruct.processedDataI || !Array.isArray(lastDataStruct.processedDataI)) {
+									errors.push(`ChartID ${chart.chartID} (Number) has invalid processedDataI on lastDataStruct.`);
+								} else {
+									let gaugeData = {
+										name: lastDataStruct.processedNode || "Unnamed_Number",
+										data: [lastDataStruct.processedDataI[lastDataStruct.processedDataI.length - 1]]
+									};
+									chartData.chartSeries.push(gaugeData);
+	
+									// If there is LimitDashboardData add it
+									let limitAnalysisEnabledI = lastDataStruct?.LimitDashboardData?.filteredData?.Enabled;
+									if (limitAnalysisEnabledI) {
+										if (chart.categoryType && chart.categoryType.includes("Single")) {
+											if (!Array.isArray(lastDataStruct.LimitDashboardData.filteredData.Values)) {
+												errors.push(`ChartID ${chart.chartID} (Number) has invalid filteredData.Values for limit data.`);
+											} else {
+												let seriesLimint = {
+													name: lastDataStruct.processedNode + "_Limit",
+													data: lastDataStruct.LimitDashboardData.filteredData.Values,
+												};
+												chartData.LimitDashboardData.push(seriesLimint);
 											}
-									}		
-													
-									else	{
-										seriesLimint={};									
-									}					
-									chartData.LimitDashboardData.push(seriesLimint);
+										}
+									}
 								}
 							}
+						} catch (numError) {
+							errors.push(`Error processing Number element for chartID ${chart.chartID}: ${numError.message}`);
+						}
+	
+					} else {
+						// Unknown element type
+						errors.push(`Unsupported elementType: ${chart.elementType} for chartID ${chart.chartID}`);
+					}
+	
+					chartsData.push(chartData);
+	
+				} catch (chartError) {
+					// Catch any unexpected errors in processing this chart
+					errors.push(`Error processing chart with ID ${chart.chartID}: ${chartError.message}`);
 				}
-				
-				chartsData.push(chartData);
 			});
+	
 		} catch (error) {
+			// Catch any higher-level error in the entire function
 			errors.push(`Error processing data: ${error.message}`);
 		}
 	
@@ -5923,6 +6798,7 @@ class DashboardDataCreator {
 			Errors: errors
 		};
 	}
+
 	
 	//Writes back to Menu
 	dashboardDataWriter() {
@@ -5981,6 +6857,7 @@ class DashboardDataCreator {
 					if (config.dataSource === "External-Database") {
 						const chartID = config.chartID;
 						const databaseParams = config.specialParameters.Database;
+						const columnTypes = config.specialParameters.TableConfig.DataColumnTypes;
 						const chartNodes = dataRequest.chartsNodes.find(node => node.chartID === chartID).chartNodes;
 						const updateRequest = dataRequest.updateRequest.find(update => update.chartID === chartID);
 	
@@ -6020,7 +6897,8 @@ class DashboardDataCreator {
 										tableName: databaseParams.TableName
 									},
 									readingParameters: {
-										readingColumns: chartNodes,										
+										readingColumns: chartNodes,	
+										columnTypes: columnTypes									
 									},
 									timeParameters: {
 										finalTime: new Date(updateRequest.finalTime),
@@ -6032,7 +6910,7 @@ class DashboardDataCreator {
 							});
 						}
 					}
-				});
+				});	
 	
 				// Convert Map values to an array and return
 				return Array.from(databaseRequestConfigMap.values());
@@ -6524,7 +7402,12 @@ class DashboardDatabaseManager {
         this.foundErrors = []; // Initialize or reset foundErrors
         
         // Query the database to get columns in `this.tableName`
-        const columnResult = this.readFromDatabase(); // Assuming this returns an array of column names
+        var columnResult = this.readFromDatabase(); // Assuming this returns an array of column names        
+            
+        //Special Case for SQLLite
+        if(this.connectionParameters.databaseType.toUpperCase()=="SQLITE"){
+			columnResult=columnResult.map(innerArray => [innerArray[1]]);
+        }
 		
         // Create a set of existing columns for fast lookup
         const existingColumns = columnResult.map(col => col[0]); // 'Field' should match the column name key in your result

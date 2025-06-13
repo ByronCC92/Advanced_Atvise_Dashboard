@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>OD_help</title>
+  <style> #parameter{font-weight:bold;} </style>
+</head>
+<body>
+<h1>Description</h1>
+<p>The combobox allows you to select elements from a list.</p>
+<p>It can be used in the following modes according to the parameter "mode":</p>
+<ol>
+  <li>Text: As soon as this mode is selected, the items in the
+group "Text Mode" need to be configured. Each shown item in the
+combobox consists of a "text element" and a "value element". The "text
+elements" are being displayed as items in the combobox, whereas the "value element"
+is being written to "base" or "alternative output address", if the related
+"text element" has been selected. With this mode up to 5 items can be
+configured. If you want to configure more than 5 items, please use the
+"Enum List" or "Script" mode.</li>
+</ol>
+<ol start="2">
+  <li>Boolean: The combobox will provide the two items "true" and
+"false". The "base" will be set according to the selected item and must
+therefore be of type "Boolean".</li>
+</ol>
+<ol start="3">
+  <li>Enum List:&nbsp;As soon as this mode is selected, the
+items in the group "Enum List Mode" need to be configured.&nbsp;Each
+shown item in the combobox consists of a "text" and a
+"value" according to the defined enum list. The "text" is being displayed as an item
+in the combobox,
+whereas the "value" is being written to "base" or "alternative output
+address", if the related "text" has been selected.</li>
+</ol>
+<ol start="4">
+  <li>Script: This mode allows you to handle the items of the combobox with the following triggers in javascript:</li>
+</ol>
+<ul>
+  <li>setItems: to set (initialise)&nbsp;the&nbsp;combobox with the predefined object containing all items (pairs of text and value)</li>
+  <li>setSelectedItem: to set one item&nbsp;(text only) in the&nbsp;combobox as selected&nbsp;</li>
+  <li>addItem: to add one item (pair of text and value) to the combobox</li>
+  <li>getSelectedItem: fires the trigger "selectedItem" if parameter is string, or calls the callback function with the&nbsp;value of the currently selected item in the&nbsp;combobox</li>
+  <li>getItems: fires the trigger "items" with an array containing all items (pairs of text and value) of the combobox </li>
+</ul>
+<div style="margin-left: 40px;">For an example&nbsp;please refer to section "Examples" below. </div>
+<ol start="4">
+</ol>
+<h1>Parameters</h1>
+<p>This control has&nbsp;the following generic parameters:</p>
+<ul>
+  <li><span id="parameter">base</span>: depending on the modes described above, the "base" will be set to the corresponding
+value of the selected item in the combobox</li>
+  <li><span id="parameter">mode</span>: select one of the four modes as described above (default: Text)</li>
+  <li><span id="parameter">alternative output address</span>: as soon as this address is configure, the value will be written to this address and not to "base"</li> </ul>
+Text Mode:<br>
+<ul>
+  <li><span id="parameter">text element 1</span>: first text element to be shown in the combobox</li>
+  <li><span id="parameter">value element 1</span>: value related to the first text element</li>
+  <li><span id="parameter">text element 2</span>: second text element to be shown in the combobox</li>
+  <li><span id="parameter">value element 2</span>: value related to the second text element</li>
+  <li><span id="parameter">text element 3</span>: third text element to be shown in the combobox</li> 
+  <li><span id="parameter">value element 3</span>: value related to the third text element</li>
+  <li><span id="parameter">text element 4</span>: fourth text element to be shown in the combobox</li>
+  <li><span id="parameter">value element 4</span>: value related to the fourth text element</li> 
+  <li><span id="parameter">text element 5</span>: fifth text element to be shown in the combobox</li>
+  <li><span id="parameter">value element 5</span>: value related to the fifth text element</li> 
+  </ul>
+Enum List Mode:<br>
+<ul>
+  <li><span id="parameter">enum list</span>:&nbsp;global list which defines the pairs (text + value) for the combobox - see mode 3 above</li> </ul>
+Font:<br>
+<ul>
+  <li><span id="parameter">family</span>:&nbsp;font family which will be applied to&nbsp;value (default: Arial)</li>
+  <li><span id="parameter">size</span>:&nbsp;font size which will be applied to the&nbsp;value (default: 12)</li>
+  <li><span id="parameter">color</span>: color which will be applied to the&nbsp;value (default: black)</li>
+  </ul>
+Appearance:<br>
+<ul>
+  <li><span id="parameter">fill color</span>:&nbsp;fill color of the combobox (default: grey)</li>
+  <li><span id="parameter">fill color when inactive</span>:&nbsp;fill color if not active&nbsp;(default: dark grey)</li>
+  <li><span id="parameter">symbol fill</span>: color of the symbol</li>
+  <li><span id="parameter">stroke color pressed</span>: the color of the stroke which will be set when the combobox is clicked (default: white)</li>
+  <li><span id="parameter">focus stroke color</span>: the color of the stroke which will be set when the button is focused (default: white)</li>
+ </ul>
+Security:
+<ul>
+  <li><span id="parameter">necessary right</span>: the user must have this right to activate the combobox i.e. to tick the checkbox</li>
+  <li><span id="parameter">activation address</span>: if the value of this address equals to "activation value", then the combobox will be active, i.e. can be pressed</li>
+  <li><span id="parameter">activation value</span>: value which activiates the combobox</li> </ul>
+<div style="margin-left: 40px;">NOTE: The activation of combobox can be configured only by the necessary right, or only by the&nbsp;activation
+address and value or by both. In case both settings are made, the user
+must have the necessary right and the value of the "activation address"
+must equal the "activation value"; otherwise the combobox will not be activated.<br>
+</div>
+<br>
+Options:<br>
+<ul>
+  <li><span id="parameter">maximum displayed items (0 = all)</span>: number of maximum items to be displayed per scrolling page (0 = scrolling off, default: 0)</li>
+  <li><span id="parameter">consistency group</span>: name of the consistency group</li>
+  <li><span id="parameter">tab index</span>:&nbsp;defines the order for changing between the object displays by using the tab key</li>
+  <li><span id="parameter">tooltip</span>:&nbsp;displays a tooltip box with the entered text (standard HTML-Elements can be entered)</li> </ul>
+<h1>Examples</h1>
+<p>The following code pieces show how to handle the combobox with the triggers:</p>
+<p>setItems<br>
+var entries = [<br>
+&nbsp; { text: "Entry 1", value: "1" },<br>
+&nbsp; { text: "Entry 2", value: "2" },<br>
+&nbsp; { text: "Entry 3", value: "3" }<br>
+];<br>
+webMI.trigger.fire("setItems", entries, "myCombobox");<br>
+<br>
+setSelectedItem<br>
+webMI.trigger.fire("setSelectedItem", "Entry 1", "myCombobox");<br>
+<br>
+addItem<br>
+webMI.trigger.fire("addItem", { text: "Entry 4", value: "4" }, "myCombobox");<br>
+<br>
+getSelectedItem (fires the trigger &bdquo;selectedItem&ldquo;)<br>
+webMI.trigger.fire("getSelectedItem", function(e){alert(e.text+" "+e.value);},"myCombobox");<br>
+<br>or<br><br>
+webMI.trigger.connect("selectedItem", function(e) { alert(e.value); }, "myCombobox");<br>
+webMI.trigger.fire("getSelectedItem", "", "myCombobox");<br>
+<br>
+getItems (fires the trigger &bdquo;items&ldquo;)<br>
+webMI.trigger.connect("items", function(e) { alert(e.value); }, "myCombobox");<br>
+webMI.trigger.fire("getItems", "", "myCombobox");<br>
+</p>
+</body>
+</html>

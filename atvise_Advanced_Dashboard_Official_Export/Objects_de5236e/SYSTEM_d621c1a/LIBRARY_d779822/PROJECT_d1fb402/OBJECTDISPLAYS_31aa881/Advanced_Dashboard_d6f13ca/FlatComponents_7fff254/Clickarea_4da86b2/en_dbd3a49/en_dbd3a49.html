@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title>OD_help</title>
+  <style> #parameter{font-weight:bold;} </style>
+</head>
+<body>
+<h1>Description</h1>
+<p>This control can be used as an overlay element which reacts on clicks.</p>
+<p>In addition, the following triggers are fired:</p>
+<ul>
+  <li>valuechanged: on MouseClick</li>
+  <li>valuechangedMouseUp: on MouseUp</li>
+  <li>valuechangedMouseDown: on MouseDown</li>
+</ul>
+<h1>Parameters</h1>
+<p>This control has&nbsp;the following generic parameters:</p>
+<ul>
+  <li><span id="parameter">base</span>: this address will be set to "value" on&nbsp;MouseClick</li>
+  <li><span id="parameter">value</span>: the "base" will be set to this value on MouseClick</li>
+  </ul>
+Appearance:<br>
+<ul>
+  <li><span id="parameter">focus stroke color</span>: the color of the stroke which will be set when the button is focused (default: white)</li>
+</ul>
+Options:<br>
+<ul>
+  <li><span id="parameter">address to set at MouseDown</span>: the value of "value MouseDown" will be set to this address if the mouse button is pressed</li>
+  <li><span id="parameter">value MouseDown</span>: value to be set on&nbsp;MouseDown</li>
+  <li><span id="parameter">address to set at MouseUp</span>:&nbsp;the value of "value MouseUp" will be set to this address if the mouse button is release</li>
+  <li><span id="parameter">value MouseUp</span>: value to be set on&nbsp;MouseUp</li>
+  <li><span id="parameter">tab index</span>: defines the order for changing between the object displays by using the tab key</li>
+  <li><span id="parameter">tooltip</span>: displays a tooltip box with the entered text (standard HTML-Elements can be entered)</li>
+  </ul>
+<div style="margin-left: 40px;">NOTE: If nothing is specified in this group, "value" will be set to "base".<br>
+<br></div>
+Security:
+<ul>
+  <li><span id="parameter">necessary right</span>: the user must have this right to activate this clickarea, i.e. to press the&nbsp;clickarea</li>
+  <li><span id="parameter">activation address</span>: if the value of this address equals to "activation value", then the&nbsp;clickarea will be active, i.e. can be pressed</li>
+  <li><span id="parameter">activation value</span>: value which activiates the&nbsp;clickarea</li> </ul>
+<div style="margin-left: 40px;">NOTE: The activation of a&nbsp;clickarea can be configured only by the necessary right, or only by the&nbsp;activation
+address and value or by both. In case both settings are made, the user
+must have the necessary right and the value of the "activation address"
+must equal the "activation value"; otherwise the&nbsp;clickarea will not be activated.<br>
+</div>
+</body>
+</html>
