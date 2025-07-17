@@ -46,7 +46,7 @@
   <atv:gridconfig enabled="true" gridstyle="lines" height="20" width="20"/>
   <atv:snapconfig enabled="true" height="5" width="5"/>
  </metadata>
- <rect atv:refpx="300" atv:refpy="175" fill="$ColorActive$" height="350" id="id_2" rx="9.986" ry="9.258" stroke="#f0f0f0" stroke-width="0" width="600" x="0" y="0"/>
+ <rect atv:refpx="300" atv:refpy="175" fill="$ColorActive$" height="350" id="id_2" rx="0" ry="0" stroke="#f0f0f0" stroke-width="0" width="600" x="0" y="0"/>
  <rect atv:refpx="150.25" atv:refpy="150.599" fill="$ColorInactive$" height="289.5" id="id_21" rx="12.54" ry="11.722" stroke="#aaaaaa" stroke-width="1" width="289.5" x="5.5" y="5.5"/>
  <rect atv:refpx="450" atv:refpy="150.349" fill="$ColorInactive$" height="290" id="id_14" rx="13.236" ry="12.373" stroke="#aaaaaa" stroke-width="1" width="290" x="305" y="5"/>
  <text atv:refpx="23.25" atv:refpy="-102.5" fill="$FontColorPopUp$" font-family="Arial" font-size="$FontSizeMenu$" id="id_5" x="19.5" y="62">T{From}</text>
@@ -55,11 +55,8 @@
  <text atv:refpx="33.791" atv:refpy="-137.5" fill="$FontColorPopUp$" font-family="Arial" font-size="$FontSizeMenu$" id="id_19" x="19.5" y="27">T{Select time range}</text>
  <line atv:refpx="110.5" atv:refpy="35.5" id="id_22" stroke="#aaaaaa" stroke-width="1" x1="15.5" x2="205.5" y1="35" y2="35"/>
  <line atv:refpx="415.5" atv:refpy="35.5" id="id_23" stroke="#aaaaaa" stroke-width="1" x1="320.5" x2="510.5" y1="35" y2="35"/>
- <g atv:refpx="233" atv:refpy="325" id="Text_Confirm" transform="matrix(1,0,0,1,6.625,66)">
-  <rect atv:refpx="231.375" atv:refpy="270.5" fill="$ColorInactive$" height="30" id="id_3" rx="13.356" ry="13.356" stroke="#aaaaaa" stroke-width="2" width="160" x="146.375" y="244"/>
-  <text atv:refpx="216.318" atv:refpy="258.5" fill="$FontColorPopUp$" font-family="Arial" font-size="16" id="id_9" x="167.375" y="264.5">T{Apply time range}</text>
-  <rect atv:refpx="225" atv:refpy="260" fill="#000000" fill-opacity="0" height="30" id="id_7" rx="13.356" ry="13.356" stroke="#424242" stroke-width="0" width="160" x="147" y="245"/>
- </g>
+ <rect atv:refpx="231.375" atv:refpy="270.5" fill="$ColorInactive$" height="30" id="id_3" rx="13.356" ry="13.356" stroke="#aaaaaa" stroke-width="2" width="160" x="131" y="309"/>
+ <text atv:refpx="198.943" atv:refpy="323.5" fill="$FontColorPopUp$" font-family="Arial" font-size="16" id="id_9" x="150" y="329.5">T{Apply time range}</text>
  <svg atv:refpx="447.481" atv:refpy="88" height="30" id="Initial_Range_Method" transform="matrix(1.4063,0,0,1,0,0)" width="160" x="238.222" xlink:href="SYSTEM.LIBRARY.ATVISE.OBJECTDISPLAYS.Advanced.combobox" y="73">
   <atv:argument name="fontSize" value="16"/>
   <atv:argument name="fontColor" value="SYSTEM.GLOBALS.atvFontColor2"/>
@@ -114,11 +111,8 @@
   <atv:overwrite id="button_bg" transform="matrix(0.64,0,0,1,0,0)" width="155.25"/>
   <atv:overwrite id="id_2" transform="matrix(0.64,0,0,1,0,0)" width="156.25"/>
  </svg>
- <g atv:refpx="406" atv:refpy="326" id="Text_Cancel">
-  <rect atv:refpx="231.375" atv:refpy="270.5" fill="$ColorInactive$" height="30" id="id_6" rx="13.356" ry="13.356" stroke="#aaaaaa" stroke-width="2" width="160" x="326" y="311"/>
-  <text atv:refpx="329.251" atv:refpy="235.5" fill="$FontColorPopUp$" font-family="Arial" font-size="16" id="id_17" x="379" y="333.5">T{Cancel}</text>
-  <rect atv:refpx="263.375" atv:refpy="233" fill="#000000" fill-opacity="0" height="30" id="id_20" rx="13.356" ry="13.356" stroke="#424242" stroke-width="0" width="160" x="325" y="310"/>
- </g>
+ <rect atv:refpx="216.375" atv:refpy="270.5" fill="$ColorInactive$" height="30" id="id_6" rx="13.356" ry="13.356" stroke="#aaaaaa" stroke-width="2" width="160" x="311" y="309"/>
+ <text atv:refpx="314.251" atv:refpy="231.5" fill="$FontColorPopUp$" font-family="Arial" font-size="16" id="id_17" x="364" y="329.5">T{Cancel}</text>
  <rect atv:refpx="145" atv:refpy="91.5" fill="#9b9b9b" fill-opacity="0.678431" height="31" id="Hide_Initial" stroke="#424242" stroke-width="0" width="250" x="20" y="76"/>
  <rect atv:refpx="145" atv:refpy="174" fill="#9b9b9b" fill-opacity="0.678431" height="31" id="Hide_Final" stroke="#424242" stroke-width="0" width="250" x="20" y="158.5"/>
  <script atv:desc="" atv:name="" type="text/ecmascript"><![CDATA[console.log("Opening Pop Up")
@@ -486,4 +480,6 @@ webMI.addOnload(function () {
 
 
 ]]></script>
+ <rect atv:refpx="248.375" atv:refpy="233" fill="#000000" fill-opacity="0" height="30" id="Text_Cancel" rx="13.356" ry="13.356" stroke="#424242" stroke-width="0" width="160" x="310" y="308"/>
+ <rect atv:refpx="208" atv:refpy="325" fill="#000000" fill-opacity="0" height="30" id="Text_Confirm" rx="13.356" ry="13.356" stroke="#424242" stroke-width="0" width="160" x="130" y="308"/>
 </svg>

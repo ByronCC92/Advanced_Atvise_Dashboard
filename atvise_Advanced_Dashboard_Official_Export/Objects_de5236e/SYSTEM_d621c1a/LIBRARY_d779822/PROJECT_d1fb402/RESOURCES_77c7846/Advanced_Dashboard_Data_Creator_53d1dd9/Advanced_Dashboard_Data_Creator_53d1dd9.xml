@@ -2142,8 +2142,6 @@ class dashboardDataProcessor {
 
         let newIntervalI = false;
         
-        console.log("correspondingIntervalInfo==================")
-          console.log(correspondingIntervalInfo)
         const { start, intervalLength } = correspondingIntervalInfo;
         const calculatedStart = highestTimestamp - intervalLength;
 
@@ -3561,7 +3559,9 @@ class dashboardDataProcessor {
 	
 				// Step 2: Calculate running times
 				const initialTime = new Date(informationRTI.OEEInfo.FtimeA).getTime();
-				const finalTime = new Date(informationRTI.LastDataPointRT[informationRTI.LastDataPointRT.length - 1].timestamps).getTime();
+				//const finalTime = new Date(informationRTI.LastDataPointRT[informationRTI.LastDataPointRT.length - 1].timestamps).getTime();			
+					
+				const finalTime = new Date().getTime();
 				const preliminaryRunningTime = finalTime - initialTime;
 				const plannedDowntimeAcumulated = this.calculatePlannedDowntime(initialTime, finalTime, plannedDowntimePeriods);
 				
@@ -3740,12 +3740,13 @@ class dashboardDataProcessor {
 					
 					//Check Cache
 					let cachedProductivity=this.dataInfoRTFinderbyID("FullRange-OEEProductivity",this.chartConfigI.specialParameters.OEEID);
-					this.DCNotfier.dgConsole("cachedProductivity: ");
-					this.DCNotfier.dgConsole(cachedProductivity[0].LastDataPointProcessed);
+					
 					
 					//If there is info in the cache
 					if (cachedProductivity.length>0){
-						OEEProd=cachedProductivity[0].LastDataPointProcessed;		
+						OEEProd=cachedProductivity[0].LastDataPointProcessed;	
+						this.DCNotfier.dgConsole("cachedProductivity: ");
+						this.DCNotfier.dgConsole(cachedProductivity[0].LastDataPointProcessed);	
 					}
 					//Calculate 
 					else {
@@ -3758,24 +3759,36 @@ class dashboardDataProcessor {
 					
 					//Check Cache
 					let cachedAvailability=this.dataInfoRTFinderbyID("FullRange-OEEAvailability",this.chartConfigI.specialParameters.OEEID);
-					this.DCNotfier.dgConsole("cachedAvailability: ");
-					this.DCNotfier.dgConsole(cachedAvailability[0].LastDataPointProcessed);
+					
 					
 					//If there is info in the cache
 					if (cachedAvailability.length>0){
 						OEEAvail=cachedAvailability[0].LastDataPointProcessed;		
+						this.DCNotfier.dgConsole("cachedAvailability: ");
+						this.DCNotfier.dgConsole(cachedAvailability[0].LastDataPointProcessed);
 					}
 					//Calculate
-					else {
-						// Fetch rawDataAvail
-						const rawDataAvail = this.rawData.find(data => data.Nodeaddress === this.chartConfigI.specialParameters.OEEAvN);
-						OEEAvail=this.FullRange_OEEAvailability(rawDataAvail,{}).ProcessedData[0];
-						
-						//For next Iteration
-						this.OEEinfoRTI["LDataAvRaw"]={
-								Value: rawDataAvail.Values[rawDataAvail.DataSize - 1],
-								status: rawDataAvail.status[rawDataAvail.DataSize - 1],
-								timestamps: rawDataAvail.timestamps[rawDataAvail.DataSize - 1]
+					else {					
+						//Case where Availability provided
+					    if (this.chartConfigI.specialParameters.OEEAvN!=undefined){
+							// Fetch rawDataAvail
+							const rawDataAvail = this.rawData.find(data => data.Nodeaddress === this.chartConfigI.specialParameters.OEEAvN);
+							OEEAvail=this.FullRange_OEEAvailability(rawDataAvail,{}).ProcessedData[0];
+							
+							//For next Iteration
+							this.OEEinfoRTI["LDataAvRaw"]={
+									Value: rawDataAvail.Values[rawDataAvail.DataSize - 1],
+									status: rawDataAvail.status[rawDataAvail.DataSize - 1],
+									timestamps: rawDataAvail.timestamps[rawDataAvail.DataSize - 1]
+							}
+						}
+						else{
+							OEEAvail=100;
+							this.OEEinfoRTI["LDataAvRaw"]={
+									Value: [100],
+									status: [0],
+									timestamps: [new Date().getTime()]
+							}
 						}
 					}
 					
@@ -3784,25 +3797,40 @@ class dashboardDataProcessor {
 					var OEEQual;
 						
 					let cachedQuality=this.dataInfoRTFinderbyID("FullRange-OEEQuality",this.chartConfigI.specialParameters.OEEID);
-					this.DCNotfier.dgConsole("cachedQuality: ");
-					this.DCNotfier.dgConsole(cachedQuality[0].LastDataPointProcessed);
+					
 					
 					//If there is info in the cache
 					if (cachedQuality.length>0){
-						OEEQual=cachedQuality[0].LastDataPointProcessed;		
+						OEEQual=cachedQuality[0].LastDataPointProcessed;
+						this.DCNotfier.dgConsole("cachedQuality: ");
+						this.DCNotfier.dgConsole(cachedQuality[0].LastDataPointProcessed);		
 					}
 					//Calculate
 					else{
-						// Fetch rawDataQual
-						const rawDataQual = this.rawData.find(data => data.Nodeaddress === this.chartConfigI.specialParameters.OEEQuN);	
-						OEEQual=this.FullRange_OEEQuality(rawDataQual,{}).ProcessedData[0];
 						
-						//For next Iteration
-						this.OEEinfoRTI["LDataQuRaw"]={
-								Value: rawDataQual.Values[rawDataQual.DataSize - 1],
-								status: rawDataQual.status[rawDataQual.DataSize - 1],
-								timestamps: rawDataQual.timestamps[rawDataQual.DataSize - 1]
+						//Case where Quality provided
+					    if (this.chartConfigI.specialParameters.OEEQuN!=undefined){
+							// Fetch rawDataQual
+							const rawDataQual = this.rawData.find(data => data.Nodeaddress === this.chartConfigI.specialParameters.OEEQuN);	
+							OEEQual=this.FullRange_OEEQuality(rawDataQual,{}).ProcessedData[0];
+							
+							//For next Iteration
+							this.OEEinfoRTI["LDataQuRaw"]={
+									Value: rawDataQual.Values[rawDataQual.DataSize - 1],
+									status: rawDataQual.status[rawDataQual.DataSize - 1],
+									timestamps: rawDataQual.timestamps[rawDataQual.DataSize - 1]
+							}
 						}
+						//Case where No Quality provided
+						else{
+							OEEQual=100;
+							this.OEEinfoRTI["LDataQuRaw"]={
+									Value: [100],
+									status: [0],
+									timestamps: [new Date().getTime()]
+							}
+						}
+						
 						
 					}		
 					
@@ -3834,12 +3862,13 @@ class dashboardDataProcessor {
 					var OEEPRT;
 					
 					let cachedProductivity=this.dataInfoRTFinderbyID("FullRange-OEEProductivity",this.chartConfigI.specialParameters.OEEID);
-					this.DCNotfier.dgConsole("cachedProductivity: ");
-					this.DCNotfier.dgConsole(cachedProductivity[0].LastDataPointProcessed);		
+					
 					
 					//If there is info in the cache
 					if (cachedProductivity.length>0){
-						OEEPRT=cachedProductivity[0].LastDataPointProcessed;		
+						OEEPRT=cachedProductivity[0].LastDataPointProcessed;	
+						this.DCNotfier.dgConsole("cachedProductivity: ");
+						this.DCNotfier.dgConsole(cachedProductivity[0].LastDataPointProcessed);			
 					}
 					//Calculate
 					else {
@@ -3850,58 +3879,72 @@ class dashboardDataProcessor {
 					var OEEART;
 					
 					let cachedAvailability=this.dataInfoRTFinderbyID("FullRange-OEEAvailability",this.chartConfigI.specialParameters.OEEID);
-					this.DCNotfier.dgConsole("cachedAvailability: ");
-					this.DCNotfier.dgConsole(cachedAvailability[0].LastDataPointProcessed);
+					
 					
 					//If there is info in the cache
 					if (cachedAvailability.length>0){
-						OEEART=cachedAvailability[0].LastDataPointProcessed;		
+						OEEART=cachedAvailability[0].LastDataPointProcessed;
+						this.DCNotfier.dgConsole("cachedAvailability: ");
+						this.DCNotfier.dgConsole(cachedAvailability[0].LastDataPointProcessed);		
 					}
 					//Calculate
 					else{
-						
-						//Create Temp informationRTI
-						const informationART={...this.informationRTI}
-						const informationARTI={
-															LastDataPointRT:[this.readCurrentValue(this.chartConfigI.specialParameters.OEEAvN)],
-															LastDataPointRaw:informationART.OEEInfo.LDataAvRaw,
-															OEEInfo:informationART.OEEInfo
-															}
-						
-						//Create OEE Availability RT
-						OEEART=this.FullRange_OEEAvailability({},informationARTI).ProcessedData[0];	
-	
-						//For next Iteration
-						this.OEEinfoRTI["LDataAvRaw"]=informationARTI.LastDataPointRT[0];
-					
+						//Case where Availability provided
+					    if (this.chartConfigI.specialParameters.OEEAvN!=undefined){
+							//Create Temp informationRTI
+							const informationART={...this.informationRTI}
+							const informationARTI={
+																LastDataPointRT:[this.readCurrentValue(this.chartConfigI.specialParameters.OEEAvN)],
+																LastDataPointRaw:informationART.OEEInfo.LDataAvRaw,
+																OEEInfo:informationART.OEEInfo
+																}
+							
+							//Create OEE Availability RT
+							OEEART=this.FullRange_OEEAvailability({},informationARTI).ProcessedData[0];	
+		
+							//For next Iteration
+							this.OEEinfoRTI["LDataAvRaw"]=informationARTI.LastDataPointRT[0];
+					    }
+					    else{
+								OEEART=100;
+								this.OEEinfoRTI["LDataAvRaw"]=[100];
+					    }
+
 					}					
 					
 									
 					//-------Calculate Quality	
 					var OEEQRT;				
 					let cachedQuality=this.dataInfoRTFinderbyID("FullRange-OEEQuality",this.chartConfigI.specialParameters.OEEID);
-					this.DCNotfier.dgConsole("cachedQuality: ");
-					this.DCNotfier.dgConsole(cachedQuality[0].LastDataPointProcessed);
+					
 					
 					//If there is info in the cache
 					if (cachedQuality.length>0){
 						OEEQRT=cachedQuality[0].LastDataPointProcessed;		
+						this.DCNotfier.dgConsole("cachedQuality: ");
+						this.DCNotfier.dgConsole(cachedQuality[0].LastDataPointProcessed);
 					}
 					//Calculate
 					else{
-					
-						//Create Temp informationRTI
-						const informationQuRT={...this.informationRTI}
-						const informationQuTI={
-															LastDataPointRT:[this.readCurrentValue(this.chartConfigI.specialParameters.OEEQuN)],
-															LastDataPointRaw:informationQuRT.OEEInfo.LDataQuRaw,
-															OEEInfo:informationQuRT.OEEInfo
-															}
-															
-						OEEQRT=this.FullRange_OEEQuality({},informationQuTI).ProcessedData[0];
-												
-							//For next Iteration
-							this.OEEinfoRTI["LDataQuRaw"]=informationQuTI.LastDataPointRT[0];					
+					  //Case where Quality provided
+					    if (this.chartConfigI.specialParameters.OEEQuN!=undefined){
+							//Create Temp informationRTI
+							const informationQuRT={...this.informationRTI}
+							const informationQuTI={
+																LastDataPointRT:[this.readCurrentValue(this.chartConfigI.specialParameters.OEEQuN)],
+																LastDataPointRaw:informationQuRT.OEEInfo.LDataQuRaw,
+																OEEInfo:informationQuRT.OEEInfo
+																}
+																
+						     OEEQRT=this.FullRange_OEEQuality({},informationQuTI).ProcessedData[0];
+													
+								//For next Iteration
+							this.OEEinfoRTI["LDataQuRaw"]=informationQuTI.LastDataPointRT[0];	
+						}	
+						else{
+							     OEEQRT=100;
+								this.OEEinfoRTI["LDataQuRaw"]=[100];
+						}	
 					}				
 										
 					//Calculate OEE										

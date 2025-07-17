@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<svg height="304.80000000000001" version="1.2" width="607.60000000000002" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg height="280" version="1.2" width="600" xmlns="http://www.w3.org/2000/svg" xmlns:atv="http://webmi.atvise.com/2007/svgext" xmlns:xlink="http://www.w3.org/1999/xlink">
  <defs/>
  <metadata>
-  <atv:parameter behavior="optional" defaultvalue="" desc="Dashboard ID" group="GeneralConfig" name="DashboardID" valuetype="string"/>
-  <atv:parameter behavior="optional" config="Line;Spline;Area;Column;Bar;Pie;Pyramid;Solidgauge;Histogram;Gauge" defaultvalue="" desc="Chart Type" group="GeneralConfig" name="ChartType" valuetype="enum"/>
+  <atv:parameter behavior="mandatory" defaultvalue="" desc="Dashboard ID" group="GeneralConfig" name="DashboardID" valuetype="string"/>
+  <atv:parameter behavior="mandatory" config="Line;Spline;Area;Column;Bar;Pie;Pyramid;Solidgauge;Histogram;Gauge" defaultvalue="Line" desc="Chart Type" group="GeneralConfig" name="ChartType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="Values;Alarms;Aggregates" defaultvalue="Values" desc="Data Type" group="GeneralConfig" name="DataType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="EnumList;Text" defaultvalue="Text" desc="Series Source" group="GeneralConfig" name="SeriesSource" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="InitialRange" group="GeneralConfig" name="InitialRange" valuetype="number"/>
@@ -46,7 +46,7 @@
   <atv:parameter behavior="optional" config="Fixed;Node" defaultvalue="Fixed" desc="E Parameter Type" group="Formula f(X)" name="EParameterType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="E Parameter Value" group="Formula f(X)" name="EParameterValue" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="E Parameter Node" group="Formula f(X)" name="EParameterNode" valuetype="address"/>
-  <atv:parameter behavior="optional" config="AllData-DateTime;Interval-CustomText;Interval-CustomInterval;Interval-Dynamic;Interval-Histogram;Single-Simple" defaultvalue="" desc="Category Type" group="Category Selection" name="CategoryType" valuetype="enum"/>
+  <atv:parameter behavior="mandatory" config="AllData-DateTime;Interval-CustomText;Interval-CustomInterval;Interval-Dynamic;Interval-Histogram;Single-Simple" defaultvalue="AllData-DateTime" desc="Category Type" group="Category Selection" name="CategoryType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="true" desc="Category Round Up" group="Category Selection" name="CategoryRound" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Custom Category" group="Category Selection" name="CategoryCustomText" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="1" desc="Custom Interval Length" group="Category Selection" name="CategoryCustomIntervalLength" valuetype="number"/>
@@ -87,23 +87,26 @@
   <atv:parameter behavior="optional" defaultvalue="18" desc="TitleFontSize" group="Appereance" name="FontSizeTitle" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="14" desc="xAxis FontSize" group="Appereance" name="FontSizexAxis" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="14" desc="yAxis FontSize" group="Appereance" name="FontSizeyAxis" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="16" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="16" desc="Data Labels FontSize" group="Appereance" name="FontSizedataLabels" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="14" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="14" desc="Data Labels FontSize" group="Appereance" name="FontSizedataLabels" valuetype="number"/>
   <atv:parameter behavior="optional" config="Value-Simple;Time-Dynamic;Time-Custom" defaultvalue="Value-Simple" desc="Data Label Type" group="Appereance" name="DatalabelType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="mm:ss" desc="Data Label CustomTime Format" group="Appereance" name="DatalabelCustomTimeFormat" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="Datalabel Number Decimals" group="Appereance" name="DatalabelNumberDecimals" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Datalabel Unit" group="Appereance" name="DatalabelUnit" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Datalabel Unit Prefix" group="Appereance" name="DatalabelUnitPrefix" valuetype="string"/>
+  <atv:parameter behavior="optional" config="none;#ffffff" defaultvalue="none" desc="Datalabel Outline" group="Appereance" name="DatalabelOutline" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="normal;bold" defaultvalue="bold" desc="Datalabel Font Weight" group="Appereance" name="DatalabelWeight" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="Line Width" group="Line Only" name="LineLineWidth" valuetype="number"/>
   <atv:parameter behavior="optional" config="Dash;DashDot;Dot;LongDash;LongDashDot;LongDashDotDot;ShortDash;ShortDashDot;ShortDashDotDot;ShortDot;Solid" defaultvalue="Solid" desc="Line Dash Style" group="Line Only" name="LineDashStyle" valuetype="enum"/>
   <atv:parameter behavior="optional" config="left;center;right" defaultvalue="center" desc="Label Position" group="Column Only" name="ColumnLabelPosition" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Stack Enabled" group="Column Only" name="ColumnStackEnabled" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="Column Rotation" group="Column Only" name="ColumnRotation" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="100" desc="Pie Chart Size (%)" group="Pie Only" name="PieSize" valuetype="number"/>
   <atv:parameter behavior="optional" config="true;false" defaultvalue="false" desc="Place Labels Inside Pie" group="Pie Only" name="PieLabelInside" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="30" desc="Label Distance (pixels)" group="Pie Only" name="PieLabelDistance" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="100" desc="Max Value" group="Solid Gauge Only" name="SolidGaugeMaxValue" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="" desc="Unit" group="Solid Gauge Only" name="SolidGaugeUnit" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="80" desc="OuterRadius" group="Solid Gauge Only" name="SolidGaugeOuterRadius" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="55" desc="InnerRadius" group="Solid Gauge Only" name="SolidGaugeInnerRadius" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="70" desc="OuterRadius" group="Solid Gauge Only" name="SolidGaugeOuterRadius" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="50" desc="InnerRadius" group="Solid Gauge Only" name="SolidGaugeInnerRadius" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Unit" group="Gauge Only" name="GaugeUnit" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="0" desc="Gauge Min" group="Gauge Only" name="GaugeMin" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="100" desc="Gauge Max" group="Gauge Only" name="GaugeMax" valuetype="number"/>
@@ -133,12 +136,25 @@
   <atv:parameter behavior="optional" defaultvalue="SYSTEM.GLOBALS.Advanced_Dashboard_List.OEE_Planned_Downtime_List" desc="Planned Downtime Enum" group="OEE Only" name="OEEPlannedDowntimeEnum" valuetype="global"/>
   <atv:parameter behavior="optional" desc="Planned Downtime Counter Node" group="OEE Only" name="OEEPlannedDowntimeCounterNode" valuetype="address"/>
   <atv:parameter behavior="optional" config="Input-BadUnits;Input-GoodUnits" defaultvalue="Input-BadUnits" desc="Quality Input Method" group="OEE Only" name="OEEQualityMethod" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="Value;Percentage" defaultvalue="Percentage" desc="Data Label Format" group="Pie Only" name="DataLabelFormat" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Reversed" group="Pyramid Only" name="PyramidReversed" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="60" desc="Width" group="Pyramid Only" name="PyramidWidth" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="90" desc="Height" group="Pyramid Only" name="PyramidHeight" valuetype="number"/>
+  <atv:parameter behavior="optional" config="Percentage;Value" defaultvalue="Percentage" desc="Data Label Format" group="Pyramid Only" name="PyramidDataLabelFormat" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="right;left;top;bottom" defaultvalue="bottom" desc="Legend Position" group="Pyramid Only" name="PyramidLegendPosition" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="" group="Tooltip" name="TooltipSufix" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" group="Tooltip" name="TooltipPrefix" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable X-Axis visibility for specific charts" group="options" name="EnableXAxis" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Y-Axis visibility for specific charts" group="options" name="EnableYAxis" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Exporting" group="options" name="EnableExporting" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Legend for specific charts" group="options" name="EnableLegend" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="14" desc="SubTitleFontSize" group="Appereance" name="FontSizeSubTitle" valuetype="number"/>
   <atv:gridconfig enabled="true" gridstyle="lines" height="20" width="20"/>
   <atv:snapconfig enabled="true" height="10" width="10"/>
  </metadata>
- <rect atv:refpx="303.798" atv:refpy="140.5" fill="none" height="279" id="Border" stroke="#000000" stroke-width="2" width="605.597" x="1" y="1"/>
+ <rect atv:refpx="300" atv:refpy="140" fill="none" height="280" id="Border" stroke="#747474" stroke-width="1" width="600" x="0" y="0"/>
  <text atv:refpx="222.595" atv:refpy="160.4" fill="none" font-family="Arial" font-size="36" id="Label" text-anchor="middle" x="303.8" y="164.9">Advanced Chart</text>
- <foreignObject height="280" id="Chart_Container" width="605.597" x="0" y="0">
+ <foreignObject height="280" id="Chart_Container" width="600" x="0" y="0">
   <div style="width:100%;height:100%" xmlns="http://www.w3.org/1999/xhtml"/>
  </foreignObject>
  <script atv:desc="" atv:name="" type="text/ecmascript" xlink:href="../../highcharts/highcharts.js"/>
@@ -289,6 +305,7 @@ const elementRawConfig = {
 		ColorYaxis: webMI.query["ColoryAxis"],
 		ColorDataLabels: webMI.query["ColordataLabels"],
 		FontSizeTitle: webMI.query["FontSizeTitle"],
+		FontSizeSubTitle: webMI.query["FontSizeSubTitle"],
 		FontSizeXaxis: webMI.query["FontSizexAxis"],
 		FontSizeYaxis: webMI.query["FontSizeyAxis"],
 		FontSizeLegend: webMI.query["FontSizeLegend"],
@@ -296,9 +313,17 @@ const elementRawConfig = {
 		DatalabelType: webMI.query["DatalabelType"],
 		DatalabelCustomTimeFormat: webMI.query["DatalabelCustomTimeFormat"],
 		DatalabelNumberDecimals: webMI.query["DatalabelNumberDecimals"],
-		DatalabelUnit: webMI.query["DatalabelUnit"]
+		DatalabelUnit: webMI.query["DatalabelUnit"],
+		DatalabelUnitPrefix: webMI.query["DatalabelUnitPrefix"],
+		DatalabelOutline: webMI.query["DatalabelOutline"],
+		DatalabelWeight: webMI.query["DatalabelWeight"],
+
 	},
 	
+	Tooltip: {
+		TooltipSufix: webMI.query["TooltipSufix"], //New
+		TooltipPrefix: webMI.query["TooltipPrefix"], //New
+	},
 	// Line
 	Line: {
 		LineLineWidth: webMI.query["LineLineWidth"],
@@ -308,19 +333,29 @@ const elementRawConfig = {
 	// Column
 	Column: {
 		LabelPosition: webMI.query["ColumnLabelPosition"],
-		StackEnabled: webMI.query["ColumnStackEnabled"]
+		StackEnabled: webMI.query["ColumnStackEnabled"],
+		ColumnRotation: webMI.query["ColumnRotation"]
 	},
 	
 	// Pie
 	Pie: {
 		PieSize: webMI.query["PieSize"],
 		PieLabelInside: webMI.query["PieLabelInside"] === "true", // Convert to boolean
-        PieLabelDistance: webMI.query["PieLabelDistance"]
+        PieLabelDistance: webMI.query["PieLabelDistance"],
+        DataLabelFormat: webMI.query["DataLabelFormat"]
+	},
+	
+	// Pyramid
+	Pyramid: {
+		PyramidReversed: webMI.query["PyramidReversed"] === "true", // Convert to boolean
+        PyramidWidth: webMI.query["PyramidWidth"],
+        PyramidHeight: webMI.query["PyramidHeight"],
+        PyramidDataLabelFormat: webMI.query["PyramidDataLabelFormat"],
+        PyramidLegendPosition: webMI.query["PyramidLegendPosition"],
 	},
 	
 	// SolidGauge
 	SolidGauge: {
-		Unit: webMI.query["SolidGaugeUnit"],
 		MaxValue: webMI.query["SolidGaugeMaxValue"],
 		OuterRadius: webMI.query["SolidGaugeOuterRadius"],
 		InnerRadius: webMI.query["SolidGaugeInnerRadius"]
@@ -370,8 +405,13 @@ const elementRawConfig = {
 		OEEPlannedDowntimeCounterNode:webMI.query["OEEPlannedDowntimeCounterNode"],
 		//Quality Method
 		OEEQualityMethod:webMI.query["OEEQualityMethod"]
-	}
-	
+	},
+	Options: {
+        EnableXAxis: webMI.query["EnableXAxis"],
+        EnableYAxis: webMI.query["EnableYAxis"],
+        EnableLegend: webMI.query["EnableLegend"],
+        EnableExporting: webMI.query["EnableExporting"] === false
+    }
 };
 
 
@@ -853,6 +893,12 @@ class singleChartManager {
 		
 		//Chart Options
 		const chartOptions =  {
+			credits: {
+				enabled: false			
+			},
+			exporting: {
+				enabled: this.elementRawConfig.Options.EnableExporting
+			},
 			chart: {
 				type: (this.elementRawConfig.GeneralConfig.ChartType).toLowerCase(),
 				backgroundColor: this.defineBackgroundColor(),
@@ -869,10 +915,12 @@ class singleChartManager {
 			subtitle: {
 				text: this.elementRawConfig.Appearance.Subtitle,
 				style: {
+					fontSize: this.elementRawConfig.Appearance.FontSizeSubTitle + 'px',
 					color: this.elementRawConfig.Appearance.ColorSubTitle
 				}
 			},
 			xAxis: {
+				//visible: this.elementRawConfig.Options.EnableXAxis,
 				title: {
 					text: this.elementRawConfig.Appearance.XName,
 					style: {
@@ -1014,6 +1062,7 @@ class singleChartManager {
 							this.chartReference.xAxis[0].setCategories(customCategories, false);							
 						break;
 						case "Column":
+						case 'Bar':
 							 this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
 						break;
 						
@@ -1024,6 +1073,243 @@ class singleChartManager {
 					this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
 				}
 			}
+		}
+	}
+	
+	//Update Series
+	updateSeries1(){
+	
+		//This update the series based on the type
+				
+		//Prepare conditions
+		const isDateTime = this.elementRawConfig.Category.CategoryType === "AllData-DateTime";
+		const elementDataI = this.elementData.chartData;
+		
+		// Remove existing series 
+		while (this.chartReference.series.length > 0) {
+			this.chartReference.series[0].remove(false);
+		}
+		
+		//Create Colors
+		this.chartColors=this.createChartColors();
+				
+		//Add Series based on type
+		switch (this.elementRawConfig.GeneralConfig.ChartType) {
+			case "Pie":
+			case "Pyramid":
+				console.log("---------Is Pie or Pyramid-------");
+				var seriesData;
+				var seriesI={};
+				
+				//Add limits to the series
+				if (this.limitAnalysisEnabled){ 
+					console.log("-------Adding limits-----");	
+					this.addLimitSeries();	
+					
+					seriesData=this.elementData.chartData.chartSeries[0].data;
+					seriesI={
+							name: this.elementRawConfig.GeneralConfig.ChartType,
+							data: seriesData
+							}
+				}	
+				
+				else{
+					console.log("elementDataI");
+					console.log(elementDataI.chartSeries[0].data);
+					seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => {
+						const obj = {
+							y: dataPoint.y,
+							name: this.defineChartLabel(dataPoint.name)
+						};
+						if (this.chartColors && this.chartColors[index]) {
+							obj.color = this.chartColors[index];
+						}
+						return obj;
+					});
+					seriesI={
+						name: this.elementRawConfig.GeneralConfig.ChartType,
+						data: seriesData
+					}
+				}
+				this.chartReference.addSeries(seriesI, false);
+			break;		
+				
+			case "Solidgauge": {
+				console.log("---------Is Solidgauge-------");
+				let seriesData;
+				let seriesI = {};
+		
+				if (this.limitAnalysisEnabled) {
+					console.log("-------Adding limits-----");
+					this.addLimitSeries();
+					seriesData = this.elementData.chartData.chartSeries[0].data;
+					seriesI = {
+						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
+						data: seriesData,
+						dial: this.elementData.chartData.chartSeries[0].dial
+					};
+				} else {
+					// Para Solidgauge solo se usa un color por serie
+					seriesData = elementDataI.chartSeries[0].data.map((dataPoint) => ({
+						y: dataPoint
+					}));
+					seriesI = {
+						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
+						data: seriesData
+					};
+					// Si tienes chartColors y el primero existe, asigna color
+					if (this.chartColors && this.chartColors[0]) {
+						seriesI.color = this.chartColors[0];
+						console.log("Color for the series")
+						console.log( this.chartColors[0]);
+						console.log(seriesI.color);
+					}
+					// Si no hay color definido, Highcharts usará el default de la librería
+				}
+		
+				this.chartReference.addSeries(seriesI, false);
+				console.log(this.chartReference);
+				break;
+             }
+			case "Gauge":
+				console.log("---------Is Gauge-------");
+				var seriesData;
+				var seriesI={};
+				
+				//Add limits to the series
+				if (this.limitAnalysisEnabled){ 
+					console.log("-------Adding limits-----");	
+					this.addLimitSeries();	
+
+					seriesData= this.elementData.chartData.chartSeries[0].data;
+					seriesI={
+						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
+						data: seriesData,
+						dial:this.elementData.chartData.chartSeries[0].dial
+					}
+				}				
+				else{				
+				/*	seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
+						y:dataPoint,
+						color: this.chartColors[index],
+					}));	*/
+					seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => {
+    const obj = { y: dataPoint };
+    if (this.chartColors && this.chartColors[index]) {
+        obj.color = this.chartColors[index];
+    }
+    return obj;
+});
+					seriesI={
+						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
+						data: seriesData
+					}				
+				}	
+				
+				this.chartReference.addSeries(seriesI, false);
+			break;			
+			
+			case "Line":
+			case "Area":
+		/*	case "Spline":
+				console.log("---------Is Line,Area or Spline-------");
+				
+				//Add limits to the series
+				if (this.limitAnalysisEnabled){ 
+					console.log("-------Adding limits-----");	
+					this.addLimitSeries();		
+				}
+				
+				console.log("-------Element Data-----");	
+				console.log(elementDataI);	
+				// Add new series for other chart types
+				elementDataI.chartSeries.forEach((series, index) => {
+				
+					//It is a Limit Series (All Data only)
+					if(series.custom==this.limitKey){
+						this.chartReference.addSeries(series, false);
+					}
+					else { //It is not a Limit Series
+						this.chartReference.addSeries({
+							name: this.defineChartLabel(series.name),
+							data: series.data,
+							color: this.chartColors[index]
+						}, false);
+					}				
+				});
+				break;*/
+				case "Spline": {
+				console.log("---------Is Line, Area or Spline-------");
+				if (this.limitAnalysisEnabled) {
+					console.log("-------Adding limits-----");
+					this.addLimitSeries();
+				}
+				elementDataI.chartSeries.forEach((series, index) => {
+					if (series.custom === this.limitKey) {
+						this.chartReference.addSeries(series, false);
+					} else {
+						const newSeries = {
+							name: this.defineChartLabel(series.name),
+							data: series.data
+						};
+						if (this.chartColors && this.chartColors[index]) {
+							newSeries.color = this.chartColors[index];
+						}
+						this.chartReference.addSeries(newSeries, false);
+					}
+				});
+				break;
+                }
+						
+				case "Column":
+				case 'Bar':
+				case "Histogram":
+				 default: {
+        console.log("---------Is Column or Histogram-------");
+        if (this.limitAnalysisEnabled) {
+            console.log("-------Adding limits-----");
+            this.addLimitSeries();
+        }
+        elementDataI.chartSeries.forEach((series, index) => {
+            if (this.limitAnalysisEnabled) {
+                this.chartReference.addSeries(series, false);
+            } else {
+                const newSeries = {
+                    name: this.defineChartLabel(series.name),
+                    data: series.data
+                };
+                if (this.chartColors && this.chartColors[index]) {
+                    newSeries.color = this.chartColors[index];
+                }
+                this.chartReference.addSeries(newSeries, false);
+            }
+        });
+        break;
+    }
+				/*default:
+					console.log("---------Is Column or Histogram-------");
+					if (this.limitAnalysisEnabled){ 
+							console.log("-------Adding limits-----");
+							this.addLimitSeries();	
+					}
+							console.log("elementDataI.chartSeries");
+							console.log(elementDataI.chartSeries);	
+						// Add new series for other chart types
+					elementDataI.chartSeries.forEach((series, index) => {
+						if (this.limitAnalysisEnabled){ 				
+							this.chartReference.addSeries(series, false);	
+						}					
+						//No limits
+						else{
+							
+							this.chartReference.addSeries({
+								name: this.defineChartLabel(series.name),
+								data: series.data,
+								color: this.chartColors[index]
+							}, false);			
+						}
+					});
+				break;	*/			
 		}
 	}
 	
@@ -1171,6 +1457,7 @@ class singleChartManager {
 		}
 	}
 	
+	
 	//Specific Chart Update
 	specificUpdate() {
 
@@ -1297,16 +1584,25 @@ class singleChartManager {
 						panKey: this.elementRawConfig.Zoom.ZoomEnabled === "true" ? 'shift' : ''
 					},
 					plotOptions: {
+						series: {
+							dataLabels:{
+								inside: false,
+								rotation: this.elementRawConfig.Column.ColumnRotation,						
+							}						
+						},
 						column: {
 							stacking: this.elementRawConfig.Column.StackEnabled === "true" ? 'normal' : undefined,
 							borderWidth: 0,
 							groupPadding: 0.2,
 							dataLabels: {
 								enabled: true, // Consider making configurable
+								inside: false,
+								y: -8,
 								style: {
 									color: this.elementRawConfig.Appearance.ColorDataLabels,
 									fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px',
-                                    textOutline: 'none'
+                                    textOutline: this.elementRawConfig.Appearance.DatalabelOutline,
+                                    fontWeight: this.elementRawConfig.Appearance.DatalabelWeight
 								},
 								align: this.elementRawConfig.Column.LabelPosition || 'center',
 								verticalAlign: 'bottom',
@@ -1319,54 +1615,141 @@ class singleChartManager {
 				}, false);
 				break;
 
-			case "Bar":
-				 this.chartReference.update({
-					plotOptions: {
-						bar: {
-                            stacking: this.elementRawConfig.Column.StackEnabled === "true" ? 'normal' : undefined,
-							dataLabels: {
-								enabled: true, // Consider making configurable
-                                style: {
-									color: this.elementRawConfig.Appearance.ColorDataLabels,
-									fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px',
-                                    textOutline: 'none'
+		case "Bar":
+			this.chartReference.update({
+				chart: {
+					zooming: this.elementRawConfig.Zoom.ZoomEnabled === "true" ? { type: 'y' } : {},
+					panning: this.elementRawConfig.Zoom.ZoomEnabled === "true",
+					panKey: this.elementRawConfig.Zoom.ZoomEnabled === "true" ? 'shift' : ''
+				},
+				plotOptions: {
+					series: {
+									dataLabels:{
+										inside: false							
+									}						
 								},
-                                formatter: function() { return labelFormatterR(this.y); }
-							}
+					bar: {
+						stacking: this.elementRawConfig.Column.StackEnabled === "true" ? 'normal' : undefined, // Usa la misma config de columna
+						borderWidth: 0,
+						groupPadding: 0.2,
+						dataLabels: {
+							enabled: true,
+							inside: false,
+							style: {
+								color: this.elementRawConfig.Appearance.ColorDataLabels,
+								fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px',
+								textOutline: this.elementRawConfig.Appearance.DatalabelOutline,
+								fontWeight: this.elementRawConfig.Appearance.DatalabelWeight
+							},
+							align: this.elementRawConfig.Column.LabelPosition || 'center',
+							verticalAlign: 'middle', // Para bar el valor común suele ser 'middle'
+							formatter: function () { return labelFormatterR(this.y); }
 						}
-					},
-                    // Bar chart plot lines are on the X-Axis (value axis)
-                    xAxis: { plotLines: getConditionalXAxisPlotLines() },
-                    tooltip: { formatter: function () { return this.series.chart.options.chart.chartManager.tooltipCreator(this); } }
-				}, false);
-				break;
+					}
+				},
+				
+				xAxis: { plotLines: getConditionalXAxisPlotLines() }, // En Bar los límites van sobre X
+				tooltip: { formatter: function () { return this.series.chart.options.chart.chartManager.tooltipCreator(this); } }
+			}, false);
+			break;
+
 
 			case "Pie":
                 // No Y-Axis plot lines for Pie charts
                 const pieSizeParam = parseFloat(this.elementRawConfig.Pie.PieSize);
                 const pieSize = (!isNaN(pieSizeParam) && pieSizeParam > 0) ? pieSizeParam + '%' : '100%';
-                const labelInside = this.elementRawConfig.Pie.PieLabelInside === "true";
+                const labelInside = this.elementRawConfig.Pie.PieLabelInside === true;
                 const labelDistanceParam = parseFloat(this.elementRawConfig.Pie.PieLabelDistance);
-                let labelDistance = labelInside ? -40 : 30;
-                if (!isNaN(labelDistanceParam)) { labelDistance = labelInside ? -Math.abs(labelDistanceParam) : Math.abs(labelDistanceParam); }
-                let labelOptions = {
-                    enabled: true, distance: labelDistance, format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                    overflow: 'justify', crop: false, style: { textOverflow: 'clip' },
-                    connectorShape: labelInside ? 'connector' : 'crookedLine', crookDistance: '70%'
+                let labelDistance = labelInside ? -40 : (parseFloat(this.elementRawConfig.Pie.PieLabelDistance) || 30); // Use PieLabelDistance, fallback to 30
+                 if (!isNaN(labelDistanceParam)) {
+                    labelDistance = labelInside ? -Math.abs(labelDistanceParam) : Math.abs(labelDistanceParam);
+                }
+
+                let  pieLabelFormat;
+                if (this.elementRawConfig.Pie.DataLabelFormat === 'Percentage') {
+                    pieLabelFormat = '{point.percentage:.1f} %';
+                } else if (this.elementRawConfig.Pie.DataLabelFormat === 'Value') {
+                    pieLabelFormat = `{point.y} ${this.elementRawConfig.Appearance.DatalabelUnit || ''}`;
+                } else { // Default to name and percentage (from xml1 original)
+                     pieLabelFormat = '<b>{point.name}</b>: {point.percentage:.1f} %';
+                }
+                
+                let  labelOptions = {
+                    enabled: true, distance: labelDistance, format: pieLabelFormat,
+                    overflow: 'justify', crop: false, style: { textOverflow: 'clip', fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px', color: this.elementRawConfig.Appearance.ColorDataLabels,                         textOutline: this.elementRawConfig.Appearance.DatalabelOutline,
+                        fontWeight: this.elementRawConfig.Appearance.DatalabelWeight },
+                    connectorShape: labelInside ? 'connector' : 'crookedLine', crookDistance: '70%',
                 };
 				this.chartReference.update({
-					plotOptions: { pie: { size: pieSize, allowPointSelect: true, cursor: 'pointer', dataLabels: labelOptions } },
+					plotOptions: { pie: { size: pieSize, allowPointSelect: true, cursor: 'pointer', dataLabels: labelOptions, showInLegend: true, borderWidth:0, borderRadius: 3  } },
+					legend: { enabled: true, itemStyle: { fontSize: this.elementRawConfig.Appearance.FontSizeLegend + 'px' } },
 					tooltip: { formatter: function () { return this.series.chart.options.chart.chartManager.tooltipCreator(this); } }
 				}, false);
 				break;
 
-			case "Pyramid":
-                // No Y-Axis plot lines for Pyramid charts
-				this.chartReference.update({
-					plotOptions: { pyramid: { reversed: false, width: '70%', height: '80%', dataLabels: { enabled: true, format: '<b>{point.name}</b>: {point.y:.1f}' } } },
-					tooltip: { formatter: function () { return this.series.chart.options.chart.chartManager.tooltipCreator(this); } }
-				}, false);
+				case "Pyramid":
+					
+					let  pyLabelFormat;
+					if (this.elementRawConfig.Pyramid.PyramidDataLabelFormat === 'Percentage') {
+						pyLabelFormat = '{point.percentage:.1f} %';
+					} else if (this.elementRawConfig.Pyramid.PyramidDataLabelFormat === 'Value') {
+						pyLabelFormat = `{point.y} ${this.elementRawConfig.Appearance.DatalabelUnit || ''}`;
+					} else { // Default to name and percentage (from xml1 original)
+						 pyLabelFormat = '<b>{point.name}</b>: {point.percentage:.1f} %';
+					}
+					
+					    const pyramidLegendPosition = this.elementRawConfig.Pyramid.PyramidLegendPosition || 'bottom';
+						let legendAlign = 'center', legendVerticalAlign = 'bottom', legendLayout = 'horizontal';
+						if (pyramidLegendPosition === 'right') {
+							legendAlign = 'right';
+							legendVerticalAlign = 'middle';
+							legendLayout = 'vertical';
+						} else if (pyramidLegendPosition === 'top') {
+							legendAlign = 'center';
+							legendVerticalAlign = 'top';
+							legendLayout = 'horizontal';
+						} else if (pyramidLegendPosition === 'left') {
+							legendAlign = 'left';
+							legendVerticalAlign = 'middle';
+							legendLayout = 'vertical';
+						}
+					
+					let  pylabelOptions = {
+						enabled: true,
+						distance: 15,
+						format: pyLabelFormat,
+						style: {
+							fontSize: this.elementRawConfig.Appearance.FontSizeDataLabels + 'px',
+							color: this.elementRawConfig.Appearance.ColorDataLabels,
+							textOutline: this.elementRawConfig.Appearance.DatalabelOutline,
+							fontWeight: this.elementRawConfig.Appearance.DatalabelWeight
+						},
+						//connectorWidth: pylabelInside ? 0 : 1,
+						softConnector: true
+						// Omitimos connectorShape para etiquetas dentro
+					};
+					
+					this.chartReference.update({
+						plotOptions: { 
+							pyramid: { 
+								reversed: this.elementRawConfig.Pyramid.PyramidReversed, 
+								width: this.elementRawConfig.Pyramid.PyramidWidth + "%", 
+								height: this.elementRawConfig.Pyramid.PyramidHeight + "%", 
+								dataLabels: pylabelOptions
+							},
+							series: { showInLegend: true } // from chartElement.txt implicit logic
+						},
+						legend: { // from chartElement.txt implicit logic
+							enabled: true,
+							layout: legendLayout,
+							verticalAlign: legendVerticalAlign,
+							align: legendAlign,	
+							itemStyle: { fontSize: this.elementRawConfig.Appearance.FontSizeLegend + 'px' },				
+						},
+						tooltip: { formatter: function () { return this.series.chart.options.chart.chartManager.tooltipCreator(this); } }
+					}, false);
 				break;
+
 
 			case "Histogram":
 				 this.chartReference.update({
@@ -1453,8 +1836,24 @@ class singleChartManager {
 		}
 	}
 	
+	formatTooltipValue(value) {
+		
+		const decimals = Number(this.elementRawConfig.Appearance.DatalabelNumberDecimals) || 0;
+		const prefix   = this.elementRawConfig.Tooltip.TooltipPrefix || '';
+		const suffix   = this.elementRawConfig.Tooltip.TooltipSufix  || '';
+		
+		let formatted = (Number.isInteger(value))
+			? value.toString()
+			: value.toFixed(decimals).replace(/\.?0+$/, '');
+	
+		    const pre = prefix ? `${prefix} ` : '';
+			const suf = suffix ? ` ${suffix}` : '';
+
+			return `${pre}${formatted}${suf}`;
+	}
+	
 	//Creates tooltip when called it
-	tooltipCreator (thisI) {						
+	tooltipCreator0 (thisI) {						
 	
 	
 		const chartManager = thisI.series.chart.options.chart.chartManager;
@@ -1469,7 +1868,8 @@ class singleChartManager {
 			case "Spline":
 			case "Area":
 				const date = new Date(thisI.x).toLocaleString(); // Converts x-value to a formatted date string
-							return `<b style="color: ${thisI.series.color};">${"Date"}</b>: ${date}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${(thisI.y).toFixed(3)}`;			
+							return `<b style="color: ${thisI.series.color};">${"Date"}</b>: ${date}<br>
+											<b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${(thisI.y).toFixed(3)}`;			
 				break;
 			//Pie Chart
 			case "Pie":
@@ -1516,6 +1916,92 @@ class singleChartManager {
 				break;
 		}
 		return tooltip;
+	}
+	
+    tooltipCreator(thisI) {						
+			const chartManager = thisI.series.chart.options.chart.chartManager;
+			const operationMode = chartManager.operationMode;
+			let tooltipInfo = chartManager.previousTooltip;
+			var tooltip;
+			var foundTooltip;
+		
+			switch (this.elementRawConfig.GeneralConfig.ChartType) {
+				case "Line":
+				case "Spline":
+				case "Area":
+					const date = new Date(thisI.x).toLocaleString();
+					return `<b style="color: ${thisI.series.color};">${"Date"}</b>: ${date}<br>
+							<b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;			
+				
+				case "Pie":
+				case "Pyramid":
+					foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.key);
+					if (!foundTooltip) return `<b>${thisI.key}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {
+						tooltip = `<b style="color: ${thisI.series.color || thisI.point.color};">Date</b>: ${foundTooltip.tooltipInfo}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">${thisI.key}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					else if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
+						tooltip = `<b style="color: ${thisI.series.color || thisI.point.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">${thisI.key}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Simple")) {
+						tooltip = `<b style="color: ${thisI.series.color || thisI.point.color};">Date</b>: ${foundTooltip.tooltipInfo}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">${thisI.key}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					break;
+		
+				case "Solidgauge":
+				case "Gauge":
+					foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.series.name);
+					if (!foundTooltip) return `<b>${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {
+						tooltip = `<b style="color: ${thisI.series.color || thisI.point.color};">Date</b>: ${foundTooltip.tooltipInfo}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					else if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
+						tooltip = `<b style="color: ${thisI.series.color || thisI.point.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Simple")) {
+						tooltip = `<b style="color: ${thisI.series.color || thisI.point.color};">Date</b>: ${foundTooltip.tooltipInfo}<br>
+								   <b style="color: ${thisI.series.color || thisI.point.color};">${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					break;
+		
+				case "Column":
+				case "Bar":
+					foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.series.name);
+					if (!foundTooltip) return `<b>${thisI.series.name}</b> (${thisI.x}): ${this.formatTooltipValue(thisI.y)}`;
+					if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {
+						tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br>
+								   <b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					else if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
+						tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br>
+								   <b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br>
+								   <b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;
+					}
+					else if (chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Interval")) {
+						const index = thisI.point.index;
+						if (foundTooltip.tooltipInfo && foundTooltip.tooltipInfo[index]) {
+							tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo[index].start}<br>
+									   <b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo[index].end}<br>
+									   <b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${this.formatTooltipValue(thisI.y)}`;
+						} else {
+							tooltip = `<b>${thisI.series.name}</b> (${thisI.x}): ${this.formatTooltipValue(thisI.y)}`;
+						}
+					} else {
+						tooltip = `<b>${thisI.series.name}</b> (${thisI.x}): ${this.formatTooltipValue(thisI.y)}`;
+					}
+					break;
+		
+				default:
+					tooltip = `<b>${thisI.series.name}</b><br/>Range: ${thisI.x} - ${thisI.x2 !== undefined ? thisI.x2 : thisI.x }<br/>Value: ${this.formatTooltipValue(thisI.y)}`;
+			}
+			return tooltip || `Value: ${this.formatTooltipValue(thisI.y)}`;
 	}
 	
 	//Update tooltip
@@ -2449,7 +2935,7 @@ class singleChartManager {
 	//-------------Auxiliary Functions--------------//
 	
 	 // Creates Chart Colors
-    createChartColors() {
+  createChartColors() {
     		
         // Ensure Highcharts.color method is available for color manipulation
         if (typeof Highcharts === 'undefined' || typeof Highcharts.color !== 'function') {
@@ -2459,7 +2945,7 @@ class singleChartManager {
 		//Color case for SolidGauge in particular
 		if (this.elementRawConfig.GeneralConfig.ChartType== "Solidgauge" ){
 
-			this.elementRawConfig.Appearance.ColorSeriesPalette= this.elementRawConfig.Appearance.ColorSeriesPalette == "" ? "#81C6FF" :this.elementRawConfig.Appearance.ColorSeriesPalette;
+			this.elementRawConfig.Appearance.ColorSeriesPalette= this.elementRawConfig.Appearance.ColorSeriesPalette == "" ? "#2CAFFE" :this.elementRawConfig.Appearance.ColorSeriesPalette;
 
 		}
 		const baseColor = this.elementRawConfig.Appearance.ColorSeriesPalette;
@@ -2471,7 +2957,7 @@ class singleChartManager {
 			for (let i = 0; i < dataLength; i++) {
 				// Calculate color variation
 				const variation = 0.4 * i;
-				const newColor = Highcharts.color(baseColor).brighten(variation).get();
+				const newColor = baseColor== "" ? undefined: Highcharts.color(baseColor).brighten(variation).get();
 				colors.push(newColor);
 			}        
         }
@@ -2484,7 +2970,8 @@ class singleChartManager {
 				//Take source from parameters
 				this.elementRawConfig.Series.forEach(function(seriesItem) {
 					if (seriesItem.SeriesNode) { // Check if SeriesNode is not undefined
-						colors.push(seriesItem.SeriesColor);
+					    var colorI=seriesItem.SeriesColor== "" ?undefined:seriesItem.SeriesColor;
+						colors.push(colorI);
 					}
 				});
 			}
@@ -2495,16 +2982,20 @@ class singleChartManager {
 					if (this.elementRawConfig.EnumList.EnumList.hasOwnProperty(key)) {
 						const enumItem = this.elementRawConfig.EnumList.EnumList[key];
 						if (enumItem.Color) { // Check if Node is not undefined
-							colors.push(enumItem.Color);
+							var colorI=enumItem.Color== "" ?undefined:enumItem.Color;
+							colors.push(colorI);
 						}
 					}
 				}
 			}
         
         }
-        return colors;
+        console.log("Returning Colors:");
+        console.log(colors);
+        return colors.length > 0 ? colors : undefined;
     }
     
+        
     defineBackgroundColor(){
 		//If transparen Enabled
 		if (this.elementRawConfig.Appearance.ColorBackgroundTranspartentEnable=="true"||this.elementRawConfig.Appearance.ColorBackground.length<=0){
@@ -2558,17 +3049,18 @@ class singleChartManager {
 		const labelType = this.elementRawConfig.Appearance.DatalabelType;
 		const customFormat = this.elementRawConfig.Appearance.DatalabelCustomTimeFormat;
 		const numberDecimals = this.elementRawConfig.Appearance.DatalabelNumberDecimals;
-		const DatalabelUnit = this.elementRawConfig.Appearance.DatalabelUnit;
+		const DatalabelUnitPrefix = this.elementRawConfig.Appearance.DatalabelUnitPrefix ? this.elementRawConfig.Appearance.DatalabelUnitPrefix + " " : "";
+		const DatalabelUnit = this.elementRawConfig.Appearance.DatalabelUnit ? " " + this.elementRawConfig.Appearance.DatalabelUnit : "";
 
 
 		if (labelType === "Value-Simple") {
 			// Number formatting logic when handling 'Value'
 			if (rawLabel >= 1000000) {
-				return (rawLabel / 1000000).toFixed(numberDecimals) + 'M '+ DatalabelUnit; // millions
+				return DatalabelUnitPrefix + (rawLabel / 1000000).toFixed(numberDecimals) + 'M' + DatalabelUnit; // millions
 			} else if (rawLabel >= 1000) {
-				return (rawLabel / 1000).toFixed(numberDecimals) + 'k '+DatalabelUnit; // thousands
+				return DatalabelUnitPrefix + (rawLabel / 1000).toFixed(numberDecimals) + 'k' + DatalabelUnit; // thousands
 			} else {
-				return rawLabel.toFixed(numberDecimals)+DatalabelUnit; // less than 1000
+				return DatalabelUnitPrefix + rawLabel.toFixed(numberDecimals) + DatalabelUnit; // less than 1000
 			}
 		} 
 		else if (labelType === "Time-Dynamic") {
@@ -2705,7 +3197,7 @@ class singleChartManager {
 			} 
 		}	
 		 else {
-			return rawLabel; // Default case: return raw label without formatting
+			return DatalabelUnitPrefix + rawLabel + DatalabelUnit; // Default case: return raw label without formatting
 		}	
 	} 
 	
