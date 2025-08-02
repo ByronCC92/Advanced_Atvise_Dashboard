@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Cantidad_Peces_Muertos
+NodeClass: Variable
+BrowseName: 1:Cantidad_Peces_Muertos
+DisplayName: en|Cantidad_Peces_Muertos
+Description: en|Cantidad_Peces_Muertos
+DataType: Int32
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

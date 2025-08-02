@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque
+NodeClass: Object
+BrowseName: 1:Sistema_Llenado_Tanque
+DisplayName: en|Sistema_Llenado_Tanque
+Description: en|Sistema_Llenado_Tanque
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

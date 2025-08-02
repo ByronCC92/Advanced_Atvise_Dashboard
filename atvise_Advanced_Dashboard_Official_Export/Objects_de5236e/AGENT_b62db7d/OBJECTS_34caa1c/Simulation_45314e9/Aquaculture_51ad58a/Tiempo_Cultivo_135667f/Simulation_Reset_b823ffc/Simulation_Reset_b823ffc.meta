@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Tiempo_Cultivo.Simulation_Reset
+NodeClass: Variable
+BrowseName: 1:Simulation_Reset
+DisplayName: en|Simulation_Reset
+Description: en|Simulation_Reset
+DataType: XmlElement
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.ScriptCode

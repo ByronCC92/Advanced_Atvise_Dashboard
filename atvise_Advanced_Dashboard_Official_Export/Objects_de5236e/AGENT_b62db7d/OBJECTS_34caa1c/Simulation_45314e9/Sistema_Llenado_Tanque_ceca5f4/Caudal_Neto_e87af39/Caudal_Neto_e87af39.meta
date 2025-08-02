@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Neto
+NodeClass: Variable
+BrowseName: 1:Caudal_Neto
+DisplayName: en|Caudal_Neto
+Description: en|Caudal_Neto
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy.Voltage_3.SineWaveStateAngle
+NodeClass: Variable
+BrowseName: 1:SineWaveStateAngle
+DisplayName: en|SineWaveStateAngle
+Description: en|SineWaveStateAngle
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Pause_Time
+NodeClass: Variable
+BrowseName: 1:Pause_Time
+DisplayName: en|Pause_Time
+Description: en|Pause_Time
+DataType: Boolean
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

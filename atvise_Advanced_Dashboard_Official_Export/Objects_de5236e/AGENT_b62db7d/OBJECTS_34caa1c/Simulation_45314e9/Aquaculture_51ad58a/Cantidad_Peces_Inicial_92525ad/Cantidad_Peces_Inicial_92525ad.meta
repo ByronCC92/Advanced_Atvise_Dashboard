@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Cantidad_Peces_Inicial
+NodeClass: Variable
+BrowseName: 1:Cantidad_Peces_Inicial
+DisplayName: en|Cantidad_Peces_Inicial
+Description: en|Cantidad_Peces_Inicial
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

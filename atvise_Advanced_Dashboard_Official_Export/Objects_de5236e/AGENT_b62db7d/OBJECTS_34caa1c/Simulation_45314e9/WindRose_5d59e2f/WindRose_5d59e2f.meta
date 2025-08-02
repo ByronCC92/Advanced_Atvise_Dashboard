@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.WindRose
+NodeClass: Object
+BrowseName: 1:WindRose
+DisplayName: en|WindRose
+Description: en|WindRose
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

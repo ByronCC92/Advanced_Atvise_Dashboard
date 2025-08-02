@@ -1,0 +1,7 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture
+NodeClass: Object
+BrowseName: 1:Aquaculture
+DisplayName: en|Aquaculture
+Description: en|Aquaculture
+EventNotifier: 0
+Reference: forward HasTypeDefinition FolderType

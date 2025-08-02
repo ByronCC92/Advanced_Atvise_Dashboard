@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Trigger" type="interval" trigger="true" relative="false" value="" offset="00:00:00" interval="00:00:02"/>
+  <code><![CDATA[//Variables Externas
+var TI = Ua.findNode("AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Entrada");
+var TR = Ua.findNode("AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Entrada_Referencia");
+
+//Variables Internas
+var Vmax=TR.result.value;
+var Vmin=Vmax-0.01;
+
+//Ejecuto Logica
+if(TR.result.value==0){
+	TI.result.assign({value:0});
+}
+else{
+	TI.result.assign({value: Vmin + (Math.random()*(Vmax-Vmin))});
+}
+]]></code>
+</script>

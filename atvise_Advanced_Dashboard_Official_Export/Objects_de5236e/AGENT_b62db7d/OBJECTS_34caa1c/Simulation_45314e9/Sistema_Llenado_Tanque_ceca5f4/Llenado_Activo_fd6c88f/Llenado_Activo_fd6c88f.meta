@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Llenado_Activo
+NodeClass: Variable
+BrowseName: 1:Llenado_Activo
+DisplayName: en|Llenado_Activo
+Description: en|Llenado_Activo
+DataType: Boolean
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

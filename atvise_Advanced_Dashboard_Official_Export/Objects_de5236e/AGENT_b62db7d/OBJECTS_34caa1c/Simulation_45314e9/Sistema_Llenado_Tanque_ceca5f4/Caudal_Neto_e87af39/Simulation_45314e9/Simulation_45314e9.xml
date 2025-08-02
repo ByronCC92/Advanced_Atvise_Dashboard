@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Timer" type="interval" trigger="true" relative="false" value="" offset="00:00:00" interval="00:00:02"/>
+  <code><![CDATA[//Variables Externas
+
+var TI = Ua.findNode("AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Neto");
+var TE = Ua.findNode("AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Entrada");
+var TS = Ua.findNode("AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Salida");
+
+//Variables Internas
+var TN=TE.result.value-TS.result.value;
+
+
+//Ejecuto Logica
+if(TN==0){
+	TI.result.assign({value:0});
+}
+else{
+	TI.result.assign({value:TN});
+}
+]]></code>
+</script>

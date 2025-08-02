@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Trigger" type="interval" trigger="true" relative="false" value="" offset="00:00:00" interval="00:00:01"/>
+  <code><![CDATA[//Variables Externas
+var CRT = Ua.findNode("AGENT.OBJECTS.Simulation.Water.Caudal");
+var CE = Ua.findNode("AGENT.OBJECTS.Simulation.Water.Caudal_Entrada");
+var CS = Ua.findNode("AGENT.OBJECTS.Simulation.Water.Caudal_Salida");
+
+
+//Ejecuto Logica
+CRT.result.assign({value: CE.result.value-CS.result.value});]]></code>
+</script>

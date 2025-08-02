@@ -19,7 +19,7 @@
 				  },
 				  {chartID: 1,
 				   chartNodes: ["AGENT.OBJECTS.Simulacion.Counter.Line_Counter_1"]
-				  }],
+				  }], 
     chartsConfig: [
 					{chartID: 0,
 					 chartType: "Pie",
@@ -135,6 +135,7 @@ class dashboardDataProcessor {
 		this.limitAnalysisEnabledI=false;
 		this.OEEinfoRTI={};
 		this.HistInfoRTI={};
+		this.WindRoseInfoRTI={};
 		this.DCNotfier=dashboardCreatorNotifier;
 		
 		this.newIntervalI=false;
@@ -455,6 +456,14 @@ class dashboardDataProcessor {
 		  } 
 		  
 		}
+		
+		if (chartConfig.dataProcessingType === "Interval-Windrose") {
+		  const anglNode = chartConfig.specialParameters?.AnN;
+		  if (anglNode) {
+			// Remove the node if it exists in chartNodesI
+			chartNodesI = chartNodesI.filter(node => node !== anglNode);
+		  }
+		}
 	
 		return chartNodesI;
 	  } catch (error) {
@@ -551,6 +560,10 @@ class dashboardDataProcessor {
 			case "Interval-Histogram": 	//Use Histogram Calculatio
 				this.DCNotfier.dgConsole("Interval Histogram")
 				return this.Interval_Histogram(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.categories);
+				break;	
+			case "Interval-Windrose": 	//Use Windrose Calculation
+				this.DCNotfier.dgConsole("Interval-Windrose")
+				return this.Interval_Windrose(this.partialDashboardDataI,this.chartCategoriesI.chartCategory.categories);
 				break;	
 			case "FullRange-Addition": 	//Add all the elements	
 				this.DCNotfier.dgConsole("Simple Addition")
@@ -1165,50 +1178,6 @@ class dashboardDataProcessor {
 
 
 		} 
-		else if (this.OperationMode === "RealTime1") {
-
-			 if (!this.informationRTI || !this.informationRTI.LastDataPointRT) {
-				this.DCNotfier.dgConsole("WARN: RealTime informationRTI missing or LastDataPointRT undefined.");
-				return { filteredData, plotLimitData }; // Return empty structures
-			}
-            if(Array.isArray(this.informationRTI.LastDataPointRT)){ // Check if it's an array
-                this.informationRTI.LastDataPointRT.forEach((dataPoint) => {
-                    if (dataPoint && dataPoint.hasOwnProperty('Value')) {
-                        const pointValue = dataPoint.Value;
-                        
-                        // Use parseFloat for comparison if limits are strings
-                        const maxFixedLimitRT = (params.dataMaxType === "Fixed" && params.dataMaxLimit && typeof params.dataMaxLimit === 'string' && params.dataMaxLimit.length > 0)
-                            ? parseFloat(params.dataMaxLimit) : NaN;
-                        const minFixedLimitRT = (params.dataMinType === "Fixed" && params.dataMinLimit && typeof params.dataMinLimit === 'string' && params.dataMinLimit.length > 0)
-                            ? parseFloat(params.dataMinLimit) : NaN;
-                            
-                       console.log("maxFixedLimitRT")
-                       console.log(maxFixedLimitRT)
-                       
-
-                        const maxFixedConditionRT = !isNaN(maxFixedLimitRT) && pointValue > maxFixedLimitRT;
-                        const minFixedConditionRT = !isNaN(minFixedLimitRT) && pointValue < minFixedLimitRT;
-                        
-                         console.log("maxFixedConditionRT")
-                       console.log(maxFixedConditionRT)
-                   
-                        if (maxFixedConditionRT || minFixedConditionRT) {
-                            filteredData.Values.push(pointValue);
-                            filteredData.status.push(dataPoint.hasOwnProperty('status') ? dataPoint.status : null);
-                            filteredData.timestamps.push(dataPoint.hasOwnProperty('timestamps') ? dataPoint.timestamps : null);
-                        }
-                        
-                        console.log("filteredData");
-                        console.log(filteredData);
-                    } else {
-                         this.DCNotfier.dgConsole("WARN: Skipping invalid dataPoint in RealTime processing:", dataPoint);
-                    }
-                });
-                filteredData.DataSize = filteredData.Values.length;
-            } else {
-                this.DCNotfier.dgConsole("WARN: LastDataPointRT is not an array.");
-            }
-		}
 		
 		 else if (this.OperationMode === "RealTime") {
             // --- REALTIME MODE LOGIC (Modified) ---
@@ -1248,11 +1217,6 @@ class dashboardDataProcessor {
                 ? rawMinLimitDataRT.Value
                 : NaN;
 		 
-		  console.log("precalculatedInfoRT")
-		console.log(precalculatedInfoRT)
-		 console.log("rawMaxLimitDataRT")
-		console.log(rawMaxLimitDataRT)
-
             if(Array.isArray(this.informationRTI.LastDataPointRT)){
                 this.informationRTI.LastDataPointRT.forEach((dataPoint) => {
                     if (dataPoint && dataPoint.hasOwnProperty('Value')) {
@@ -1267,11 +1231,11 @@ class dashboardDataProcessor {
                                 isAboveMaxRT = true;
                             }
                         } else if (params.dataMaxType === "Node") {
-							console.log("pointValue")
-							console.log(pointValue)
+							this.DCNotfier.dgConsole("pointValue")
+							this.DCNotfier.dgConsole(pointValue)
 							
-							console.log("currentMaxLimitValueRT")
-							console.log(currentMaxLimitValueRT)
+							this.DCNotfier.dgConsole("currentMaxLimitValueRT")
+							this.DCNotfier.dgConsole(currentMaxLimitValueRT)
                             // New Node Check using current limit value
                             if (!isNaN(currentMaxLimitValueRT) && pointValue > currentMaxLimitValueRT) {
                                 isAboveMaxRT = true;
@@ -1518,6 +1482,10 @@ class dashboardDataProcessor {
 					break;
 				case "Interval-Histogram":  // Histogram
 				    chartCategory = this.histogramCategoryCreator();
+				    intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+				    break;
+				case "Single-Polar":  // Polar Charts
+				    chartCategory = this.polarCategoryCreator();
 				    intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
 				    break;
 				case "Single-Simple":  // Simple
@@ -1893,6 +1861,54 @@ class dashboardDataProcessor {
 		return { categories: categories };
 	}
 	
+    //Creates Polar Category    
+	polarCategoryCreator(){
+    
+		const specialParameters = this.uniqueCategoriesConfigI.categoryConfig.specialParameters;
+		const labelsFormat = specialParameters.labF; 
+		const cardinalDirections = parseInt(specialParameters.wDirs) || 16;
+		
+		let categories = [];
+
+		if (labelsFormat === "Angle") {
+			const angleStep = 360 / cardinalDirections;
+			for (let i = 0; i < cardinalDirections; i++) {
+				categories.push(i * angleStep);
+			}
+		} else {
+			// Otherwise, proceed with the original cardinal direction logic
+			const directions8 = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+			const directions16 = [
+				'N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE',
+				'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'
+			];
+			const directions4 = ['N', 'E', 'S', 'W'];
+			const directions32 = [
+				'N', 'NbE', 'NNE', 'NEbN', 'NE', 'NEbE', 'ENE', 'EbN',
+				'E', 'EbS', 'ESE', 'SEbE', 'SE', 'SEbS', 'SSE', 'SbE',
+				'S', 'SbW', 'SSW', 'SWbS', 'SW', 'SWbW', 'WSW', 'WbS',
+				'W', 'WbN', 'WNW', 'NWbW', 'NW', 'NWbN', 'NNW', 'NbW'
+			];
+			
+			switch(cardinalDirections) {
+				case 4:
+					categories = directions4;
+					break;
+				case 8:
+					categories = directions8;
+					break;
+				case 32:
+					categories = directions32;
+					break;
+				case 16:
+				default:
+					categories = directions16;
+					break;
+			}
+		}
+		
+		return { categories: categories };
+	}
 	
 	//-------------------Tooltip Functions--------------//
 	//--------------------------------------------------//
@@ -1901,10 +1917,7 @@ class dashboardDataProcessor {
 	
 		let tooltipInfo;
 		var intervalInfo=this.chartCategoriesI.intervalInfo;
-
-		
 		if(this.chartConfigI.elementType=="Chart"){
-			
 			//Simple Processing type
 			if(this.chartConfigI.dataProcessingType.includes("Simple")) {
 				tooltipInfo="";			
@@ -1916,18 +1929,18 @@ class dashboardDataProcessor {
 			//Interval Processing type
 			else if(this.chartConfigI.dataProcessingType.includes("Interval")) {
 				if (this.updateRequestI.OperationMode === "Hist") {
-					if (this.chartConfigI.dataProcessingType!="Interval-Histogram"){
+					if (this.chartConfigI.dataProcessingType!="Interval-Histogram" && this.chartConfigI.dataProcessingType!="Interval-Windrose"){
 						tooltipInfo = this.chartCategoriesI.chartCategory.intervals.map(interval => ({
 						  start: this.formatTimestampToDateTime(interval.start),
 						  end: this.formatTimestampToDateTime(interval.end)
 						}));
-					}		
+					}					
 					else{
 						tooltipInfo={start:this.formatTimestampToDateTime(new Date(intervalInfo.start)),
 							 end:this.formatTimestampToDateTime(new Date(intervalInfo.end))};
 					}
 				}
-				else if (this.updateRequestI.OperationMode === "RealTime") {
+				else if (this.updateRequestI.OperationMode === "RealTime" && this.chartConfigI.dataProcessingType!="Interval-Windrose") {
 					if (this.chartConfigI.dataProcessingType!="Interval-Histogram"){
 						var interval=this.chartCategoriesI.chartCategory.intervals[0];
 						tooltipInfo={
@@ -1960,7 +1973,6 @@ class dashboardDataProcessor {
 			else {
 				tooltipInfo="";			
 			}
-		
 		return {tooltipInfo:tooltipInfo, name:this.nodeI}
 		}
 	
@@ -2021,6 +2033,10 @@ class dashboardDataProcessor {
                     chartCategory = this.histogramCategoryCreatorRT();
                     intervalInfo = this.allDataIntervalInfoRT();
                     break;
+                case "Single-Polar":  // Polar Charts
+				    chartCategory = this.polarCategoryCreator();
+				    intervalInfo={start:this.dataRequest.updateRequest[0].initialTime,end:this.dataRequest.updateRequest[0].finalTime,newInterval:this.newIntervalI};
+				    break;
                 case "Single-Simple":  // Simple
 					if(config.categoryConfig.elementType=="Chart"){
 						if(config.categoryConfig.chartType=="Column"){
@@ -2299,6 +2315,7 @@ class dashboardDataProcessor {
 							},
 							OEEInfo:JSON.parse(JSON.stringify(this.OEEinfoRTI)),
 							HistInfo:this.HistInfoRTI,
+							WindRoseInfoRTI:this.WindRoseInfoRTI,
 							LastRelevantTimestamp:this.relevantTimestampII
 					}]
 				},
@@ -3214,25 +3231,31 @@ class dashboardDataProcessor {
 		} 
 		
 		else if (this.OperationMode === "RealTime") {
-			let accumulatedDifference = informationRTI.LastDataPointProcessed;
-			let previousValue = informationRTI.LastDataPointRaw.Value;
-			let currentValue = informationRTI.LastDataPointRT[informationRTI.LastDataPointRT.length - 1].Value;
-			let difference = currentValue - previousValue;	
-			
-			
-			//Negative Number
-			if (difference < 0) {
-				this.DCNotfier.dgConsole("Negative difference detected:"+currentValue+" - "+ previousValue+" = "+difference);
-				let differenceI=this.negativeDifHandler({Values:[previousValue,currentValue]},difference,0,1);
-				this.DCNotfier.dgConsole("--------------------New Difference------------------");
-				this.DCNotfier.dgConsole(differenceI);
-				accumulatedDifference += differenceI;
-			}	
-			else {
-				accumulatedDifference += difference;
+			this.DCNotfier.dgConsole("--------------------Full Range Difference In RT------------------");
+			if(informationRTI.LastDataPointRaw.Value!=undefined){
+				let accumulatedDifference = informationRTI.LastDataPointProcessed;
+				let previousValue = informationRTI.LastDataPointRaw.Value;
+				let currentValue = informationRTI.LastDataPointRT[informationRTI.LastDataPointRT.length - 1].Value;
+				let difference = currentValue - previousValue;	
+				
+				
+				//Negative Number
+				if (difference < 0) {
+					this.DCNotfier.dgConsole("Negative difference detected:"+currentValue+" - "+ previousValue+" = "+difference);
+					let differenceI=this.negativeDifHandler({Values:[previousValue,currentValue]},difference,0,1);
+					this.DCNotfier.dgConsole("--------------------New Difference------------------");
+					this.DCNotfier.dgConsole(differenceI);
+					accumulatedDifference += differenceI;
+				}	
+				else {
+					accumulatedDifference += difference;
+				}
+		
+				return { ProcessedData: [accumulatedDifference] };
 			}
-	
-			return { ProcessedData: [accumulatedDifference] };
+			else{
+				return { ProcessedData: [0] };
+			}
 		}
 	}
 
@@ -3677,8 +3700,7 @@ class dashboardDataProcessor {
 				informationRTI.LastDataPointProcessed=informationRTI.OEEInfo.LtotalUB;
 				const { ProcessedData: qualityArray } = this.FullRange_Difference({},informationRTI);
 				const addedUnitsQuality = qualityArray[0] ?? 0; // Default to 0 if no data
-				
-				
+			
 				//Initialize Quality
 				var OEEQuality;
 				
@@ -4046,6 +4068,221 @@ class dashboardDataProcessor {
 	
 		return { ProcessedData: histogramCountArray };
 	}
+		
+	//Create Windrose Data
+	Interval_Windrose(rawData, chartCategories) {
+	
+		if (this.OperationMode === "Hist") {
+			try {
+				// --- REVISED LOGIC TO GET DIRECTION CATEGORIES ---
+				let directionCategories;
+	
+				// Check if chartCategories is the array itself (the new format)
+				if (Array.isArray(chartCategories)) {
+					directionCategories = chartCategories;
+				}
+				// Check for the old, nested object structure for backward compatibility
+				else if (chartCategories && chartCategories.chartCategory && Array.isArray(chartCategories.chartCategory.categories)) {
+					directionCategories = chartCategories.chartCategory.categories;
+				}
+				// If neither format matches, the data is invalid
+				else {
+					console.error("Chart direction categories are missing or in an invalid format.");
+					return { ProcessedData: [] };
+				}
+	
+	
+				// 1. Get Angle Data
+				const rawDataAngle = this.rawData.find(data => data.Nodeaddress === this.chartConfigI.specialParameters.AnN);
+	
+				if (!rawDataAngle || !rawDataAngle.Values || rawDataAngle.Values.length === 0) {
+					console.error("Angle data is missing or empty.");
+					return { ProcessedData: [] };
+				}
+	
+				// 2. Get Parameters from chartConfig
+				const specialParameters = this.chartConfigI.specialParameters;
+				const minSpeed = parseFloat(specialParameters.wMin) || 0;
+				const maxSpeed = parseFloat(specialParameters.wMax) || 25;
+				const speedCategories = parseInt(specialParameters.wSpCs) || 6;
+				
+				// Get the new parameter to control legend style
+				const legendStyle =  'less-greater'; 
+			
+	
+				// 3. Create Speed Bins based on the parameters
+				const speedBinSize = (maxSpeed - minSpeed) / speedCategories;
+				const speedBins = [];
+				for (let i = 0; i < speedCategories; i++) {
+					const start = minSpeed + i * speedBinSize;
+					const end = start + speedBinSize;
+					let binName;
+
+					// Check the legendStyle parameter to decide the naming format
+					if (legendStyle === 'less-greater') {
+						// Special case for the first bin name
+						if (i === 0) {
+							binName = `< ${end.toFixed(1)}`;
+						}
+						// Special case for the last bin name
+						else if (i === speedCategories - 1) {
+							binName = `> ${start.toFixed(1)}`;
+						}
+						// Default case for intermediate bins
+						else {
+							binName = `${start.toFixed(1)} - ${end.toFixed(1)}`;
+						}
+					} else {
+						// Original/default format
+						binName = `${start.toFixed(1)} - ${end.toFixed(1)}`;
+					}
+	
+					speedBins.push({
+						name: binName, // Use the new conditional binName
+						from: start,
+						to: end,
+						// Use the extracted directionCategories array
+						data: new Array(directionCategories.length).fill(0)
+					});
+				}
+	
+				// 4. Associate each Wind Speed with the Closest Angle in Time
+				const pairedData = rawData.timestamps.map((speedTimestamp, i) => {
+					let closestAngle = null;
+					let minTimeDiff = Infinity;
+	
+					rawDataAngle.timestamps.forEach((angleTimestamp, j) => {
+						const timeDiff = Math.abs(speedTimestamp - angleTimestamp);
+						if (timeDiff < minTimeDiff) {
+							minTimeDiff = timeDiff;
+							closestAngle = rawDataAngle.Values[j];
+						}
+					});
+	
+					return {
+						speed: rawData.Values[i],
+						angle: closestAngle
+					};
+				}).filter(d => d.angle !== null);
+	
+				// 5. Bin the Paired Data
+				pairedData.forEach(data => {
+					const angle = data.angle;
+					// Use the extracted directionCategories array
+					const directions = directionCategories.length;
+					const anglePerDirection = 360 / directions;
+					const directionIndex = Math.floor((angle + anglePerDirection / 2) / anglePerDirection) % directions;
+	
+					const speed = data.speed;
+					for (let j = 0; j < speedBins.length; j++) {
+						if (speed >= speedBins[j].from && speed < speedBins[j].to) {
+							speedBins[j].data[directionIndex]++;
+							break;
+						}
+					}
+				});
+	
+				// 6. Store counts and total for Real-Time processing
+                const totalCount = pairedData.length > 0 ? pairedData.length : 1;
+                this.WindRoseInfoRTI.speedBins = JSON.parse(JSON.stringify(speedBins)); // Deep copy for safety
+                this.WindRoseInfoRTI.totalCount = totalCount;
+				
+				// 7. Format for Highcharts (convert counts to percentages)
+				const processedData = speedBins.map(bin => {
+					return {
+						name: bin.name,
+						data: bin.data.map(count => (count / totalCount) * 100)
+					};
+				});
+				
+				return { ProcessedData: processedData };
+	
+			} catch (error) {
+				console.error("Error in Interval_Windrose:", error);
+				console.log(error.message);
+				return { ProcessedData: [] };
+			}
+		} 
+		
+		else if (this.OperationMode === "RealTime") {
+		    try {
+                // 1. Get last state from informationRTI
+                const lastState = this.informationRTI.WindRoseInfoRTI;
+                if (!lastState || !lastState.speedBins || typeof lastState.totalCount === 'undefined') {
+                    console.error("Real-time Windrose processing requires an initial historical run. WindRoseInfoRTI is missing or incomplete.");
+                    return { ProcessedData: this.informationRTI.LastDataPointProcessed || [] };
+                }
+                let speedBins = JSON.parse(JSON.stringify(lastState.speedBins)); // Deep copy to avoid mutation
+                let totalCount = lastState.totalCount;
+
+                // 2. Get new data points
+                const newSpeedPoints = this.informationRTI.LastDataPointRT;
+                 if (!newSpeedPoints || newSpeedPoints.length === 0) {
+                    console.error("No new speed data points in RealTime update.");
+                    return { ProcessedData: this.informationRTI.LastDataPointProcessed }; // Return last known data
+                }
+                
+                // Get the single, most recent angle value to associate with all new speed points
+                const newAnglePoint = this.readCurrentValue(this.chartConfigI.specialParameters.AnN);
+                if (!newAnglePoint || newAnglePoint.Value === null) {
+                    console.error("Could not read new angle data point in RealTime update.");
+                    return { ProcessedData: this.informationRTI.LastDataPointProcessed }; // Return last known data
+                }
+                const newAngle = newAnglePoint.Value;
+
+                // 3. Get direction categories
+                let directionCategories;
+                if (Array.isArray(chartCategories)) {
+                    directionCategories = chartCategories;
+                } else if (chartCategories && chartCategories.chartCategory && Array.isArray(chartCategories.chartCategory.categories)) {
+                    directionCategories = chartCategories.chartCategory.categories;
+                } else {
+                    console.error("Chart direction categories are missing or in an invalid format for RealTime.");
+                    return { ProcessedData: [] };
+                }
+                
+                // 4. Loop through ALL new speed data points and bin them
+                newSpeedPoints.forEach(speedPoint => {
+                    const newSpeed = speedPoint.Value;
+					
+                    const directions = directionCategories.length;
+                    const anglePerDirection = 360 / directions;
+                    const directionIndex = Math.floor((newAngle + anglePerDirection / 2) / anglePerDirection) % directions;
+
+                    for (let j = 0; j < speedBins.length; j++) {
+                        if (newSpeed >= speedBins[j].from && newSpeed < speedBins[j].to) {							
+							this.DCNotfier.dgConsole("--------------Adding points in Windrose---------------");
+							this.DCNotfier.dgConsole("New Point: "+newSpeed);
+							this.DCNotfier.dgConsole("New Angle: "+newAngle);
+                            speedBins[j].data[directionIndex]++;
+
+                            break;
+                        }
+                    }
+                    totalCount++; // Increment total count for each new point
+                });
+	
+                // 5. Update WindRoseInfoRTI for the next iteration
+                this.WindRoseInfoRTI.speedBins = JSON.parse(JSON.stringify(speedBins));
+                this.WindRoseInfoRTI.totalCount = totalCount;
+
+                // 6. Format for Highcharts (recalculate percentages)
+                const processedData = speedBins.map(bin => {
+                    return {
+                        name: bin.name,
+                        data: bin.data.map(count => (count / totalCount) * 100)
+                    };
+                });
+
+                return { ProcessedData: processedData };
+
+            } catch (error) {
+                console.error("Error in RealTime Interval_Windrose:", error);
+                console.log(error.message);
+                return { ProcessedData: [] };
+            }
+		}
+	}
 	
 	// Method to count changes in data
 	Interval_ChangesCounter(rawData, intervals) {
@@ -4136,8 +4373,7 @@ class dashboardDataProcessor {
 	
 		return { ProcessedData: timeOnArray };
 	}
-		
-	
+			
 	// Method to integrate data within Intervals
 	Interval_Integration(rawData, intervals) {
 		let integratedDataArray = [];
@@ -4299,16 +4535,9 @@ class dashboardDataProcessor {
 			try {
 			
 				let endIndexPrevious;
-				console.log("intervals")
-				console.log(intervals)
 				
 				differenceArray = intervals.map((interval, intervalIndex) => {
-					/*
-					console.log("interval start");
-					console.log(interval.start);
-					console.log("interval end");
-					console.log(interval.end);
-					*/
+	
 					
 					// Find startIndex: First index where timestamp >= interval.start and < interval.end
 					let startIndex = rawData.timestamps.findIndex(time => time >= interval.start && time < interval.end);
@@ -5149,13 +5378,14 @@ class dashboardDataProcessor {
 	
 	//Get last element Different than null, used in dataInfoRTCreator
 	getLastNonNullElement(array) {
-
+		
 		for (let i = array.length - 1; i >= 0; i--) {
 
 			if (array[i] !== null   && array[i] !==undefined ) {
 				return { element: array[i], index: i };
 			}
 		}
+		
 		return { element: null, index: -1 };
 	}
 }
@@ -6575,6 +6805,7 @@ class DashboardDataCreator {
 							case "Bar":
 								// For these types, each processedDataStruct item becomes a series
 								chart.processedDataStruct.forEach((dataStruct, k) => {
+								
 									try {
 										const seriesName = dataStruct.processedNode || `Unnamed_Series_${k}`;
 										const chartID = chart.chartID;
@@ -6722,7 +6953,7 @@ class DashboardDataCreator {
 								}
 								break;
 	
-							case "Histogram":
+							 case "Histogram":
 								try {
 									if (chart.processedDataStruct[0]) {
 										const seriesName = chart.processedDataStruct[0].processedNode || "Histogram_Series";
@@ -6742,9 +6973,38 @@ class DashboardDataCreator {
 									errors.push(`Error processing Histogram for chartID ${chart.chartID}: ${histError.message}`);
 								}
 								break;
+								
+							case "Windrose":
+								try {
+									if (chart.processedDataStruct[0]) {
+										// The processedDataI for Windrose is already in the correct series format for Highcharts
+										const seriesData = chart.processedDataStruct[0].processedDataI;
+							
+										// Validate that seriesData is an array
+										if (!Array.isArray(seriesData)) {
+											errors.push(`ChartID ${chart.chartID} (Windrose) has invalid processedDataI.`);
+										} else {
+											// Each item in seriesData is a series object { name: '...', data: [...] }
+											chartData.chartSeries = seriesData;
+										}
+							
+										// The categories are the wind directions
+										const categories = chart.processedDataStruct[0].chartCategories;
+										if (!Array.isArray(categories)) {
+											errors.push(`ChartID ${chart.chartID} (Windrose) has invalid chartCategories.`);
+										} else {
+											chartData.chartCategories = categories;
+										}
+									} else {
+										errors.push(`Chart with ID ${chart.chartID} (Windrose) has no processedDataStruct element. Skipping this chart.`);
+									}
+								} catch (windroseError) {
+									errors.push(`Error processing Windrose chart for chartID ${chart.chartID}: ${windroseError.message}`);
+								}
+								break;
 	
 							default:
-								errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);
+							errors.push(`Unsupported chartType: ${chart.chartType} for chartID ${chart.chartID}`);
 						} // end switch
 	
 					} else if (chart.elementType === "Table") {

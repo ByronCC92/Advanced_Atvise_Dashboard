@@ -154,11 +154,14 @@ const ONE_DAY = 24 * ONE_HOUR;
 //------Initial Conditions-----------//
 webMI.addOnload(function() {
 
+	//Create Notifier Instance
+	const DashboardCreatorNotifier1= new DashboardCreatorNotifier((dashboardMenuRawConfig.DebuggingConfig.DebuggingEnabled=="true")&&(dashboardMenuRawConfig.DebuggingConfig.DebuggingSection=="Client-Only"|| dashboardMenuRawConfig.DebuggingConfig.DebuggingSection=="All-Code"));
+
 	//Create dashboard Manager
-	const dashboardManager1= new dashboardManager();
+	const dashboardManager1= new dashboardManager(DashboardCreatorNotifier1);
 
 	//Create UI Handler
-	const userInterfaceHandler1 = new userInterfaceHandler(dashboardMenuRawConfig,uIElements,initialRangeMethods);
+	const userInterfaceHandler1 = new userInterfaceHandler(dashboardMenuRawConfig,uIElements,initialRangeMethods,DashboardCreatorNotifier1);
 
 	//Initialize UI Handler
 	userInterfaceHandler1.initialize(dashboardManager1);
@@ -177,7 +180,7 @@ class userInterfaceHandler {
     updateRequest; // To handle update requests
 
     // Constructor
-    constructor(dashboardMenuRawConfig,uIElements,initialRangeMethods) {
+    constructor(dashboardMenuRawConfig,uIElements,initialRangeMethods,DashboardCreatorNotifier) {
 		this.dashboardMenuRawConfig=dashboardMenuRawConfig;
 		this.RealTime=dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled=="true" ? true: false;
 		this.PreviousMode=this.RealTime==true ? "RealTime": "Hist";
@@ -192,7 +195,7 @@ class userInterfaceHandler {
 		this.InitialRange=dashboardMenuRawConfig.GeneralConfig.InitialRange;
 		this.InitialRangeUnit=dashboardMenuRawConfig.GeneralConfig.InitialRangeUnit;
 		this.CacheConfig=dashboardMenuRawConfig.CacheConfig;
-		this.DebuggingConfig=dashboardMenuRawConfig.DebuggingConfig;
+		this.DebuggingConfig=dashboardMenuRawConfig.DebuggingConfig;		
 		this.ShiftConfig=dashboardMenuRawConfig.ShiftConfig;
 		this.DashboardID=dashboardMenuRawConfig.GeneralConfig.DashboardID;
 		this.IgnoreDateChanges=false;
@@ -201,12 +204,13 @@ class userInterfaceHandler {
         this.currentConfig;
         this.updateRequest;
         this.dashboardManager;
+        this.DCNotfier=DashboardCreatorNotifier;
     }
 
     // Initialize
     async initialize(dashboardManager) {
-
-	   //Store
+    
+        //Store
 	   this.dashboardManager=dashboardManager;
 
        //Calculate time
@@ -233,12 +237,15 @@ class userInterfaceHandler {
 		
 	   //Init Dashboard Manager
 	   dashboardManager.initialize(this.updateRequest,false,this.dashboardMenuRawConfig.GeneralConfig.RealTimeEnabled,this.dashboardMenuRawConfig.GeneralConfig.RealTimeUpdateTime,this.dashboardMenuRawConfig,this.OutofShift);
+	 
 
     }
 
 
     // Add Listeners
     async addListeners() {
+    
+    
 		document.getElementById(this.uIElements.Click_Area[0]).style.cursor = "pointer";
 		document.getElementById(this.uIElements.Click_Area[1]).style.cursor = "pointer";
        //Listener Real Time
@@ -457,8 +464,10 @@ class userInterfaceHandler {
 		//Auxiliary
 		let dayOfWeek=FinalTimeI.getDay();
 		
-		
-
+		 //Add logic to change automatically shift 
+	   if (this.ShiftEnabled && (this.ShiftConfig.AutomaticChange=="true")){
+			this.updateToCurrentShift();
+		}
 
 		switch (this.InitialRangeMethod) {
 			case 'CustomRange':
@@ -565,6 +574,53 @@ class userInterfaceHandler {
 		this.FinalTime = new Date(FinalTimeI);
 		this.InitialTime = new Date(InitialTimeI);
 	}
+	
+	//Update to current Shift
+	updateToCurrentShift(){
+		
+		const now = new Date();
+		const nowTime = now.getTime();
+
+		const shifts = [
+			{ name: 'FirstShift', start: this.ShiftConfig.FirstShiftStart, end: this.ShiftConfig.FirstShiftEnd },
+			{ name: 'SecondShift', start: this.ShiftConfig.SecondShiftStart, end: this.ShiftConfig.SecondShiftEnd },
+			{ name: 'ThirdShift', start: this.ShiftConfig.ThirdShiftStart, end: this.ShiftConfig.ThirdShiftEnd }
+		];
+
+		for (const shift of shifts) {
+			// Use the existing helper function to parse "HH:MM" time strings
+			const startParts = this.parseTimeString(shift.start);
+			const endParts = this.parseTimeString(shift.end);
+
+			// Create Date objects for the shift's start and end times based on the current day
+			const shiftStartDate = new Date(now);
+			shiftStartDate.setHours(startParts.hours, startParts.minutes, 0, 0);
+
+			const shiftEndDate = new Date(now);
+			shiftEndDate.setHours(endParts.hours, endParts.minutes, 0, 0);
+			
+			const isOvernight = shiftEndDate.getTime() <= shiftStartDate.getTime();
+
+			if (isOvernight) {
+				// For an overnight shift (e.g., 22:00 to 06:00), the current time is valid if it's either:
+				// 1. After the start time on the current day (e.g., 23:00)
+				// OR
+				// 2. Before the end time on the current day (e.g., 04:00, which belongs to the shift started yesterday)
+				if (nowTime >= shiftStartDate.getTime() || nowTime < shiftEndDate.getTime()) {
+					this.InitialRangeMethod = shift.name;
+					break; // Found the correct shift, no need to check others
+				}
+			} else {
+				// For a standard, non-overnight shift
+				if (nowTime >= shiftStartDate.getTime() && nowTime < shiftEndDate.getTime()) {
+					this.InitialRangeMethod = shift.name;
+					break; // Found the correct shift, no need to check others
+				}
+			}
+		}
+		
+	}
+	
 
 	//Calculate Shift times
 	calculateShiftTimes(shiftStartString, shiftEndString) {
@@ -782,15 +838,11 @@ class userInterfaceHandler {
 							sectionactive = 2;
 							break;
 				}
-				
-		console.log("Sections============");
-		console.log("sectionactive: "+sectionactive);
+			
 				
 		//Set active only the current icon
 		for (var i=0; i<this.uIElements.Shift_Indicator_Sections.length; i++){
 			if (i==sectionactive){
-				console.log("Activating section");
-				console.log(this.uIElements.Shift_Indicator_Sections[i])
 				webMI.gfx.setFill(this.uIElements.Shift_Indicator_Sections[i], this.dashboardMenuRawConfig.Appearance.ColorActive);
 			}
 			else
@@ -820,7 +872,7 @@ class dashboardManager {
     DashboardData;
 
     // Constructor
-    constructor() {
+    constructor(DashboardCreatorNotifier) {
 		this.ElementsConfig=new Array();
 		this.InitialRangeMethod;
 		this.ShiftConfig;
@@ -847,6 +899,8 @@ class dashboardManager {
         this.replacementString="<_::_>"
         this.LoadingDisplay="SYSTEM.LIBRARY.PROJECT.OBJECTDISPLAYS.Advanced_Dashboard.Advanced_Dashboard_Loading_Element";
         this.LoadingDisplayR;
+        this.DCNotfier=DashboardCreatorNotifier;
+        this.DebuggingEnabled;
     }
 
     
@@ -856,6 +910,9 @@ class dashboardManager {
 
 		//Open Loading Display
 		 this.loadingDisplayHandler("Open");
+		 
+		 //Set Debugginf Policy
+		 this.DebuggingEnabled=this.DCNotfier.debuggingEnabled;
 
 		 //Define Operation Mode
 		 this.RealTime=operationMode;
@@ -874,8 +931,8 @@ class dashboardManager {
 
 		 //Set First Update Request
 		 this.UpdateRequest=updateRequest;
-		 console.log("------------First Update Request---------");
-		 console.log(this.UpdateRequest);
+		 this.DCNotfier.dgConsole("------------First Update Request---------");
+		 this.DCNotfier.dgConsole(this.UpdateRequest);
 
 		 //Define chartTimeRange
 		 this.ChartTimeRange=(this.UpdateRequest.finalTime-this.UpdateRequest.initialTime);
@@ -890,29 +947,32 @@ class dashboardManager {
 		 setTimeout(async (e) => {
 
 			//Make sure there are Elements
-			 if (this.ElementsConfig.length>=1){
+			 if (this.ElementsConfig.length>=1){			 
+				   
+				//Set Debugging Policy to charts
+				this.setDebugginh();
 
 				 //Create Data Request
 				 await this.createDataRequest();
-				 console.log("------------Data Request Ready---------");
-				 console.log(this.DataRequest);
+				 this.DCNotfier.dgConsole("------------Data Request Ready---------");
+				 this.DCNotfier.dgConsole(this.DataRequest);
 
 				 //Unique nodes in Request
 				 this.UniqueNodes= await this.rawDataRequestProcessor(this.DataRequest,"nodesRequest");
-				 console.log("------------Unique Nodes---------");
-				 console.log(this.UniqueNodes);
+				 this.DCNotfier.dgConsole("------------Unique Nodes---------");
+				 this.DCNotfier.dgConsole(this.UniqueNodes);
 
 				  //Unique nodes in Request
 				 this.UniqueNodesDB= await this.rawDataRequestProcessor(this.DataRequest,"nodesRequestDB");
-				 console.log("------------Unique Nodes DB---------");
-				 console.log(this.UniqueNodesDB);
+				 this.DCNotfier.dgConsole("------------Unique Nodes DB---------");
+				 this.DCNotfier.dgConsole(this.UniqueNodesDB);
 
 
 				 //Create Dashboard Data
 				 this.DashboardData= await this.dashboardDataCreatorHandler();
 				 this.DashboardDataBase=this.DashboardData;
-				 console.log("-----------Dashboard Data--------------");
-				 console.log(this.DashboardData);
+				 this.DCNotfier.dgConsole("-----------Dashboard Data--------------");
+				 this.DCNotfier.dgConsole(this.DashboardData);
 
 				 //Distribuite Dashboard Data
 				 await this.distributeDashboardData();
@@ -947,11 +1007,13 @@ class dashboardManager {
     // Method to register elements based on configuration
     registerElements(ElementConfig) {
 
-		console.log("--------------Registering-------------");
-		console.log(this.ElementsConfig);
+		this.DCNotfier.dgConsole("--------------Registering-------------");
+		this.DCNotfier.dgConsole(this.ElementsConfig);
+		
 
 		//Add to Elements Config
 		this.ElementsConfig.push(ElementConfig);
+	
     }
 
     //Organizes order and updates
@@ -995,9 +1057,6 @@ class dashboardManager {
 				noOEE.push(config);
 			}
 		});
-
-		console.log("oeeIdMap");
-		console.log(oeeIdMap);
 
 		// Proceed only if oeeElements are not empty
 		if (oeeElements.length > 0) {
@@ -1051,9 +1110,6 @@ class dashboardManager {
 						let parameters = Array.from(oeeIdMap.entries()).flatMap(([key, valueObj]) =>
 							Object.keys(valueObj) // Extract all keys directly
 						);
-
-						console.log("parameters");
-						console.log(parameters);
 
 						// Add nodes to chartNodes if valid
 						parameters.forEach(param => {
@@ -1140,7 +1196,15 @@ class dashboardManager {
 						chartNodes.push(minLimitNode);
 					}
 				}
+			}			
+			
+			if (chartsConfig.dataProcessingType === "Interval-Windrose") {
+					const AngleNode= chartsConfig.specialParameters?.AnN;
+					if (AngleNode && !chartNodes.includes(AngleNode)) {
+							chartNodes.push(AngleNode);
+						}					
 			}
+			
 		});
 
 		// Combine the arrays and update the original ElementsConfig
@@ -1150,14 +1214,14 @@ class dashboardManager {
     // Method to create data requests
     async createDataRequest() {
 
-		console.log("elementConfig before Organizer");
-		console.log(this.ElementsConfig);
+		this.DCNotfier.dgConsole("--------------ElementConfig before Organizer-----------");
+		this.DCNotfier.dgConsole(this.ElementsConfig);
 		
 		//Organize ElementConfig
 		await this.elementConfigOrganizer();
 
-		console.log("elementConfig after Organizer");
-		console.log(this.ElementsConfig);
+		this.DCNotfier.dgConsole("--------------ElementConfig after Organizer-----------");
+		this.DCNotfier.dgConsole(this.ElementsConfig);
 
         let chartsNodes = [];
         let chartsConfig = [];
@@ -1282,18 +1346,18 @@ class dashboardManager {
 		  //Open Loading Display
 		  this.loadingDisplayHandler("Open");
 
-		 console.log("------------New Update Request---------");
-		 console.log(this.UpdateRequest);
+		 this.DCNotfier.dgConsole("------------New Update Request---------");
+		 this.DCNotfier.dgConsole(this.UpdateRequest);
 
 		 //Create Data Request
 		 await this.createDataRequest();
-		 console.log("------------Data Request Ready---------");
-		 console.log(this.DataRequest);
+		 this.DCNotfier.dgConsole("------------Data Request Ready---------");
+		 this.DCNotfier.dgConsole(this.DataRequest);
 
 		 //Create Dashboard Data
 		 this.DashboardData = await this.dashboardDataCreator();
-		 console.log("-----------Dashboard Data--------------");
-		 console.log(this.DashboardData);
+		 this.DCNotfier.dgConsole("-----------Dashboard Data--------------");
+		 this.DCNotfier.dgConsole(this.DashboardData);
 
 		 //Distribuite Dashboard Data
 		 await this.distributeDashboardData();
@@ -1314,14 +1378,14 @@ class dashboardManager {
 		//If Data Direct is enabled
 		if(this.DashboardDataDirectEnabled){
 				this.DashboardDataDirect	= await this.dashboardDataDirectCreator();
-				console.log("-----------Dashboard Data  Direct--------------");
-				console.log(JSON.stringify(this.DashboardDataDirect));
+				this.DCNotfier.dgConsole("-----------Dashboard Data  Direct--------------");
+				this.DCNotfier.dgConsole(this.DashboardDataDirect);
 		}
 
 		 //Create Dashboard Data
 		 this.DashboardDataProcessed = await this.dashboardDataCreator();
-		 console.log("-----------Dashboard Data  Processed--------------");
-		 console.log(JSON.stringify(this.DashboardDataProcessed));
+		 this.DCNotfier.dgConsole("-----------Dashboard Data  Processed--------------");
+		 this.DCNotfier.dgConsole(this.DashboardDataProcessed);
 
 		if(this.DashboardDataDirectEnabled){
 			//Merge Data
@@ -1464,9 +1528,6 @@ class dashboardManager {
 					LimitDashboardData: [], // Placeholder for limit data
 					chartCategories: []      // Placeholder for category data
 				};
-				console.log("chartData");
-				console.log(chartData);
-
 				// Push the chartData to the main dashboardData structure
 				dashboardData.chartsData.push(chartData);
 			}
@@ -1511,11 +1572,11 @@ class dashboardManager {
 				}
 
 				const mergedData = this.mergeResponses(responses);
-				console.log("-----------Custom Request answer--------------");
+				this.DCNotfier.dgConsole("-----------Custom Request answer--------------");
 				return mergedData;
 			} else {
 				const response = await this.sendDataRequest(dataRequest);
-				console.log("-----------Custom Request answer--------------");
+				this.DCNotfier.dgConsole("-----------Custom Request answer--------------");
 				return response;
 			}
 		}
@@ -1577,7 +1638,7 @@ class dashboardManager {
 
 	// Distribute dashboard data
     distributeDashboardData() {
-		console.log("Distribuiting............")
+		this.DCNotfier.dgConsole("Distribuiting............")
 		var DashboardData;
 		//History Data
 		if (!this.RealTime){
@@ -1604,10 +1665,10 @@ class dashboardManager {
 
                 // Fire Each Trigger
                 webMI.trigger.fire("Element_Data_" + chartData.chartID, chartDataI);
-                console.log("Data distributed for chart ID:", chartData.chartID);
+                this.DCNotfier.dgConsole("Data distributed for chart ID:", chartData.chartID);
             });
         } else {
-            console.log("No chartsData to distribute or DashboardData not set.");
+            this.DCNotfier.dgConsole("No chartsData to distribute or DashboardData not set.");
         }
     }
 
@@ -1650,31 +1711,31 @@ class dashboardManager {
      //Handles RealTime Update
     async updateRTHandler(NodesRT){
 
-		console.log("NodesRT");
-		console.log(JSON.stringify(NodesRT));
+		this.DCNotfier.dgConsole("NodesRT");
+		this.DCNotfier.dgConsole(NodesRT);
 
 		//Create Data Request RT
 		this.DataRequestRT= await this.createRTDataRequest(NodesRT);
-		console.log("------------Data Request RT Ready---------");
-		console.log(this.DataRequestRT);
+		this.DCNotfier.dgConsole("------------Data Request RT Ready---------");
+		this.DCNotfier.dgConsole(this.DataRequestRT);
 
 		//Create Dashboard Data Direct (No processing required)
 		this.DashboardDataRTDirect=this.dashboardDataRTDirectCreator();
-		console.log("-----------Dashboard Data RT Direct--------------");
-		console.log(this.DashboardDataRTDirect);
+		this.DCNotfier.dgConsole("-----------Dashboard Data RT Direct--------------");
+		this.DCNotfier.dgConsole(this.DashboardDataRTDirect);
 
-		console.log("-----------DataRequestRT Required Processing--------------");
-		console.log(this.DataRequestRT);
+		this.DCNotfier.dgConsole("-----------DataRequestRT Required Processing--------------");
+		this.DCNotfier.dgConsole(this.DataRequestRT);
 
 		//Create Dashboard data which requires processing
 		this.DashboardDataRTProcessed= await this.dashboardDataCreator();
 
-		console.log("-----------DashboardRT Processed Data--------------");
-		console.log(this.DashboardDataRTProcessed);
+		this.DCNotfier.dgConsole("-----------DashboardRT Processed Data--------------");
+		this.DCNotfier.dgConsole(this.DashboardDataRTProcessed);
 
 		this.DashboardDataRTFinal=this.dashboardRTDataMerger(this.DashboardDataRTDirect,this.DashboardDataRTProcessed);
-		console.log("-----------DashboardRT Data Final--------------");
-		console.log(this.DashboardDataRTFinal);
+		this.DCNotfier.dgConsole("-----------DashboardRT Data Final--------------");
+		this.DCNotfier.dgConsole(this.DashboardDataRTFinal);
 
 		//Distribute Data
 		this.distributeDashboardData();
@@ -1784,8 +1845,6 @@ class dashboardManager {
 					else if (nodeRT.Node === chartsConfigI.specialParameters.OEEQuN) {
 						// Find the other chartNode besides the current node
 						const newNode = matchingChartNode.chartNodes.find(node => node !== nodeRT.Node);
-						console.log("newNode OEE=================>");
-						console.log(newNode);
 						// Ensure newNode is not already present in NodesRT
 						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)&& !organizedNodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
 							// Create a new nodeRT structure
@@ -1800,6 +1859,28 @@ class dashboardManager {
 						}
 					}
 				}
+				
+				else if (chartsConfigI && chartsDataI && chartsConfigI.dataProcessingType === "Interval-Windrose") {
+
+					// Check if node matches AnN
+					if (nodeRT.Node === chartsConfigI.specialParameters.AnN) {
+						// Find the other chartNode besides the current node
+						const newNode = matchingChartNode.chartNodes.find(node => node !== nodeRT.Node);
+
+						// Ensure newNode is not already present in NodesRT
+						if (newNode && !NodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)&& !organizedNodesRT.some(existingNodeRT => existingNodeRT.Node === newNode)) {
+							// Create a new nodeRT structure
+							const newNodeRT = {
+								Node: newNode,
+								//Value: chartsDataI.informationRT[0].LastDataPointRaw
+								Value: []
+							};
+
+							// Add the new nodeRT to the output array
+							organizedNodesRT.push(newNodeRT);
+						}
+					}
+				}		
 			});
 		});
 
@@ -1810,8 +1891,8 @@ class dashboardManager {
 			});
 		}
 
-		console.log("------------organizedNodesRT---------");
-		console.log(organizedNodesRT);
+		this.DCNotfier.dgConsole("------------organizedNodesRT---------");
+		this.DCNotfier.dgConsole(organizedNodesRT);
 		return organizedNodesRT;
     }
 
@@ -1828,8 +1909,8 @@ class dashboardManager {
 
 			let newNodesRT= this.nodesRTOrganizer(NodesRT);
 
-			console.log("----------Creating RT Data Request Before----------");
-			console.log(this.DataRequest);
+			this.DCNotfier.dgConsole("----------Creating RT Data Request Before----------");
+			this.DCNotfier.dgConsole(this.DataRequest);
 
 			// Extract the nodes from NodesRT to filter chartsNodes
 			let currentNodes = new Set(newNodesRT.map(nodeObj => nodeObj.Node));
@@ -1934,7 +2015,7 @@ class dashboardManager {
 
 					} catch (error) {
 						console.error(`Error processing update request for chartID ${request.chartID}:`, error);
-						console.log(error);
+						this.DCNotfier.dgConsole(error);
 						return request; // Return the original request in case of an error
 					}
 				});
@@ -2220,6 +2301,28 @@ class dashboardManager {
 		let index = thisElement.id.indexOf('_Click_area_Realtime');
 		return thisElement.id.substring(0, index);
 	}
+	
+	   //Debuggin Policy Setter
+		setDebugginh(){
+			webMI.trigger.fire("Debugging_Enabled", this.DebuggingEnabled);
+		}
 
+}
+
+
+//---------------Dashboard Creator Notifier----------------//
+//-----------------------------------------------------//
+class DashboardCreatorNotifier {
+
+	constructor(enableDebugging) {	
+		this.debuggingEnabled=enableDebugging;
+	}
+		
+	dgConsole(message){
+		if (this.debuggingEnabled){
+		    const messageI=(typeof message === "string") ? ("//---Menu: "+message):message;
+			console.log(messageI);
+		}
+	}
 }]]></script>
 </svg>

@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Water.Presion_Salida_2
+NodeClass: Variable
+BrowseName: 1:Presion_Salida_2
+DisplayName: en|Presion_Salida_2
+Description: en|Presion_Salida_2
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

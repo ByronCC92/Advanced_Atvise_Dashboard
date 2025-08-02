@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Peso_Promedio_Inicial
+NodeClass: Variable
+BrowseName: 1:Peso_Promedio_Inicial
+DisplayName: en|Peso_Promedio_Inicial
+Description: en|Peso_Promedio_Inicial
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

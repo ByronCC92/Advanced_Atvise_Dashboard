@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Biomasa_Proyectada
+NodeClass: Variable
+BrowseName: 1:Biomasa_Proyectada
+DisplayName: en|Biomasa_Proyectada
+Description: en|Biomasa_Proyectada
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

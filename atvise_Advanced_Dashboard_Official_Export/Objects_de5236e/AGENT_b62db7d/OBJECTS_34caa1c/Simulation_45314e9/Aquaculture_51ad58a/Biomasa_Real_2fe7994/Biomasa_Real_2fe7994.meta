@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Biomasa_Real
+NodeClass: Variable
+BrowseName: 1:Biomasa_Real
+DisplayName: en|Biomasa_Real
+Description: en|Biomasa_Real
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy.CostperkWh
+NodeClass: Variable
+BrowseName: 1:CostperkWh
+DisplayName: en|CostperkWh
+Description: en|CostperkWh
+DataType: Double
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

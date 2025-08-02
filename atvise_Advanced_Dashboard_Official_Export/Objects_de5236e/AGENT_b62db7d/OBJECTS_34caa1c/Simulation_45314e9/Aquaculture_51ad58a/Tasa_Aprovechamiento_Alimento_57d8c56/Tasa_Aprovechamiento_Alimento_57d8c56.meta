@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Tasa_Aprovechamiento_Alimento
+NodeClass: Variable
+BrowseName: 1:Tasa_Aprovechamiento_Alimento
+DisplayName: en|Tasa_Aprovechamiento_Alimento
+Description: en|Tasa_Aprovechamiento_Alimento
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

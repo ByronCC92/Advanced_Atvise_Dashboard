@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Trigger" type="interval" trigger="true" relative="false" value="" offset="00:00:00" interval="00:00:01"/>
+  <code><![CDATA[//Variables Externas
+var TI = Ua.findNode("AGENT.OBJECTS.Simulation.Energy.Current_1");
+
+// Node to store the current angle for persistence between executions.
+var currentAngleNode = Ua.findNode("AGENT.OBJECTS.Simulation.Energy.Current_1.SineWaveStateAngle");
+
+
+//Variables Internas
+var Vmax = 20; // Maximum value of the sine wave
+var Vmin = -20; // Minimum value of the sine wave
+
+// Sine wave period in seconds. Script executes every second.
+var wavePeriodSeconds = 60; // Example: 60 seconds for one full cycle
+
+// Calculate angle increment per second (2*PI is a full circle).
+var angleIncrement = (2 * Math.PI) / wavePeriodSeconds;
+
+//Ejecuto Logica
+
+// Retrieve the current angle from the persistent OPC UA node, or initialize to 0.
+var currentAngle = currentAngleNode.result.value || 0;
+
+// Calculate amplitude and midpoint for scaling the sine wave.
+var amplitude = (Vmax - Vmin) / 2;
+var midpoint = Vmin + amplitude;
+
+// Calculate the sine wave value.
+var sineValue = midpoint + amplitude * Math.sin(currentAngle);
+
+// Assign the calculated value to the target OPC UA variable.
+TI.result.assign({value: sineValue});
+
+// Update the angle for the next execution.
+currentAngle += angleIncrement;
+
+// Wrap angle around 2*PI to keep it within a single cycle.
+if (currentAngle >= 2 * Math.PI) {
+    currentAngle -= 2 * Math.PI;
+}
+
+
+// Save the updated angle back to the persistent OPC UA node.
+currentAngleNode.result.assign({value: currentAngle});]]></code>
+</script>

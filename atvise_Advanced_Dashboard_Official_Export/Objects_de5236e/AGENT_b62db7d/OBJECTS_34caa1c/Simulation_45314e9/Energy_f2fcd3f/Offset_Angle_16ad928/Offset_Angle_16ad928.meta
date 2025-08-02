@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy.Offset_Angle
+NodeClass: Variable
+BrowseName: 1:Offset_Angle
+DisplayName: en|Offset_Angle
+Description: en|Offset_Angle
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

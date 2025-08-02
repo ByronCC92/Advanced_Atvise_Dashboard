@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy.Max_Limit
+NodeClass: Variable
+BrowseName: 1:Max_Limit
+DisplayName: en|Max_Limit
+Description: en|Max_Limit
+DataType: Int64
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

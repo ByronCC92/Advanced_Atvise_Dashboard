@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Alimento_Diario
+NodeClass: Variable
+BrowseName: 1:Alimento_Diario
+DisplayName: en|Alimento_Diario
+Description: en|Alimento_Diario
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

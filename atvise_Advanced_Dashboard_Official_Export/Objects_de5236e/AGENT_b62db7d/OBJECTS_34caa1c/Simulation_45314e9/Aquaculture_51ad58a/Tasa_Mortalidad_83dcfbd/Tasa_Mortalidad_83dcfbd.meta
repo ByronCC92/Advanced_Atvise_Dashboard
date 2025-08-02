@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Tasa_Mortalidad
+NodeClass: Variable
+BrowseName: 1:Tasa_Mortalidad
+DisplayName: en|Tasa_Mortalidad
+Description: en|Tasa_Mortalidad
+DataType: UInt32
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

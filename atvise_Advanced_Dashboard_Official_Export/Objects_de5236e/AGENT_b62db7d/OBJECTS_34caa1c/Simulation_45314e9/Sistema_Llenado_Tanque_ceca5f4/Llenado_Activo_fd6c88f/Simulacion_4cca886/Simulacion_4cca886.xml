@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Caudal_Entrada" type="node" trigger="true" relative="false" value="ns=1;s=AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Entrada"/>
+  <code><![CDATA[//Variables Externas
+var LA = Ua.findNode("AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Llenado_Activo");
+var CE = Ua.findNode("AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Caudal_Entrada");
+
+//If the water flow is different than 0
+if(CE.result.value>0){
+	LA.result.assign({value:true});
+}
+else{
+	LA.result.assign({value:false});
+}
+
+]]></code>
+</script>

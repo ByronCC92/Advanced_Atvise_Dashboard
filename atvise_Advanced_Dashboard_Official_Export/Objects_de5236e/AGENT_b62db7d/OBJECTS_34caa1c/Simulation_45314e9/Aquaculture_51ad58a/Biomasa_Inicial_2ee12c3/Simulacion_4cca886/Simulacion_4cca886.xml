@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Cantidad_Peces_Inicial" type="node" trigger="true" relative="false" value="ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Cantidad_Peces_Inicial"/>
+  <parameter name="Peso_Promedio_Inicial" type="node" trigger="true" relative="false" value="ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Peso_Promedio_Inicial"/>
+  <code><![CDATA[//Variables Externas
+var BI = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Biomasa_Inicial");
+var CPI = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Cantidad_Peces_Inicial");
+var PPI = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Peso_Promedio_Inicial");
+
+//Variables Internas
+var BIC=CPI.result.value*PPI.result.value;
+
+
+//Ejecuto Logica
+BI.result.assign({value:BIC});
+
+]]></code>
+</script>

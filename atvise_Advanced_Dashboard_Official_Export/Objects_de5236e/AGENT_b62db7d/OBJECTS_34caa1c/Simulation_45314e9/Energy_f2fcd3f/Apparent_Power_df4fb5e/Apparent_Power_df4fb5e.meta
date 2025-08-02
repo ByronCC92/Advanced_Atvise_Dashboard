@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Energy.Apparent_Power
+NodeClass: Variable
+BrowseName: 1:Apparent_Power
+DisplayName: en|Apparent_Power
+Description: en|Apparent_Power
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

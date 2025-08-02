@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Oxigen_Saturation
+NodeClass: Variable
+BrowseName: 1:Oxigen_Saturation
+DisplayName: en|Oxigen_Saturation
+Description: en|Oxigen_Saturation
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

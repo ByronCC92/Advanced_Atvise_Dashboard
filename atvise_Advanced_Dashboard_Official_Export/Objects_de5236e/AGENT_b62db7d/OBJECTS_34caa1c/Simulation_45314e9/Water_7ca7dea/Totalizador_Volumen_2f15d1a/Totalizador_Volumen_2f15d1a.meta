@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Water.Totalizador_Volumen
+NodeClass: Variable
+BrowseName: 1:Totalizador_Volumen
+DisplayName: en|Totalizador_Volumen
+Description: en|Totalizador_Volumen
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

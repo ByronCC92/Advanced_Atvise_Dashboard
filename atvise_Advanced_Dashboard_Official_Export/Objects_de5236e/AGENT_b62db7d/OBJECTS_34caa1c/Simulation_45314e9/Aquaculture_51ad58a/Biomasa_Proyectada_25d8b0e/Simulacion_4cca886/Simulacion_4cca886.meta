@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Biomasa_Proyectada.Simulacion
+NodeClass: Variable
+BrowseName: 1:Simulacion
+DisplayName: en|Simulacion
+Description: en|Simulacion
+DataType: XmlElement
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition ns=1;s=VariableTypes.ATVISE.ScriptCode

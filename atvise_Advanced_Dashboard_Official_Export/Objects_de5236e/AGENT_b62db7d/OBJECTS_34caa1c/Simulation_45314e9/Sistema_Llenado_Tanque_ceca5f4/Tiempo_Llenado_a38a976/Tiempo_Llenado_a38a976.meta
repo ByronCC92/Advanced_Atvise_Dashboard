@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Sistema_Llenado_Tanque.Tiempo_Llenado
+NodeClass: Variable
+BrowseName: 1:Tiempo_Llenado
+DisplayName: en|Tiempo_Llenado
+Description: en|Tiempo_Llenado
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos

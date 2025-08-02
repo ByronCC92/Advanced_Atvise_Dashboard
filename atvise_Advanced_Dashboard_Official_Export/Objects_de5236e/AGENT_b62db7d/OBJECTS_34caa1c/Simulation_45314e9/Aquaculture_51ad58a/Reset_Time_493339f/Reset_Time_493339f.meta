@@ -1,0 +1,9 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Aquaculture.Reset_Time
+NodeClass: Variable
+BrowseName: 1:Reset_Time
+DisplayName: en|Reset_Time
+Description: en|Reset_Time
+DataType: Boolean
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType

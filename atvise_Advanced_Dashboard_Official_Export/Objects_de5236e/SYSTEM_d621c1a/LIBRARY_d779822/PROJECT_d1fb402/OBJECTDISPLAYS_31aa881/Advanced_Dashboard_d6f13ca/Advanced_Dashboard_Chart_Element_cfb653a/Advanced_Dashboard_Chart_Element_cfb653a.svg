@@ -3,7 +3,7 @@
  <defs/>
  <metadata>
   <atv:parameter behavior="mandatory" defaultvalue="" desc="Dashboard ID" group="GeneralConfig" name="DashboardID" valuetype="string"/>
-  <atv:parameter behavior="mandatory" config="Line;Spline;Area;Column;Bar;Pie;Pyramid;Solidgauge;Histogram;Gauge" defaultvalue="Line" desc="Chart Type" group="GeneralConfig" name="ChartType" valuetype="enum"/>
+  <atv:parameter behavior="mandatory" config="Line;Spline;Area;Column;Bar;Pie;Pyramid;Solidgauge;Histogram;Gauge;Windrose" defaultvalue="Line" desc="Chart Type" group="GeneralConfig" name="ChartType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="Values;Alarms;Aggregates" defaultvalue="Values" desc="Data Type" group="GeneralConfig" name="DataType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="EnumList;Text" defaultvalue="Text" desc="Series Source" group="GeneralConfig" name="SeriesSource" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="InitialRange" group="GeneralConfig" name="InitialRange" valuetype="number"/>
@@ -27,7 +27,7 @@
   <atv:parameter behavior="optional" config="Dash;DashDot;Dot;LongDash;LongDashDot;LongDashDotDot;ShortDash;ShortDashDot;ShortDashDotDot;ShortDot;Solid" defaultvalue="Solid" desc="Type Limit Line Min" group="LimitAnalysis" name="TypeLimitLineMin" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="Min" desc="Text Limit Line Min" group="LimitAnalysis" name="TextLimitLineMin" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Data Processing Enabled" group="DataProcessing" name="DataProcessingEnabled" valuetype="bool"/>
-  <atv:parameter behavior="optional" config="Simple-None;SinglePoint-LastValue;SinglePoint-FirstValue;SinglePoint-Max;SinglePoint-Min;Interval-Addition;Interval-Average;Interval-CountChanges;Interval-CountTimeOff;Interval-CountTimeOn;Interval-Difference;Interval-Histogram;Interval-Integration;FullRange-Addition;FullRange-Average;FullRange-Difference;FullRange-Integration;FullRange-OEE;FullRange-OEEAvailability;FullRange-OEEProductivity;FullRange-OEEQuality" defaultvalue="Simple-None" desc="Data Processing Type" group="DataProcessing" name="DataProcessingType" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="Simple-None;SinglePoint-LastValue;SinglePoint-FirstValue;SinglePoint-Max;SinglePoint-Min;Interval-Addition;Interval-Average;Interval-CountChanges;Interval-CountTimeOff;Interval-CountTimeOn;Interval-Difference;Interval-Histogram;Interval-Integration;Interval-Windrose;FullRange-Addition;FullRange-Average;FullRange-Difference;FullRange-Integration;FullRange-OEE;FullRange-OEEAvailability;FullRange-OEEProductivity;FullRange-OEEQuality" defaultvalue="Simple-None" desc="Data Processing Type" group="DataProcessing" name="DataProcessingType" valuetype="enum"/>
   <atv:parameter behavior="optional" config="s;min;h;day;month" defaultvalue="s" desc="Processing Time Input Unit" group="DataProcessing" name="DataProcessingTimeInputUnit" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Formula Enabled" group="Formula f(X)" name="FormulaEnabled" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Formula Description" group="Formula f(X)" name="FormulaDescription" valuetype="string"/>
@@ -46,7 +46,7 @@
   <atv:parameter behavior="optional" config="Fixed;Node" defaultvalue="Fixed" desc="E Parameter Type" group="Formula f(X)" name="EParameterType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="E Parameter Value" group="Formula f(X)" name="EParameterValue" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="E Parameter Node" group="Formula f(X)" name="EParameterNode" valuetype="address"/>
-  <atv:parameter behavior="mandatory" config="AllData-DateTime;Interval-CustomText;Interval-CustomInterval;Interval-Dynamic;Interval-Histogram;Single-Simple" defaultvalue="AllData-DateTime" desc="Category Type" group="Category Selection" name="CategoryType" valuetype="enum"/>
+  <atv:parameter behavior="mandatory" config="AllData-DateTime;Interval-CustomText;Interval-CustomInterval;Interval-Dynamic;Interval-Histogram;Single-Polar;Single-Simple" defaultvalue="AllData-DateTime" desc="Category Type" group="Category Selection" name="CategoryType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="true" desc="Category Round Up" group="Category Selection" name="CategoryRound" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Custom Category" group="Category Selection" name="CategoryCustomText" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="1" desc="Custom Interval Length" group="Category Selection" name="CategoryCustomIntervalLength" valuetype="number"/>
@@ -75,6 +75,7 @@
   <atv:parameter behavior="optional" defaultvalue="" desc="XName" group="Appereance" name="XName" valuetype="string"/>
   <atv:parameter behavior="optional" config="Color-Pallete;Color-Custom" defaultvalue="Color-Pallete" desc="Color Series Type" group="Appereance" name="ColorSeriesType" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Series Palette Color" group="Appereance" name="ColorSeriesPalette" substitute="$Color$" valuetype="global"/>
+  <atv:parameter behavior="optional" defaultvalue="0.1" desc="Palette Color Difference Index" group="Appereance" name="ColorDifferenceIndex" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="false" desc="Background Transparent Enabled" group="Appereance" name="ColorBackgroundTranspartentEnable" valuetype="bool"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Background Color" group="Appereance" name="ColorB" valuetype="global"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Grid Color" group="Appereance" name="ColorG" valuetype="global"/>
@@ -85,6 +86,7 @@
   <atv:parameter behavior="optional" defaultvalue="#000000" desc="Color yAxis" group="Appereance" name="ColoryAxis" valuetype="color"/>
   <atv:parameter behavior="optional" defaultvalue="SYSTEM.GLOBALS.atvFontColor" desc="Color dataLabels" group="Appereance" name="ColordataLabels" valuetype="global"/>
   <atv:parameter behavior="optional" defaultvalue="18" desc="TitleFontSize" group="Appereance" name="FontSizeTitle" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="14" desc="SubTitleFontSize" group="Appereance" name="FontSizeSubTitle" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="14" desc="xAxis FontSize" group="Appereance" name="FontSizexAxis" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="14" desc="yAxis FontSize" group="Appereance" name="FontSizeyAxis" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="14" desc="Legend FontSize" group="Appereance" name="FontSizeLegend" valuetype="number"/>
@@ -96,6 +98,8 @@
   <atv:parameter behavior="optional" defaultvalue="" desc="Datalabel Unit Prefix" group="Appereance" name="DatalabelUnitPrefix" valuetype="string"/>
   <atv:parameter behavior="optional" config="none;#ffffff" defaultvalue="none" desc="Datalabel Outline" group="Appereance" name="DatalabelOutline" valuetype="enum"/>
   <atv:parameter behavior="optional" config="normal;bold" defaultvalue="bold" desc="Datalabel Font Weight" group="Appereance" name="DatalabelWeight" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="" group="Tooltip" name="TooltipSufix" valuetype="string"/>
+  <atv:parameter behavior="optional" defaultvalue="" group="Tooltip" name="TooltipPrefix" valuetype="string"/>
   <atv:parameter behavior="optional" defaultvalue="2" desc="Line Width" group="Line Only" name="LineLineWidth" valuetype="number"/>
   <atv:parameter behavior="optional" config="Dash;DashDot;Dot;LongDash;LongDashDot;LongDashDotDot;ShortDash;ShortDashDot;ShortDashDotDot;ShortDot;Solid" defaultvalue="Solid" desc="Line Dash Style" group="Line Only" name="LineDashStyle" valuetype="enum"/>
   <atv:parameter behavior="optional" config="left;center;right" defaultvalue="center" desc="Label Position" group="Column Only" name="ColumnLabelPosition" valuetype="enum"/>
@@ -104,6 +108,12 @@
   <atv:parameter behavior="optional" defaultvalue="100" desc="Pie Chart Size (%)" group="Pie Only" name="PieSize" valuetype="number"/>
   <atv:parameter behavior="optional" config="true;false" defaultvalue="false" desc="Place Labels Inside Pie" group="Pie Only" name="PieLabelInside" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="30" desc="Label Distance (pixels)" group="Pie Only" name="PieLabelDistance" valuetype="number"/>
+  <atv:parameter behavior="optional" config="Value;Percentage" defaultvalue="Percentage" desc="Data Label Format" group="Pie Only" name="DataLabelFormat" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Reversed" group="Pyramid Only" name="PyramidReversed" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="60" desc="Width" group="Pyramid Only" name="PyramidWidth" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="90" desc="Height" group="Pyramid Only" name="PyramidHeight" valuetype="number"/>
+  <atv:parameter behavior="optional" config="Percentage;Value" defaultvalue="Percentage" desc="Data Label Format" group="Pyramid Only" name="PyramidDataLabelFormat" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="right;left;top;bottom" defaultvalue="bottom" desc="Legend Position" group="Pyramid Only" name="PyramidLegendPosition" valuetype="enum"/>
   <atv:parameter behavior="optional" defaultvalue="100" desc="Max Value" group="Solid Gauge Only" name="SolidGaugeMaxValue" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="70" desc="OuterRadius" group="Solid Gauge Only" name="SolidGaugeOuterRadius" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="50" desc="InnerRadius" group="Solid Gauge Only" name="SolidGaugeInnerRadius" valuetype="number"/>
@@ -123,6 +133,12 @@
   <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Outer Radius" group="Gauge Only" name="GaugeOuterRadius" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Gauge Inner Radius" group="Gauge Only" name="GaugeInnerRadius" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="Number of Bins" group="Histogram Only" name="HistogramNumberBins" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="" desc="Angle Input Node" group="Windrose Only" name="AngleNode" valuetype="address"/>
+  <atv:parameter behavior="optional" config="4;8;16;32" defaultvalue="16" desc="Number of Cardinal Directions" group="Windrose Only" name="WindroseCardinalDirections" valuetype="enum"/>
+  <atv:parameter behavior="optional" config="Cardinal Directions;Angle" defaultvalue="Cardinal Directions" desc="Labels Format" group="Windrose Only" name="WindroseLabelsFormat" valuetype="enum"/>
+  <atv:parameter behavior="optional" defaultvalue="6" desc="Number of Speed Categories" group="Windrose Only" name="WindroseSpeedCategories" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="0" desc="Min Speed for Categories" group="Windrose Only" name="WindroseMinSpeed" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="25" desc="Max Speed for Categories" group="Windrose Only" name="WindroseMaxSpeed" valuetype="number"/>
   <atv:parameter behavior="optional" defaultvalue="" desc="OEEID" group="OEE Only" name="OEEID" valuetype="string"/>
   <atv:parameter behavior="optional" desc="Availability Counter Node" group="OEE Only" name="OEEAvailabilityCounterNode" valuetype="address"/>
   <atv:parameter behavior="optional" desc="Productivity Counter Node" group="OEE Only" name="OEEProductivityCounterNode" valuetype="address"/>
@@ -136,19 +152,10 @@
   <atv:parameter behavior="optional" defaultvalue="SYSTEM.GLOBALS.Advanced_Dashboard_List.OEE_Planned_Downtime_List" desc="Planned Downtime Enum" group="OEE Only" name="OEEPlannedDowntimeEnum" valuetype="global"/>
   <atv:parameter behavior="optional" desc="Planned Downtime Counter Node" group="OEE Only" name="OEEPlannedDowntimeCounterNode" valuetype="address"/>
   <atv:parameter behavior="optional" config="Input-BadUnits;Input-GoodUnits" defaultvalue="Input-BadUnits" desc="Quality Input Method" group="OEE Only" name="OEEQualityMethod" valuetype="enum"/>
-  <atv:parameter behavior="optional" config="Value;Percentage" defaultvalue="Percentage" desc="Data Label Format" group="Pie Only" name="DataLabelFormat" valuetype="enum"/>
-  <atv:parameter behavior="optional" defaultvalue="true" desc="Reversed" group="Pyramid Only" name="PyramidReversed" valuetype="bool"/>
-  <atv:parameter behavior="optional" defaultvalue="60" desc="Width" group="Pyramid Only" name="PyramidWidth" valuetype="number"/>
-  <atv:parameter behavior="optional" defaultvalue="90" desc="Height" group="Pyramid Only" name="PyramidHeight" valuetype="number"/>
-  <atv:parameter behavior="optional" config="Percentage;Value" defaultvalue="Percentage" desc="Data Label Format" group="Pyramid Only" name="PyramidDataLabelFormat" valuetype="enum"/>
-  <atv:parameter behavior="optional" config="right;left;top;bottom" defaultvalue="bottom" desc="Legend Position" group="Pyramid Only" name="PyramidLegendPosition" valuetype="enum"/>
-  <atv:parameter behavior="optional" defaultvalue="" group="Tooltip" name="TooltipSufix" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="" group="Tooltip" name="TooltipPrefix" valuetype="string"/>
-  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable X-Axis visibility for specific charts" group="options" name="EnableXAxis" valuetype="bool"/>
-  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Y-Axis visibility for specific charts" group="options" name="EnableYAxis" valuetype="bool"/>
-  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Exporting" group="options" name="EnableExporting" valuetype="bool"/>
-  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Legend for specific charts" group="options" name="EnableLegend" valuetype="bool"/>
-  <atv:parameter behavior="optional" defaultvalue="14" desc="SubTitleFontSize" group="Appereance" name="FontSizeSubTitle" valuetype="number"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable X-Axis visibility for specific charts" group="Options" name="EnableXAxis" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Y-Axis visibility for specific charts" group="Options" name="EnableYAxis" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Exporting" group="Options" name="EnableExporting" valuetype="bool"/>
+  <atv:parameter behavior="optional" defaultvalue="true" desc="Enable Legend for specific charts" group="Options" name="EnableLegend" valuetype="bool"/>
   <atv:gridconfig enabled="true" gridstyle="lines" height="20" width="20"/>
   <atv:snapconfig enabled="true" height="10" width="10"/>
  </metadata>
@@ -295,6 +302,7 @@ const elementRawConfig = {
 		XName: webMI.query["XName"],
 		ColorSeriesType:webMI.query["ColorSeriesType"],
 		ColorSeriesPalette: webMI.query["ColorSeriesPalette"],
+		ColorDifferenceIndex:webMI.query["ColorDifferenceIndex"],
 		ColorBackgroundTranspartentEnable:webMI.query["ColorBackgroundTranspartentEnable"],
 		ColorBackground: webMI.query["ColorB"],
 		ColorGrid: webMI.query["ColorG"],
@@ -380,6 +388,16 @@ const elementRawConfig = {
 		InnerRadius: webMI.query["GaugeInnerRadius"]
 	},
 	
+	// Windrose
+	Windrose: {
+	    AngleNode: webMI.query["AngleNode"],
+		CardinalDirections: webMI.query["WindroseCardinalDirections"],
+		LabelsFormat: webMI.query["WindroseLabelsFormat"],
+		SpeedCategories: webMI.query["WindroseSpeedCategories"],
+		MinSpeed: webMI.query["WindroseMinSpeed"],
+		MaxSpeed: webMI.query["WindroseMaxSpeed"]
+	},
+	
 	// Histogram
 	Histogram: {
 		NumberBins: webMI.query["HistogramNumberBins"]
@@ -407,10 +425,10 @@ const elementRawConfig = {
 		OEEQualityMethod:webMI.query["OEEQualityMethod"]
 	},
 	Options: {
-        EnableXAxis: webMI.query["EnableXAxis"],
-        EnableYAxis: webMI.query["EnableYAxis"],
-        EnableLegend: webMI.query["EnableLegend"],
-        EnableExporting: webMI.query["EnableExporting"] === false
+        EnableXAxis: webMI.query["EnableXAxis"]=== "true",
+        EnableYAxis: webMI.query["EnableYAxis"]=== "true",
+        EnableLegend: webMI.query["EnableLegend"]=== "true",
+        EnableExporting: webMI.query["EnableExporting"] === "true"
     }
 };
 
@@ -421,8 +439,12 @@ webMI.addOnload(function() {
 	//Get Chart container
 	chartContainter=document.getElementById("Chart_Container");
 	
+	//Create Notifier Instance
+	const singleChartManageNotifierI=new DashboardCreatorNotifier(false);
+	singleChartManageNotifierI.addListeners();
+	
 	//Create Chart Manager
-    const singleChartManagerI=new singleChartManager(elementRawConfig);
+    const singleChartManagerI=new singleChartManager(elementRawConfig,singleChartManageNotifierI);
     
     //Initialize Chart
     singleChartManagerI.initialize();
@@ -431,7 +453,8 @@ webMI.addOnload(function() {
 });
 
 
-//Single Chart Manager
+//---------------Single Chart Manager----------------//
+//-----------------------------------------------------//
 class singleChartManager {
 	// Attributes
 	elementRawConfig;
@@ -447,7 +470,7 @@ class singleChartManager {
 	configConflicts;
 	
 	// Constructor
-	constructor(elementRawConfig) {
+	constructor(elementRawConfig,singleChartManageNotifier) {
 		this.chartReference;
 		this.elementData;
 		this.limitData;
@@ -471,7 +494,8 @@ class singleChartManager {
 		this.isPiePyramid=this.elementRawConfig.GeneralConfig.ChartType.toLowerCase() === "pie" || this.elementRawConfig.GeneralConfig.ChartType.toLowerCase() === "pyramid";		
 		this.isSG=this.elementRawConfig.GeneralConfig.ChartType.toLowerCase() === "solidgauge";
 		this.limitAnalysisEnabled = (this.elementRawConfig.LimitAnalysis.DataLimitEnabled=="true" && (this.elementRawConfig.LimitAnalysis.DataMaxLimit.length >0 || this.elementRawConfig.LimitAnalysis.DataMinLimit.length >0)) ;
-		this.limitKey="_Limit"
+		this.limitKey="_Limit";
+		this.DCNotfier=singleChartManageNotifier;
 	}
 	
 	//Initialize everything
@@ -481,9 +505,8 @@ class singleChartManager {
 		webMI.gfx.setVisible("Label", false);
 		webMI.gfx.setVisible("Border", false);	
 		
-		console.log("-----------Element Config------------");
-		console.log(this.elementConfig);	
-		console.log(this.chartLabels);
+		this.DCNotfier.dgConsole("-----------Element Configs------------");
+		this.DCNotfier.dgConsole(this.elementConfig);	
 		
 		//Add listeners           
 		this.addListeners(); 
@@ -495,13 +518,15 @@ class singleChartManager {
 						
 			//Create Single Data Request
 			this.singleDataRequest = await this.singleDataRequestCreator();
-			console.log("-----------Single Data Request------------");
-			console.log(this.singleDataRequest);
+			this.DCNotfier.dgConsole("-----------Single Data Request------------");
+			this.DCNotfier.dgConsole(this.singleDataRequest);
 			
 			//Call for data
 			this.elementData = await this.singleelementDataCreator();
-			console.log("-----------Single Element Data------------");
-
+			this.DCNotfier.dgConsole("-----------Single Element Data------------");
+			this.DCNotfier.dgConsole(this.elementData);
+		
+			
 			//Initialize Chart
 			this.initializeChart();
 	
@@ -512,9 +537,10 @@ class singleChartManager {
 			   
 		//-----------------------------------------------//
 		//----------In Dashboard Chart Requests---------//       
+		
 		else {   
 			
-			console.log("-----Registering from chart: "+this.chartID+"----------");
+			this.DCNotfier.dgConsole("-----Registering from chart: "+this.chartID+"----------");
 			
 			//Wait for Dashboard ready
 			await this.waitForDashboardReady();
@@ -525,16 +551,11 @@ class singleChartManager {
 			//Wait for Data Ready
 			await this.waitForElementDataReady();	
 			
-			console.log("-----------Single Element Data------------");
-			console.log(this.elementData);
+			this.DCNotfier.dgConsole("-----------Single Element Data------------");
+			this.DCNotfier.dgConsole(this.elementData);
 			
-			
-			console.log("-----------this.elementRawConfig------------");
-			console.log(JSON.stringify(this.elementRawConfig));
-			
-			var testElementData = await this.applyFormula(this.elementData.chartData.chartSeries); 
-			console.log("-----------testElementData------------");
-			console.log(testElementData);
+			this.DCNotfier.dgConsole("-----------this.elementRawConfig------------");
+			this.DCNotfier.dgConsole(this.elementRawConfig);
 			
 			//Initialize Chart
 			this.initializeChart();
@@ -567,8 +588,8 @@ class singleChartManager {
 		webMI.trigger.connect("Element_Data_"+this.chartID, (e) => {
 			
 			this.elementData=e.value;
-			console.log("-------------this.elementData------------");	
-			console.log(this.elementData);	
+			this.DCNotfier.dgConsole("-------------Element Data------------");	
+			this.DCNotfier.dgConsole(this.elementData);	
 			
 			//Historic Data
 			if(this.elementData.RTInfo.OperationMode=="Hist"){
@@ -590,7 +611,7 @@ class singleChartManager {
 				//After Initialization
 				else{
 					
-					console.log("-------------Updating Chart------------")
+					this.DCNotfier.dgConsole("-------------Updating Chart------------")
 					//UpdateChart
 					this.updateChart();
 				
@@ -600,14 +621,15 @@ class singleChartManager {
 			
 			//Real Time Data
 			else if(this.elementData.RTInfo.OperationMode=="RealTime"){
-				
+			
+				this.DCNotfier.dgConsole("-------------Updating RT Chart------------");		
 				//Update current Operation mode
 				this.operationMode="RealTime";
 				
 				this.elementDataRT=this.elementData;
-				console.log("this.elementDataRT");
-				console.log(JSON.stringify(this.elementDataRT)); 
-				console.log("-------------Updating RT Chart------------");				
+				this.DCNotfier.dgConsole("---------------ElementDataRT--------------");
+				this.DCNotfier.dgConsole(this.elementDataRT); 
+						
 				//UpdateChart RT
 				this.updateRTChart();
 			}
@@ -617,8 +639,8 @@ class singleChartManager {
 		//Subcribe to Variable Changes	
 		/*
 		webMI.data.subscribe(this.elementNodes,(e) => {
-			console.log("-------------New Value------------");
-			console.log(e.address);
+			this.DCNotfier.dgConsole("-------------New Value------------");
+			this.DCNotfier.dgConsole(e.address);
 			
 			// Updates chart with RT data
 			this.updateChartRT(e.value); 
@@ -750,6 +772,7 @@ class singleChartManager {
 			specialParametersI["dataMinType"] = this.elementRawConfig.LimitAnalysis.DataMinType;
 		}
 		
+		//OEE Cased
 		if (this.elementRawConfig.DataProcessing.ProcessingType.includes("OEE")){
 			
 			//Add OEEID
@@ -839,6 +862,19 @@ class singleChartManager {
 			}
 		
 		}
+		
+		//WindRose Case
+		
+		else if (this.elementRawConfig.GeneralConfig.ChartType === "Windrose") {
+		    specialParametersI["AnN"] = this.elementRawConfig.Windrose.AngleNode;
+			specialParametersI["wDirs"] = this.elementRawConfig.Windrose.CardinalDirections;
+			specialParametersI["labF"] = this.elementRawConfig.Windrose.LabelsFormat;
+			specialParametersI["wSpCs"] = this.elementRawConfig.Windrose.SpeedCategories;
+			specialParametersI["wMin"] = this.elementRawConfig.Windrose.MinSpeed;
+			specialParametersI["wMax"] = this.elementRawConfig.Windrose.MaxSpeed;
+		}
+		
+		//If Chartype is Instagra,
 		else if (this.elementRawConfig.GeneralConfig.ChartType=="Histogram"){
 			specialParametersI["HistogramNumberBins"]=this.elementRawConfig.Histogram.NumberBins;
 		}
@@ -866,7 +902,7 @@ class singleChartManager {
 		return new Promise((resolve) => {
 			const checkReady = () => {
 				if (this.elementDataReady) {
-					console.log("-------Element Data Ready--------")
+					this.DCNotfier.dgConsole("-------Element Data Ready--------")
 					resolve();
 				} else {
 					setTimeout(checkReady, 100);
@@ -886,10 +922,12 @@ class singleChartManager {
 	//-----------------------------------------------//
 	//--------Historical Chart Functions------------//		
 	
+
 	// Initialize Chart
 	initializeChart() {
 		
 		const labelFormatterR=this.dataLabelFormatter.bind(this);
+		var chartType=this.elementRawConfig.GeneralConfig.ChartType=='Windrose' ? 'column' : (this.elementRawConfig.GeneralConfig.ChartType).toLowerCase();
 		
 		//Chart Options
 		const chartOptions =  {
@@ -900,7 +938,7 @@ class singleChartManager {
 				enabled: this.elementRawConfig.Options.EnableExporting
 			},
 			chart: {
-				type: (this.elementRawConfig.GeneralConfig.ChartType).toLowerCase(),
+				type: chartType,
 				backgroundColor: this.defineBackgroundColor(),
 				chartManager: this
 			},
@@ -920,7 +958,7 @@ class singleChartManager {
 				}
 			},
 			xAxis: {
-				//visible: this.elementRawConfig.Options.EnableXAxis,
+				visible: this.elementRawConfig.Options.EnableXAxis,
 				title: {
 					text: this.elementRawConfig.Appearance.XName,
 					style: {
@@ -936,6 +974,7 @@ class singleChartManager {
 				},						
 			},
 			yAxis: {
+			visible: this.elementRawConfig.Options.EnableYAxis,
 				title: {
 					text: this.elementRawConfig.Appearance.YName,
 					style: {
@@ -943,7 +982,6 @@ class singleChartManager {
 						fontSize: this.elementRawConfig.Appearance.FontSizeYaxis + 'px'
 					  }
 				},
-				visible: true,
 				labels: {
 				  style: {
 					color: this.elementRawConfig.Appearance.ColorYaxis,
@@ -962,28 +1000,29 @@ class singleChartManager {
 				data: []
 			}]
 		}
-		console.log("-----------Chart Selected Options------------");
-		console.log(chartOptions);
+		this.DCNotfier.dgConsole("-----------Chart Selected Options------------");
+		this.DCNotfier.dgConsole(chartOptions);
 	
 		this.chartReference = Highcharts.chart(chartContainter, chartOptions);
 		
-	}
+	}	
+	
 	
 	// Updates chart 
 	async updateChart() {
 		
-		console.log("-----------Update Chart------------");
+		this.DCNotfier.dgConsole("-----------Update Chart------------");
 				
 		// --- Apply Formula if Enabled 
 		if (this.elementRawConfig.FormulaFX.FormulaEnabled && this.elementData && this.elementData.chartData) {
 			try {
-				console.log("-----------Applying Formula to Historical Data------------");
+				this.DCNotfier.dgConsole("-----------Applying Formula to Historical Data------------");
 				// Await the result of the formula application
 				const modifiedChartSeries = await this.applyFormula(this.elementData.chartData.chartSeries);
 				// IMPORTANT: Update the elementData with the modified series
 				this.elementData.chartData.chartSeries = modifiedChartSeries;
-				console.log("-----------Formula Applied, Modified Data:-----------");
-				console.log(JSON.stringify(this.elementData.chartData.chartSeries)); // Log modified data for verification
+				this.DCNotfier.dgConsole("-----------Formula Applied, Modified Data:-----------");
+				this.DCNotfier.dgConsole(JSON.stringify(this.elementData.chartData.chartSeries)); // Log modified data for verification
 			} catch (error) {
 				 console.error("Failed to apply formula:", error);
 			}
@@ -1004,21 +1043,19 @@ class singleChartManager {
 		//--------Specific Type Update-----//	
 		this.tooltipUpdater();			
 		
-	    console.log("-------Chart reference-----");		
-		console.log(this.chartReference);
+	    this.DCNotfier.dgConsole("-------Chart reference-----");		
+		this.DCNotfier.dgConsole(this.chartReference);
 				
 		
 		//--------Specific Type Update-----//	
 		this.chartReference.redraw();
 		
-		console.log("-------Chart reference-----");		
-		console.log(this.chartReference);
 		
 	}
 	
 	//Update Categories
 	updateCategories(){
-		console.log("-----------Update Categories------------");
+		this.DCNotfier.dgConsole("-----------Update Categories------------");
 		
 		//Prepare conditions
 		const isDateTime = this.elementRawConfig.Category.CategoryType === "AllData-DateTime";
@@ -1061,6 +1098,29 @@ class singleChartManager {
 							}));
 							this.chartReference.xAxis[0].setCategories(customCategories, false);							
 						break;
+						case "Windrose":							
+							const windroseCategories = elementDataI.chartCategories;
+							if (windroseCategories && windroseCategories.length > 0) {
+								const cardinalDirections = windroseCategories.length;
+								const angleStep = 360 / cardinalDirections;
+								
+								// Update the xAxis with a numerical scale and a custom formatter for labels
+								this.chartReference.xAxis[0].update({
+									type: 'linear',
+									min: 0,
+									max: 360,
+									tickInterval: angleStep,
+									labels: {
+										// This formatter maps the degree value to the correct direction label
+										formatter: function () {
+											// this.value is the degree (e.g., 0, 22.5, 45)
+											const index = Math.round(this.value / angleStep) % cardinalDirections;
+											return windroseCategories[index];
+										}
+									}
+								}, false); // 'false' to prevent immediate redraw
+							}
+						break;
 						case "Column":
 						case 'Bar':
 							 this.chartReference.xAxis[0].setCategories(elementDataI.chartCategories, false);
@@ -1074,245 +1134,8 @@ class singleChartManager {
 				}
 			}
 		}
-	}
-	
-	//Update Series
-	updateSeries1(){
-	
-		//This update the series based on the type
-				
-		//Prepare conditions
-		const isDateTime = this.elementRawConfig.Category.CategoryType === "AllData-DateTime";
-		const elementDataI = this.elementData.chartData;
-		
-		// Remove existing series 
-		while (this.chartReference.series.length > 0) {
-			this.chartReference.series[0].remove(false);
-		}
-		
-		//Create Colors
-		this.chartColors=this.createChartColors();
-				
-		//Add Series based on type
-		switch (this.elementRawConfig.GeneralConfig.ChartType) {
-			case "Pie":
-			case "Pyramid":
-				console.log("---------Is Pie or Pyramid-------");
-				var seriesData;
-				var seriesI={};
-				
-				//Add limits to the series
-				if (this.limitAnalysisEnabled){ 
-					console.log("-------Adding limits-----");	
-					this.addLimitSeries();	
-					
-					seriesData=this.elementData.chartData.chartSeries[0].data;
-					seriesI={
-							name: this.elementRawConfig.GeneralConfig.ChartType,
-							data: seriesData
-							}
-				}	
-				
-				else{
-					console.log("elementDataI");
-					console.log(elementDataI.chartSeries[0].data);
-					seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => {
-						const obj = {
-							y: dataPoint.y,
-							name: this.defineChartLabel(dataPoint.name)
-						};
-						if (this.chartColors && this.chartColors[index]) {
-							obj.color = this.chartColors[index];
-						}
-						return obj;
-					});
-					seriesI={
-						name: this.elementRawConfig.GeneralConfig.ChartType,
-						data: seriesData
-					}
-				}
-				this.chartReference.addSeries(seriesI, false);
-			break;		
-				
-			case "Solidgauge": {
-				console.log("---------Is Solidgauge-------");
-				let seriesData;
-				let seriesI = {};
-		
-				if (this.limitAnalysisEnabled) {
-					console.log("-------Adding limits-----");
-					this.addLimitSeries();
-					seriesData = this.elementData.chartData.chartSeries[0].data;
-					seriesI = {
-						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
-						data: seriesData,
-						dial: this.elementData.chartData.chartSeries[0].dial
-					};
-				} else {
-					// Para Solidgauge solo se usa un color por serie
-					seriesData = elementDataI.chartSeries[0].data.map((dataPoint) => ({
-						y: dataPoint
-					}));
-					seriesI = {
-						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
-						data: seriesData
-					};
-					// Si tienes chartColors y el primero existe, asigna color
-					if (this.chartColors && this.chartColors[0]) {
-						seriesI.color = this.chartColors[0];
-						console.log("Color for the series")
-						console.log( this.chartColors[0]);
-						console.log(seriesI.color);
-					}
-					// Si no hay color definido, Highcharts usará el default de la librería
-				}
-		
-				this.chartReference.addSeries(seriesI, false);
-				console.log(this.chartReference);
-				break;
-             }
-			case "Gauge":
-				console.log("---------Is Gauge-------");
-				var seriesData;
-				var seriesI={};
-				
-				//Add limits to the series
-				if (this.limitAnalysisEnabled){ 
-					console.log("-------Adding limits-----");	
-					this.addLimitSeries();	
+	}	
 
-					seriesData= this.elementData.chartData.chartSeries[0].data;
-					seriesI={
-						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
-						data: seriesData,
-						dial:this.elementData.chartData.chartSeries[0].dial
-					}
-				}				
-				else{				
-				/*	seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
-						y:dataPoint,
-						color: this.chartColors[index],
-					}));	*/
-					seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => {
-    const obj = { y: dataPoint };
-    if (this.chartColors && this.chartColors[index]) {
-        obj.color = this.chartColors[index];
-    }
-    return obj;
-});
-					seriesI={
-						name: this.defineChartLabel(elementDataI.chartSeries[0].name),
-						data: seriesData
-					}				
-				}	
-				
-				this.chartReference.addSeries(seriesI, false);
-			break;			
-			
-			case "Line":
-			case "Area":
-		/*	case "Spline":
-				console.log("---------Is Line,Area or Spline-------");
-				
-				//Add limits to the series
-				if (this.limitAnalysisEnabled){ 
-					console.log("-------Adding limits-----");	
-					this.addLimitSeries();		
-				}
-				
-				console.log("-------Element Data-----");	
-				console.log(elementDataI);	
-				// Add new series for other chart types
-				elementDataI.chartSeries.forEach((series, index) => {
-				
-					//It is a Limit Series (All Data only)
-					if(series.custom==this.limitKey){
-						this.chartReference.addSeries(series, false);
-					}
-					else { //It is not a Limit Series
-						this.chartReference.addSeries({
-							name: this.defineChartLabel(series.name),
-							data: series.data,
-							color: this.chartColors[index]
-						}, false);
-					}				
-				});
-				break;*/
-				case "Spline": {
-				console.log("---------Is Line, Area or Spline-------");
-				if (this.limitAnalysisEnabled) {
-					console.log("-------Adding limits-----");
-					this.addLimitSeries();
-				}
-				elementDataI.chartSeries.forEach((series, index) => {
-					if (series.custom === this.limitKey) {
-						this.chartReference.addSeries(series, false);
-					} else {
-						const newSeries = {
-							name: this.defineChartLabel(series.name),
-							data: series.data
-						};
-						if (this.chartColors && this.chartColors[index]) {
-							newSeries.color = this.chartColors[index];
-						}
-						this.chartReference.addSeries(newSeries, false);
-					}
-				});
-				break;
-                }
-						
-				case "Column":
-				case 'Bar':
-				case "Histogram":
-				 default: {
-        console.log("---------Is Column or Histogram-------");
-        if (this.limitAnalysisEnabled) {
-            console.log("-------Adding limits-----");
-            this.addLimitSeries();
-        }
-        elementDataI.chartSeries.forEach((series, index) => {
-            if (this.limitAnalysisEnabled) {
-                this.chartReference.addSeries(series, false);
-            } else {
-                const newSeries = {
-                    name: this.defineChartLabel(series.name),
-                    data: series.data
-                };
-                if (this.chartColors && this.chartColors[index]) {
-                    newSeries.color = this.chartColors[index];
-                }
-                this.chartReference.addSeries(newSeries, false);
-            }
-        });
-        break;
-    }
-				/*default:
-					console.log("---------Is Column or Histogram-------");
-					if (this.limitAnalysisEnabled){ 
-							console.log("-------Adding limits-----");
-							this.addLimitSeries();	
-					}
-							console.log("elementDataI.chartSeries");
-							console.log(elementDataI.chartSeries);	
-						// Add new series for other chart types
-					elementDataI.chartSeries.forEach((series, index) => {
-						if (this.limitAnalysisEnabled){ 				
-							this.chartReference.addSeries(series, false);	
-						}					
-						//No limits
-						else{
-							
-							this.chartReference.addSeries({
-								name: this.defineChartLabel(series.name),
-								data: series.data,
-								color: this.chartColors[index]
-							}, false);			
-						}
-					});
-				break;	*/			
-		}
-	}
-	
 	//Update Series
 	updateSeries(){
 	
@@ -1334,13 +1157,13 @@ class singleChartManager {
 		switch (this.elementRawConfig.GeneralConfig.ChartType) {
 			case "Pie":
 			case "Pyramid":
-				console.log("---------Is Pie or Pyramid-------");
+				this.DCNotfier.dgConsole("---------Is Pie or Pyramid-------");
 				var seriesData;
 				var seriesI={};
 				
 				//Add limits to the series
 				if (this.limitAnalysisEnabled){ 
-					console.log("-------Adding limits-----");	
+					this.DCNotfier.dgConsole("-------Adding limits-----");	
 					this.addLimitSeries();	
 					
 					seriesData=this.elementData.chartData.chartSeries[0].data;
@@ -1351,8 +1174,8 @@ class singleChartManager {
 				}	
 				
 				else{
-					console.log("elementDataI");
-					console.log(elementDataI.chartSeries[0].data);
+					this.DCNotfier.dgConsole("elementDataI");
+					this.DCNotfier.dgConsole(elementDataI.chartSeries[0].data);
 					seriesData = elementDataI.chartSeries[0].data.map((dataPoint, index) => ({
 						y:dataPoint.y,
 						color: this.chartColors[index],
@@ -1368,13 +1191,13 @@ class singleChartManager {
 				
 			case "Solidgauge":
 			case "Gauge":
-				console.log("---------Is SG o Gauge-------");
+				this.DCNotfier.dgConsole("---------Is SG o Gauge-------");
 				var seriesData;
 				var seriesI={};
 				
 				//Add limits to the series
 				if (this.limitAnalysisEnabled){ 
-					console.log("-------Adding limits-----");	
+					this.DCNotfier.dgConsole("-------Adding limits-----");	
 					this.addLimitSeries();	
 
 					seriesData= this.elementData.chartData.chartSeries[0].data;
@@ -1401,16 +1224,16 @@ class singleChartManager {
 			case "Line":
 			case "Area":
 			case "Spline":
-				console.log("---------Is Line,Area or Spline-------");
+				this.DCNotfier.dgConsole("---------Is Line,Area or Spline-------");
 				
 				//Add limits to the series
 				if (this.limitAnalysisEnabled){ 
-					console.log("-------Adding limits-----");	
+					this.DCNotfier.dgConsole("-------Adding limits-----");	
 					this.addLimitSeries();		
 				}
 				
-				console.log("-------Element Data-----");	
-				console.log(elementDataI);	
+				this.DCNotfier.dgConsole("-------Element Data-----");	
+				this.DCNotfier.dgConsole(elementDataI);	
 				// Add new series for other chart types
 				elementDataI.chartSeries.forEach((series, index) => {
 				
@@ -1427,17 +1250,31 @@ class singleChartManager {
 					}				
 				});
 				break;
-						
+				
+				case "Windrose":	
+					this.DCNotfier.dgConsole("---------Adding Windrose Series-------");
+					// The data is already structured as an array of series (one for each speed range)
+					elementDataI.chartSeries.forEach((series, index) => {
+						this.chartReference.addSeries({
+							name: series.name,
+							data: series.data,
+							// Use the color palette
+							color: this.chartColors ? this.chartColors[index] : null,
+							// The series type must be 'column' for a windrose
+						}, false); // Add series without redrawing yet
+					});
+					break;
+				
 				case "Column":
 				case "Histogram":
 				default:
-					console.log("---------Is Column or Histogram-------");
+					this.DCNotfier.dgConsole("---------Is Column or Histogram-------");
 					if (this.limitAnalysisEnabled){ 
-							console.log("-------Adding limits-----");
+							this.DCNotfier.dgConsole("-------Adding limits-----");
 							this.addLimitSeries();	
 					}
-							console.log("elementDataI.chartSeries");
-							console.log(elementDataI.chartSeries);	
+							this.DCNotfier.dgConsole("elementDataI.chartSeries");
+							this.DCNotfier.dgConsole(elementDataI.chartSeries);	
 						// Add new series for other chart types
 					elementDataI.chartSeries.forEach((series, index) => {
 						if (this.limitAnalysisEnabled){ 				
@@ -1455,13 +1292,12 @@ class singleChartManager {
 					});
 				break;				
 		}
-	}
-	
+	}	
 	
 	//Specific Chart Update
 	specificUpdate() {
 
-		console.log("----------Apply Specific Config------------");
+		this.DCNotfier.dgConsole("----------Apply Specific Config------------");
 		const labelFormatterR = this.dataLabelFormatter.bind(this); // Bind formatter function
 
         // --- Base Plot Line Configurations ---
@@ -1769,6 +1605,51 @@ class singleChartManager {
 					}
 				}, false);
 				break;
+				
+			case "Windrose":
+				this.chartReference.update({
+					chart: {
+						polar: true // This is the most critical setting
+					},
+					// Optional: Control the size of the polar plot area
+					pane: {
+						size: '85%'
+					},
+					// Optional: Better legend positioning for a windrose
+					legend: {
+						align: 'right',
+						verticalAlign: 'top',
+						y: 70,
+						layout: 'vertical'
+					},
+					yAxis: {
+						min: 0,
+						endOnTick: false,
+						showLastLabel: true,
+						title: {
+							text: this.elementRawConfig.Appearance.YName || 'Frequency'
+						},
+						labels: {
+							formatter: function () {
+								return this.value + '%'; // Assuming data is in percentage
+							}
+						},
+						reversedStacks: false
+					},
+					plotOptions: {
+						series: {
+							stacking: 'normal', // Stack columns for each direction
+							shadow: false,
+							groupPadding: 0,
+							pointPlacement: 'on' // Align columns with the direction labels
+						}
+					},
+					tooltip: {
+						valueDecimals: 2,
+						valueSuffix: '%'
+					}
+				}, false);
+				break;
 
 			case "Solidgauge":
                 // No Y-Axis plot lines for Solidgauge
@@ -1832,10 +1713,11 @@ class singleChartManager {
 			    break;
 
 			default:
-				console.log(`No specific configurations implemented for chart type: ${this.elementRawConfig.GeneralConfig.ChartType}`);
+				this.DCNotfier.dgConsole(`No specific configurations implemented for chart type: ${this.elementRawConfig.GeneralConfig.ChartType}`);
 		}
 	}
 	
+	//Format Tooltip
 	formatTooltipValue(value) {
 		
 		const decimals = Number(this.elementRawConfig.Appearance.DatalabelNumberDecimals) || 0;
@@ -1853,71 +1735,6 @@ class singleChartManager {
 	}
 	
 	//Creates tooltip when called it
-	tooltipCreator0 (thisI) {						
-	
-	
-		const chartManager = thisI.series.chart.options.chart.chartManager;
-		const operationMode = chartManager.operationMode;
-		let tooltipInfo=chartManager.previousTooltip;
-		var tooltip;
-		var foundTooltip;
-
-		switch (this.elementRawConfig.GeneralConfig.ChartType) {
-			//Pie Chart
-			case "Line":
-			case "Spline":
-			case "Area":
-				const date = new Date(thisI.x).toLocaleString(); // Converts x-value to a formatted date string
-							return `<b style="color: ${thisI.series.color};">${"Date"}</b>: ${date}<br>
-											<b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${(thisI.y).toFixed(3)}`;			
-				break;
-			//Pie Chart
-			case "Pie":
-			case "Pyramid":
-				foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.key);
-				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {				
-					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.key}</b>: ${thisI.y.toFixed(3)}`;
-				}
-				else if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
-					tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br><b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br><b style="color: ${thisI.series.color};">${thisI.key}</b>: ${thisI.y.toFixed(3)}`;
-				}
-				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Simple")) {				
-					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.key}</b>: ${thisI.y.toFixed(3)}`;
-				}
-				break;
-			case "Solidgauge":
-			case "Gauge":
-				foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.series.name);
-				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {				
-					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;
-				}
-				else if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
-					tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br><b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;
-				}
-				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Simple")) {				
-					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;
-				}
-				break;
-			case "Column":			
-				foundTooltip = tooltipInfo.find(obj => chartManager.defineChartLabel(obj.name) === thisI.series.name);
-				//Simple Processing type
-				if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("SinglePoint")) {
-					tooltip = `<b style="color: ${thisI.series.color};">Date</b>: ${foundTooltip.tooltipInfo}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;	
-				}
-				else if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("FullRange")) {
-					tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo.start}<br><b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo.end}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;	
-				}
-				else if(chartManager.elementRawConfig.DataProcessing.ProcessingType.includes("Interval")) {
-					const index = thisI.point.index;
-					tooltip = `<b style="color: ${thisI.series.color};">Initial Date</b>: ${foundTooltip.tooltipInfo[index].start}<br><b style="color: ${thisI.series.color};">Final Date</b>: ${foundTooltip.tooltipInfo[index].end}<br><b style="color: ${thisI.series.color};">${thisI.series.name}</b>: ${thisI.y.toFixed(3)}`;	
-				}
-				
-				
-				break;
-		}
-		return tooltip;
-	}
-	
     tooltipCreator(thisI) {						
 			const chartManager = thisI.series.chart.options.chart.chartManager;
 			const operationMode = chartManager.operationMode;
@@ -2100,7 +1917,7 @@ class singleChartManager {
 			
 			this.limitData.forEach(limitData => {
 				let limitSeries; // Declare limitSeries variable
-					console.log("MinLimit Line Color Parameter:", this.elementRawConfig.LimitAnalysis.ColorLimitLineMin); // DEBUG: Log the color value
+					this.DCNotfier.dgConsole("MinLimit Line Color Parameter:", this.elementRawConfig.LimitAnalysis.ColorLimitLineMin); // DEBUG: Log the color value
 				// Check if the name ends with _MaxLimPlot or _MinLimPlot
 				if (limitData.name.endsWith('_MaxLimPlot')) {
 					limitSeries = {
@@ -2203,7 +2020,7 @@ class singleChartManager {
 				}
 				
 				else if(this.elementRawConfig.GeneralConfig.ChartType== "Histogram"){
-					console.log("Entering to Histogram")
+					this.DCNotfier.dgConsole("Entering to Histogram")
 					series.name= this.defineChartLabel(series.name);
 					series.type="histogram";
 					series.data = series.data.map((dataPoint, index) => {						
@@ -2221,7 +2038,7 @@ class singleChartManager {
 		}
 		
 		else if (this.elementConfig.chartsConfig.categoryType.includes("Single")) {
-			console.log("Excecuting Single logic")
+			this.DCNotfier.dgConsole("Excecuting Single logic")
 			// Find the corresponding limitData by name		
 			
 			const colorIndex = this.elementNodes.findIndex(node => node === (chartSeries[0].name));
@@ -2278,13 +2095,13 @@ class singleChartManager {
 		// --- Apply Formula if Enabled (BEFORE processing RT updates) ---
 		if (this.elementRawConfig.FormulaFX.FormulaEnabled && this.elementDataRT && this.elementDataRT.chartData) {
 			 try {
-				console.log("-----------Applying Formula to RT Data------------");
+				this.DCNotfier.dgConsole("-----------Applying Formula to RT Data------------");
 				// Await the result
 				const modifiedChartSeries = await this.applyFormula(this.elementDataRT.chartData.chartSeries);
 				// Update elementDataRT with modified series
 				this.elementDataRT.chartData.chartSeries = modifiedChartSeries;
-				 console.log("-----------Formula Applied to RT, Modified Data:-----------");
-				 console.log(JSON.stringify(this.elementDataRT.chartData.chartSeries));
+				 this.DCNotfier.dgConsole("-----------Formula Applied to RT, Modified Data:-----------");
+				 this.DCNotfier.dgConsole(this.elementDataRT.chartData.chartSeries);
 			} catch (error) {
 				 console.error("Failed to apply formula to RT data:", error);
 			}
@@ -2298,7 +2115,7 @@ class singleChartManager {
 		
 		//Add limits to the series
 		if (this.limitAnalysisEnabled){ 
-			console.log("-------Adding limits-----");	
+			this.DCNotfier.dgConsole("-------Adding limits-----");	
 			this.addLimitSeriesRT();		
 		}
 		
@@ -2309,7 +2126,7 @@ class singleChartManager {
 		//FullRange/SinglePoint Processing (One Point)
 		else if (dataProcessingType.includes("FullRange") || dataProcessingType.includes("SinglePoint")) {
 		
-			console.log("-----Updating Full Range--------")
+			this.DCNotfier.dgConsole("-----Updating Full Range--------")
 			if (this.firstTimeRT)	{
 				setTimeout((e) => {	
 					this.updateFullRangeOrSinglePointData();
@@ -2338,7 +2155,6 @@ class singleChartManager {
 	}	
 	
 	addLimitSeriesRT() {
-		console.log(this.elementDataRT);
 		if (!this.elementDataRT || !this.elementDataRT.chartData || !this.elementDataRT.chartData.LimitDashboardData) {
 			console.error("Element data is not available or does not contain limit data.");
 			return;
@@ -2426,12 +2242,11 @@ class singleChartManager {
 					chartSeries.push(limitSeries);
 					
 			});
-			console.log("chartSeries after");
-			console.log(chartSeries);
+
 		} 
 		
 		else if (this.elementConfig.chartsConfig.categoryType.includes("Interval")) {
-			console.log("For Interval")
+
 			// Process interval data
 			chartSeries.forEach((series, indexS) => {
 				// Find the corresponding limitData by name
@@ -2440,7 +2255,7 @@ class singleChartManager {
 				
 				if(this.elementRawConfig.GeneralConfig.ChartType== "Column"){	
 					if (limitData) {
-						console.log("Entered Limit Data");
+
 						series.data = series.data.map((dataPoint, index) => {
 							if (limitData.data[index] === 1) {
 								return {
@@ -2462,7 +2277,6 @@ class singleChartManager {
 				}	
 				
 				else if(this.elementRawConfig.GeneralConfig.ChartType== "Histogram"){
-					console.log("Entering to Histogram")
 					series.name= this.defineChartLabel(series.name);
 					series.type="histogram";
 					series.data = series.data.map((dataPoint, index) => {						
@@ -2528,25 +2342,19 @@ class singleChartManager {
 		// Check if the category type is "AllData-DateTime"
 		if (this.elementConfig.chartsConfig.categoryType === "AllData-DateTime") {
 			// Processing simple data
-			console.log("---------Updating Simple Data-----------");
+			this.DCNotfier.dgConsole("---------Updating Simple Data-----------");
 	
 			// Get the series from the chart reference
-			const chartSeries = this.chartReference.series;
-			console.log("chartSeries");
-			console.log(chartSeries);
+			const chartSeries = this.chartReference.series;;
 			
 			// Iterate through the updatingData to find the matching series by name
 			this.elementDataRT.chartData.chartSeries.forEach(updatingSeries => {
-			
-				console.log("updatingSeries=======");
-				console.log(updatingSeries);	
+
 				// Find the corresponding series in the chart
 				const chartSeriesItem = chartSeries.find(series => series.name === this.defineChartLabel(updatingSeries.name));
 				const chartrange = this.chartTimeRange;
 	
 				if (chartSeriesItem) {
-					console.log("chartSeriesItem before=======");
-					console.log(chartSeriesItem);	
 				
 					if (this.limitAnalysisEnabled) {
 						updatingSeries.data = [updatingSeries.data];
@@ -2559,16 +2367,11 @@ class singleChartManager {
 							// Ensure dataPoints is an array of points
 							if (Array.isArray(dataPoints) && dataPoints.length > 0) {
 								dataPoints.forEach(dataPoint => {
-									console.log("Adding new points");
-									console.log(dataPoint);
 									chartSeriesItem.addPoint(dataPoint, false); // Set redraw to false
 								});
 							}
 						});
-						
-						
-						console.log("chartSeriesItem after==========");
-						console.log(chartSeriesItem);
+					
 	
 						// Calculate minTime after adding new points
 						const dataLength = chartSeriesItem.data.length;
@@ -2576,17 +2379,14 @@ class singleChartManager {
 							const lastPointTime = chartSeriesItem.data[dataLength - 1].x;
 							const minTime = lastPointTime - chartrange;
 							
-						console.log("chartSeries after==========");
-						console.log(chartSeries);
-							
 							// Remove points outside the range from all series
 							chartSeries.forEach(series => {
-								console.log("(series.data[0]==========");
-								console.log((series.data[0]));
-								if (series.data[0].x!=null){
-									while (series.data.length > 0 && (series.data[0].x < minTime)) {
-										series.data[0].remove(false); // Set redraw to false
-									}
+								if (series.data[0]!=undefined){
+									if (series.data[0].x!=null){
+										while (series.data.length > 0 && (series.data[0].x < minTime)) {
+											series.data[0].remove(false); // Set redraw to false
+										}
+									}	
 								}							
 							});
 						}
@@ -2602,7 +2402,7 @@ class singleChartManager {
 	// Process data for "FullRange Or SinglePoint" type
 	updateFullRangeOrSinglePointData() {
 		// Processing full range or single point data
-		console.log("---------Updating Full Range or Single Point Data-----------");
+		this.DCNotfier.dgConsole("---------Updating Full Range or Single Point Data-----------");
 		// Get the series from the chart reference
 		const chartSeries = this.chartReference.series;
 		
@@ -2693,8 +2493,8 @@ class singleChartManager {
 	}
 	
 	// Process data for "Interval" type
-    updateIntervalData() {
-		console.log("---------Processing Interval Data-----------");
+    updateIntervalData1() {
+		this.DCNotfier.dgConsole("---------Processing Interval Data-----------");
 	
 		const elementDataI = this.elementDataRT.chartData;
 		const intervalInfo = elementDataI.informationRT;
@@ -2704,7 +2504,7 @@ class singleChartManager {
 	
 		// If the chart type is Histogram
 		if (this.elementRawConfig.GeneralConfig.ChartType === "Histogram") {
-			console.log("---------Processing Histogram Data-----------");
+			this.DCNotfier.dgConsole("---------Processing Histogram Data-----------");
 	
 			// Get existing categories from the xAxis
 			const existingCategories = this.chartReference.xAxis[0].categories;
@@ -2755,8 +2555,7 @@ class singleChartManager {
 			elementDataI.chartSeries.forEach(updatingSeries => {
 				// Find the corresponding series in the chart by name
 				const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
-				console.log("chartSeriesItem hello");
-				console.log(chartSeriesItem.xAxis.categories);
+
 				
 				//Find corresponding intervalinfo
 				const intervalInfoI = this.elementDataRT.chartData.informationRT.find(info => info.Node === updatingSeries.name)?.IntervalInfo;
@@ -2819,6 +2618,174 @@ class singleChartManager {
 			}
 		}
 	}
+	
+	// Process data for "Interval" type
+    updateIntervalData() {
+		this.DCNotfier.dgConsole("---------Processing Interval Data-----------");
+	
+		const elementDataI = this.elementDataRT.chartData;
+		const intervalInfo = elementDataI.informationRT;
+	
+		// Check if it is necessary to go to a new interval
+		const newInterval = intervalInfo.some(info => info.IntervalInfo.newInterval);
+
+        // --- SPECIAL HANDLING FOR WINDROSE CHART (SMART UPDATE) ---
+        if (this.elementRawConfig.GeneralConfig.ChartType === 'Windrose') {
+            this.DCNotfier.dgConsole("---------Processing Windrose RT Update (Smart)-----------");
+            const newSeriesData = elementDataI.chartSeries;
+            let needsRedraw = false; // Flag to track if any update occurred
+
+            // Iterate through each updated series from the backend (e.g., for each speed bin)
+            newSeriesData.forEach(updatingSeries => {
+                // Find the corresponding series already on the chart by its name
+                const chartSeriesItem = this.chartReference.series.find(
+                    s => s.name === updatingSeries.name
+                );
+
+                if (chartSeriesItem) {
+                    // Now, iterate through the data points (directions) of this series
+                    updatingSeries.data.forEach((newPointValue, pointIndex) => {
+                        const currentPoint = chartSeriesItem.data[pointIndex];
+                        
+                        // Check if a point exists and if its 'y' value is different from the new value.
+                        if (currentPoint && currentPoint.y !== newPointValue) {
+                            // The value has changed, so update the point.
+                            currentPoint.update(newPointValue, false); // Update without redrawing.
+                            needsRedraw = true; // Mark that a change has occurred.
+                        }
+                    });
+                } else {
+                     console.warn(`Could not find a matching series on the chart for updated series: ${updatingSeries.name}`);
+                }
+            });
+
+            // After all points in all series have been checked, redraw the chart only if necessary.
+            if (needsRedraw) {
+                this.DCNotfier.dgConsole("Windrose data changed. Redrawing chart.");
+                this.chartReference.redraw();
+            } else {
+                this.DCNotfier.dgConsole("No change in Windrose data. Skipping redraw.");
+            }
+
+            return; // Exit to prevent the default logic from running
+        }
+	
+		// If the chart type is Histogram
+		if (this.elementRawConfig.GeneralConfig.ChartType === "Histogram") {
+			this.DCNotfier.dgConsole("---------Processing Histogram Data-----------");
+	
+			// Get existing categories from the xAxis
+			const existingCategories = this.chartReference.xAxis[0].categories;
+			const newCategories = elementDataI.chartCategories;
+	
+			 // Merge existing and new categories, ensuring they are in the correct order
+			newCategories.forEach((category) => {
+				if (!existingCategories.includes(category)) {
+					existingCategories.push(category);
+				}
+			});
+	
+			// Sort the categories
+			existingCategories.sort((a, b) => {
+				const aStart = parseFloat(a.split('-')[0]);
+				const bStart = parseFloat(b.split('-')[0]);
+				return aStart - bStart;
+			});
+			
+			// Update the xAxis with the new categories
+			this.chartReference.xAxis[0].setCategories(existingCategories, false);
+	
+			// Update series data
+			elementDataI.chartSeries.forEach(updatingSeries => {
+				// Find the corresponding series in the chart by name
+				const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
+				if (chartSeriesItem) {
+				
+					// Check and update each data point in the series
+					updatingSeries.data.forEach((dataPoint, index) => {
+						if (chartSeriesItem.data[index] && chartSeriesItem.data[index].y !== dataPoint) {
+							chartSeriesItem.data[index].update(dataPoint, false);
+						} else if (!chartSeriesItem.data[index]) {
+							chartSeriesItem.addPoint(dataPoint, false);
+						}
+					});
+				}
+			});
+			
+			// Redraw the chart after updates
+			this.chartReference.redraw(true);
+		}
+		
+		//--- DEFAULT LOGIC FOR OTHER INTERVAL CHARTS (Column, etc.) ---
+		 else {		
+	
+			// Update series data
+			elementDataI.chartSeries.forEach(updatingSeries => {
+				// Find the corresponding series in the chart by name
+				const chartSeriesItem = this.chartReference.series.find(series => series.name === this.defineChartLabel(updatingSeries.name));
+				
+				//Find corresponding intervalinfo
+				const intervalInfoI = this.elementDataRT.chartData.informationRT.find(info => info.Node === updatingSeries.name)?.IntervalInfo;
+				
+				//Calculate updating index					
+				if(this.elementDataRT.RTInfo.InitialRangeMethod.includes("Shift")){
+					
+				}				
+				
+				if (chartSeriesItem) {					
+					const newValue = updatingSeries.data[0];
+	
+					if (newInterval&&!this.elementDataRT.RTInfo.InitialRangeMethod.includes("Shift")) {
+						// Add new data point and remove the first point						
+						chartSeriesItem.addPoint(newValue, false);
+						if (chartSeriesItem.data.length > 1) {
+							chartSeriesItem.data[0].remove(false); // Remove the first point
+						}
+					} else {																	
+						// Update the last point with the new value
+						const lastPoint = chartSeriesItem.data[intervalInfoI.currentIntervalndex];
+						if (lastPoint) {
+                            lastPoint.update(newValue, false);
+                        }
+					}
+				}
+			});
+	
+			if (newInterval&&!this.elementDataRT.RTInfo.InitialRangeMethod.includes("Shift")) {
+				// Add missing series with a value of 0
+				this.chartReference.series.forEach(chartSeriesItem => {
+					const isSeriesPresent = elementDataI.chartSeries.some(updatingSeries => this.defineChartLabel(updatingSeries.name) === chartSeriesItem.name);
+					if (!isSeriesPresent) {
+						chartSeriesItem.addPoint(0, false);
+						if (chartSeriesItem.data.length > 1) {
+							chartSeriesItem.data[0].remove(false); // Remove the first point
+						}
+					}
+				});
+			}
+	
+			// Update categories
+			const xAxis = this.chartReference.xAxis[0];
+			let updatedCategories;
+			if(!this.elementDataRT.RTInfo.InitialRangeMethod.includes("Shift")){//Shift Does not change the chartCategories
+				if (newInterval ) {
+					// Remove the first category and add the new one using elementDataI.chartCategories[0]
+					xAxis.categories.push(elementDataI.chartCategories[0]);
+					updatedCategories = xAxis.categories;
+					this.chartReference.redraw(true); // Enable animation on redraw    
+				} else {
+					// Update the last category with the new one
+					updatedCategories = xAxis.categories;
+					updatedCategories[updatedCategories.length - 1] = elementDataI.chartCategories[0];
+					this.chartReference.redraw(false); // Disable animation on redraw
+				}
+			}
+			else{
+				this.chartReference.redraw(false); // Disable animation on redraw
+			}
+		}
+	}
+		
 	
 	//-----------------------------------------------//
 	//----------For Single Chart Requests-----------//	
@@ -2902,7 +2869,7 @@ class singleChartManager {
 			//Custom Request
 			webMI.data.customRequest("GET", "Advanced_Dashboard_Data_Creator?DataRequest="+JSON.stringify(this.singleDataRequest)+"&format=binary", "responseType=string", function(e){
 				try {  
-					console.log("----------Single Request Answered--------");
+					this.DCNotfier.dgConsole("----------Single Request Answered--------");
 					
 					//Read dashboardData
 					let dashboardData=e;
@@ -2924,8 +2891,8 @@ class singleChartManager {
 					resolve (elementDataI);
 				} 
 				catch (error) {
-					console.log("Error found with custom request")
-					console.log(error);
+					this.DCNotfier.dgConsole("Error found with custom request")
+					this.DCNotfier.dgConsole(error);
 				}
 			});
 		});
@@ -2935,7 +2902,7 @@ class singleChartManager {
 	//-------------Auxiliary Functions--------------//
 	
 	 // Creates Chart Colors
-  createChartColors() {
+    createChartColors() {
     		
         // Ensure Highcharts.color method is available for color manipulation
         if (typeof Highcharts === 'undefined' || typeof Highcharts.color !== 'function') {
@@ -2955,8 +2922,9 @@ class singleChartManager {
         //Color from Color Pallete
         if ( this.elementRawConfig.Appearance.ColorSeriesType=="Color-Pallete") {
 			for (let i = 0; i < dataLength; i++) {
+			
 				// Calculate color variation
-				const variation = 0.4 * i;
+				const variation = this.elementRawConfig.Appearance.ColorDifferenceIndex * i;
 				const newColor = baseColor== "" ? undefined: Highcharts.color(baseColor).brighten(variation).get();
 				colors.push(newColor);
 			}        
@@ -2990,11 +2958,10 @@ class singleChartManager {
 			}
         
         }
-        console.log("Returning Colors:");
-        console.log(colors);
+        this.DCNotfier.dgConsole("Returning Colors:");
+        this.DCNotfier.dgConsole(colors);
         return colors.length > 0 ? colors : undefined;
-    }
-    
+    }    
         
     defineBackgroundColor(){
 		//If transparen Enabled
@@ -3029,7 +2996,7 @@ class singleChartManager {
 		
 		else {
 		
-			console.log("Excecuting chart label logic");
+			this.DCNotfier.dgConsole("Excecuting chart label logic");
 			// Find the index of the element in this.elementNodes where SeriesName is the last part
 			const index = this.elementNodes.findIndex(node => {
 				return node === SeriesName;
@@ -3107,7 +3074,7 @@ class singleChartManager {
 			const hierarchy = ['YYYY', 'MM', 'DD', 'hh', 'mm', 'ss'];
 			const presentHierarchy = hierarchy.filter(unit => customFormat.includes(unit));
 			
-			console.log("presentHierarchy: "+presentHierarchy);
+			this.DCNotfier.dgConsole("presentHierarchy: "+presentHierarchy);
 			
 			
 			if (presentHierarchy.length > 0) {
@@ -3220,7 +3187,7 @@ class singleChartManager {
 	
 		// --- 1. Check Prerequisites ---
 		if (!formulaConfig.FormulaEnabled) {
-			console.log("Formula is disabled.");
+			this.DCNotfier.dgConsole("Formula is disabled.");
 			return chartSeries; // Return original data if formula is not enabled
 		}
 		if (!formulaConfig.FormulaDescription || typeof formulaConfig.FormulaDescription !== 'string' || formulaConfig.FormulaDescription.trim() === '') {
@@ -3232,7 +3199,7 @@ class singleChartManager {
 			return chartSeries; // Return original if input is bad
 		}
 	
-		console.log("Applying formula:", formulaConfig.FormulaDescription);
+		this.DCNotfier.dgConsole("Applying formula:", formulaConfig.FormulaDescription);
 	
 		// --- 2. Prepare for Asynchronous Node Reading ---
 		return new Promise((resolve, reject) => {
@@ -3258,12 +3225,12 @@ class singleChartManager {
 				}
 			}
 	
-			console.log("Nodes to read for formula parameters:", nodesToRead);
+			this.DCNotfier.dgConsole("Nodes to read for formula parameters:", nodesToRead);
 	
 			// --- 4. Define Function to Process Data (Core Logic) ---
 			// This function will be called after node values are potentially read.
 			const processDataWithParams = (resolvedParamValues) => {
-				console.log("Final formula parameters:", resolvedParamValues);
+				this.DCNotfier.dgConsole("Final formula parameters:", resolvedParamValues);
 				try {
 					// --- 4a. Deep copy the chartSeries to avoid modifying the original ---
 					// Using JSON parse/stringify for a simple deep copy suitable for this structure
@@ -3351,7 +3318,7 @@ class singleChartManager {
 						});
 					});
 	
-					console.log("Formula application complete.");
+					this.DCNotfier.dgConsole("Formula application complete.");
 					resolve(modifiedChartSeries); // Resolve the promise with the modified data
 	
 				} catch (processingError) {
@@ -3377,13 +3344,11 @@ class singleChartManager {
 	
 			// --- 5b. Read Node values if needed ---
             if (nodesToRead.length === 0) {
-                // No nodes to read, process data directly with fixed/default values
-                console.log("No nodes required for formula, proceeding directly.");
+
                 processDataWithParams(finalParamValues);
             } else {
-                console.log("Reading nodes for formula:", nodesToRead);
+
                 webMI.data.read(nodesToRead, (results) => {
-                    console.log("Node read results:", results);
                     const nodeValueMap = {}; // Store values keyed by address
                     const readResultsArray = Array.isArray(results) ? results : (results ? [results] : []); // Handle null/undefined results too
 
@@ -3433,6 +3398,29 @@ class singleChartManager {
 		});
 	}	
 	
+}
+
+//---------------Dashboard Creator Notifier----------------//
+//-----------------------------------------------------//
+class DashboardCreatorNotifier {
+
+	constructor() {	
+		this.debuggingEnabled=false;
+	}
+	
+	addListeners(){
+		// Global Listener
+	    webMI.trigger.connect("Debugging_Enabled", (e) => {	
+			this.debuggingEnabled=e.value;
+	    });
+	}
+		
+	dgConsole(message){
+		if (this.debuggingEnabled){
+		    const messageI=(typeof message === "string") ? ("//---Chart: "+message):message;
+			console.log(messageI);
+		}
+	}
 }
 
 ]]></script>

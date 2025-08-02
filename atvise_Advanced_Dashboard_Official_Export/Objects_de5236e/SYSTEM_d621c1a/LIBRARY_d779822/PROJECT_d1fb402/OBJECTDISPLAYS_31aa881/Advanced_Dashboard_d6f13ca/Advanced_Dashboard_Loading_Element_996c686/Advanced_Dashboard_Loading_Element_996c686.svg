@@ -48,7 +48,7 @@ class loadingDisplayManager{
     initialize() {
 			//Set Background
 			this.setBackgroundColor();
-			console.log("--------Setting Loading Background-------");
+
     }
     
     addListeners() {

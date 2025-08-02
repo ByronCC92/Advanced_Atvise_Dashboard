@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Timer" type="interval" trigger="true" relative="false" value="" offset="00:00:00" interval="00:00:05"/>
+  <code><![CDATA[//Modelo Actual de Biomasa Proyecta
+// BP (T)= BI + VCSC*T - CM*(PPI+ (VCSP*T))
+//VCSC=  ((AD*TA)/(24*3600)) [g/s]  (Velocidad de crecimiento por segundo del cultivo: Cuantos kg crece el cultivo por segundo)
+//VCSP=((AD*TA)/(24*3600))/CPI) [g/(s*pez)] (Velocidad de crecimiento por segundo de un solo pes: Cuantos g crece un pes por segundo)
+
+//BP: Biomasa Proyectada (Actual)
+//BI: Biomasa Inicial (Cantidad de peses multiplicado por Peso Promedio)
+//AD: Alimento Diario
+//TA: Tasa de Aprovechamiento
+//CM: Cantidad Peses Muertos
+//PPI: Peso promedio Inicial
+//CPI: Cantidad de Peses Inicial
+//T: Tiempo desde incio de la cosecha en segundos
+
+
+//Variables Externas
+var BI = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Biomasa_Inicial");
+var BP = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Biomasa_Proyectada");
+var AD = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Alimento_Diario");
+var TAA = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Tasa_Aprovechamiento_Alimento");
+var CPI = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Cantidad_Peces_Inicial");
+var PPI = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Peso_Promedio_Inicial");
+var CM = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Cantidad_Peces_Muertos");
+var T = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Tiempo_Cultivo");
+
+//Variables Calculadas
+var  VCSC=((AD.result.value*(TAA.result.value/100))/86400);
+var  VCSP=(VCSC/CPI.result.value);
+
+var AS=AD.result.value/(24*3600); //Tasa de alimentacion por segundo
+
+//Variables Internas
+var BPI=BI.result.value+(VCSC*T.result.value)-(CM.result.value*(PPI.result.value+(VCSP*T.result.value)));
+
+
+//Ejecuto Logica
+BP.result.assign({value:BPI});]]></code>
+</script>

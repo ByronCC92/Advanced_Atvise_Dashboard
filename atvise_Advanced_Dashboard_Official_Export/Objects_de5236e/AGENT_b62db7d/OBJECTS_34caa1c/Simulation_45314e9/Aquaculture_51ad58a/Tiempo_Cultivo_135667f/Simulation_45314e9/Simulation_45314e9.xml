@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<script>
+  <metadata>
+    <priority>0</priority>
+    <owner>root</owner>
+    <runcontext>caller</runcontext>
+  </metadata>
+  <parameter name="Trigger" type="interval" trigger="true" relative="false" value="" offset="00:00:00" interval="00:00:01"/>
+  <code><![CDATA[//Variables Externas
+var TI = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Tiempo_Cultivo");
+var Pause = Ua.findNode("AGENT.OBJECTS.Simulation.Aquaculture.Pause_Time");
+
+//Variables Internas
+var Vmax=15552000;
+var Vmin=0;
+
+//Ejecuto Logica
+if (TI.result.value>=Vmax){
+	TI.result.assign({value: 0});
+}
+else{
+	if(Pause.result.value!=true){
+		TI.result.assign({value: TI.result.value+1});
+	}	
+}]]></code>
+</script>

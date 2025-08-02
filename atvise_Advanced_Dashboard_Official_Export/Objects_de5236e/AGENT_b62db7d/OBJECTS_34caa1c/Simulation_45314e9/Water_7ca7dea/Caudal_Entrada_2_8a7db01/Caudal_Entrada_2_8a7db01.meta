@@ -1,0 +1,10 @@
+NodeId: ns=1;s=AGENT.OBJECTS.Simulation.Water.Caudal_Entrada_2
+NodeClass: Variable
+BrowseName: 1:Caudal_Entrada_2
+DisplayName: en|Caudal_Entrada_2
+Description: en|Caudal_Entrada_2
+DataType: Float
+ValueRank: -1
+AccessLevel: 103
+Reference: forward HasTypeDefinition BaseVariableType
+Reference: forward HasHistoricalConfiguration ns=1;s=AGENT.HISTORY.Historicos
